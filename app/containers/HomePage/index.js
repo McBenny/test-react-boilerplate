@@ -5,14 +5,14 @@
  *
  */
 
-import React from 'react';
-import { FormattedMessage } from 'react-intl';
-import messages from './messages';
+import React, { Fragment } from 'react';
 
 export default function HomePage() {
+  const headerMessage = 'My title';
   return (
-    <h1>
-      <FormattedMessage {...messages.header} />
-    </h1>
+    <Fragment>
+      <h1>{headerMessage}</h1>
+      <a href="#0">Link</a>
+    </Fragment>
   );
 }
