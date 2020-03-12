@@ -8,6 +8,6 @@
 import React from 'react';
 
 export default function NotFound() {
-  const message = 'This is the NotFoundPage container!';
-  return <h1>{message}</h1>;
+    const message = 'This is the NotFoundPage container!';
+    return <h1>{message}</h1>;
 }

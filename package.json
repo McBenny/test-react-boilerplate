@@ -1,7 +1,7 @@
 {
-  "name": "react-boilerplate",
-  "version": "4.0.0",
-  "description": "A highly scalable, offline-first foundation with the best DX and a focus on performance and best practices",
+  "name": "Handball Scoreboard 1.1",
+  "version": "0.0.0",
+  "description": "A handball scoreboard to be used during a game of handball base on react-boilerplate 4.0.0",
   "repository": {
     "type": "git",
     "url": "git://github.com/react-boilerplate/react-boilerplate.git"
