@@ -1,5 +1,5 @@
 {
-  "name": "react-boilerplate",
+  "name": "handball-scoreboard",
   "version": "0.0.0",
   "description": "A handball scoreboard to be used during a game of handball base on react-boilerplate 4.0.0",
   "repository": {
@@ -47,7 +47,7 @@
   "browserslist": [
     "last 2 versions",
     "> 1%",
-    "IE 10"
+    "IE 11"
   ],
   "lint-staged": {
     "*.js": [
