@@ -25,7 +25,6 @@ import { SAVE_SETTINGS } from './constants';
  * @return {object} An action object with a type of CHANGE_USERNAME
  */
 export function saveSettings(settings) {
-    console.log('game/actions: settings:', settings);
     return {
         type: SAVE_SETTINGS,
         settings

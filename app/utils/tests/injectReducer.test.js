@@ -6,7 +6,7 @@ import { memoryHistory } from 'react-router-dom';
 import React from 'react';
 import { Provider } from 'react-redux';
 import renderer from 'react-test-renderer';
-import { render } from 'react-testing-library';
+import { render } from '@testing-library/react';
 
 import configureStore from '../../configureStore';
 import injectReducer, { useInjectReducer } from '../injectReducer';
@@ -29,7 +29,7 @@ describe('injectReducer decorator', () => {
     beforeEach(() => {
         store = configureStore({}, memoryHistory);
         injectors = {
-            injectReducer: jest.fn(),
+            injectReducer: jest.fn()
         };
         ComponentWithReducer = injectReducer({ key: 'test', reducer })(Component);
         reducerInjectors.default.mockClear();
@@ -39,7 +39,7 @@ describe('injectReducer decorator', () => {
         renderer.create(
             <Provider store={store}>
                 <ComponentWithReducer />
-            </Provider>,
+            </Provider>
         );
 
         expect(injectors.injectReducer).toHaveBeenCalledTimes(1);
@@ -56,10 +56,10 @@ describe('injectReducer decorator', () => {
         const renderedComponent = renderer.create(
             <Provider store={store}>
                 <ComponentWithReducer {...props} />
-            </Provider>,
+            </Provider>
         );
         const {
-            props: { children },
+            props: { children }
         } = renderedComponent.getInstance();
 
         expect(children.props).toEqual(props);
@@ -73,7 +73,7 @@ describe('useInjectReducer hook', () => {
 
     beforeAll(() => {
         injectors = {
-            injectReducer: jest.fn(),
+            injectReducer: jest.fn()
         };
         reducerInjectors.default = jest.fn().mockImplementation(() => injectors);
         store = configureStore({}, memoryHistory);
@@ -87,7 +87,7 @@ describe('useInjectReducer hook', () => {
         render(
             <Provider store={store}>
                 <ComponentWithReducer />
-            </Provider>,
+            </Provider>
         );
 
         expect(injectors.injectReducer).toHaveBeenCalledTimes(1);

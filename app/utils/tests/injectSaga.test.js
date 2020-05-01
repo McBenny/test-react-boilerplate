@@ -5,7 +5,7 @@
 import { memoryHistory } from 'react-router-dom';
 import { put } from 'redux-saga/effects';
 import renderer from 'react-test-renderer';
-import { render } from 'react-testing-library';
+import { render } from '@testing-library/react';
 import React from 'react';
 import { Provider } from 'react-redux';
 
@@ -33,12 +33,12 @@ describe('injectSaga decorator', () => {
         store = configureStore({}, memoryHistory);
         injectors = {
             injectSaga: jest.fn(),
-            ejectSaga: jest.fn(),
+            ejectSaga: jest.fn()
         };
         ComponentWithSaga = injectSaga({
             key: 'test',
             saga: testSaga,
-            mode: 'testMode',
+            mode: 'testMode'
         })(Component);
         sagaInjectors.default.mockClear();
     });
@@ -48,7 +48,7 @@ describe('injectSaga decorator', () => {
         renderer.create(
             <Provider store={store}>
                 <ComponentWithSaga {...props} />
-            </Provider>,
+            </Provider>
         );
 
         expect(injectors.injectSaga).toHaveBeenCalledTimes(1);
@@ -60,7 +60,7 @@ describe('injectSaga decorator', () => {
         const renderedComponent = renderer.create(
             <Provider store={store}>
                 <ComponentWithSaga {...props} />
-            </Provider>,
+            </Provider>
         );
         renderedComponent.unmount();
 
@@ -78,10 +78,10 @@ describe('injectSaga decorator', () => {
         const renderedComponent = renderer.create(
             <Provider store={store}>
                 <ComponentWithSaga {...props} />
-            </Provider>,
+            </Provider>
         );
         const {
-            props: { children },
+            props: { children }
         } = renderedComponent.getInstance();
         expect(children.props).toEqual(props);
     });
@@ -100,13 +100,13 @@ describe('useInjectSaga hook', () => {
         store = configureStore({}, memoryHistory);
         injectors = {
             injectSaga: jest.fn(),
-            ejectSaga: jest.fn(),
+            ejectSaga: jest.fn()
         };
         ComponentWithSaga = () => {
             useInjectSaga({
                 key: 'test',
                 saga: testSaga,
-                mode: 'testMode',
+                mode: 'testMode'
             });
             return null;
         };
@@ -118,13 +118,13 @@ describe('useInjectSaga hook', () => {
         render(
             <Provider store={store}>
                 <ComponentWithSaga {...props} />
-            </Provider>,
+            </Provider>
         );
 
         expect(injectors.injectSaga).toHaveBeenCalledTimes(1);
         expect(injectors.injectSaga).toHaveBeenCalledWith('test', {
             saga: testSaga,
-            mode: 'testMode',
+            mode: 'testMode'
         });
     });
 
@@ -133,7 +133,7 @@ describe('useInjectSaga hook', () => {
         const { unmount } = render(
             <Provider store={store}>
                 <ComponentWithSaga {...props} />
-            </Provider>,
+            </Provider>
         );
         unmount();
 
