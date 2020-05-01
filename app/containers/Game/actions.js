@@ -15,18 +15,19 @@
  *    }
  */
 
-import { CHANGE_TEAM_A_NAME } from './constants';
+import { SAVE_SETTINGS } from './constants';
 
 /**
- * Changes the input field of the form
+ * Saves the settings
  *
- * @param  {string} username The new text of the input field
+ * @param  {object} settings TThe whole lot of settings
  *
  * @return {object} An action object with a type of CHANGE_USERNAME
  */
-export function changeTeamAName(teamAName) {
+export function saveSettings(settings) {
+    console.log('game/actions: settings:', settings);
     return {
-        type: CHANGE_TEAM_A_NAME,
-        teamAName,
+        type: SAVE_SETTINGS,
+        settings
     };
 }

@@ -13,69 +13,74 @@ import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
 
 import { useInjectReducer } from 'utils/injectReducer';
-import { changeTeamAName } from './actions';
-import { makeSelectTeamAName, makeSelectTeamBName, makeSelectDate } from './selectors';
+import { makeSelectDate, makeSelectSettings } from './selectors';
 import reducer from './reducer';
+
+import Settings from '../Settings';
+// import { initialState as initialSettings } from '../Settings/reducer';
+// import { saveSettings } from './actions';
 
 const key = 'game';
 
-export function Game({
-    teamAName,
-    teamBName,
-    date
-}) {
+export function Game({ settings, date }) {
     useInjectReducer({ key, reducer });
 
-    const [isInitialised, setIsInitialised] = useState(false);
-
-    const saveInitialisation = () => {
-        setIsInitialised(true);
+    const messages = {
+        header: 'Game screen',
+        settings: {
+            open: 'Open settings...'
+        },
+        teamA: 'Home team',
+        teamB: 'Visitor team'
     };
 
-    const headerMessage = 'Game screen';
-    const needSettingsMessage = 'You need to set things up.';
-    const openSettings = 'Open settings...';
+    const [settingsScreenVisibility, setSettingsScreenVisibility] = useState(false);
+    const openSettings = () => {
+        setSettingsScreenVisibility(true);
+    };
+
     return (
         <Fragment>
-            {isInitialised ? (
-                <Fragment>
-                    <h1>All good!</h1>
-                    <p>{teamAName}</p>
-                    <p>{teamBName}</p>
-                    <p>{date}</p>
-                </Fragment>
+            <h1>{messages.header}</h1>
+            <p>
+                {messages.teamA}: {settings.teamAName}
+            </p>
+            <p>
+                {messages.teamB}: {settings.teamBName}
+            </p>
+            <p>{date}</p>
+            <button type="button" onClick={openSettings}>
+                {messages.settings.open}
+            </button>
+            {settingsScreenVisibility ? (
+                <Settings setSettingsScreenVisibility={setSettingsScreenVisibility} settingsData={settings} />
             ) : (
-                <Fragment>
-                    <h1>{headerMessage}</h1>
-                    <p>{needSettingsMessage}</p>
-                    <button type="button" onClick={saveInitialisation}>{openSettings}</button>
-                </Fragment>
+                ''
             )}
         </Fragment>
     );
 }
 
 Game.propTypes = {
-    teamAName: PropTypes.string,
-    teamBName: PropTypes.string,
+    settings: PropTypes.object,
     date: PropTypes.string
 };
 
 const mapStateToProps = createStructuredSelector({
-    teamAName: makeSelectTeamAName(),
-    teamBName: makeSelectTeamBName(),
+    settings: makeSelectSettings(),
     date: makeSelectDate()
 });
 
-export function mapDispatchToProps(dispatch) {
-    return {
-        onChangeTeamAName: evt => dispatch(changeTeamAName(evt.target.value))
-    };
-}
+// export function mapDispatchToProps(dispatch) {
+//     return {
+//         onChangeTeamAName: evt => dispatch(changeTeamAName(evt.target.value)),
+//         onChangeTeamBName: evt => dispatch(changeTeamBName(evt.target.value))
+//     };
+// }
 
 const withConnect = connect(
-    mapStateToProps,
-    mapDispatchToProps
+    mapStateToProps
+    // mapDispatchToProps
 );
 
 export default compose(
