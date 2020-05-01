@@ -1,7 +1,7 @@
 /*
- * Game screen
+ * Settings screen
  *
- * This is the main screen, at the '/game' route
+ * This is a "pop-up" displaying settings on top of the main screen
  *
  */
 
