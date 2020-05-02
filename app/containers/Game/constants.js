@@ -10,3 +10,24 @@
  */
 
 export const SAVE_SETTINGS = 'boilerplate/Game/SAVE_SETTINGS';
+export const HANDLE_GAME_STATUS = 'boilerplate/Game/HANDLE_GAME_STATUS';
+
+export const EVENT_TYPES = {
+    goal: 'goal',
+    yellowCard: 'yellow card',
+    redCard: 'red card',
+    blueCard: 'blue card',
+    suspension: '2 minutes',
+    timeOut: 'time out',
+    periodStart: 'start period',
+    periodEnd: 'end period'
+};
+
+export const PERIODS = {
+    0: 'warm-up',
+    1: 'half-time 1',
+    2: 'half-time 2',
+    3: 'extra-time half-time 1',
+    4: 'extra-time half-time 2',
+    5: 'full-time'
+};

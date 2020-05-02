@@ -12,7 +12,7 @@ export default function HomePage() {
     const linkText = 'Start game';
     return (
         <Fragment>
-            <h1>{headerMessage}</h1>
+            <h1 className="title title--1">{headerMessage}</h1>
             <a href="game">{linkText}</a>
         </Fragment>
     );

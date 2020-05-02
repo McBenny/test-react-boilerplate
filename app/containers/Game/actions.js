@@ -15,7 +15,7 @@
  *    }
  */
 
-import { SAVE_SETTINGS } from './constants';
+import { SAVE_SETTINGS, HANDLE_GAME_STATUS } from './constants';
 
 /**
  * Saves the settings
@@ -28,5 +28,12 @@ export function saveSettings(settings) {
     return {
         type: SAVE_SETTINGS,
         settings
+    };
+}
+
+export function handleGameStatus(data) {
+    return {
+        type: HANDLE_GAME_STATUS,
+        ...data
     };
 }

@@ -19,4 +19,36 @@ const makeSelectDate = () =>
         gameState => gameState.date
     );
 
-export { selectGame, makeSelectSettings, makeSelectDate };
+const makeSelectGameStarted = () =>
+    createSelector(
+        selectGame,
+        gameState => gameState.gameStarted
+    );
+
+const makeSelectGamePaused = () =>
+    createSelector(
+        selectGame,
+        gameState => gameState.gamePaused
+    );
+
+const makeSelectDataTeamA = () =>
+    createSelector(
+        selectGame,
+        gameState => gameState.dataTeamA
+    );
+
+const makeSelectDataTeamB = () =>
+    createSelector(
+        selectGame,
+        gameState => gameState.dataTeamB
+    );
+
+export {
+    selectGame,
+    makeSelectSettings,
+    makeSelectDate,
+    makeSelectGameStarted,
+    makeSelectGamePaused,
+    makeSelectDataTeamA,
+    makeSelectDataTeamB
+};
