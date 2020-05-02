@@ -9,6 +9,7 @@ import React, { Fragment, useState, memo } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
+import nextId from 'react-id-generator';
 
 import { createStructuredSelector } from 'reselect';
 
@@ -18,17 +19,31 @@ import {
     makeSelectSettings,
     makeSelectGameStarted,
     makeSelectGamePaused,
+    makeSelectGameEvents,
     makeSelectDataTeamA,
     makeSelectDataTeamB
 } from './selectors';
 import reducer from './reducer';
-import { handleGameStatus } from './actions';
+import { addEvent, addGoal, addYellowCard, handleGameStatus } from './actions';
 
 import Settings from '../Settings';
+import { EVENT_TYPES } from './constants';
+import './styles.scss';
 
 const key = 'game';
 
-export function Game({ settings, date, gameStarted, gamePaused, onHandleGameStatus, dataTeamA, dataTeamB }) {
+export function Game({
+    settings,
+    date,
+    gameStarted,
+    gamePaused,
+    gameEvents,
+    onHandleGameStatus,
+    onAddGoal,
+    onAddYellowCard,
+    dataTeamA,
+    dataTeamB
+}) {
     useInjectReducer({ key, reducer });
 
     const messages = {
@@ -51,9 +66,18 @@ export function Game({ settings, date, gameStarted, gamePaused, onHandleGameStat
     };
 
     const handleStartButton = () => {
+        let eventName = '';
+        if (gameStarted) {
+            eventName = gamePaused ? EVENT_TYPES.periodStart : EVENT_TYPES.periodEnd;
+        } else {
+            eventName = EVENT_TYPES.gameStart;
+        }
         onHandleGameStatus({
             gameStarted: true,
-            gamePaused: !gamePaused
+            gamePaused: !gamePaused,
+            eventType: eventName,
+            team: null,
+            playerNumber: null
         });
     };
 
@@ -64,10 +88,40 @@ export function Game({ settings, date, gameStarted, gamePaused, onHandleGameStat
         return messages.startButton.start;
     };
 
+    const addGoalPerTeam = (team, playerNumber) => {
+        onAddGoal({
+            eventType: EVENT_TYPES.goal,
+            team,
+            playerNumber
+        });
+    };
+
+    const addYellowCardPerTeam = (team, playerNumber) => {
+        onAddYellowCard({
+            eventType: EVENT_TYPES.yellowCard,
+            team,
+            playerNumber
+        });
+    };
+
+    const gameEventsLog = () => {
+        const log = gameEvents.map(gameEvent => {
+            const htmlId = nextId();
+            return (
+                <li key={htmlId}>
+                    <b>Event:</b> {gameEvent.eventType}, <b>Team:</b> {gameEvent.team}, <b>Player:</b>{' '}
+                    {gameEvent.playerNumber}
+                </li>
+            );
+        });
+        return <ul>{log}</ul>;
+    };
+
     return (
         <Fragment>
             <h1 className="title title--1">{messages.header}</h1>
             <ul>
+                <li>{date}</li>
                 <li>
                     <button type="button" onClick={openSettings}>
                         {messages.settings.open}
@@ -82,13 +136,66 @@ export function Game({ settings, date, gameStarted, gamePaused, onHandleGameStat
                     Score: {dataTeamA.score} - {dataTeamB.score}
                 </li>
             </ul>
-            <p>
+
+            <h2>
                 {messages.teamA}: {settings.teamAName}
-            </p>
-            <p>
+            </h2>
+            <ul>
+                <li>
+                    <button
+                        type="button"
+                        disabled={!gameStarted || gamePaused}
+                        onClick={() => {
+                            addGoalPerTeam('A', 0);
+                        }}
+                    >
+                        Add goal
+                    </button>
+                </li>
+                <li>
+                    Yellow cards: {dataTeamA.yellowCards}
+                    <button
+                        type="button"
+                        disabled={!gameStarted || gamePaused}
+                        onClick={() => {
+                            addYellowCardPerTeam('A', 0);
+                        }}
+                    >
+                        Add 1
+                    </button>
+                </li>
+            </ul>
+
+            <h2>
                 {messages.teamB}: {settings.teamBName}
-            </p>
-            <p>{date}</p>
+            </h2>
+            <ul>
+                <li>
+                    <button
+                        type="button"
+                        disabled={!gameStarted || gamePaused}
+                        onClick={() => {
+                            addGoalPerTeam('B', 0);
+                        }}
+                    >
+                        Add goal
+                    </button>
+                </li>
+                <li>
+                    Yellow cards: {dataTeamB.yellowCards}
+                    <button
+                        type="button"
+                        disabled={!gameStarted || gamePaused}
+                        onClick={() => {
+                            addYellowCardPerTeam('B', 0);
+                        }}
+                    >
+                        Add 1
+                    </button>
+                </li>
+            </ul>
+            {gameEvents.eventType}
+            {gameEventsLog()}
             {settingsScreenVisibility ? (
                 <Settings setSettingsScreenVisibility={setSettingsScreenVisibility} settingsData={settings} />
             ) : (
@@ -103,7 +210,10 @@ Game.propTypes = {
     date: PropTypes.string,
     gameStarted: PropTypes.bool,
     gamePaused: PropTypes.bool,
+    gameEvents: PropTypes.array,
     onHandleGameStatus: PropTypes.func,
+    onAddGoal: PropTypes.func,
+    onAddYellowCard: PropTypes.func,
     dataTeamA: PropTypes.object,
     dataTeamB: PropTypes.object
 };
@@ -113,13 +223,25 @@ const mapStateToProps = createStructuredSelector({
     date: makeSelectDate(),
     gameStarted: makeSelectGameStarted(),
     gamePaused: makeSelectGamePaused(),
+    gameEvents: makeSelectGameEvents(),
     dataTeamA: makeSelectDataTeamA(),
     dataTeamB: makeSelectDataTeamB()
 });
 
 export function mapDispatchToProps(dispatch) {
     return {
-        onHandleGameStatus: data => dispatch(handleGameStatus(data))
+        onHandleGameStatus: data => {
+            dispatch(handleGameStatus(data));
+            dispatch(addEvent(data));
+        },
+        onAddGoal: data => {
+            dispatch(addGoal(data));
+            dispatch(addEvent(data));
+        },
+        onAddYellowCard: data => {
+            dispatch(addYellowCard(data));
+            dispatch(addEvent(data));
+        }
     };
 }
 

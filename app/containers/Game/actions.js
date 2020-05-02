@@ -15,7 +15,16 @@
  *    }
  */
 
-import { SAVE_SETTINGS, HANDLE_GAME_STATUS } from './constants';
+import {
+    SAVE_SETTINGS,
+    HANDLE_GAME_STATUS,
+    ADD_GOAL,
+    ADD_EVENT,
+    ADD_YELLOW_CARD,
+    ADD_RED_CARD,
+    ADD_BLUE_CARD,
+    ADD_SUSPENSION
+} from './constants';
 
 /**
  * Saves the settings
@@ -34,6 +43,48 @@ export function saveSettings(settings) {
 export function handleGameStatus(data) {
     return {
         type: HANDLE_GAME_STATUS,
+        ...data
+    };
+}
+
+export function addEvent(data) {
+    return {
+        type: ADD_EVENT,
+        ...data
+    };
+}
+
+export function addGoal(data) {
+    return {
+        type: ADD_GOAL,
+        ...data
+    };
+}
+
+export function addYellowCard(data) {
+    return {
+        type: ADD_YELLOW_CARD,
+        ...data
+    };
+}
+
+export function addRedCard(data) {
+    return {
+        type: ADD_RED_CARD,
+        ...data
+    };
+}
+
+export function addBlueCard(data) {
+    return {
+        type: ADD_BLUE_CARD,
+        ...data
+    };
+}
+
+export function addSuspension(data) {
+    return {
+        type: ADD_SUSPENSION,
         ...data
     };
 }

@@ -11,6 +11,12 @@
 
 export const SAVE_SETTINGS = 'boilerplate/Game/SAVE_SETTINGS';
 export const HANDLE_GAME_STATUS = 'boilerplate/Game/HANDLE_GAME_STATUS';
+export const ADD_EVENT = 'boilerplate/Game/ADD_EVENT';
+export const ADD_GOAL = 'boilerplate/Game/ADD_GOAL';
+export const ADD_YELLOW_CARD = 'boilerplate/Game/ADD_YELLOW_CARD';
+export const ADD_RED_CARD = 'boilerplate/Game/ADD_RED_CARD';
+export const ADD_BLUE_CARD = 'boilerplate/Game/ADD_BLUE_CARD';
+export const ADD_SUSPENSION = 'boilerplate/Game/ADD_SUSPENSION';
 
 export const EVENT_TYPES = {
     goal: 'goal',
@@ -19,6 +25,8 @@ export const EVENT_TYPES = {
     blueCard: 'blue card',
     suspension: '2 minutes',
     timeOut: 'time out',
+    gameStart: 'start game',
+    gameEnd: 'end game',
     periodStart: 'start period',
     periodEnd: 'end period'
 };

@@ -31,6 +31,12 @@ const makeSelectGamePaused = () =>
         gameState => gameState.gamePaused
     );
 
+const makeSelectGameEvents = () =>
+    createSelector(
+        selectGame,
+        gameState => gameState.gameEvents
+    );
+
 const makeSelectDataTeamA = () =>
     createSelector(
         selectGame,
@@ -49,6 +55,7 @@ export {
     makeSelectDate,
     makeSelectGameStarted,
     makeSelectGamePaused,
+    makeSelectGameEvents,
     makeSelectDataTeamA,
     makeSelectDataTeamB
 };

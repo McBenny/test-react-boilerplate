@@ -8,7 +8,16 @@
  */
 
 import produce from 'immer';
-import { SAVE_SETTINGS, HANDLE_GAME_STATUS } from './constants';
+import {
+    SAVE_SETTINGS,
+    HANDLE_GAME_STATUS,
+    ADD_EVENT,
+    ADD_GOAL,
+    ADD_YELLOW_CARD,
+    ADD_RED_CARD,
+    ADD_BLUE_CARD,
+    ADD_SUSPENSION
+} from './constants';
 import { initialState as initialSettings } from '../Settings/reducer';
 
 const getToday = () => {
@@ -29,7 +38,7 @@ export const initialState = {
     gamePaused: true,
     currentPeriod: 0,
     dataTeamA: {
-        score: 7,
+        score: 0,
         yellowCards: 0,
         redCards: 0,
         blueCards: 0,
@@ -44,7 +53,7 @@ export const initialState = {
         ]
     },
     dataTeamB: {
-        score: 5,
+        score: 0,
         yellowCards: 0,
         redCards: 0,
         blueCards: 0,
@@ -69,9 +78,37 @@ const gameReducer = (state = initialState, action) =>
                 draft.settings = action.settings;
                 break;
             case HANDLE_GAME_STATUS:
-                console.log(action);
+                // console.log(action);
                 draft.gameStarted = action.gameStarted;
                 draft.gamePaused = action.gamePaused;
+                break;
+            case ADD_EVENT:
+                // console.log(ADD_EVENT, action);
+                draft.gameEvents.push({
+                    eventType: action.eventType,
+                    team: action.team,
+                    playerNumber: action.playerNumber
+                });
+                break;
+            case ADD_GOAL:
+                // console.log(ADD_GOAL, action);
+                draft[`dataTeam${action.team}`].score += 1;
+                break;
+            case ADD_YELLOW_CARD:
+                // console.log(ADD_YELLOW_CARD, action);
+                draft[`dataTeam${action.team}`].yellowCards += 1;
+                break;
+            case ADD_RED_CARD:
+                // console.log(ADD_RED_CARD, action);
+                draft[`dataTeam${action.team}`].redCards += 1;
+                break;
+            case ADD_BLUE_CARD:
+                // console.log(ADD_BLUE_CARD, action);
+                draft[`dataTeam${action.team}`].blueCards += 1;
+                break;
+            case ADD_SUSPENSION:
+                // console.log(ADD_SUSPENSION, action);
+                draft[`dataTeam${action.team}`].suspensions += 1;
                 break;
             default:
         }
