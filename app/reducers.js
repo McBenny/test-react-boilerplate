@@ -13,6 +13,6 @@ import history from 'utils/history';
 export default function createReducer(injectedReducers = {}) {
     return combineReducers({
         router: connectRouter(history),
-        ...injectedReducers,
+        ...injectedReducers
     });
 }

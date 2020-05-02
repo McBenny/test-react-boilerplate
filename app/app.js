@@ -39,7 +39,7 @@ const render = () => {
                 <App />
             </ConnectedRouter>
         </Provider>,
-        MOUNT_NODE,
+        MOUNT_NODE
     );
 };
 

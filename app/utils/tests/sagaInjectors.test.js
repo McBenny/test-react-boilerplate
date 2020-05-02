@@ -28,8 +28,8 @@ describe('injectors', () => {
             expect(getInjectors(store)).toEqual(
                 expect.objectContaining({
                     injectSaga: expect.any(Function),
-                    ejectSaga: expect.any(Function),
-                }),
+                    ejectSaga: expect.any(Function)
+                })
             );
         });
 
@@ -199,7 +199,7 @@ describe('injectors', () => {
             store.injectedSagas.test = {
                 saga: testSaga,
                 task: { cancel },
-                mode: RESTART_ON_REMOUNT,
+                mode: RESTART_ON_REMOUNT
             };
 
             function* testSaga1() {
