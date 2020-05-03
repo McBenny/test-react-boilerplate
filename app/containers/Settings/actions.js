@@ -15,12 +15,12 @@
  *    }
  */
 
-import { CHANGE_TEAM_A_NAME, CHANGE_TEAM_B_NAME, CANCEL_SETTINGS_CHANGE } from './constants';
+import { CHANGE_TEAM_A_NAME, CHANGE_TEAM_B_NAME, CANCEL_SETTINGS_CHANGE, CHANGE_PLAYER } from './constants';
 
 /**
  * Changes the input field of the form
  * @param  {string} teamAName The new text of the input field
- * @return {object} An action object with a type of CHANGE_USERNAME
+ * @return {object} An action object with a type of CHANGE_TEAM_A_NAME
  */
 export function changeTeamAName(teamAName) {
     return {
@@ -32,12 +32,24 @@ export function changeTeamAName(teamAName) {
 /**
  * Changes the input field of the form
  * @param  {string} teamBName The new text of the input field
- * @return {object} An action object with a type of CHANGE_USERNAME
+ * @return {object} An action object with a type of CHANGE_TEAM_B_NAME
  */
 export function changeTeamBName(teamBName) {
     return {
         type: CHANGE_TEAM_B_NAME,
         teamBName
+    };
+}
+
+/**
+ * Changes the input field of the form
+ * @param  {object} player The new text of the input field
+ * @return {object} An action object with a type of CHANGE_PLAYER
+ */
+export function changePlayer(player) {
+    return {
+        type: CHANGE_PLAYER,
+        player
     };
 }
 
