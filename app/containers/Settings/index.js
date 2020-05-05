@@ -30,7 +30,7 @@ export function Settings({
     onChangePlayer,
     onSaveSettings,
     onCloseSettings,
-    setSettingsScreenVisibility,
+    setScreenVisibility,
     settingsData
 }) {
     useInjectReducer({ key, reducer });
@@ -52,12 +52,12 @@ export function Settings({
             teamBName,
             players
         });
-        setSettingsScreenVisibility(false);
+        setScreenVisibility(false);
     };
 
-    const closeSettings = () => {
+    const closePopIn = () => {
         onCloseSettings(settingsData);
-        setSettingsScreenVisibility(false);
+        setScreenVisibility(false);
     };
 
     const UPDATE_NUMBER = 'UPDATE_NUMBER';
@@ -137,7 +137,7 @@ export function Settings({
                 </p>
                 <h3>{messages.addPlayer}</h3>
                 {playersList('A')}
-                <button type="button" onClick={closeSettings}>
+                <button type="button" onClick={closePopIn}>
                     {messages.close}
                 </button>{' '}
                 <button type="submit">{messages.save}</button>
@@ -155,7 +155,7 @@ Settings.propTypes = {
     onChangePlayer: PropTypes.func,
     onSaveSettings: PropTypes.func,
     onCloseSettings: PropTypes.func,
-    setSettingsScreenVisibility: PropTypes.func,
+    setScreenVisibility: PropTypes.func,
     settingsData: PropTypes.object
 };
 

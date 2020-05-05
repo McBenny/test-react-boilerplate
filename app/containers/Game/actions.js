@@ -1,5 +1,5 @@
 /*
- * Home Actions
+ * Game Actions
  *
  * Actions change things in your application
  * Since this boilerplate uses a uni-directional data flow, specifically redux,
@@ -15,16 +15,7 @@
  *    }
  */
 
-import {
-    SAVE_SETTINGS,
-    HANDLE_GAME_STATUS,
-    ADD_GOAL,
-    ADD_EVENT,
-    ADD_YELLOW_CARD,
-    ADD_RED_CARD,
-    ADD_BLUE_CARD,
-    ADD_SUSPENSION
-} from './constants';
+import { SAVE_SETTINGS, HANDLE_GAME_STATUS, ADD_EVENT } from './constants';
 
 /**
  * Saves the settings
@@ -54,37 +45,9 @@ export function addEvent(data) {
     };
 }
 
-export function addGoal(data) {
+export function addAction(data) {
     return {
-        type: ADD_GOAL,
-        ...data
-    };
-}
-
-export function addYellowCard(data) {
-    return {
-        type: ADD_YELLOW_CARD,
-        ...data
-    };
-}
-
-export function addRedCard(data) {
-    return {
-        type: ADD_RED_CARD,
-        ...data
-    };
-}
-
-export function addBlueCard(data) {
-    return {
-        type: ADD_BLUE_CARD,
-        ...data
-    };
-}
-
-export function addSuspension(data) {
-    return {
-        type: ADD_SUSPENSION,
+        type: data.type,
         ...data
     };
 }

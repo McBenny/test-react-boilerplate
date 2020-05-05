@@ -52,7 +52,7 @@ const settingsReducer = (state = initialState, action) =>
                 // console.log(CHANGE_PLAYER, action);
                 const targetPlayer = draft.players[`team${action.player.team}`][`player${action.player.playerIndex}`];
                 if (action.player.playerNumber) {
-                    targetPlayer.playerNumber = action.player.playerNumber;
+                    targetPlayer.playerNumber = parseInt(action.player.playerNumber, 10);
                 }
                 if (action.player.playerName) {
                     targetPlayer.playerName = action.player.playerName;

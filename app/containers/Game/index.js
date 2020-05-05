@@ -5,7 +5,7 @@
  *
  */
 
-import React, { Fragment, useState, memo } from 'react';
+import React, { Fragment, useState, memo, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
@@ -24,10 +24,20 @@ import {
     makeSelectDataTeamB
 } from './selectors';
 import reducer from './reducer';
-import { addEvent, addGoal, addYellowCard, handleGameStatus } from './actions';
+import { addEvent, addAction, handleGameStatus } from './actions';
 
 import Settings from '../Settings';
-import { EVENT_TYPES } from './constants';
+import Players from '../../components/Players';
+
+import {
+    ADD_BLUE_CARD,
+    ADD_EVENT,
+    ADD_GOAL,
+    ADD_RED_CARD,
+    ADD_SUSPENSION,
+    ADD_YELLOW_CARD,
+    EVENT_TYPES
+} from './constants';
 import './styles.scss';
 
 const key = 'game';
@@ -39,8 +49,7 @@ export function Game({
     gamePaused,
     gameEvents,
     onHandleGameStatus,
-    onAddGoal,
-    onAddYellowCard,
+    onAddAction,
     dataTeamA,
     dataTeamB
 }) {
@@ -57,7 +66,12 @@ export function Game({
             resume: 'Resume game'
         },
         teamA: 'Home team',
-        teamB: 'Visitor team'
+        teamB: 'Visitor team',
+        addGoal: 'Add a goal',
+        addYellowCard: 'Add a yellow card',
+        addSuspension: 'Add a 2 minutes',
+        addRedCard: 'Add a red card',
+        addBlueCard: 'Add a blue card'
     };
 
     const [settingsScreenVisibility, setSettingsScreenVisibility] = useState(false);
@@ -65,8 +79,25 @@ export function Game({
         setSettingsScreenVisibility(true);
     };
 
+    const initialPlayersData = { eventType: '', playersListType: '', playersTeam: '', playersList: {} };
+    const [playersScreenVisibility, setPlayersScreenVisibility] = useState(false);
+    const [playersData, setPlayersData] = useState(initialPlayersData);
+    const openPlayers = ({ team, type, eventType }) => {
+        setPlayersData({
+            eventType,
+            playersListType: type,
+            playersTeam: team,
+            playersList: settings.players[`team${team}`]
+        });
+    };
+    useEffect(() => {
+        if (playersData !== initialPlayersData) {
+            setPlayersScreenVisibility(true);
+        }
+    }, [playersData]);
+
     const handleStartButton = () => {
-        let eventName = '';
+        let eventName;
         if (gameStarted) {
             eventName = gamePaused ? EVENT_TYPES.periodStart : EVENT_TYPES.periodEnd;
         } else {
@@ -88,17 +119,10 @@ export function Game({
         return messages.startButton.start;
     };
 
-    const addGoalPerTeam = (team, playerNumber) => {
-        onAddGoal({
-            eventType: EVENT_TYPES.goal,
-            team,
-            playerNumber
-        });
-    };
-
-    const addYellowCardPerTeam = (team, playerNumber) => {
-        onAddYellowCard({
-            eventType: EVENT_TYPES.yellowCard,
+    const addActionPerTeam = ({ eventType, type, team, playerNumber }) => {
+        onAddAction({
+            eventType,
+            type,
             team,
             playerNumber
         });
@@ -145,11 +169,9 @@ export function Game({
                     <button
                         type="button"
                         disabled={!gameStarted || gamePaused}
-                        onClick={() => {
-                            addGoalPerTeam('A', 0);
-                        }}
+                        onClick={() => openPlayers({ eventType: EVENT_TYPES.goal, team: 'A', type: ADD_GOAL })}
                     >
-                        Add goal
+                        {messages.addGoal}
                     </button>
                 </li>
                 <li>
@@ -157,11 +179,43 @@ export function Game({
                     <button
                         type="button"
                         disabled={!gameStarted || gamePaused}
-                        onClick={() => {
-                            addYellowCardPerTeam('A', 0);
-                        }}
+                        onClick={() =>
+                            openPlayers({ eventType: EVENT_TYPES.yellowCard, team: 'A', type: ADD_YELLOW_CARD })
+                        }
                     >
-                        Add 1
+                        {messages.addYellowCard}
+                    </button>
+                </li>
+                <li>
+                    2 minutes: {dataTeamA.suspensions}
+                    <button
+                        type="button"
+                        disabled={!gameStarted || gamePaused}
+                        onClick={() =>
+                            openPlayers({ eventType: EVENT_TYPES.suspension, team: 'A', type: ADD_SUSPENSION })
+                        }
+                    >
+                        {messages.addSuspension}
+                    </button>
+                </li>
+                <li>
+                    Red cards: {dataTeamA.redCards}
+                    <button
+                        type="button"
+                        disabled={!gameStarted || gamePaused}
+                        onClick={() => openPlayers({ eventType: EVENT_TYPES.redCard, team: 'A', type: ADD_RED_CARD })}
+                    >
+                        {messages.addRedCard}
+                    </button>
+                </li>
+                <li>
+                    Blue cards: {dataTeamA.blueCards}
+                    <button
+                        type="button"
+                        disabled={!gameStarted || gamePaused}
+                        onClick={() => openPlayers({ eventType: EVENT_TYPES.blueCard, team: 'A', type: ADD_BLUE_CARD })}
+                    >
+                        {messages.addBlueCard}
                     </button>
                 </li>
             </ul>
@@ -174,11 +228,9 @@ export function Game({
                     <button
                         type="button"
                         disabled={!gameStarted || gamePaused}
-                        onClick={() => {
-                            addGoalPerTeam('B', 0);
-                        }}
+                        onClick={() => openPlayers({ eventType: EVENT_TYPES.goal, team: 'B', type: ADD_GOAL })}
                     >
-                        Add goal
+                        {messages.addGoal}
                     </button>
                 </li>
                 <li>
@@ -186,18 +238,62 @@ export function Game({
                     <button
                         type="button"
                         disabled={!gameStarted || gamePaused}
-                        onClick={() => {
-                            addYellowCardPerTeam('B', 0);
-                        }}
+                        onClick={() =>
+                            openPlayers({ eventType: EVENT_TYPES.yellowCard, team: 'B', type: ADD_YELLOW_CARD })
+                        }
                     >
-                        Add 1
+                        {messages.addYellowCard}
+                    </button>
+                </li>
+                <li>
+                    2 minutes: {dataTeamB.suspensions}
+                    <button
+                        type="button"
+                        disabled={!gameStarted || gamePaused}
+                        onClick={() =>
+                            openPlayers({ eventType: EVENT_TYPES.suspension, team: 'B', type: ADD_SUSPENSION })
+                        }
+                    >
+                        {messages.addSuspension}
+                    </button>
+                </li>
+                <li>
+                    Red cards: {dataTeamB.redCards}
+                    <button
+                        type="button"
+                        disabled={!gameStarted || gamePaused}
+                        onClick={() => openPlayers({ eventType: EVENT_TYPES.redCard, team: 'B', type: ADD_RED_CARD })}
+                    >
+                        {messages.addRedCard}
+                    </button>
+                </li>
+                <li>
+                    Blue cards: {dataTeamB.blueCards}
+                    <button
+                        type="button"
+                        disabled={!gameStarted || gamePaused}
+                        onClick={() => openPlayers({ eventType: EVENT_TYPES.blueCard, team: 'B', type: ADD_BLUE_CARD })}
+                    >
+                        {messages.addBlueCard}
                     </button>
                 </li>
             </ul>
             {gameEvents.eventType}
             {gameEventsLog()}
             {settingsScreenVisibility ? (
-                <Settings setSettingsScreenVisibility={setSettingsScreenVisibility} settingsData={settings} />
+                <Settings setScreenVisibility={setSettingsScreenVisibility} settingsData={settings} />
+            ) : (
+                ''
+            )}
+            {playersScreenVisibility ? (
+                <Players
+                    setScreenVisibility={setPlayersScreenVisibility}
+                    eventType={playersData.eventType}
+                    playersListType={playersData.playersListType}
+                    team={playersData.playersTeam}
+                    playersList={playersData.playersList}
+                    actionHandler={addActionPerTeam}
+                />
             ) : (
                 ''
             )}
@@ -212,8 +308,7 @@ Game.propTypes = {
     gamePaused: PropTypes.bool,
     gameEvents: PropTypes.array,
     onHandleGameStatus: PropTypes.func,
-    onAddGoal: PropTypes.func,
-    onAddYellowCard: PropTypes.func,
+    onAddAction: PropTypes.func,
     dataTeamA: PropTypes.object,
     dataTeamB: PropTypes.object
 };
@@ -234,13 +329,9 @@ export function mapDispatchToProps(dispatch) {
             dispatch(handleGameStatus(data));
             dispatch(addEvent(data));
         },
-        onAddGoal: data => {
-            dispatch(addGoal(data));
-            dispatch(addEvent(data));
-        },
-        onAddYellowCard: data => {
-            dispatch(addYellowCard(data));
-            dispatch(addEvent(data));
+        onAddAction: data => {
+            dispatch(addAction(data));
+            dispatch(addAction({ ...data, type: ADD_EVENT }));
         }
     };
 }
