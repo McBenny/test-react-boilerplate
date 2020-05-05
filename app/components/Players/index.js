@@ -4,6 +4,7 @@ import { ADD_GOAL } from '../../containers/Game/constants';
 import { compareValues } from '../../utils/utilities';
 
 function Players({ setScreenVisibility, eventType, playersListType, team, playersList, actionHandler }) {
+    // TODO: have a centralised messages file to import this from
     const messages = {
         title: 'Players',
         close: 'Close'
@@ -13,6 +14,7 @@ function Players({ setScreenVisibility, eventType, playersListType, team, player
         setScreenVisibility(false);
     };
 
+    // TODO: move this in constants
     const unknownPlayer = {
         player0: {
             playerNumber: 0,
@@ -22,6 +24,7 @@ function Players({ setScreenVisibility, eventType, playersListType, team, player
     const playersListModified = playersListType === ADD_GOAL ? Object.assign(unknownPlayer, playersList) : playersList;
 
     const playersListDisplay = () => {
+        // TODO: transform object of players into an array to simplify this
         const playersKeysArray = Object.keys(playersListModified);
         const playersArray = playersKeysArray.map(player => ({
             ...playersListModified[player],

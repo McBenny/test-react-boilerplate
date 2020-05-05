@@ -15,6 +15,7 @@ export const initialState = {
     teamAName: 'Team A',
     teamBName: 'Team B',
     players: {
+        // TODO: transform this into an array to simplify it
         teamA: {
             player1: {
                 playerNumber: 1,

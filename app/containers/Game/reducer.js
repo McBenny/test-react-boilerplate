@@ -44,6 +44,7 @@ export const initialState = {
         blueCards: 0,
         suspensions: 0,
         timeOuts: 0,
+        // TODO: probably remove this
         players: [
             {
                 number: 0,
@@ -59,6 +60,7 @@ export const initialState = {
         blueCards: 0,
         suspensions: 0,
         timeOuts: 0,
+        // TODO: Probably remove this
         players: [
             {
                 number: 0,
