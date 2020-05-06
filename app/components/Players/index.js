@@ -14,7 +14,6 @@ function Players({ setScreenVisibility, eventType, playersListType, team, player
         setScreenVisibility(false);
     };
 
-    // TODO: move this in constants
     const playersListModified = playersListType === ADD_GOAL ? Object.assign(UNKNOWN_PLAYER, playersList) : playersList;
 
     const playersListDisplay = () => {
