@@ -146,7 +146,7 @@ export function Game({
             </ul>
 
             <h2>
-                {messages.teamA}: {settings.teamAName}
+                {messages.teamA}: {settings.teams.A.name}
             </h2>
             <ul>
                 <li>
@@ -215,7 +215,7 @@ export function Game({
             </ul>
 
             <h2>
-                {messages.teamB}: {settings.teamBName}
+                {messages.teamB}: {settings.teams.B.name}
             </h2>
             <ul>
                 <li>

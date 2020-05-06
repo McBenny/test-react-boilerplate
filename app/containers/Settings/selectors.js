@@ -7,16 +7,10 @@ import { initialState } from './reducer';
 
 const selectSettings = state => state.settings || initialState;
 
-const makeSelectTeamAName = () =>
+const makeSelectTeamName = () =>
     createSelector(
         selectSettings,
-        settingsState => settingsState.teamAName
-    );
-
-const makeSelectTeamBName = () =>
-    createSelector(
-        selectSettings,
-        settingsState => settingsState.teamBName
+        settingsState => settingsState.teams
     );
 
 const makeSelectPlayer = () =>
@@ -25,4 +19,4 @@ const makeSelectPlayer = () =>
         settingsState => settingsState.players
     );
 
-export { selectSettings, makeSelectTeamAName, makeSelectTeamBName, makeSelectPlayer };
+export { selectSettings, makeSelectTeamName, makeSelectPlayer };

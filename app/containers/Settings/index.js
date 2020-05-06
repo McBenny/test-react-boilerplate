@@ -14,8 +14,8 @@ import { createStructuredSelector } from 'reselect';
 import nextId from 'react-id-generator';
 
 import { useInjectReducer } from 'utils/injectReducer';
-import { changeTeamAName, changeTeamBName, changePlayer, cancelChangeSettings } from './actions';
-import { makeSelectPlayer, makeSelectTeamAName, makeSelectTeamBName } from './selectors';
+import { changeTeamName, changePlayer, cancelChangeSettings } from './actions';
+import { makeSelectPlayer, makeSelectTeamName } from './selectors';
 import reducer from './reducer';
 import { messages } from './messages';
 import { saveSettings } from '../Game/actions';
@@ -23,11 +23,9 @@ import { saveSettings } from '../Game/actions';
 const key = 'settings';
 
 export function Settings({
-    teamAName,
-    teamBName,
+    teams,
     players,
-    onChangeTeamAName,
-    onChangeTeamBName,
+    onChangeTeamName,
     onChangePlayer,
     onSaveSettings,
     onCloseSettings,
@@ -39,8 +37,7 @@ export function Settings({
     const saveInitialisation = e => {
         e.preventDefault();
         onSaveSettings({
-            teamAName,
-            teamBName,
+            teams,
             players
         });
         setScreenVisibility(false);
@@ -50,6 +47,10 @@ export function Settings({
     const closePopIn = () => {
         onCloseSettings(settingsData);
         setScreenVisibility(false);
+    };
+
+    const handleChangeTeamName = (e, team) => {
+        onChangeTeamName({ team, teamName: e.target.value });
     };
 
     const UPDATE_NUMBER = 'UPDATE_NUMBER';
@@ -118,11 +119,23 @@ export function Settings({
             <form action="" onSubmit={saveInitialisation}>
                 <p>
                     <label htmlFor="teamAName">{messages.teamA}:</label>{' '}
-                    <input type="text" id="teamAName" onChange={onChangeTeamAName} value={teamAName} required />
+                    <input
+                        type="text"
+                        id="teamAName"
+                        onChange={e => handleChangeTeamName(e, 'A')}
+                        value={teams.A.name}
+                        required
+                    />
                 </p>
                 <p>
                     <label htmlFor="teamBName">{messages.teamB}:</label>{' '}
-                    <input type="text" id="teamBName" onChange={onChangeTeamBName} value={teamBName} required />
+                    <input
+                        type="text"
+                        id="teamBName"
+                        onChange={e => handleChangeTeamName(e, 'B')}
+                        value={teams.B.name}
+                        required
+                    />
                 </p>
                 <h3>{messages.addPlayer}</h3>
                 {playersList('A')}
@@ -136,11 +149,9 @@ export function Settings({
 }
 
 Settings.propTypes = {
-    teamAName: PropTypes.string,
-    teamBName: PropTypes.string,
+    teams: PropTypes.object,
     players: PropTypes.object,
-    onChangeTeamAName: PropTypes.func,
-    onChangeTeamBName: PropTypes.func,
+    onChangeTeamName: PropTypes.func,
     onChangePlayer: PropTypes.func,
     onSaveSettings: PropTypes.func,
     onCloseSettings: PropTypes.func,
@@ -149,15 +160,13 @@ Settings.propTypes = {
 };
 
 const mapStateToProps = createStructuredSelector({
-    teamAName: makeSelectTeamAName(),
-    teamBName: makeSelectTeamBName(),
+    teams: makeSelectTeamName(),
     players: makeSelectPlayer()
 });
 
 export function mapDispatchToProps(dispatch) {
     return {
-        onChangeTeamAName: evt => dispatch(changeTeamAName(evt.target.value)),
-        onChangeTeamBName: evt => dispatch(changeTeamBName(evt.target.value)),
+        onChangeTeamName: data => dispatch(changeTeamName(data)),
         onChangePlayer: data => dispatch(changePlayer(data)),
         onSaveSettings: data => dispatch(saveSettings(data)),
         onCloseSettings: data => dispatch(cancelChangeSettings(data))
