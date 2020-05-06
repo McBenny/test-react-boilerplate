@@ -17,10 +17,12 @@ export const initialState = {
             name: 'Team AAA',
             players: [
                 {
+                    id: 1,
                     playerName: 'Adam',
                     playerNumber: 26
                 },
                 {
+                    id: 2,
                     playerName: 'Traverso',
                     playerNumber: 25
                 }
@@ -65,13 +67,16 @@ const settingsReducer = (state = initialState, action) =>
                 break;
             case CHANGE_PLAYER: {
                 // console.log(CHANGE_PLAYER, action);
-                const targetPlayer = draft.players[`team${action.player.team}`][`player${action.player.playerIndex}`];
-                if (action.player.playerNumber) {
-                    targetPlayer.playerNumber = parseInt(action.player.playerNumber, 10);
-                }
-                if (action.player.playerName) {
-                    targetPlayer.playerName = action.player.playerName;
-                }
+                draft.teams[action.team].players = draft.teams[action.team].players.map(player => {
+                    if (player.id === action.id) {
+                        return {
+                            ...player,
+                            playerNumber: action.playerNumber,
+                            playerName: action.playerName
+                        };
+                    }
+                    return player;
+                });
                 break;
             }
             case CANCEL_SETTINGS_CHANGE: {

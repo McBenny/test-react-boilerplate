@@ -13,10 +13,4 @@ const makeSelectTeamName = () =>
         settingsState => settingsState.teams
     );
 
-const makeSelectPlayer = () =>
-    createSelector(
-        selectSettings,
-        settingsState => settingsState.players
-    );
-
-export { selectSettings, makeSelectTeamName, makeSelectPlayer };
+export { selectSettings, makeSelectTeamName };

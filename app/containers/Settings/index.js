@@ -11,11 +11,10 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 
 import { createStructuredSelector } from 'reselect';
-import nextId from 'react-id-generator';
 
 import { useInjectReducer } from 'utils/injectReducer';
 import { changeTeamName, changePlayer, cancelChangeSettings } from './actions';
-import { makeSelectPlayer, makeSelectTeamName } from './selectors';
+import { makeSelectTeamName } from './selectors';
 import reducer from './reducer';
 import { messages } from './messages';
 import { saveSettings } from '../Game/actions';
@@ -24,7 +23,6 @@ const key = 'settings';
 
 export function Settings({
     teams,
-    players,
     onChangeTeamName,
     onChangePlayer,
     onSaveSettings,
@@ -37,8 +35,7 @@ export function Settings({
     const saveInitialisation = e => {
         e.preventDefault();
         onSaveSettings({
-            teams,
-            players
+            teams
         });
         setScreenVisibility(false);
     };
@@ -53,66 +50,42 @@ export function Settings({
         onChangeTeamName({ team, teamName: e.target.value });
     };
 
-    const UPDATE_NUMBER = 'UPDATE_NUMBER';
-    const UPDATE_NAME = 'UPDATE_NAME';
-
-    const changePlayerPrep = (e, data) => {
-        onChangePlayer({
-            ...data,
-            playerNumber: data.update === UPDATE_NUMBER ? e.target.value : data.playerNumber,
-            playerName: data.update === UPDATE_NAME ? e.target.value : data.playerName
-        });
-    };
-
     const playersList = team => {
-        const numberOfPlayers = 16;
-        const buffer = [];
-        for (let i = 1; i <= numberOfPlayers; i += 1) {
-            const playerRef = players[`team${team}`][`player${i}`];
-            if (playerRef) {
-                const htmlId = nextId();
-                const playerData = {
-                    team,
-                    playerIndex: i,
-                    playerNumber: playerRef.playerNumber,
-                    playerName: playerRef.playerName
-                };
-                buffer.push(
-                    <li key={htmlId}>
-                        <label htmlFor={`playerNumber${htmlId}`}>{messages.playerNumberAndName}:</label>{' '}
-                        <input
-                            type="text"
-                            id={`playerNumber${htmlId}`}
-                            onChange={e =>
-                                changePlayerPrep(e, {
-                                    team,
-                                    playerIndex: i,
-                                    update: UPDATE_NUMBER,
-                                    playerName: playerData.playerName
-                                })
-                            }
-                            value={playerRef.playerNumber}
-                            required
-                        />{' '}
-                        <input
-                            type="text"
-                            id={`playerName${htmlId}`}
-                            onChange={e =>
-                                onChangePlayer({
-                                    team,
-                                    playerIndex: i,
-                                    playerName: e.target.value
-                                })
-                            }
-                            value={playerRef.playerName}
-                        />{' '}
-                        <button type="button">+</button>
-                    </li>
-                );
-            }
-        }
+        const buffer = teams[team].players.map(player => (
+            <li key={`player${player.id}`}>
+                <label htmlFor={`playerNumber${player.id}`}>{messages.playerNumberAndName}:</label>
+                <input
+                    type="text"
+                    id={`playerNumber${player.id}`}
+                    onChange={e =>
+                        onChangePlayer({
+                            team,
+                            id: player.id,
+                            playerNumber: e.target.value,
+                            playerName: player.playerName
+                        })
+                    }
+                    value={player.playerNumber}
+                    required
+                />{' '}
+                <input
+                    type="text"
+                    id={`playerName${player.id}`}
+                    onChange={e =>
+                        onChangePlayer({
+                            team,
+                            id: player.id,
+                            playerNumber: player.playerNumber,
+                            playerName: e.target.value
+                        })
+                    }
+                    value={player.playerName}
+                />
+            </li>
+        ));
         return <ul>{buffer}</ul>;
     };
+
     return (
         <Fragment>
             <h2>{messages.header}</h2>
@@ -150,7 +123,6 @@ export function Settings({
 
 Settings.propTypes = {
     teams: PropTypes.object,
-    players: PropTypes.object,
     onChangeTeamName: PropTypes.func,
     onChangePlayer: PropTypes.func,
     onSaveSettings: PropTypes.func,
@@ -160,8 +132,7 @@ Settings.propTypes = {
 };
 
 const mapStateToProps = createStructuredSelector({
-    teams: makeSelectTeamName(),
-    players: makeSelectPlayer()
+    teams: makeSelectTeamName()
 });
 
 export function mapDispatchToProps(dispatch) {

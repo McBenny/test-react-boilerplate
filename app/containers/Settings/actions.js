@@ -40,7 +40,7 @@ export function changeTeamName({ team, teamName }) {
 export function changePlayer(player) {
     return {
         type: CHANGE_PLAYER,
-        player
+        ...player
     };
 }
 
