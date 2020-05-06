@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { ADD_GOAL } from '../../containers/Game/constants';
+import { ADD_GOAL, UNKNOWN_PLAYER } from '../../containers/Game/constants';
 import { compareValues } from '../../utils/utilities';
 
 function Players({ setScreenVisibility, eventType, playersListType, team, playersList, actionHandler }) {
@@ -15,13 +15,7 @@ function Players({ setScreenVisibility, eventType, playersListType, team, player
     };
 
     // TODO: move this in constants
-    const unknownPlayer = {
-        player0: {
-            playerNumber: 0,
-            playerName: '(unknown)'
-        }
-    };
-    const playersListModified = playersListType === ADD_GOAL ? Object.assign(unknownPlayer, playersList) : playersList;
+    const playersListModified = playersListType === ADD_GOAL ? Object.assign(UNKNOWN_PLAYER, playersList) : playersList;
 
     const playersListDisplay = () => {
         // TODO: transform object of players into an array to simplify this

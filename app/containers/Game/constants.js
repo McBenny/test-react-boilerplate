@@ -40,3 +40,10 @@ export const PERIODS = {
     4: 'extra-time half-time 2',
     5: 'full-time'
 };
+
+export const UNKNOWN_PLAYER = {
+    player0: {
+        playerNumber: 0,
+        playerName: '(unknown)'
+    }
+};
