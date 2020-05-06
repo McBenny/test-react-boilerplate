@@ -132,13 +132,14 @@ It should be possible to also add a goal anywhere in the list.
 These features should also apply to the fouls, any foul registered should be editable and removable, it should also be possible to add a foul.
 
 ##TODO
-- [ ] Changing the number, _first or last name_ of a player updates every occurence of that player,
-- [ ] Removing a player gives everything he holds to "unknown player"
+- [X] allow for timeouts per team
 - [ ] Disable a player if he's disqualified
 - [ ] Make add a player in settings "dynamic"
-- [ ] allow for removal of a player
 - [ ] add officials with a letter identification
 - [ ] allow for fouls applied to officials
-- [ ] on start/stop, allow for choice between pause/resume or close/open a period
-- [ ] allow for timeouts per team per period
+- [ ] allow for removal of a player
+- [ ] Removing a player gives everything he holds to "unknown player"
+- [ ] Changing the number, _first or last name_ of a player updates every occurence of that player,
 - [ ] display list of players per foul
+- [ ] on start/stop, allow for choice between pause/resume or close/open a period
+- [ ] create a generic pop-in with generic features (open/close)

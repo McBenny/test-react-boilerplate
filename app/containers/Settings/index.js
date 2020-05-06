@@ -55,6 +55,7 @@ export function Settings({
         setScreenVisibility(false);
     };
 
+    // TODO: make this a common function
     const closePopIn = () => {
         onCloseSettings(settingsData);
         setScreenVisibility(false);

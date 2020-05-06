@@ -35,6 +35,7 @@ import {
     ADD_GOAL,
     ADD_RED_CARD,
     ADD_SUSPENSION,
+    ADD_TIMEOUT,
     ADD_YELLOW_CARD,
     EVENT_TYPES
 } from './constants';
@@ -71,7 +72,8 @@ export function Game({
         addYellowCard: 'Add a yellow card',
         addSuspension: 'Add a 2 minutes',
         addRedCard: 'Add a red card',
-        addBlueCard: 'Add a blue card'
+        addBlueCard: 'Add a blue card',
+        addTimeout: 'Add a timeout'
     };
 
     const [settingsScreenVisibility, setSettingsScreenVisibility] = useState(false);
@@ -108,6 +110,15 @@ export function Game({
             gamePaused: !gamePaused,
             eventType: eventName,
             team: null,
+            playerNumber: null
+        });
+    };
+
+    const handleTimeoutButton = team => {
+        onAddAction({
+            type: ADD_TIMEOUT,
+            eventType: EVENT_TYPES.timeout,
+            team,
             playerNumber: null
         });
     };
@@ -165,6 +176,16 @@ export function Game({
                 {messages.teamA}: {settings.teamAName}
             </h2>
             <ul>
+                <li>
+                    Timeouts: {dataTeamA.timeouts}
+                    <button
+                        type="button"
+                        disabled={!gameStarted || gamePaused || dataTeamA.timeouts >= 3}
+                        onClick={() => handleTimeoutButton('A')}
+                    >
+                        {messages.addTimeout}
+                    </button>
+                </li>
                 <li>
                     <button
                         type="button"
@@ -224,6 +245,16 @@ export function Game({
                 {messages.teamB}: {settings.teamBName}
             </h2>
             <ul>
+                <li>
+                    Timeouts: {dataTeamB.timeouts}
+                    <button
+                        type="button"
+                        disabled={!gameStarted || gamePaused || dataTeamB.timeouts >= 3}
+                        onClick={() => handleTimeoutButton('B')}
+                    >
+                        {messages.addTimeout}
+                    </button>
+                </li>
                 <li>
                     <button
                         type="button"

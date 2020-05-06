@@ -16,7 +16,8 @@ import {
     ADD_YELLOW_CARD,
     ADD_RED_CARD,
     ADD_BLUE_CARD,
-    ADD_SUSPENSION
+    ADD_SUSPENSION,
+    ADD_TIMEOUT
 } from './constants';
 import { initialState as initialSettings } from '../Settings/reducer';
 
@@ -43,7 +44,7 @@ export const initialState = {
         redCards: 0,
         blueCards: 0,
         suspensions: 0,
-        timeOuts: 0,
+        timeouts: 0,
         // TODO: probably remove this
         players: [
             {
@@ -59,7 +60,7 @@ export const initialState = {
         redCards: 0,
         blueCards: 0,
         suspensions: 0,
-        timeOuts: 0,
+        timeouts: 0,
         // TODO: Probably remove this
         players: [
             {
@@ -111,6 +112,10 @@ const gameReducer = (state = initialState, action) =>
             case ADD_SUSPENSION:
                 // console.log(ADD_SUSPENSION, action);
                 draft[`dataTeam${action.team}`].suspensions += 1;
+                break;
+            case ADD_TIMEOUT:
+                // console.log(ADD_TIMEOUT, action);
+                draft[`dataTeam${action.team}`].timeouts += 1;
                 break;
             default:
         }

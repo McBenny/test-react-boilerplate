@@ -17,6 +17,7 @@ export const ADD_YELLOW_CARD = 'boilerplate/Game/ADD_YELLOW_CARD';
 export const ADD_RED_CARD = 'boilerplate/Game/ADD_RED_CARD';
 export const ADD_BLUE_CARD = 'boilerplate/Game/ADD_BLUE_CARD';
 export const ADD_SUSPENSION = 'boilerplate/Game/ADD_SUSPENSION';
+export const ADD_TIMEOUT = 'boilerplate/Game/ADD_TIMEOUT';
 
 export const EVENT_TYPES = {
     goal: 'goal',
@@ -24,7 +25,7 @@ export const EVENT_TYPES = {
     redCard: 'red card',
     blueCard: 'blue card',
     suspension: '2 minutes',
-    timeOut: 'time out',
+    timeout: 'time out',
     gameStart: 'start game',
     gameEnd: 'end game',
     periodStart: 'start period',
