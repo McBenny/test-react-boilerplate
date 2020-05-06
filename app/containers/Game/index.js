@@ -70,7 +70,7 @@ export function Game({
             eventType,
             playersListType: type,
             playersTeam: team,
-            playersList: settings.players[`team${team}`]
+            playersList: settings.teams[team].players
         });
     };
     useEffect(() => {

@@ -42,8 +42,7 @@ export const PERIODS = {
 };
 
 export const UNKNOWN_PLAYER = {
-    player0: {
-        playerNumber: 0,
-        playerName: '(unknown)'
-    }
+    id: 0,
+    playerNumber: 0,
+    playerName: '(unknown)'
 };
