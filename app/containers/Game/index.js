@@ -108,9 +108,7 @@ export function Game({
         onHandleGameStatus({
             gameStarted: true,
             gamePaused: !gamePaused,
-            eventType: eventName,
-            team: null,
-            playerNumber: null
+            eventType: eventName
         });
     };
 
@@ -118,8 +116,7 @@ export function Game({
         onAddAction({
             type: ADD_TIMEOUT,
             eventType: EVENT_TYPES.timeout,
-            team,
-            playerNumber: null
+            team
         });
     };
 
@@ -131,12 +128,7 @@ export function Game({
     };
 
     const addActionPerTeam = ({ eventType, type, team, playerNumber }) => {
-        onAddAction({
-            eventType,
-            type,
-            team,
-            playerNumber
-        });
+        onAddAction({ eventType, type, team, playerNumber });
     };
 
     const gameEventsLog = () => {
@@ -309,7 +301,7 @@ export function Game({
                     </button>
                 </li>
             </ul>
-            {gameEvents.eventType}
+            <h2>Game log:</h2>
             {gameEventsLog()}
             {settingsScreenVisibility ? (
                 <Settings setScreenVisibility={setSettingsScreenVisibility} settingsData={settings} />

@@ -17,6 +17,7 @@
 
 import { CHANGE_TEAM_A_NAME, CHANGE_TEAM_B_NAME, CANCEL_SETTINGS_CHANGE, CHANGE_PLAYER } from './constants';
 
+// TODO: Try to use a single function for both teams
 /**
  * Changes the input field of the form
  * @param  {string} teamAName The new text of the input field

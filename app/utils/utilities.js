@@ -9,9 +9,9 @@
 export function compareValues(key, isAscending = true) {
     return function innerSort(a, b) {
         let comparison = 0;
-        if (a[key] > b[key]) {
+        if (a[key].toLowerCase() > b[key].toLowerCase()) {
             comparison = 1;
-        } else if (a[key] < b[key]) {
+        } else if (a[key].toLowerCase() < b[key].toLowerCase()) {
             comparison = -1;
         }
         return isAscending ? comparison : comparison * -1;

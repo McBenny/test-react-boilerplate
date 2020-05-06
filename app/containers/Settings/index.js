@@ -70,7 +70,6 @@ export function Settings({
             playerNumber: data.update === UPDATE_NUMBER ? e.target.value : data.playerNumber,
             playerName: data.update === UPDATE_NAME ? e.target.value : data.playerName
         });
-        e.target.focus();
     };
 
     const playersList = team => {
@@ -101,7 +100,6 @@ export function Settings({
                                 })
                             }
                             value={playerRef.playerNumber}
-                            data-value={playerData}
                             required
                         />{' '}
                         <input
@@ -115,7 +113,6 @@ export function Settings({
                                 })
                             }
                             value={playerRef.playerName}
-                            data-value={playerData}
                         />{' '}
                         <button type="button">+</button>
                     </li>
