@@ -11,4 +11,5 @@
 
 export const CHANGE_TEAM_A_NAME = 'boilerplate/Settings/CHANGE_TEAM_A_NAME';
 export const CHANGE_TEAM_B_NAME = 'boilerplate/Settings/CHANGE_TEAM_B_NAME';
+export const CHANGE_PLAYER = 'boilerplate/Settings/CHANGE_PLAYER';
 export const CANCEL_SETTINGS_CHANGE = 'boilerplate/Settings/CANCEL_SETTINGS_CHANGE';

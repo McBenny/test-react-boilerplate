@@ -37,7 +37,7 @@ The display shows the 2 teams involved, the current score and the players who re
                 - save / cancel
 
 ###Display
-The screen is separated in 2 sides with on each sides:
+The screen is separated in 2 sides with on each side:
 
 - Team identification (name, _logo, jersey colour_)
 - Number of goals,
@@ -92,30 +92,30 @@ These settings are a mandatory step to start the game session. Some fields are n
 This is the main screen where most of the interactions are happening, and from where the official can access all other screens.
 
 This screen shows the current status of the game:
-- Teams playing,
-- current score,
-- fouls received by players per team,
-- current half time.
+- [X] Teams playing,
+- [X] current score,
+- [X] fouls received by players per team,
+- [ ] current half time.
 
 From this screen it's possible to access other screens:
-- Game settings: to alter the game's settings (add a player, change a referee...),
-- Add a goal screen: to add a goal for a team,
-- Add a foul screen: to add a certain type of foul to a team / player,
-- Edit score screen: to edit the score if a mistake has been made
+- [ ] Game settings: to alter the game's settings (add a player, change a referee...),
+- [x] Add a goal screen: to add a goal for a team,
+- [x] Add a foul screen: to add a certain type of foul to a team / player,
+- [ ] Edit score screen: to edit the score if a mistake has been made
 
 This screen also allows for certain actions:
-- select/change half-time,
-- export game data
+- [ ] select/change half-time,
+- [ ] export game data
 
 ###Add a goal / Add a foul
 These screens are basically identical, they only perform different actions: adding a goal or a foul to a team. It allows for the selection of the player to associate with the goal or the foul.
 
 All actions performed on this screen are to be stored in chronological order to be able to log the actions of the game.
 
-A possible way to to store these actions can be expressed as:
-- in team A, player X scores a goal,
-- in team B, player Y receives a yellow card,
-- in team A, player Z receives a "2 minutes",
+A possible way to store these actions can be expressed as:
+- [x] in team A, player X scores a goal,
+- [x] in team B, player Y receives a yellow card,
+- [x] in team A, player Z receives a "2 minutes",
 - ...
 
 This will allow for a complete log of the actions of the game.
@@ -131,6 +131,15 @@ It should be possible to also add a goal anywhere in the list.
 
 These features should also apply to the fouls, any foul registered should be editable and removable, it should also be possible to add a foul.
 
-##Notes
-- Changing the number, _first or last name_ of a player updates every occurence of that player,
-- Removing a player gives everything he holds to "unknown player"
+##TODO
+- [X] allow for timeouts per team
+- [ ] Disable a player if he's disqualified
+- [ ] Make add a player in settings "dynamic"
+- [ ] add officials with a letter identification
+- [ ] allow for fouls applied to officials
+- [ ] allow for removal of a player
+- [ ] Removing a player gives everything he holds to "unknown player"
+- [ ] Changing the number, _first or last name_ of a player updates every occurence of that player,
+- [ ] display list of players per foul
+- [ ] on start/stop, allow for choice between pause/resume or close/open a period
+- [ ] create a generic pop-in with generic features (open/close)

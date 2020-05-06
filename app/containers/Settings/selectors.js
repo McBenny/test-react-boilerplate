@@ -19,4 +19,10 @@ const makeSelectTeamBName = () =>
         settingsState => settingsState.teamBName
     );
 
-export { selectSettings, makeSelectTeamAName, makeSelectTeamBName };
+const makeSelectPlayer = () =>
+    createSelector(
+        selectSettings,
+        settingsState => settingsState.players
+    );
+
+export { selectSettings, makeSelectTeamAName, makeSelectTeamBName, makeSelectPlayer };

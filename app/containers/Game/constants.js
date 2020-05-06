@@ -10,3 +10,40 @@
  */
 
 export const SAVE_SETTINGS = 'boilerplate/Game/SAVE_SETTINGS';
+export const HANDLE_GAME_STATUS = 'boilerplate/Game/HANDLE_GAME_STATUS';
+export const ADD_EVENT = 'boilerplate/Game/ADD_EVENT';
+export const ADD_GOAL = 'boilerplate/Game/ADD_GOAL';
+export const ADD_YELLOW_CARD = 'boilerplate/Game/ADD_YELLOW_CARD';
+export const ADD_RED_CARD = 'boilerplate/Game/ADD_RED_CARD';
+export const ADD_BLUE_CARD = 'boilerplate/Game/ADD_BLUE_CARD';
+export const ADD_SUSPENSION = 'boilerplate/Game/ADD_SUSPENSION';
+export const ADD_TIMEOUT = 'boilerplate/Game/ADD_TIMEOUT';
+
+export const EVENT_TYPES = {
+    goal: 'goal',
+    yellowCard: 'yellow card',
+    redCard: 'red card',
+    blueCard: 'blue card',
+    suspension: '2 minutes',
+    timeout: 'time out',
+    gameStart: 'start game',
+    gameEnd: 'end game',
+    periodStart: 'start period',
+    periodEnd: 'end period'
+};
+
+export const PERIODS = {
+    0: 'warm-up',
+    1: 'half-time 1',
+    2: 'half-time 2',
+    3: 'extra-time half-time 1',
+    4: 'extra-time half-time 2',
+    5: 'full-time'
+};
+
+export const UNKNOWN_PLAYER = {
+    player0: {
+        playerNumber: 0,
+        playerName: '(unknown)'
+    }
+};
