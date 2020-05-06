@@ -2,14 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { ADD_GOAL, UNKNOWN_PLAYER } from '../../containers/Game/constants';
 import { compareValues } from '../../utils/utilities';
+import { messages } from './messages';
 
 function Players({ setScreenVisibility, eventType, playersListType, team, playersList, actionHandler }) {
-    // TODO: have a centralised messages file to import this from
-    const messages = {
-        title: 'Players',
-        close: 'Close'
-    };
-
     const closePopIn = () => {
         setScreenVisibility(false);
     };

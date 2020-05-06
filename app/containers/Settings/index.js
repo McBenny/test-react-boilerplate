@@ -17,6 +17,7 @@ import { useInjectReducer } from 'utils/injectReducer';
 import { changeTeamAName, changeTeamBName, changePlayer, cancelChangeSettings } from './actions';
 import { makeSelectPlayer, makeSelectTeamAName, makeSelectTeamBName } from './selectors';
 import reducer from './reducer';
+import { messages } from './messages';
 import { saveSettings } from '../Game/actions';
 
 const key = 'settings';
@@ -34,16 +35,6 @@ export function Settings({
     settingsData
 }) {
     useInjectReducer({ key, reducer });
-
-    const messages = {
-        header: 'Settings',
-        close: 'Close settings',
-        save: 'Save settings',
-        teamA: 'Home team',
-        teamB: 'Visitor team',
-        addPlayer: 'Add a player',
-        playerNumberAndName: 'Player number and name'
-    };
 
     const saveInitialisation = e => {
         e.preventDefault();
