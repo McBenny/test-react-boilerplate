@@ -14,7 +14,7 @@ import { createStructuredSelector } from 'reselect';
 
 import { useInjectReducer } from 'utils/injectReducer';
 import { changeTeamName, changePlayer, cancelChangeSettings } from './actions';
-import { makeSelectTeamName } from './selectors';
+import { makeSelectTeams } from './selectors';
 import reducer from './reducer';
 import { messages } from './messages';
 import { saveSettings } from '../Game/actions';
@@ -132,7 +132,7 @@ Settings.propTypes = {
 };
 
 const mapStateToProps = createStructuredSelector({
-    teams: makeSelectTeamName()
+    teams: makeSelectTeams()
 });
 
 export function mapDispatchToProps(dispatch) {
