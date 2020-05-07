@@ -90,7 +90,7 @@ const gameReducer = (state = initialState, action) =>
                 draft.gameEvents.push({
                     eventType: action.eventType,
                     team: action.team,
-                    playerNumber: action.playerNumber
+                    id: action.id
                 });
                 break;
             case ADD_GOAL:

@@ -15,30 +15,19 @@
  *    }
  */
 
-import { CHANGE_TEAM_A_NAME, CHANGE_TEAM_B_NAME, CANCEL_SETTINGS_CHANGE, CHANGE_PLAYER } from './constants';
-
-// TODO: Try to use a single function for both teams
-/**
- * Changes the input field of the form
- * @param  {string} teamAName The new text of the input field
- * @return {object} An action object with a type of CHANGE_TEAM_A_NAME
- */
-export function changeTeamAName(teamAName) {
-    return {
-        type: CHANGE_TEAM_A_NAME,
-        teamAName
-    };
-}
+import { CHANGE_TEAM_NAME, CANCEL_SETTINGS_CHANGE, CHANGE_PLAYER } from './constants';
 
 /**
  * Changes the input field of the form
- * @param  {string} teamBName The new text of the input field
- * @return {object} An action object with a type of CHANGE_TEAM_B_NAME
+ * @param  {string} team The reference of the team
+ * @param  {string} teamName The new text of the input field
+ * @return {object} An action object with a type of CHANGE_TEAM_NAME
  */
-export function changeTeamBName(teamBName) {
+export function changeTeamName({ team, teamName }) {
     return {
-        type: CHANGE_TEAM_B_NAME,
-        teamBName
+        type: CHANGE_TEAM_NAME,
+        team,
+        teamName
     };
 }
 
@@ -50,7 +39,7 @@ export function changeTeamBName(teamBName) {
 export function changePlayer(player) {
     return {
         type: CHANGE_PLAYER,
-        player
+        ...player
     };
 }
 

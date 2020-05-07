@@ -1,26 +1,31 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { ADD_GOAL, UNKNOWN_PLAYER } from '../../containers/Game/constants';
 import { compareValues } from '../../utils/utilities';
 import { messages } from './messages';
+import { ADD_GOAL, UNKNOWN_PLAYER } from '../../containers/Game/constants';
 
 function Players({ setScreenVisibility, eventType, playersListType, team, playersList, actionHandler }) {
     const closePopIn = () => {
         setScreenVisibility(false);
     };
 
-    const playersListModified = playersListType === ADD_GOAL ? Object.assign(UNKNOWN_PLAYER, playersList) : playersList;
-
     const playersListDisplay = () => {
-        // TODO: transform object of players into an array to simplify this
-        const playersKeysArray = Object.keys(playersListModified);
-        const playersArray = playersKeysArray.map(player => ({
-            ...playersListModified[player],
-            ref: player
-        }));
-        const playersSorted = playersArray.sort(compareValues('playerNumber', true));
-        const list = playersSorted.map(player => (
-            <li key={playersListModified[player.ref].playerNumber}>
+        let playersListSorted;
+        const unknownPlayerInserted = playersList.filter(player => player.id === 0);
+        if (playersListType === ADD_GOAL) {
+            if (unknownPlayerInserted.length === 0) {
+                playersList.push(UNKNOWN_PLAYER);
+            }
+            playersListSorted = playersList.sort(compareValues('playerNumber', true));
+            playersListSorted.splice(2, 0, playersListSorted.splice(0, 1)[0]);
+        } else {
+            playersListSorted = playersList.sort(compareValues('playerNumber', true));
+            if (unknownPlayerInserted.length !== 0) {
+                playersListSorted.shift();
+            }
+        }
+        const buffer = playersListSorted.map(player => (
+            <li key={`${playersListType}playerNumber${player.id}`}>
                 <button
                     type="button"
                     onClick={() =>
@@ -28,15 +33,15 @@ function Players({ setScreenVisibility, eventType, playersListType, team, player
                             eventType,
                             type: playersListType,
                             team,
-                            playerNumber: playersListModified[player.ref].playerNumber
+                            id: player.id
                         })
                     }
                 >
-                    {playersListModified[player.ref].playerNumber} {playersListModified[player.ref].playerName}
+                    {player.playerNumber} {player.playerName}
                 </button>
             </li>
         ));
-        return <ul>{list}</ul>;
+        return <ul>{buffer}</ul>;
     };
 
     return (
@@ -56,7 +61,7 @@ Players.propTypes = {
     eventType: PropTypes.string,
     playersListType: PropTypes.string,
     team: PropTypes.string,
-    playersList: PropTypes.object,
+    playersList: PropTypes.array,
     actionHandler: PropTypes.func
 };
 

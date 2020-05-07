@@ -11,11 +11,10 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 
 import { createStructuredSelector } from 'reselect';
-import nextId from 'react-id-generator';
 
 import { useInjectReducer } from 'utils/injectReducer';
-import { changeTeamAName, changeTeamBName, changePlayer, cancelChangeSettings } from './actions';
-import { makeSelectPlayer, makeSelectTeamAName, makeSelectTeamBName } from './selectors';
+import { changeTeamName, changePlayer, cancelChangeSettings } from './actions';
+import { makeSelectTeams } from './selectors';
 import reducer from './reducer';
 import { messages } from './messages';
 import { saveSettings } from '../Game/actions';
@@ -23,11 +22,8 @@ import { saveSettings } from '../Game/actions';
 const key = 'settings';
 
 export function Settings({
-    teamAName,
-    teamBName,
-    players,
-    onChangeTeamAName,
-    onChangeTeamBName,
+    teams,
+    onChangeTeamName,
     onChangePlayer,
     onSaveSettings,
     onCloseSettings,
@@ -39,9 +35,7 @@ export function Settings({
     const saveInitialisation = e => {
         e.preventDefault();
         onSaveSettings({
-            teamAName,
-            teamBName,
-            players
+            teams
         });
         setScreenVisibility(false);
     };
@@ -52,77 +46,74 @@ export function Settings({
         setScreenVisibility(false);
     };
 
-    const UPDATE_NUMBER = 'UPDATE_NUMBER';
-    const UPDATE_NAME = 'UPDATE_NAME';
-
-    const changePlayerPrep = (e, data) => {
-        onChangePlayer({
-            ...data,
-            playerNumber: data.update === UPDATE_NUMBER ? e.target.value : data.playerNumber,
-            playerName: data.update === UPDATE_NAME ? e.target.value : data.playerName
-        });
+    const handleChangeTeamName = (e, team) => {
+        onChangeTeamName({ team, teamName: e.target.value });
     };
 
     const playersList = team => {
-        const numberOfPlayers = 16;
-        const buffer = [];
-        for (let i = 1; i <= numberOfPlayers; i += 1) {
-            const playerRef = players[`team${team}`][`player${i}`];
-            if (playerRef) {
-                const htmlId = nextId();
-                const playerData = {
-                    team,
-                    playerIndex: i,
-                    playerNumber: playerRef.playerNumber,
-                    playerName: playerRef.playerName
-                };
-                buffer.push(
-                    <li key={htmlId}>
-                        <label htmlFor={`playerNumber${htmlId}`}>{messages.playerNumberAndName}:</label>{' '}
+        const buffer = teams[team].players.map(player => {
+            if (player.id !== 0) {
+                return (
+                    <li key={`player${player.id}`}>
+                        <label htmlFor={`playerNumber${player.id}`}>{messages.playerNumberAndName}:</label>
                         <input
                             type="text"
-                            id={`playerNumber${htmlId}`}
+                            id={`playerNumber${player.id}`}
                             onChange={e =>
-                                changePlayerPrep(e, {
+                                onChangePlayer({
                                     team,
-                                    playerIndex: i,
-                                    update: UPDATE_NUMBER,
-                                    playerName: playerData.playerName
+                                    id: player.id,
+                                    playerNumber: e.target.value,
+                                    playerName: player.playerName
                                 })
                             }
-                            value={playerRef.playerNumber}
+                            value={player.playerNumber}
                             required
                         />{' '}
                         <input
                             type="text"
-                            id={`playerName${htmlId}`}
+                            id={`playerName${player.id}`}
                             onChange={e =>
                                 onChangePlayer({
                                     team,
-                                    playerIndex: i,
+                                    id: player.id,
+                                    playerNumber: player.playerNumber,
                                     playerName: e.target.value
                                 })
                             }
-                            value={playerRef.playerName}
-                        />{' '}
-                        <button type="button">+</button>
+                            value={player.playerName}
+                        />
                     </li>
                 );
             }
-        }
+            return '';
+        });
         return <ul>{buffer}</ul>;
     };
+
     return (
         <Fragment>
             <h2>{messages.header}</h2>
             <form action="" onSubmit={saveInitialisation}>
                 <p>
                     <label htmlFor="teamAName">{messages.teamA}:</label>{' '}
-                    <input type="text" id="teamAName" onChange={onChangeTeamAName} value={teamAName} required />
+                    <input
+                        type="text"
+                        id="teamAName"
+                        onChange={e => handleChangeTeamName(e, 'A')}
+                        value={teams.A.name}
+                        required
+                    />
                 </p>
                 <p>
                     <label htmlFor="teamBName">{messages.teamB}:</label>{' '}
-                    <input type="text" id="teamBName" onChange={onChangeTeamBName} value={teamBName} required />
+                    <input
+                        type="text"
+                        id="teamBName"
+                        onChange={e => handleChangeTeamName(e, 'B')}
+                        value={teams.B.name}
+                        required
+                    />
                 </p>
                 <h3>{messages.addPlayer}</h3>
                 {playersList('A')}
@@ -136,11 +127,8 @@ export function Settings({
 }
 
 Settings.propTypes = {
-    teamAName: PropTypes.string,
-    teamBName: PropTypes.string,
-    players: PropTypes.object,
-    onChangeTeamAName: PropTypes.func,
-    onChangeTeamBName: PropTypes.func,
+    teams: PropTypes.object,
+    onChangeTeamName: PropTypes.func,
     onChangePlayer: PropTypes.func,
     onSaveSettings: PropTypes.func,
     onCloseSettings: PropTypes.func,
@@ -149,15 +137,12 @@ Settings.propTypes = {
 };
 
 const mapStateToProps = createStructuredSelector({
-    teamAName: makeSelectTeamAName(),
-    teamBName: makeSelectTeamBName(),
-    players: makeSelectPlayer()
+    teams: makeSelectTeams()
 });
 
 export function mapDispatchToProps(dispatch) {
     return {
-        onChangeTeamAName: evt => dispatch(changeTeamAName(evt.target.value)),
-        onChangeTeamBName: evt => dispatch(changeTeamBName(evt.target.value)),
+        onChangeTeamName: data => dispatch(changeTeamName(data)),
         onChangePlayer: data => dispatch(changePlayer(data)),
         onSaveSettings: data => dispatch(saveSettings(data)),
         onCloseSettings: data => dispatch(cancelChangeSettings(data))
