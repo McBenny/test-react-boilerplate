@@ -32,29 +32,6 @@ export const initialState = {
             name: 'Team B',
             players: []
         }
-    },
-    players: {
-        // TODO: transform this into an array to simplify it
-        teamA: {
-            player1: {
-                playerNumber: 1,
-                playerName: 'Player 1'
-            },
-            player2: {
-                playerNumber: 2,
-                playerName: 'Player 2'
-            }
-        },
-        teamB: {
-            player1: {
-                playerNumber: 11,
-                playerName: 'Joueur 1'
-            },
-            player2: {
-                playerNumber: 12,
-                playerName: 'Joueur 2'
-            }
-        }
     }
 };
 
@@ -71,7 +48,7 @@ const settingsReducer = (state = initialState, action) =>
                     if (player.id === action.id) {
                         return {
                             ...player,
-                            playerNumber: action.playerNumber,
+                            playerNumber: parseInt(action.playerNumber, 10),
                             playerName: action.playerName
                         };
                     }

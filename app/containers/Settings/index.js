@@ -51,38 +51,43 @@ export function Settings({
     };
 
     const playersList = team => {
-        const buffer = teams[team].players.map(player => (
-            <li key={`player${player.id}`}>
-                <label htmlFor={`playerNumber${player.id}`}>{messages.playerNumberAndName}:</label>
-                <input
-                    type="text"
-                    id={`playerNumber${player.id}`}
-                    onChange={e =>
-                        onChangePlayer({
-                            team,
-                            id: player.id,
-                            playerNumber: e.target.value,
-                            playerName: player.playerName
-                        })
-                    }
-                    value={player.playerNumber}
-                    required
-                />{' '}
-                <input
-                    type="text"
-                    id={`playerName${player.id}`}
-                    onChange={e =>
-                        onChangePlayer({
-                            team,
-                            id: player.id,
-                            playerNumber: player.playerNumber,
-                            playerName: e.target.value
-                        })
-                    }
-                    value={player.playerName}
-                />
-            </li>
-        ));
+        const buffer = teams[team].players.map(player => {
+            if (player.id !== 0) {
+                return (
+                    <li key={`player${player.id}`}>
+                        <label htmlFor={`playerNumber${player.id}`}>{messages.playerNumberAndName}:</label>
+                        <input
+                            type="text"
+                            id={`playerNumber${player.id}`}
+                            onChange={e =>
+                                onChangePlayer({
+                                    team,
+                                    id: player.id,
+                                    playerNumber: e.target.value,
+                                    playerName: player.playerName
+                                })
+                            }
+                            value={player.playerNumber}
+                            required
+                        />{' '}
+                        <input
+                            type="text"
+                            id={`playerName${player.id}`}
+                            onChange={e =>
+                                onChangePlayer({
+                                    team,
+                                    id: player.id,
+                                    playerNumber: player.playerNumber,
+                                    playerName: e.target.value
+                                })
+                            }
+                            value={player.playerName}
+                        />
+                    </li>
+                );
+            }
+            return '';
+        });
         return <ul>{buffer}</ul>;
     };
 
