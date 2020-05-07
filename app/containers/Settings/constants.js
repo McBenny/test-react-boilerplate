@@ -10,5 +10,14 @@
  */
 
 export const CHANGE_TEAM_NAME = 'boilerplate/Settings/CHANGE_TEAM_NAME';
+export const ADD_EMPTY_PLAYER = 'boilerplate/Settings/ADD_EMPTY_PLAYER';
 export const CHANGE_PLAYER = 'boilerplate/Settings/CHANGE_PLAYER';
 export const CANCEL_SETTINGS_CHANGE = 'boilerplate/Settings/CANCEL_SETTINGS_CHANGE';
+
+export const EMPTY_PLAYER = {
+    id: 1,
+    playerNumber: 0,
+    playerName: ''
+};
+
+export const MAX_NUMBER_OF_PLAYERS = 16;

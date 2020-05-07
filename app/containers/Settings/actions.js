@@ -15,7 +15,7 @@
  *    }
  */
 
-import { CHANGE_TEAM_NAME, CANCEL_SETTINGS_CHANGE, CHANGE_PLAYER } from './constants';
+import { CHANGE_TEAM_NAME, CANCEL_SETTINGS_CHANGE, ADD_EMPTY_PLAYER, CHANGE_PLAYER } from './constants';
 
 /**
  * Changes the input field of the form
@@ -28,6 +28,18 @@ export function changeTeamName({ team, teamName }) {
         type: CHANGE_TEAM_NAME,
         team,
         teamName
+    };
+}
+
+/**
+ * Changes the input field of the form
+ * @param  {object} player The new text of the input field
+ * @return {object} An action object with a type of CHANGE_PLAYER
+ */
+export function addEmptyPlayer(player) {
+    return {
+        type: ADD_EMPTY_PLAYER,
+        ...player
     };
 }
 

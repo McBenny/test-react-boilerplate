@@ -8,7 +8,7 @@
  */
 
 import produce from 'immer';
-import { CHANGE_TEAM_NAME, CANCEL_SETTINGS_CHANGE, CHANGE_PLAYER } from './constants';
+import { CHANGE_TEAM_NAME, CANCEL_SETTINGS_CHANGE, CHANGE_PLAYER, ADD_EMPTY_PLAYER } from './constants';
 
 // The initial state of the App
 export const initialState = {
@@ -41,6 +41,17 @@ const settingsReducer = (state = initialState, action) =>
         switch (action.type) {
             case CHANGE_TEAM_NAME:
                 draft.teams[action.team].name = action.teamName;
+                break;
+            case ADD_EMPTY_PLAYER:
+                // console.log(ADD_EMPTY_PLAYER, action);
+                draft.teams[action.team].players = [
+                    ...draft.teams[action.team].players,
+                    {
+                        id: action.id,
+                        playerName: action.playerName,
+                        playerNumber: action.playerNumber
+                    }
+                ];
                 break;
             case CHANGE_PLAYER: {
                 // console.log(CHANGE_PLAYER, action);

@@ -17,7 +17,7 @@ function Players({ setScreenVisibility, eventType, playersListType, team, player
                 playersList.push(UNKNOWN_PLAYER);
             }
             playersListSorted = playersList.sort(compareValues('playerNumber', true));
-            playersListSorted.splice(2, 0, playersListSorted.splice(0, 1)[0]);
+            playersListSorted.splice(playersListSorted.length, 0, playersListSorted.splice(0, 1)[0]);
         } else {
             playersListSorted = playersList.sort(compareValues('playerNumber', true));
             if (unknownPlayerInserted.length !== 0) {
