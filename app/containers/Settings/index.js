@@ -18,7 +18,7 @@ import { makeSelectTeams } from './selectors';
 import reducer from './reducer';
 import { messages } from './messages';
 import { saveSettings } from '../Game/actions';
-import { EMPTY_PLAYER } from './constants';
+import { EMPTY_PLAYER, MAX_NUMBER_OF_PLAYERS } from './constants';
 
 const key = 'settings';
 
@@ -56,10 +56,17 @@ export function Settings({
         onChangeTeamName({ team, teamName: e.target.value });
     };
 
+    const addPlayerButton = (team, id) => (
+        <button type="button" onClick={() => onAddEmptyPlayer({ ...EMPTY_PLAYER, id, team })}>
+            +
+        </button>
+    );
+
     const playersList = team => {
-        const playersLength = teams[team].players.length;
-        if (playersLength > 0) {
-            const buffer = teams[team].players.map(player => {
+        if (teams[team].players.length > 0) {
+            const playersNotUnknown = teams[team].players.filter(player => player.id !== 0);
+            const playersLength = playersNotUnknown.length;
+            const buffer = playersNotUnknown.map((player, index) => {
                 if (player.id !== 0) {
                     return (
                         <li key={`player${player.id}`}>
@@ -92,7 +99,18 @@ export function Settings({
                                     })
                                 }
                                 value={player.playerName}
-                            />
+                            />{' '}
+                            {console.log(
+                                team,
+                                index,
+                                MAX_NUMBER_OF_PLAYERS,
+                                playersLength,
+                                index < MAX_NUMBER_OF_PLAYERS - 1,
+                                index === playersLength - 1
+                            )}
+                            {index < MAX_NUMBER_OF_PLAYERS - 1 &&
+                                index === playersLength - 1 &&
+                                addPlayerButton(team, index + 2)}
                         </li>
                     );
                 }

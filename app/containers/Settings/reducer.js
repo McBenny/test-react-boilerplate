@@ -43,8 +43,9 @@ const settingsReducer = (state = initialState, action) =>
                 draft.teams[action.team].name = action.teamName;
                 break;
             case ADD_EMPTY_PLAYER:
-                console.log(ADD_EMPTY_PLAYER, action);
+                // console.log(ADD_EMPTY_PLAYER, action);
                 draft.teams[action.team].players = [
+                    ...draft.teams[action.team].players,
                     {
                         id: action.id,
                         playerName: action.playerName,

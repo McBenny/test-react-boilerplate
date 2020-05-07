@@ -37,7 +37,6 @@ export function changeTeamName({ team, teamName }) {
  * @return {object} An action object with a type of CHANGE_PLAYER
  */
 export function addEmptyPlayer(player) {
-    console.log('addEmptyPlayer', player);
     return {
         type: ADD_EMPTY_PLAYER,
         ...player

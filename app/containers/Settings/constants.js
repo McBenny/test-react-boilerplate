@@ -19,3 +19,5 @@ export const EMPTY_PLAYER = {
     playerNumber: 0,
     playerName: ''
 };
+
+export const MAX_NUMBER_OF_PLAYERS = 16;
