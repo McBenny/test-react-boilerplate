@@ -100,14 +100,6 @@ export function Settings({
                                 }
                                 value={player.playerName}
                             />{' '}
-                            {console.log(
-                                team,
-                                index,
-                                MAX_NUMBER_OF_PLAYERS,
-                                playersLength,
-                                index < MAX_NUMBER_OF_PLAYERS - 1,
-                                index === playersLength - 1
-                            )}
                             {index < MAX_NUMBER_OF_PLAYERS - 1 &&
                                 index === playersLength - 1 &&
                                 addPlayerButton(team, index + 2)}
