@@ -31,7 +31,6 @@ const makeSelectGamePaused = () =>
         gameState => gameState.gamePaused
     );
 
-// TODO: Try with deleting this function
 const makeSelectGameEvents = () =>
     createSelector(
         selectGame,
