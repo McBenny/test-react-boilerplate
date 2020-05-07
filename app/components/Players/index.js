@@ -33,7 +33,7 @@ function Players({ setScreenVisibility, eventType, playersListType, team, player
                             eventType,
                             type: playersListType,
                             team,
-                            playerNumber: player.playerNumber
+                            id: player.id
                         })
                     }
                 >

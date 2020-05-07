@@ -108,8 +108,8 @@ export function Game({
         return messages.startButton.start;
     };
 
-    const addActionPerTeam = ({ eventType, type, team, playerNumber }) => {
-        onAddAction({ eventType, type, team, playerNumber });
+    const addActionPerTeam = ({ eventType, type, team, id }) => {
+        onAddAction({ eventType, type, team, id });
     };
 
     const gameEventsLog = () => {
@@ -117,8 +117,7 @@ export function Game({
             const htmlId = nextId();
             return (
                 <li key={htmlId}>
-                    <b>Event:</b> {gameEvent.eventType}, <b>Team:</b> {gameEvent.team}, <b>Player:</b>{' '}
-                    {gameEvent.playerNumber}
+                    <b>Event:</b> {gameEvent.eventType}, <b>Team:</b> {gameEvent.team}, <b>Player:</b> {gameEvent.id}
                 </li>
             );
         });
