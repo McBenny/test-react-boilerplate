@@ -45,8 +45,8 @@ export function Settings({
 
     const saveInitialisation = e => {
         e.preventDefault();
-        const teamACleaned = teams.A.players.filter(player => player.playerNumber !== 0);
-        const teamBCleaned = teams.B.players.filter(player => player.playerNumber !== 0);
+        const teamACleaned = teams.A.players.filter(player => player.reference !== 0);
+        const teamBCleaned = teams.B.players.filter(player => player.reference !== 0);
         teams.A.players.splice(0, teams.A.players.length, ...teamACleaned);
         teams.B.players.splice(0, teams.B.players.length, ...teamBCleaned);
         onSaveSettings({
@@ -103,11 +103,11 @@ export function Settings({
                                     onChangePlayer({
                                         team,
                                         id: player.id,
-                                        playerNumber: e.target.value,
+                                        reference: e.target.value,
                                         playerName: player.playerName
                                     })
                                 }
-                                value={player.playerNumber}
+                                value={player.reference}
                                 pattern="[0-9][0-9]*"
                                 title={messages.numberPattern}
                                 required
@@ -119,7 +119,7 @@ export function Settings({
                                     onChangePlayer({
                                         team,
                                         id: player.id,
-                                        playerNumber: player.playerNumber,
+                                        reference: player.reference,
                                         playerName: e.target.value
                                     })
                                 }

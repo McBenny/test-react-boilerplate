@@ -47,10 +47,10 @@ function Players({ setScreenVisibility, eventType, playersListType, team, player
             if (unknownPlayerInserted.length === 0) {
                 playersList.push(UNKNOWN_PLAYER);
             }
-            playersListSorted = playersList.sort(compareValues('playerNumber', true));
+            playersListSorted = playersList.sort(compareValues('reference', true));
             playersListSorted.splice(playersListSorted.length, 0, playersListSorted.splice(0, 1)[0]);
         } else {
-            playersListSorted = playersList.sort(compareValues('playerNumber', true));
+            playersListSorted = playersList.sort(compareValues('reference', true));
             if (unknownPlayerInserted.length !== 0) {
                 playersListSorted.shift();
             }
@@ -79,7 +79,7 @@ function Players({ setScreenVisibility, eventType, playersListType, team, player
                         disabled={playerDisabled}
                         title={playerDisabled ? messages.maxActionsReached : ''}
                     >
-                        {player.playerNumber} {player.playerName}
+                        {player.reference} {player.playerName}
                     </button>
                 </li>
             );

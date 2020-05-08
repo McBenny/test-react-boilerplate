@@ -18,7 +18,7 @@ export const CANCEL_SETTINGS_CHANGE = 'boilerplate/Settings/CANCEL_SETTINGS_CHAN
 
 export const EMPTY_PLAYER = {
     id: 1,
-    playerNumber: 0,
+    reference: 0,
     playerName: '',
     goals: 0,
     yellowCards: 0,

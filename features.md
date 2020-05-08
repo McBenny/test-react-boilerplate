@@ -137,9 +137,10 @@ These features should also apply to the fouls, any foul registered should be edi
 - [X] Disable a player if he's disqualified
 - [X] add officials with a letter identification
 - [X] allow for fouls applied to officials
-- [ ] allow for removal of a player
-- [ ] Removing a player gives everything he holds to "unknown player"
-- [ ] Changing the number, _first or last name_ of a player updates every occurence of that player,
+- [X] refactor player/officials management to reduce code amount, use common names (member/player, reference/number)
 - [ ] display list of players per foul
 - [ ] on start/stop, allow for choice between pause/resume or close/open a period
 - [ ] create a generic pop-in with generic features (open/close)
+- [ ] allow for removal of a player
+- [ ] Removing a player gives everything he holds to "unknown player"
+- [ ] Changing the number, _first or last name_ of a player updates every occurrence of that player,
