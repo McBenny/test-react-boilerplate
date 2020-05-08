@@ -63,7 +63,13 @@ export function Game({
         setSettingsScreenVisibility(true);
     };
 
-    const initialPlayersData = { eventType: '', playersListType: '', playersTeam: '', playersList: {} };
+    const initialPlayersData = {
+        eventType: '',
+        playersListType: '',
+        playersTeam: '',
+        playersList: [],
+        officialsList: []
+    };
     const [playersScreenVisibility, setPlayersScreenVisibility] = useState(false);
     const [playersData, setPlayersData] = useState(initialPlayersData);
     const openPlayers = ({ team, type, eventType }) => {
@@ -71,7 +77,8 @@ export function Game({
             eventType,
             playersListType: type,
             playersTeam: team,
-            playersList: settings.teams[team].players
+            playersList: settings.teams[team].players,
+            officialsList: settings.teams[team].officials
         });
     };
     useEffect(() => {
@@ -109,8 +116,8 @@ export function Game({
         return messages.startButton.start;
     };
 
-    const addActionPerTeam = ({ eventType, type, team, id }) => {
-        onAddAction({ eventType, type, team, id });
+    const addActionPerTeam = ({ eventType, type, team, id, memberType }) => {
+        onAddAction({ eventType, type, team, id, memberType });
     };
 
     const gameEventsLog = () => {
@@ -298,6 +305,7 @@ export function Game({
                     playersListType={playersData.playersListType}
                     team={playersData.playersTeam}
                     playersList={playersData.playersList}
+                    officialsList={playersData.officialsList}
                     actionHandler={addActionPerTeam}
                 />
             ) : (

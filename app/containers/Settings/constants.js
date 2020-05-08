@@ -12,6 +12,8 @@
 export const CHANGE_TEAM_NAME = 'boilerplate/Settings/CHANGE_TEAM_NAME';
 export const ADD_EMPTY_PLAYER = 'boilerplate/Settings/ADD_EMPTY_PLAYER';
 export const CHANGE_PLAYER = 'boilerplate/Settings/CHANGE_PLAYER';
+export const ADD_EMPTY_OFFICIAL = 'boilerplate/Settings/ADD_EMPTY_OFFICIAL';
+export const CHANGE_OFFICIAL = 'boilerplate/Settings/CHANGE_OFFICIAL';
 export const CANCEL_SETTINGS_CHANGE = 'boilerplate/Settings/CANCEL_SETTINGS_CHANGE';
 
 export const EMPTY_PLAYER = {
@@ -25,8 +27,20 @@ export const EMPTY_PLAYER = {
     suspensions: 0
 };
 
+export const OFFICIALS_REFERENCES = ['A', 'B', 'C', 'D'];
+export const EMPTY_OFFICIAL = {
+    id: 1,
+    officialReference: OFFICIALS_REFERENCES[0],
+    officialName: '',
+    yellowCards: 0,
+    redCards: 0,
+    blueCards: 0,
+    suspensions: 0
+};
+
 export const MAX_NUMBER = {
     players: 16,
+    officials: 4,
     yellowCards: 1,
     redCards: 1,
     blueCards: 1,

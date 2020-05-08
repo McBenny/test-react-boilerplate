@@ -8,7 +8,16 @@
  */
 
 import produce from 'immer';
-import { CHANGE_TEAM_NAME, CANCEL_SETTINGS_CHANGE, CHANGE_PLAYER, ADD_EMPTY_PLAYER, EMPTY_PLAYER } from './constants';
+import {
+    CHANGE_TEAM_NAME,
+    CANCEL_SETTINGS_CHANGE,
+    EMPTY_PLAYER,
+    ADD_EMPTY_PLAYER,
+    CHANGE_PLAYER,
+    EMPTY_OFFICIAL,
+    ADD_EMPTY_OFFICIAL,
+    CHANGE_OFFICIAL
+} from './constants';
 
 // The initial state of the App
 export const initialState = {
@@ -36,11 +45,23 @@ export const initialState = {
                     blueCards: 0,
                     suspensions: 0
                 }
+            ],
+            officials: [
+                {
+                    id: 1,
+                    officialReference: 'A',
+                    officialName: 'Puyhardy',
+                    yellowCards: 0,
+                    redCards: 0,
+                    blueCards: 0,
+                    suspensions: 0
+                }
             ]
         },
         B: {
             name: 'Team B',
-            players: []
+            players: [],
+            officials: []
         }
     }
 };
@@ -75,6 +96,32 @@ const settingsReducer = (state = initialState, action) =>
                         };
                     }
                     return player;
+                });
+                break;
+            }
+            case ADD_EMPTY_OFFICIAL:
+                // console.log(ADD_EMPTY_OFFICIAL, action);
+                draft.teams[action.team].officials = [
+                    ...draft.teams[action.team].officials,
+                    {
+                        ...EMPTY_OFFICIAL,
+                        id: action.id,
+                        officialName: action.officialName,
+                        officialReference: action.officialReference
+                    }
+                ];
+                break;
+            case CHANGE_OFFICIAL: {
+                // console.log(CHANGE_OFFICIAL, action);
+                draft.teams[action.team].officials = draft.teams[action.team].officials.map(official => {
+                    if (official.id === action.id) {
+                        return {
+                            ...official,
+                            officialReference: action.officialReference.toUpperCase(),
+                            officialName: action.officialName
+                        };
+                    }
+                    return official;
                 });
                 break;
             }

@@ -135,8 +135,8 @@ These features should also apply to the fouls, any foul registered should be edi
 - [X] allow for timeouts per team
 - [X] Make add a player in settings "dynamic"
 - [X] Disable a player if he's disqualified
-- [ ] add officials with a letter identification
-- [ ] allow for fouls applied to officials
+- [X] add officials with a letter identification
+- [X] allow for fouls applied to officials
 - [ ] allow for removal of a player
 - [ ] Removing a player gives everything he holds to "unknown player"
 - [ ] Changing the number, _first or last name_ of a player updates every occurence of that player,
