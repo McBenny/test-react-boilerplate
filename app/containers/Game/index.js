@@ -41,6 +41,7 @@ import {
     EVENT_TYPES
 } from './constants';
 import './styles.scss';
+import { MAX_NUMBER } from '../Settings/constants';
 
 const key = 'game';
 
@@ -152,8 +153,9 @@ export function Game({
                     Timeouts: {dataTeamA.timeouts}
                     <button
                         type="button"
-                        disabled={!gameStarted || gamePaused || dataTeamA.timeouts >= 3}
+                        disabled={!gameStarted || gamePaused || dataTeamA.timeouts >= MAX_NUMBER.timeouts}
                         onClick={() => handleTimeoutButton('A')}
+                        title={dataTeamA.timeouts >= MAX_NUMBER.timeouts ? messages.maxTimeoutsReached : ''}
                     >
                         {messages.addTimeout}
                     </button>
@@ -221,8 +223,9 @@ export function Game({
                     Timeouts: {dataTeamB.timeouts}
                     <button
                         type="button"
-                        disabled={!gameStarted || gamePaused || dataTeamB.timeouts >= 3}
+                        disabled={!gameStarted || gamePaused || dataTeamB.timeouts >= MAX_NUMBER.timeouts}
                         onClick={() => handleTimeoutButton('B')}
+                        title={dataTeamB.timeouts >= MAX_NUMBER.timeouts ? messages.maxTimeoutsReached : ''}
                     >
                         {messages.addTimeout}
                     </button>
