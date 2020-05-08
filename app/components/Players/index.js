@@ -6,8 +6,8 @@ import {
     ADD_GOAL,
     ADD_YELLOW_CARD,
     ADD_BLUE_CARD,
-    UNKNOWN_PLAYER,
-    ADD_SUSPENSION
+    ADD_SUSPENSION,
+    UNKNOWN_PLAYER
 } from '../../containers/Game/constants';
 import { MAX_NUMBER } from '../../containers/Settings/constants';
 
@@ -16,6 +16,16 @@ function Players({ setScreenVisibility, eventType, playersListType, team, player
         setScreenVisibility(false);
     };
 
+    /**
+     * According to the rules of handball:
+     *  - in general, when the maximum number of a sanction is reached, referees can't add the same sanction,
+     *  - reaching the maximum number of yellow cards only prevents from receiving another yellow card,
+     *  - reaching maximum number of red cards prevents from playing so only possibility: blue card,
+     *  - a blue card can only be given to a player with a red card. Reaching maximum number of blue cards prevents from everything,
+     *  - reaching maximum number of suspensions still allows for goals and red cards.
+     * @param player
+     * @returns {boolean|boolean}
+     */
     const isPlayerDisabled = player => {
         const yellowCardsMax =
             playersListType === ADD_YELLOW_CARD &&
@@ -50,26 +60,29 @@ function Players({ setScreenVisibility, eventType, playersListType, team, player
 
     const playersListDisplay = () => {
         const cleanPlayersList = createPlayersList();
-        const buffer = cleanPlayersList.map(player => (
-            <li key={`${playersListType}playerNumber${player.id}`}>
-                <button
-                    type="button"
-                    onClick={() => {
-                        actionHandler({
-                            eventType,
-                            type: playersListType,
-                            team,
-                            id: player.id
-                        });
-                        closePopIn();
-                    }}
-                    disabled={isPlayerDisabled(player)}
-                    title={isPlayerDisabled ? messages.maxActionsReached : ''}
-                >
-                    {player.playerNumber} {player.playerName}
-                </button>
-            </li>
-        ));
+        const buffer = cleanPlayersList.map(player => {
+            const playerDisabled = isPlayerDisabled(player);
+            return (
+                <li key={`${playersListType}playerNumber${player.id}`}>
+                    <button
+                        type="button"
+                        onClick={() => {
+                            actionHandler({
+                                eventType,
+                                type: playersListType,
+                                team,
+                                id: player.id
+                            });
+                            closePopIn();
+                        }}
+                        disabled={playerDisabled}
+                        title={playerDisabled ? messages.maxActionsReached : ''}
+                    >
+                        {player.playerNumber} {player.playerName}
+                    </button>
+                </li>
+            );
+        });
         return <ul>{buffer}</ul>;
     };
 
