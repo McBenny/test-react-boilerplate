@@ -25,4 +25,11 @@ export const EMPTY_PLAYER = {
     suspensions: 0
 };
 
-export const MAX_NUMBER_OF_PLAYERS = 16;
+export const MAX_NUMBER = {
+    players: 16,
+    yellowCards: 1,
+    redCards: 1,
+    blueCards: 1,
+    suspensions: 2,
+    timeouts: 3
+};

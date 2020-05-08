@@ -18,7 +18,7 @@ import { makeSelectTeams } from './selectors';
 import reducer from './reducer';
 import { messages } from './messages';
 import { saveSettings } from '../Game/actions';
-import { EMPTY_PLAYER, MAX_NUMBER_OF_PLAYERS } from './constants';
+import { EMPTY_PLAYER, MAX_NUMBER } from './constants';
 
 const key = 'settings';
 
@@ -100,7 +100,7 @@ export function Settings({
                                 }
                                 value={player.playerName}
                             />{' '}
-                            {index < MAX_NUMBER_OF_PLAYERS - 1 &&
+                            {index < MAX_NUMBER.players - 1 &&
                                 index === playersLength - 1 &&
                                 addPlayerButton(team, index + 2)}
                         </li>

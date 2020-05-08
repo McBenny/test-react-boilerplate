@@ -2,14 +2,35 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { compareValues } from '../../utils/utilities';
 import { messages } from './messages';
-import { ADD_GOAL, UNKNOWN_PLAYER } from '../../containers/Game/constants';
+import {
+    ADD_GOAL,
+    ADD_YELLOW_CARD,
+    ADD_BLUE_CARD,
+    UNKNOWN_PLAYER,
+    ADD_SUSPENSION
+} from '../../containers/Game/constants';
+import { MAX_NUMBER } from '../../containers/Settings/constants';
 
 function Players({ setScreenVisibility, eventType, playersListType, team, playersList, actionHandler }) {
     const closePopIn = () => {
         setScreenVisibility(false);
     };
 
-    const playersListDisplay = () => {
+    const isPlayerDisabled = player => {
+        const yellowCardsMax =
+            playersListType === ADD_YELLOW_CARD &&
+            (player.yellowCards >= MAX_NUMBER.yellowCards || player.suspensions > 0);
+        const redCardsMax = playersListType !== ADD_BLUE_CARD && player.redCards >= MAX_NUMBER.redCards;
+        const blueCardsMax =
+            playersListType === ADD_BLUE_CARD &&
+            (player.redCards < MAX_NUMBER.redCards || player.blueCards >= MAX_NUMBER.blueCards);
+        const suspensionsMax =
+            (playersListType === ADD_YELLOW_CARD || playersListType === ADD_SUSPENSION) &&
+            player.suspensions >= MAX_NUMBER.suspensions;
+        return yellowCardsMax || redCardsMax || blueCardsMax || suspensionsMax;
+    };
+
+    const createPlayersList = () => {
         let playersListSorted;
         const unknownPlayerInserted = playersList.filter(player => player.id === 0);
         if (playersListType === ADD_GOAL) {
@@ -24,18 +45,26 @@ function Players({ setScreenVisibility, eventType, playersListType, team, player
                 playersListSorted.shift();
             }
         }
-        const buffer = playersListSorted.map(player => (
+        return playersListSorted;
+    };
+
+    const playersListDisplay = () => {
+        const cleanPlayersList = createPlayersList();
+        const buffer = cleanPlayersList.map(player => (
             <li key={`${playersListType}playerNumber${player.id}`}>
                 <button
                     type="button"
-                    onClick={() =>
+                    onClick={() => {
                         actionHandler({
                             eventType,
                             type: playersListType,
                             team,
                             id: player.id
-                        })
-                    }
+                        });
+                        closePopIn();
+                    }}
+                    disabled={isPlayerDisabled(player)}
+                    title={isPlayerDisabled ? messages.maxActionsReached : ''}
                 >
                     {player.playerNumber} {player.playerName}
                 </button>
