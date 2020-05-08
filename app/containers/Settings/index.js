@@ -12,7 +12,7 @@ import { compose } from 'redux';
 
 import { createStructuredSelector } from 'reselect';
 
-import { useInjectReducer } from 'utils/injectReducer';
+import { useInjectReducer } from '../../utils/injectReducer';
 import {
     changeTeamName,
     addEmptyPlayer,
@@ -102,7 +102,7 @@ export function Settings({
                                         team,
                                         id: player.id,
                                         reference: e.target.value,
-                                        playerName: player.playerName
+                                        name: player.name
                                     })
                                 }
                                 value={player.reference}
@@ -118,10 +118,10 @@ export function Settings({
                                         team,
                                         id: player.id,
                                         reference: player.reference,
-                                        playerName: e.target.value
+                                        name: e.target.value
                                     })
                                 }
-                                value={player.playerName}
+                                value={player.name}
                             />{' '}
                             {index < MAX_NUMBER.players - 1 &&
                                 index === playersLength - 1 &&

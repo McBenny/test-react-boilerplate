@@ -27,7 +27,7 @@ export const initialState = {
             players: [
                 {
                     id: 1,
-                    playerName: 'Adam',
+                    name: 'Adam',
                     reference: 26,
                     goals: 0,
                     yellowCards: 0,
@@ -37,7 +37,7 @@ export const initialState = {
                 },
                 {
                     id: 2,
-                    playerName: 'Traverso',
+                    name: 'Traverso',
                     reference: 25,
                     goals: 0,
                     yellowCards: 0,
@@ -80,7 +80,7 @@ const settingsReducer = (state = initialState, action) =>
                     {
                         ...EMPTY_PLAYER,
                         id: action.id,
-                        playerName: action.playerName,
+                        name: action.name,
                         reference: action.reference
                     }
                 ];
@@ -92,7 +92,7 @@ const settingsReducer = (state = initialState, action) =>
                         return {
                             ...player,
                             reference: parseInt(action.reference, 10),
-                            playerName: action.playerName
+                            name: action.name
                         };
                     }
                     return player;
