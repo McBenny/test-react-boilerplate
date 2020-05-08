@@ -31,7 +31,7 @@ export const OFFICIALS_REFERENCES = ['A', 'B', 'C', 'D'];
 export const EMPTY_OFFICIAL = {
     id: 1,
     reference: OFFICIALS_REFERENCES[0],
-    officialName: '',
+    name: '',
     yellowCards: 0,
     redCards: 0,
     blueCards: 0,

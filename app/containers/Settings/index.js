@@ -155,7 +155,7 @@ export function Settings({
                                         team,
                                         id: official.id,
                                         reference: e.target.value,
-                                        officialName: official.officialName
+                                        name: official.name
                                     })
                                 }
                                 value={official.reference}
@@ -172,10 +172,10 @@ export function Settings({
                                         team,
                                         id: official.id,
                                         reference: official.reference,
-                                        officialName: e.target.value
+                                        name: e.target.value
                                     })
                                 }
-                                value={official.officialName}
+                                value={official.name}
                             />{' '}
                             {index < MAX_NUMBER.officials - 1 &&
                                 index === officialsLength - 1 &&

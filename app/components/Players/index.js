@@ -110,7 +110,7 @@ function Players({ setScreenVisibility, eventType, playersListType, team, player
                         disabled={officialDisabled}
                         title={officialDisabled ? messages.maxActionsReached : ''}
                     >
-                        {official.reference} {official.officialName}
+                        {official.reference} {official.name}
                     </button>
                 </li>
             );

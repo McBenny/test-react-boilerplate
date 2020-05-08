@@ -50,7 +50,7 @@ export const initialState = {
                 {
                     id: 1,
                     reference: 'A',
-                    officialName: 'Puyhardy',
+                    name: 'Puyhardy',
                     yellowCards: 0,
                     redCards: 0,
                     blueCards: 0,
@@ -106,7 +106,7 @@ const settingsReducer = (state = initialState, action) =>
                     {
                         ...EMPTY_OFFICIAL,
                         id: action.id,
-                        officialName: action.officialName,
+                        name: action.name,
                         reference: action.reference
                     }
                 ];
@@ -118,7 +118,7 @@ const settingsReducer = (state = initialState, action) =>
                         return {
                             ...official,
                             reference: action.reference.toUpperCase(),
-                            officialName: action.officialName
+                            name: action.name
                         };
                     }
                     return official;
