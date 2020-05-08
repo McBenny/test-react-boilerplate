@@ -39,36 +39,20 @@ export const initialState = {
     gamePaused: true,
     currentPeriod: 0,
     dataTeamA: {
-        score: 0,
+        goals: 0,
         yellowCards: 0,
         redCards: 0,
         blueCards: 0,
         suspensions: 0,
-        timeouts: 0,
-        // TODO: probably remove this
-        players: [
-            {
-                number: 0,
-                firstName: 'unknown',
-                lastName: ''
-            }
-        ]
+        timeouts: 0
     },
     dataTeamB: {
-        score: 0,
+        goals: 0,
         yellowCards: 0,
         redCards: 0,
         blueCards: 0,
         suspensions: 0,
-        timeouts: 0,
-        // TODO: Probably remove this
-        players: [
-            {
-                number: 0,
-                firstName: 'unknown',
-                lastName: ''
-            }
-        ]
+        timeouts: 0
     },
     gameEvents: []
 };
@@ -76,6 +60,25 @@ export const initialState = {
 /* eslint-disable default-case, no-param-reassign */
 const gameReducer = (state = initialState, action) =>
     produce(state, draft => {
+        let updatedData;
+        switch (action.type) {
+            case ADD_GOAL:
+                updatedData = 'goals';
+                break;
+            case ADD_YELLOW_CARD:
+                updatedData = 'yellowCards';
+                break;
+            case ADD_RED_CARD:
+                updatedData = 'redCards';
+                break;
+            case ADD_BLUE_CARD:
+                updatedData = 'blueCards';
+                break;
+            case ADD_SUSPENSION:
+                updatedData = 'suspensions';
+                break;
+            default:
+        }
         switch (action.type) {
             case SAVE_SETTINGS:
                 draft.settings = action.settings;
@@ -94,24 +97,22 @@ const gameReducer = (state = initialState, action) =>
                 });
                 break;
             case ADD_GOAL:
-                // console.log(ADD_GOAL, action);
-                draft[`dataTeam${action.team}`].score += 1;
-                break;
             case ADD_YELLOW_CARD:
-                // console.log(ADD_YELLOW_CARD, action);
-                draft[`dataTeam${action.team}`].yellowCards += 1;
-                break;
             case ADD_RED_CARD:
-                // console.log(ADD_RED_CARD, action);
-                draft[`dataTeam${action.team}`].redCards += 1;
-                break;
             case ADD_BLUE_CARD:
-                // console.log(ADD_BLUE_CARD, action);
-                draft[`dataTeam${action.team}`].blueCards += 1;
-                break;
             case ADD_SUSPENSION:
-                // console.log(ADD_SUSPENSION, action);
-                draft[`dataTeam${action.team}`].suspensions += 1;
+                // console.log(action);
+                // UpdatedData is determined in the previous switch statement
+                draft[`dataTeam${action.team}`][updatedData] += 1;
+                draft.settings.teams[action.team].players = draft.settings.teams[action.team].players.map(player => {
+                    if (player.id === action.id) {
+                        return {
+                            ...player,
+                            [updatedData]: player[updatedData] + 1
+                        };
+                    }
+                    return player;
+                });
                 break;
             case ADD_TIMEOUT:
                 // console.log(ADD_TIMEOUT, action);

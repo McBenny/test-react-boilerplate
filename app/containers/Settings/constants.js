@@ -17,7 +17,12 @@ export const CANCEL_SETTINGS_CHANGE = 'boilerplate/Settings/CANCEL_SETTINGS_CHAN
 export const EMPTY_PLAYER = {
     id: 1,
     playerNumber: 0,
-    playerName: ''
+    playerName: '',
+    goals: 0,
+    yellowCards: 0,
+    redCards: 0,
+    blueCards: 0,
+    suspensions: 0
 };
 
 export const MAX_NUMBER_OF_PLAYERS = 16;

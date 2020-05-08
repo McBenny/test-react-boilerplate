@@ -13,7 +13,7 @@ import nextId from 'react-id-generator';
 
 import { createStructuredSelector } from 'reselect';
 
-import { useInjectReducer } from 'utils/injectReducer';
+import { useInjectReducer } from '../../utils/injectReducer';
 import {
     makeSelectDate,
     makeSelectSettings,
@@ -140,7 +140,7 @@ export function Game({
                     </button>
                 </li>
                 <li>
-                    Score: {dataTeamA.score} - {dataTeamB.score}
+                    Score: {dataTeamA.goals} - {dataTeamB.goals}
                 </li>
             </ul>
 

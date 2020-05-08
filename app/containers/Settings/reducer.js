@@ -8,7 +8,7 @@
  */
 
 import produce from 'immer';
-import { CHANGE_TEAM_NAME, CANCEL_SETTINGS_CHANGE, CHANGE_PLAYER, ADD_EMPTY_PLAYER } from './constants';
+import { CHANGE_TEAM_NAME, CANCEL_SETTINGS_CHANGE, CHANGE_PLAYER, ADD_EMPTY_PLAYER, EMPTY_PLAYER } from './constants';
 
 // The initial state of the App
 export const initialState = {
@@ -19,12 +19,22 @@ export const initialState = {
                 {
                     id: 1,
                     playerName: 'Adam',
-                    playerNumber: 26
+                    playerNumber: 26,
+                    goals: 0,
+                    yellowCards: 0,
+                    redCards: 0,
+                    blueCards: 0,
+                    suspensions: 0
                 },
                 {
                     id: 2,
                     playerName: 'Traverso',
-                    playerNumber: 25
+                    playerNumber: 25,
+                    goals: 0,
+                    yellowCards: 0,
+                    redCards: 0,
+                    blueCards: 0,
+                    suspensions: 0
                 }
             ]
         },
@@ -47,6 +57,7 @@ const settingsReducer = (state = initialState, action) =>
                 draft.teams[action.team].players = [
                     ...draft.teams[action.team].players,
                     {
+                        ...EMPTY_PLAYER,
                         id: action.id,
                         playerName: action.playerName,
                         playerNumber: action.playerNumber
