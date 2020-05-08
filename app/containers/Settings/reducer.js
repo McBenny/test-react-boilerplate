@@ -49,7 +49,7 @@ export const initialState = {
             officials: [
                 {
                     id: 1,
-                    officialReference: 'A',
+                    reference: 'A',
                     officialName: 'Puyhardy',
                     yellowCards: 0,
                     redCards: 0,
@@ -107,7 +107,7 @@ const settingsReducer = (state = initialState, action) =>
                         ...EMPTY_OFFICIAL,
                         id: action.id,
                         officialName: action.officialName,
-                        officialReference: action.officialReference
+                        reference: action.reference
                     }
                 ];
                 break;
@@ -117,7 +117,7 @@ const settingsReducer = (state = initialState, action) =>
                     if (official.id === action.id) {
                         return {
                             ...official,
-                            officialReference: action.officialReference.toUpperCase(),
+                            reference: action.reference.toUpperCase(),
                             officialName: action.officialName
                         };
                     }

@@ -78,9 +78,7 @@ export function Settings({
     const addOfficialButton = (team, id) => (
         <button
             type="button"
-            onClick={() =>
-                onAddEmptyOfficial({ ...EMPTY_OFFICIAL, id, team, officialReference: OFFICIALS_REFERENCES[id - 1] })
-            }
+            onClick={() => onAddEmptyOfficial({ ...EMPTY_OFFICIAL, id, team, reference: OFFICIALS_REFERENCES[id - 1] })}
             title={messages.addOfficial}
         >
             +
@@ -156,11 +154,11 @@ export function Settings({
                                     onChangeOfficial({
                                         team,
                                         id: official.id,
-                                        officialReference: e.target.value,
+                                        reference: e.target.value,
                                         officialName: official.officialName
                                     })
                                 }
-                                value={official.officialReference}
+                                value={official.reference}
                                 pattern="[A-D]"
                                 title={messages.referencePattern}
                                 required
@@ -173,7 +171,7 @@ export function Settings({
                                     onChangeOfficial({
                                         team,
                                         id: official.id,
-                                        officialReference: official.officialReference,
+                                        reference: official.reference,
                                         officialName: e.target.value
                                     })
                                 }

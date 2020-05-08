@@ -30,7 +30,7 @@ export const EMPTY_PLAYER = {
 export const OFFICIALS_REFERENCES = ['A', 'B', 'C', 'D'];
 export const EMPTY_OFFICIAL = {
     id: 1,
-    officialReference: OFFICIALS_REFERENCES[0],
+    reference: OFFICIALS_REFERENCES[0],
     officialName: '',
     yellowCards: 0,
     redCards: 0,
