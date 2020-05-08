@@ -9,6 +9,8 @@
  * export const YOUR_ACTION_CONSTANT = 'yourproject/YourContainer/YOUR_ACTION_CONSTANT';
  */
 
+import { EMPTY_PLAYER } from '../Settings/constants';
+
 export const SAVE_SETTINGS = 'boilerplate/Game/SAVE_SETTINGS';
 export const HANDLE_GAME_STATUS = 'boilerplate/Game/HANDLE_GAME_STATUS';
 export const ADD_EVENT = 'boilerplate/Game/ADD_EVENT';
@@ -42,12 +44,7 @@ export const PERIODS = {
 };
 
 export const UNKNOWN_PLAYER = {
+    ...EMPTY_PLAYER,
     id: 0,
-    playerNumber: 0,
-    playerName: '(unknown)',
-    goals: 0,
-    yellowCards: 0,
-    redCards: 0,
-    blueCards: 0,
-    suspension: 0
+    playerName: '(unknown)'
 };
