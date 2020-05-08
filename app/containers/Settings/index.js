@@ -25,7 +25,7 @@ import { makeSelectTeams } from './selectors';
 import reducer from './reducer';
 import { messages } from './messages';
 import { saveSettings } from '../Game/actions';
-import { EMPTY_PLAYER, EMPTY_OFFICIAL, OFFICIAL_REFERENCES, MAX_NUMBER } from './constants';
+import { EMPTY_PLAYER, EMPTY_OFFICIAL, OFFICIALS_REFERENCES, MAX_NUMBER } from './constants';
 
 const key = 'settings';
 
@@ -79,7 +79,7 @@ export function Settings({
         <button
             type="button"
             onClick={() =>
-                onAddEmptyOfficial({ ...EMPTY_OFFICIAL, id, team, officialReference: OFFICIAL_REFERENCES[id - 1] })
+                onAddEmptyOfficial({ ...EMPTY_OFFICIAL, id, team, officialReference: OFFICIALS_REFERENCES[id - 1] })
             }
             title={messages.addOfficial}
         >
