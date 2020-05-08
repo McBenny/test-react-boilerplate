@@ -100,20 +100,24 @@ const gameReducer = (state = initialState, action) =>
             case ADD_YELLOW_CARD:
             case ADD_RED_CARD:
             case ADD_BLUE_CARD:
-            case ADD_SUSPENSION:
+            case ADD_SUSPENSION: {
                 // console.log(action);
                 // UpdatedData is determined in the previous switch statement
                 draft[`dataTeam${action.team}`][updatedData] += 1;
-                draft.settings.teams[action.team].players = draft.settings.teams[action.team].players.map(player => {
-                    if (player.id === action.id) {
-                        return {
-                            ...player,
-                            [updatedData]: player[updatedData] + 1
-                        };
+                const { memberType } = action;
+                draft.settings.teams[action.team][memberType] = draft.settings.teams[action.team][memberType].map(
+                    member => {
+                        if (member.id === action.id) {
+                            return {
+                                ...member,
+                                [updatedData]: member[updatedData] + 1
+                            };
+                        }
+                        return member;
                     }
-                    return player;
-                });
+                );
                 break;
+            }
             case ADD_TIMEOUT:
                 // console.log(ADD_TIMEOUT, action);
                 draft[`dataTeam${action.team}`].timeouts += 1;

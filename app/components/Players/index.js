@@ -11,7 +11,7 @@ import {
 } from '../../containers/Game/constants';
 import { MAX_NUMBER } from '../../containers/Settings/constants';
 
-function Players({ setScreenVisibility, eventType, playersListType, team, playersList, actionHandler }) {
+function Players({ setScreenVisibility, eventType, playersListType, team, playersList, officialsList, actionHandler }) {
     const closePopIn = () => {
         setScreenVisibility(false);
     };
@@ -71,7 +71,8 @@ function Players({ setScreenVisibility, eventType, playersListType, team, player
                                 eventType,
                                 type: playersListType,
                                 team,
-                                id: player.id
+                                id: player.id,
+                                memberType: 'players'
                             });
                             closePopIn();
                         }}
@@ -83,14 +84,52 @@ function Players({ setScreenVisibility, eventType, playersListType, team, player
                 </li>
             );
         });
+        if (cleanPlayersList.length === 0) {
+            return <p>{messages.noPlayers}</p>;
+        }
+        return <ul>{buffer}</ul>;
+    };
+
+    const officialsListDisplay = () => {
+        const buffer = officialsList.map(official => {
+            const officialDisabled = isPlayerDisabled(official);
+            return (
+                <li key={`${playersListType}officialReference${official.id}`}>
+                    <button
+                        type="button"
+                        onClick={() => {
+                            actionHandler({
+                                eventType,
+                                type: playersListType,
+                                team,
+                                id: official.id,
+                                memberType: 'officials'
+                            });
+                            closePopIn();
+                        }}
+                        disabled={officialDisabled}
+                        title={officialDisabled ? messages.maxActionsReached : ''}
+                    >
+                        {official.officialReference} {official.officialName}
+                    </button>
+                </li>
+            );
+        });
+        if (officialsList.length === 0) {
+            return <p>{messages.noOfficials}</p>;
+        }
         return <ul>{buffer}</ul>;
     };
 
     return (
         <React.Fragment>
-            <h2 className="title title--2">{messages.title}</h2>
-            <h3>{playersListType}</h3>
+            <h2 className="title title--2">
+                {messages.title}: {playersListType}
+            </h2>
+            <h3>{messages.listOfPlayers}</h3>
             {playersListDisplay()}
+            {playersListType !== ADD_GOAL ? <h3>{messages.listOfOfficials}</h3> : ''}
+            {playersListType !== ADD_GOAL ? officialsListDisplay() : ''}
             <button type="button" onClick={closePopIn}>
                 {messages.close}
             </button>
@@ -104,6 +143,7 @@ Players.propTypes = {
     playersListType: PropTypes.string,
     team: PropTypes.string,
     playersList: PropTypes.array,
+    officialsList: PropTypes.array,
     actionHandler: PropTypes.func
 };
 

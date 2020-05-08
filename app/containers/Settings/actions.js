@@ -15,7 +15,14 @@
  *    }
  */
 
-import { CHANGE_TEAM_NAME, CANCEL_SETTINGS_CHANGE, ADD_EMPTY_PLAYER, CHANGE_PLAYER } from './constants';
+import {
+    CHANGE_TEAM_NAME,
+    CANCEL_SETTINGS_CHANGE,
+    ADD_EMPTY_PLAYER,
+    ADD_EMPTY_OFFICIAL,
+    CHANGE_PLAYER,
+    CHANGE_OFFICIAL
+} from './constants';
 
 /**
  * Changes the input field of the form
@@ -34,12 +41,24 @@ export function changeTeamName({ team, teamName }) {
 /**
  * Changes the input field of the form
  * @param  {object} player The new text of the input field
- * @return {object} An action object with a type of CHANGE_PLAYER
+ * @return {object} An action object with a type of ADD_EMPTY_PLAYER
  */
 export function addEmptyPlayer(player) {
     return {
         type: ADD_EMPTY_PLAYER,
         ...player
+    };
+}
+
+/**
+ * Changes the input field of the form
+ * @param  {object} official The new text of the input field
+ * @return {object} An action object with a type of ADD_EMPTY_OFFiCIAL
+ */
+export function addEmptyOfficial(official) {
+    return {
+        type: ADD_EMPTY_OFFICIAL,
+        ...official
     };
 }
 
@@ -52,6 +71,18 @@ export function changePlayer(player) {
     return {
         type: CHANGE_PLAYER,
         ...player
+    };
+}
+
+/**
+ * Changes the input field of the form
+ * @param  {object} official The new text of the input field
+ * @return {object} An action object with a type of CHANGE_OFFICIAL
+ */
+export function changeOfficial(official) {
+    return {
+        type: CHANGE_OFFICIAL,
+        ...official
     };
 }
 

@@ -13,20 +13,29 @@ import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
 
 import { useInjectReducer } from 'utils/injectReducer';
-import { changeTeamName, changePlayer, cancelChangeSettings, addEmptyPlayer } from './actions';
+import {
+    changeTeamName,
+    addEmptyPlayer,
+    changePlayer,
+    addEmptyOfficial,
+    changeOfficial,
+    cancelChangeSettings
+} from './actions';
 import { makeSelectTeams } from './selectors';
 import reducer from './reducer';
 import { messages } from './messages';
 import { saveSettings } from '../Game/actions';
-import { EMPTY_PLAYER, MAX_NUMBER } from './constants';
+import { EMPTY_PLAYER, EMPTY_OFFICIAL, OFFICIAL_REFERENCES, MAX_NUMBER } from './constants';
 
 const key = 'settings';
 
 export function Settings({
     teams,
-    onAddEmptyPlayer,
     onChangeTeamName,
+    onAddEmptyPlayer,
     onChangePlayer,
+    onAddEmptyOfficial,
+    onChangeOfficial,
     onSaveSettings,
     onCloseSettings,
     setScreenVisibility,
@@ -57,7 +66,23 @@ export function Settings({
     };
 
     const addPlayerButton = (team, id) => (
-        <button type="button" onClick={() => onAddEmptyPlayer({ ...EMPTY_PLAYER, id, team })}>
+        <button
+            type="button"
+            onClick={() => onAddEmptyPlayer({ ...EMPTY_PLAYER, id, team })}
+            title={messages.addPlayer}
+        >
+            +
+        </button>
+    );
+
+    const addOfficialButton = (team, id) => (
+        <button
+            type="button"
+            onClick={() =>
+                onAddEmptyOfficial({ ...EMPTY_OFFICIAL, id, team, officialReference: OFFICIAL_REFERENCES[id - 1] })
+            }
+            title={messages.addOfficial}
+        >
             +
         </button>
     );
@@ -113,6 +138,60 @@ export function Settings({
         return null;
     };
 
+    const officialsList = team => {
+        if (teams[team].officials.length > 0) {
+            const officialsNotUnknown = teams[team].officials.filter(official => official.id !== 0);
+            const officialsLength = officialsNotUnknown.length;
+            const buffer = officialsNotUnknown.map((official, index) => {
+                if (official.id !== 0) {
+                    return (
+                        <li key={`official${official.id}`}>
+                            <label htmlFor={`officialReference${official.id}`}>
+                                {messages.officialReferenceAndName}:
+                            </label>
+                            <input
+                                type="text"
+                                id={`officialReference${official.id}`}
+                                onChange={e =>
+                                    onChangeOfficial({
+                                        team,
+                                        id: official.id,
+                                        officialReference: e.target.value,
+                                        officialName: official.officialName
+                                    })
+                                }
+                                value={official.officialReference}
+                                pattern="[A-D]"
+                                title={messages.referencePattern}
+                                required
+                                disabled
+                            />{' '}
+                            <input
+                                type="text"
+                                id={`officialName${official.id}`}
+                                onChange={e =>
+                                    onChangeOfficial({
+                                        team,
+                                        id: official.id,
+                                        officialReference: official.officialReference,
+                                        officialName: e.target.value
+                                    })
+                                }
+                                value={official.officialName}
+                            />{' '}
+                            {index < MAX_NUMBER.officials - 1 &&
+                                index === officialsLength - 1 &&
+                                addOfficialButton(team, index + 2)}
+                        </li>
+                    );
+                }
+                return '';
+            });
+            return <ul>{buffer}</ul>;
+        }
+        return null;
+    };
+
     /**
      * If a team has no players or has only one player and it's id is 0 (unknown player),
      * an empty player is created to allow for an input line
@@ -124,6 +203,12 @@ export function Settings({
                 (teams[team].players.length === 1 && teams[team].players[0].id === 0)
             ) {
                 onAddEmptyPlayer({ ...EMPTY_PLAYER, id: 1, team });
+            }
+            if (
+                teams[team].officials.length === 0 ||
+                (teams[team].officials.length === 1 && teams[team].officials[0].id === 0)
+            ) {
+                onAddEmptyOfficial({ ...EMPTY_OFFICIAL, id: 1, team });
             }
             return true;
         });
@@ -144,7 +229,10 @@ export function Settings({
                         required
                     />
                 </p>
+                <h4>{messages.listOfPlayers}</h4>
                 {playersList('A')}
+                <h4>{messages.listOfOfficials}</h4>
+                {officialsList('A')}
                 <h3>{messages.teamB}</h3>
                 <p>
                     <label htmlFor="teamBName">{messages.teamB}:</label>{' '}
@@ -156,7 +244,10 @@ export function Settings({
                         required
                     />
                 </p>
+                <h4>{messages.listOfPlayers}</h4>
                 {playersList('B')}
+                <h4>{messages.listOfOfficials}</h4>
+                {officialsList('B')}
                 <button type="button" onClick={closePopIn}>
                     {messages.close}
                 </button>{' '}
@@ -171,6 +262,8 @@ Settings.propTypes = {
     onChangeTeamName: PropTypes.func,
     onAddEmptyPlayer: PropTypes.func,
     onChangePlayer: PropTypes.func,
+    onAddEmptyOfficial: PropTypes.func,
+    onChangeOfficial: PropTypes.func,
     onSaveSettings: PropTypes.func,
     onCloseSettings: PropTypes.func,
     setScreenVisibility: PropTypes.func,
@@ -186,6 +279,8 @@ export function mapDispatchToProps(dispatch) {
         onChangeTeamName: data => dispatch(changeTeamName(data)),
         onAddEmptyPlayer: data => dispatch(addEmptyPlayer(data)),
         onChangePlayer: data => dispatch(changePlayer(data)),
+        onAddEmptyOfficial: data => dispatch(addEmptyOfficial(data)),
+        onChangeOfficial: data => dispatch(changeOfficial(data)),
         onSaveSettings: data => dispatch(saveSettings(data)),
         onCloseSettings: data => dispatch(cancelChangeSettings(data))
     };
