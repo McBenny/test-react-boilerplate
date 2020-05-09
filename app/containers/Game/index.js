@@ -87,6 +87,7 @@ export function Game({
         }
     }, [playersData]);
 
+    const score = { teamA: dataTeamA.goals, teamB: dataTeamB.goals };
     const handleStartButton = () => {
         let eventType;
         if (gameStarted) {
@@ -98,14 +99,10 @@ export function Game({
             gameStarted: true,
             gamePaused: !gamePaused,
             eventType,
-            score: {
-                teamA: dataTeamA.goals,
-                teamB: dataTeamB.goals
-            }
+            score
         });
     };
 
-    const score = { teamA: dataTeamA.goals, teamB: dataTeamB.goals };
     const handleTimeoutButton = team => {
         onAddAction({
             type: ADD_TIMEOUT,
