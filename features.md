@@ -3,20 +3,22 @@
 ##Settings:
 Minimum requirements to get started:
 - Create a match:
-    - Competition (Men / Women)
-    - Date
-    - Referees
-        - First and last names (2),
-    - Team A / B:
-        - name
-        - _colour_
+    - [ ] Competition (Men / Women)
+    - [X] Date
+    - [ ] Referees
+        - [ ] First and last names (2),
+    - [ ] Timekeeper and Scorekeeper (2)
+        - [ ] First and last names (2),
+    - [ ] Team A / B:
+        - [X] name
+        - [ ] _colour_
         - Players:
-            - Number\*
-            - _First and last name_
-            - Goalie?
+            - [X] Number\*
+            - [X] _First and last name_
+            - [ ] Goalie?
         - Officials:
-            - First and last name
-            - Start button
+            - [X] First and last name
+            - [X] Start button
 
 ##Main screen features
 Table officials can change the score, mark players fouls and export the final score sheet.
@@ -24,57 +26,57 @@ Table officials can change the score, mark players fouls and export the final sc
 The display shows the 2 teams involved, the current score and the players who received fouls.
 
 ###General features
-- Edit match settings => access to initial settings
-- Invert Teams (A-B => B-A)
-- Alter score:
-    - remove last goal,
-    - edit score sheet:
-        - opens a dialog with:
-            - list of goals one after the other with:
-                - score / new goal - for each line, possible to edit the team and player number or remove the line
-                - for each line possibility to insert a line: - choose the team, the player number
-                - [goal team A] - [goal team B][player number]
-                - save / cancel
+- [X] Edit match settings => access to initial settings
+- [ ] Invert Teams (A-B => B-A)
+- [ ] Alter score:
+    - [ ] remove last goal,
+    - [ ] edit score sheet:
+        - [ ] opens a dialog with:
+            - [ ] list of goals one after the other with:
+                - [ ] score / new goal - for each line, possible to edit the team and player number or remove the line
+                - [ ] for each line possibility to insert a line: - choose the team, the player number
+                - [ ] [goal team A] - [goal team B][player number]
+                - [ ] save / cancel
 
 ###Display
 The screen is separated in 2 sides with on each side:
 
-- Team identification (name, _logo, jersey colour_)
-- Number of goals,
-- List of fouls (yellow and red cards, 2 minutes with player number, _first and last name_).
-- _Click on the team to view the line-up_
-    - opens a dialog with:
-        - lists the players with number, _first and last name_
-        - for each player, possible to edit (number, first or last name) and remove player
-        - button to add a player:
-            - adds a line with empty fields for number, _first and last name_.
-        - close button
+- [X] Team identification (name, _logo, jersey colour_)
+- [X] Number of goals,
+- [X] List of fouls (yellow and red cards, 2 minutes with player number, _first and last name_).
+- [ ] _Click on the team to view the line-up_
+    - [ ] opens a dialog with:
+        - [ ] lists the players with number, _first and last name_
+        - [ ] for each player, possible to edit (number, first or last name) and remove player
+        - [ ] button to add a player:
+            - [ ] adds a line with empty fields for number, _first and last name_.
+        - [ ] close button
 
-- Click on the score to add a goal:
-    - opens a dialog with:
-        - list of players  numbers (_plus name_)
-        - an "unknown" player,
-        - close/cancel button
-    - Official can select the number of the payer or "unknown"
-        - it closes the dialog (automatic)
-        - updates the total goals of the team
+- [X] Click on the score to add a goal:
+    - [X] opens a dialog with:
+        - [X] list of players  numbers (_plus name_)
+        - [X] an "unknown" player,
+        - [X] close/cancel button
+    - [X] Official can select the number of the payer or "unknown"
+        - [X] it closes the dialog (automatic)
+        - [X] updates the total goals of the team
 
-- Click on the foul type to add a foul:
-    - opens a dialog with:
-        - list of players  numbers (_plus name_)
-        - an "unknown" player,
-        - close/cancel button
-    - Official can select the number of the payer or "unknown"
-        - it closes the dialog (automatic)
-        - updates the list of players for that foul
+- [X] Click on the foul type to add a foul:
+    - [X] opens a dialog with:
+        - [X] list of players  numbers (_plus name_)
+        - [X] no "unknown" player,
+        - [X] close/cancel button
+    - [X] Official can select the number of the payer
+        - [X] it closes the dialog (automatic)
+        - [X] updates the list of players for that foul
 
 ##Screens
-1) Splash screen + button to create a game
-1) Game settings
-1) Game screen
-1) Add a goal
-1) Add a foul
-1) Edit game log
+1) [X] Splash screen + button to create a game
+1) [X] Game settings
+1) [X] Game screen
+1) [X] Add a goal
+1) [X] Add a foul
+1) [ ] Edit game log
 
 ###Splash screen
 This is the starting screen of the application, its purpose is to present the app and allow for the official to start a session.
@@ -98,9 +100,9 @@ This screen shows the current status of the game:
 - [ ] current half time.
 
 From this screen it's possible to access other screens:
-- [ ] Game settings: to alter the game's settings (add a player, change a referee...),
-- [x] Add a goal screen: to add a goal for a team,
-- [x] Add a foul screen: to add a certain type of foul to a team / player,
+- [X] Game settings: to alter the game's settings (add a player, change a referee...),
+- [X] Add a goal screen: to add a goal for a team,
+- [X] Add a foul screen: to add a certain type of foul to a team / player,
 - [ ] Edit score screen: to edit the score if a mistake has been made
 
 This screen also allows for certain actions:
@@ -113,9 +115,9 @@ These screens are basically identical, they only perform different actions: addi
 All actions performed on this screen are to be stored in chronological order to be able to log the actions of the game.
 
 A possible way to store these actions can be expressed as:
-- [x] in team A, player X scores a goal,
-- [x] in team B, player Y receives a yellow card,
-- [x] in team A, player Z receives a "2 minutes",
+- [X] in team A, player X scores a goal,
+- [X] in team B, player Y receives a yellow card,
+- [X] in team A, player Z receives a "2 minutes",
 - ...
 
 This will allow for a complete log of the actions of the game.
@@ -142,6 +144,9 @@ These features should also apply to the fouls, any foul registered should be edi
 - [X] keep current score on every event
 - [ ] on start/stop, allow for choice between pause/resume or close/open a period
 - [ ] create a generic pop-in with generic features (open/close)
+- [ ] add a colour to each team
+- [ ] add game officials (referees, scorekeeper (table), timekeeper (scoreboard/buzzer))
+- [ ] in players pop-in, list players and officials in different tabs
 - [ ] allow for removal of a player
 - [ ] Removing a player gives everything he holds to "unknown players"
 - [ ] Changing the number, _first or last name_ of a player updates every occurrence of that player,
