@@ -120,8 +120,34 @@ export function Game({
         onAddAction({ eventType, type, team, id, memberType });
     };
 
+    /**
+     * This function generates a list of players registered for a specific team and a specific foul (HTML).
+     * @param team {string} A or B
+     * @param foul {string} a key out of EVENT_TYPES
+     * @returns {string|*}
+     */
+    const foulPlayersLog = (team, foul) => {
+        const log = gameEvents.filter(event => event.team === team && event.eventType === EVENT_TYPES[foul]);
+        if (log.length > 0) {
+            const buffer = log.map(event => {
+                const eventMember = settings.teams[team][event.memberType].filter(member => member.id === event.id);
+                return (
+                    <li key={`${foul}${team}${event.memberType}${eventMember[0].id}`}>
+                        {eventMember[0].reference} {eventMember[0].name}
+                    </li>
+                );
+            });
+            return <ul>{buffer}</ul>;
+        }
+        return '';
+    };
+
+    /**
+     * This function generates the list of events of the game (HTML).
+     * @returns {*}
+     */
     const gameEventsLog = () => {
-        const log = gameEvents.map(gameEvent => {
+        const buffer = gameEvents.map(gameEvent => {
             const htmlId = nextId();
             return (
                 <li key={htmlId}>
@@ -131,7 +157,7 @@ export function Game({
                 </li>
             );
         });
-        return <ul>{log}</ul>;
+        return <ul>{buffer}</ul>;
     };
 
     return (
@@ -189,6 +215,7 @@ export function Game({
                     >
                         {messages.addYellowCard}
                     </button>
+                    {foulPlayersLog('A', 'yellowCard')}
                 </li>
                 <li>
                     2 minutes: {dataTeamA.suspensions}
@@ -201,6 +228,7 @@ export function Game({
                     >
                         {messages.addSuspension}
                     </button>
+                    {foulPlayersLog('A', 'suspension')}
                 </li>
                 <li>
                     Red cards: {dataTeamA.redCards}
@@ -211,6 +239,7 @@ export function Game({
                     >
                         {messages.addRedCard}
                     </button>
+                    {foulPlayersLog('A', 'redCard')}
                 </li>
                 <li>
                     Blue cards: {dataTeamA.blueCards}
@@ -221,6 +250,7 @@ export function Game({
                     >
                         {messages.addBlueCard}
                     </button>
+                    {foulPlayersLog('A', 'blueCard')}
                 </li>
             </ul>
 
@@ -259,6 +289,7 @@ export function Game({
                     >
                         {messages.addYellowCard}
                     </button>
+                    {foulPlayersLog('B', 'yellowCard')}
                 </li>
                 <li>
                     2 minutes: {dataTeamB.suspensions}
@@ -271,6 +302,7 @@ export function Game({
                     >
                         {messages.addSuspension}
                     </button>
+                    {foulPlayersLog('B', 'suspension')}
                 </li>
                 <li>
                     Red cards: {dataTeamB.redCards}
@@ -281,6 +313,7 @@ export function Game({
                     >
                         {messages.addRedCard}
                     </button>
+                    {foulPlayersLog('B', 'redCard')}
                 </li>
                 <li>
                     Blue cards: {dataTeamB.blueCards}
@@ -291,6 +324,7 @@ export function Game({
                     >
                         {messages.addBlueCard}
                     </button>
+                    {foulPlayersLog('B', 'blueCard')}
                 </li>
             </ul>
             <h2>Game log:</h2>
