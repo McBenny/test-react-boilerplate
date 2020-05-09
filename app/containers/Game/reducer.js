@@ -89,15 +89,21 @@ const gameReducer = (state = initialState, action) =>
                 draft.gameStarted = action.gameStarted;
                 draft.gamePaused = action.gamePaused;
                 break;
-            case ADD_EVENT:
+            case ADD_EVENT: {
                 // console.log(ADD_EVENT, action);
+                const { id, team, eventType, memberType, score } = action;
                 draft.gameEvents.push({
-                    eventType: action.eventType,
-                    team: action.team,
-                    id: action.id,
-                    memberType: action.memberType
+                    eventType,
+                    team,
+                    id,
+                    memberType,
+                    score: {
+                        teamA: score.teamA,
+                        teamB: score.teamB
+                    }
                 });
                 break;
+            }
             case ADD_GOAL:
             case ADD_YELLOW_CARD:
             case ADD_RED_CARD:

@@ -87,17 +87,19 @@ export function Game({
         }
     }, [playersData]);
 
+    const score = { teamA: dataTeamA.goals, teamB: dataTeamB.goals };
     const handleStartButton = () => {
-        let eventName;
+        let eventType;
         if (gameStarted) {
-            eventName = gamePaused ? EVENT_TYPES.periodStart : EVENT_TYPES.periodEnd;
+            eventType = gamePaused ? EVENT_TYPES.periodStart : EVENT_TYPES.periodEnd;
         } else {
-            eventName = EVENT_TYPES.gameStart;
+            eventType = EVENT_TYPES.gameStart;
         }
         onHandleGameStatus({
             gameStarted: true,
             gamePaused: !gamePaused,
-            eventType: eventName
+            eventType,
+            score
         });
     };
 
@@ -105,7 +107,8 @@ export function Game({
         onAddAction({
             type: ADD_TIMEOUT,
             eventType: EVENT_TYPES.timeout,
-            team
+            team,
+            score
         });
     };
 
@@ -117,7 +120,14 @@ export function Game({
     };
 
     const addActionPerTeam = ({ eventType, type, team, id, memberType }) => {
-        onAddAction({ eventType, type, team, id, memberType });
+        let updatedScore = score;
+        if (eventType === EVENT_TYPES.goal) {
+            updatedScore = {
+                teamA: team === 'A' ? score.teamA + 1 : score.teamA,
+                teamB: team === 'B' ? score.teamB + 1 : score.teamB
+            };
+        }
+        onAddAction({ eventType, type, team, id, memberType, score: updatedScore });
     };
 
     /**
@@ -153,7 +163,7 @@ export function Game({
                 <li key={htmlId}>
                     <strong>Event:</strong> {gameEvent.eventType}, <strong>{gameEvent.team ? 'Team:' : ''}</strong>{' '}
                     {gameEvent.team}, <strong>{gameEvent.memberType ? `${gameEvent.memberType}:` : ''}</strong>{' '}
-                    {gameEvent.id}
+                    {gameEvent.id}, <strong>Score:</strong> {gameEvent.score.teamA}-{gameEvent.score.teamB}
                 </li>
             );
         });
