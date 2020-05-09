@@ -15,14 +15,7 @@
  *    }
  */
 
-import {
-    CHANGE_TEAM_NAME,
-    CANCEL_SETTINGS_CHANGE,
-    ADD_EMPTY_PLAYER,
-    ADD_EMPTY_OFFICIAL,
-    CHANGE_PLAYER,
-    CHANGE_OFFICIAL
-} from './constants';
+import { CHANGE_TEAM_NAME, INIT_SETTINGS, ADD_EMPTY_MEMBER, CHANGE_MEMBER } from './constants';
 
 /**
  * Changes the input field of the form
@@ -40,49 +33,26 @@ export function changeTeamName({ team, teamName }) {
 
 /**
  * Changes the input field of the form
- * @param  {object} player The new text of the input field
- * @return {object} An action object with a type of ADD_EMPTY_PLAYER
+ * @param  {object} member The new text of the input field
+ * @return {object} An action object with a type of ADD_EMPTY_MEMBER
  */
-export function addEmptyPlayer(player) {
+export function addEmptyMember(member) {
     return {
-        type: ADD_EMPTY_PLAYER,
-        ...player
+        type: ADD_EMPTY_MEMBER,
+        ...member
     };
 }
 
 /**
  * Changes the input field of the form
- * @param  {object} official The new text of the input field
- * @return {object} An action object with a type of ADD_EMPTY_OFFiCIAL
+ * @param  {object} member The new text of the input field
+ * @return {object} An action object with a type of CHANGE_MEMBER
  */
-export function addEmptyOfficial(official) {
+export function changeMember(member) {
+    // console.log(CHANGE_MEMBER, member);
     return {
-        type: ADD_EMPTY_OFFICIAL,
-        ...official
-    };
-}
-
-/**
- * Changes the input field of the form
- * @param  {object} player The new text of the input field
- * @return {object} An action object with a type of CHANGE_PLAYER
- */
-export function changePlayer(player) {
-    return {
-        type: CHANGE_PLAYER,
-        ...player
-    };
-}
-
-/**
- * Changes the input field of the form
- * @param  {object} official The new text of the input field
- * @return {object} An action object with a type of CHANGE_OFFICIAL
- */
-export function changeOfficial(official) {
-    return {
-        type: CHANGE_OFFICIAL,
-        ...official
+        type: CHANGE_MEMBER,
+        ...member
     };
 }
 
@@ -91,9 +61,9 @@ export function changeOfficial(official) {
  * @param  {object} settings The object containing the settings
  * @returns {{settings: *, type: string}}
  */
-export function cancelChangeSettings(settings) {
+export function initSettings(settings) {
     return {
-        type: CANCEL_SETTINGS_CHANGE,
+        type: INIT_SETTINGS,
         settings
     };
 }

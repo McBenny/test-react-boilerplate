@@ -8,55 +8,15 @@
  */
 
 import produce from 'immer';
-import {
-    CHANGE_TEAM_NAME,
-    CANCEL_SETTINGS_CHANGE,
-    EMPTY_PLAYER,
-    ADD_EMPTY_PLAYER,
-    CHANGE_PLAYER,
-    EMPTY_OFFICIAL,
-    ADD_EMPTY_OFFICIAL,
-    CHANGE_OFFICIAL
-} from './constants';
+import { CHANGE_TEAM_NAME, INIT_SETTINGS, EMPTY_MEMBER, ADD_EMPTY_MEMBER, CHANGE_MEMBER } from './constants';
 
 // The initial state of the App
 export const initialState = {
     teams: {
         A: {
             name: 'Team AAA',
-            players: [
-                {
-                    id: 1,
-                    name: 'Adam',
-                    reference: 26,
-                    goals: 0,
-                    yellowCards: 0,
-                    redCards: 0,
-                    blueCards: 0,
-                    suspensions: 0
-                },
-                {
-                    id: 2,
-                    name: 'Traverso',
-                    reference: 25,
-                    goals: 0,
-                    yellowCards: 0,
-                    redCards: 0,
-                    blueCards: 0,
-                    suspensions: 0
-                }
-            ],
-            officials: [
-                {
-                    id: 1,
-                    reference: 'A',
-                    name: 'Puyhardy',
-                    yellowCards: 0,
-                    redCards: 0,
-                    blueCards: 0,
-                    suspensions: 0
-                }
-            ]
+            players: [],
+            officials: []
         },
         B: {
             name: 'Team B',
@@ -73,59 +33,37 @@ const settingsReducer = (state = initialState, action) =>
             case CHANGE_TEAM_NAME:
                 draft.teams[action.team].name = action.teamName;
                 break;
-            case ADD_EMPTY_PLAYER:
-                // console.log(ADD_EMPTY_PLAYER, action);
-                draft.teams[action.team].players = [
-                    ...draft.teams[action.team].players,
+            case ADD_EMPTY_MEMBER:
+                // console.log(ADD_EMPTY_MEMBER, action);
+                draft.teams[action.team][action.memberType] = [
+                    ...draft.teams[action.team][action.memberType],
                     {
-                        ...EMPTY_PLAYER,
+                        ...EMPTY_MEMBER[action.memberType],
                         id: action.id,
                         name: action.name,
                         reference: action.reference
                     }
                 ];
                 break;
-            case CHANGE_PLAYER: {
-                // console.log(CHANGE_PLAYER, action);
-                draft.teams[action.team].players = draft.teams[action.team].players.map(player => {
-                    if (player.id === action.id) {
-                        return {
-                            ...player,
-                            reference: parseInt(action.reference, 10),
-                            name: action.name
-                        };
+            case CHANGE_MEMBER: {
+                // console.log(CHANGE_MEMBER, action);
+                const reference = action.memberType === 'players' ? parseInt(action.reference, 10) : action.reference;
+                draft.teams[action.team][action.memberType] = draft.teams[action.team][action.memberType].map(
+                    member => {
+                        if (member.id === action.id) {
+                            return {
+                                ...member,
+                                reference,
+                                name: action.name
+                            };
+                        }
+                        return member;
                     }
-                    return player;
-                });
+                );
                 break;
             }
-            case ADD_EMPTY_OFFICIAL:
-                // console.log(ADD_EMPTY_OFFICIAL, action);
-                draft.teams[action.team].officials = [
-                    ...draft.teams[action.team].officials,
-                    {
-                        ...EMPTY_OFFICIAL,
-                        id: action.id,
-                        name: action.name,
-                        reference: action.reference
-                    }
-                ];
-                break;
-            case CHANGE_OFFICIAL: {
-                // console.log(CHANGE_OFFICIAL, action);
-                draft.teams[action.team].officials = draft.teams[action.team].officials.map(official => {
-                    if (official.id === action.id) {
-                        return {
-                            ...official,
-                            reference: action.reference.toUpperCase(),
-                            name: action.name
-                        };
-                    }
-                    return official;
-                });
-                break;
-            }
-            case CANCEL_SETTINGS_CHANGE: {
+            case INIT_SETTINGS: {
+                // console.log(INIT_SETTINGS, action);
                 const newSettings = Object.keys(action.settings);
                 newSettings.forEach(setting => {
                     draft[setting] = action.settings[setting];

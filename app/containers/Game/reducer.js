@@ -81,6 +81,7 @@ const gameReducer = (state = initialState, action) =>
         }
         switch (action.type) {
             case SAVE_SETTINGS:
+                // console.log(SAVE_SETTINGS, action);
                 draft.settings = action.settings;
                 break;
             case HANDLE_GAME_STATUS:
@@ -90,11 +91,12 @@ const gameReducer = (state = initialState, action) =>
                 break;
             case ADD_EVENT:
                 // TODO: Add the type of member to distinguish players and officials
-                // console.log(ADD_EVENT, action);
+                console.log(ADD_EVENT, action);
                 draft.gameEvents.push({
                     eventType: action.eventType,
                     team: action.team,
-                    id: action.id
+                    id: action.id,
+                    memberType: action.memberType
                 });
                 break;
             case ADD_GOAL:
