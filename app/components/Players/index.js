@@ -23,97 +23,79 @@ function Players({ setScreenVisibility, eventType, playersListType, team, player
      *  - reaching maximum number of red cards prevents from playing so only possibility: blue card,
      *  - a blue card can only be given to a player with a red card. Reaching maximum number of blue cards prevents from everything,
      *  - reaching maximum number of suspensions still allows for goals and red cards.
-     * @param player
+     * @param member
      * @returns {boolean|boolean}
      */
-    const isPlayerDisabled = player => {
+    const isMemberDisabled = member => {
         const yellowCardsMax =
             playersListType === ADD_YELLOW_CARD &&
-            (player.yellowCards >= MAX_NUMBER.yellowCards || player.suspensions > 0);
-        const redCardsMax = playersListType !== ADD_BLUE_CARD && player.redCards >= MAX_NUMBER.redCards;
+            (member.yellowCards >= MAX_NUMBER.yellowCards || member.suspensions > 0);
+        const redCardsMax = playersListType !== ADD_BLUE_CARD && member.redCards >= MAX_NUMBER.redCards;
         const blueCardsMax =
             playersListType === ADD_BLUE_CARD &&
-            (player.redCards < MAX_NUMBER.redCards || player.blueCards >= MAX_NUMBER.blueCards);
+            (member.redCards < MAX_NUMBER.redCards || member.blueCards >= MAX_NUMBER.blueCards);
         const suspensionsMax =
             (playersListType === ADD_YELLOW_CARD || playersListType === ADD_SUSPENSION) &&
-            player.suspensions >= MAX_NUMBER.suspensions;
+            member.suspensions >= MAX_NUMBER.suspensions;
         return yellowCardsMax || redCardsMax || blueCardsMax || suspensionsMax;
     };
 
     const createPlayersList = () => {
-        let playersListSorted;
-        const unknownPlayerInserted = playersList.filter(player => player.id === 0);
+        let membersListSorted;
+        const unknownMemberInserted = playersList.filter(member => member.id === 0);
         if (playersListType === ADD_GOAL) {
-            if (unknownPlayerInserted.length === 0) {
+            if (unknownMemberInserted.length === 0) {
                 playersList.push(UNKNOWN_PLAYER);
             }
-            playersListSorted = playersList.sort(compareValues('playerNumber', true));
-            playersListSorted.splice(playersListSorted.length, 0, playersListSorted.splice(0, 1)[0]);
+            membersListSorted = playersList.sort(compareValues('reference', true));
+            membersListSorted.splice(membersListSorted.length, 0, membersListSorted.splice(0, 1)[0]);
         } else {
-            playersListSorted = playersList.sort(compareValues('playerNumber', true));
-            if (unknownPlayerInserted.length !== 0) {
-                playersListSorted.shift();
+            membersListSorted = playersList.sort(compareValues('reference', true));
+            if (unknownMemberInserted.length !== 0) {
+                membersListSorted.shift();
             }
         }
-        return playersListSorted;
+        return membersListSorted;
     };
 
+    const buttonTemplate = (member, type, isDisabled) => (
+        <li key={`${playersListType}${type}Reference${member.id}`}>
+            <button
+                type="button"
+                onClick={() => {
+                    actionHandler({
+                        eventType,
+                        type: playersListType,
+                        team,
+                        id: member.id,
+                        memberType: type
+                    });
+                    closePopIn();
+                }}
+                disabled={isDisabled}
+                title={isDisabled ? messages.maxActionsReached : ''}
+            >
+                {member.reference} {member.name}
+            </button>
+        </li>
+    );
+
     const playersListDisplay = () => {
-        const cleanPlayersList = createPlayersList();
-        const buffer = cleanPlayersList.map(player => {
-            const playerDisabled = isPlayerDisabled(player);
-            return (
-                <li key={`${playersListType}playerNumber${player.id}`}>
-                    <button
-                        type="button"
-                        onClick={() => {
-                            actionHandler({
-                                eventType,
-                                type: playersListType,
-                                team,
-                                id: player.id,
-                                memberType: 'players'
-                            });
-                            closePopIn();
-                        }}
-                        disabled={playerDisabled}
-                        title={playerDisabled ? messages.maxActionsReached : ''}
-                    >
-                        {player.playerNumber} {player.playerName}
-                    </button>
-                </li>
-            );
+        const cleanMembersList = createPlayersList();
+        const buffer = cleanMembersList.map(member => {
+            const memberDisabled = isMemberDisabled(member);
+            return buttonTemplate(member, 'players', memberDisabled);
         });
-        if (cleanPlayersList.length === 0) {
+        if (cleanMembersList.length === 0) {
             return <p>{messages.noPlayers}</p>;
         }
         return <ul>{buffer}</ul>;
     };
 
     const officialsListDisplay = () => {
-        const buffer = officialsList.map(official => {
-            const officialDisabled = isPlayerDisabled(official);
-            return (
-                <li key={`${playersListType}officialReference${official.id}`}>
-                    <button
-                        type="button"
-                        onClick={() => {
-                            actionHandler({
-                                eventType,
-                                type: playersListType,
-                                team,
-                                id: official.id,
-                                memberType: 'officials'
-                            });
-                            closePopIn();
-                        }}
-                        disabled={officialDisabled}
-                        title={officialDisabled ? messages.maxActionsReached : ''}
-                    >
-                        {official.officialReference} {official.officialName}
-                    </button>
-                </li>
-            );
+        const buffer = officialsList.map(member => {
+            const memberDisabled = isMemberDisabled(member);
+            return buttonTemplate(member, 'officials', memberDisabled);
         });
         if (officialsList.length === 0) {
             return <p>{messages.noOfficials}</p>;

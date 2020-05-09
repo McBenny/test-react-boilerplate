@@ -125,7 +125,9 @@ export function Game({
             const htmlId = nextId();
             return (
                 <li key={htmlId}>
-                    <b>Event:</b> {gameEvent.eventType}, <b>Team:</b> {gameEvent.team}, <b>Player:</b> {gameEvent.id}
+                    <strong>Event:</strong> {gameEvent.eventType}, <strong>{gameEvent.team ? 'Team:' : ''}</strong>{' '}
+                    {gameEvent.team}, <strong>{gameEvent.memberType ? `${gameEvent.memberType}:` : ''}</strong>{' '}
+                    {gameEvent.id}
                 </li>
             );
         });

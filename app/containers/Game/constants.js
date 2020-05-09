@@ -9,7 +9,7 @@
  * export const YOUR_ACTION_CONSTANT = 'yourproject/YourContainer/YOUR_ACTION_CONSTANT';
  */
 
-import { EMPTY_PLAYER } from '../Settings/constants';
+import { EMPTY_MEMBER } from '../Settings/constants';
 
 export const SAVE_SETTINGS = 'boilerplate/Game/SAVE_SETTINGS';
 export const HANDLE_GAME_STATUS = 'boilerplate/Game/HANDLE_GAME_STATUS';
@@ -44,7 +44,7 @@ export const PERIODS = {
 };
 
 export const UNKNOWN_PLAYER = {
-    ...EMPTY_PLAYER,
+    ...EMPTY_MEMBER.players,
     id: 0,
-    playerName: '(unknown)'
+    name: '(unknown)'
 };

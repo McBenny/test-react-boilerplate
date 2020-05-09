@@ -81,10 +81,11 @@ const gameReducer = (state = initialState, action) =>
         }
         switch (action.type) {
             case SAVE_SETTINGS:
+                // console.log(SAVE_SETTINGS, action);
                 draft.settings = action.settings;
                 break;
             case HANDLE_GAME_STATUS:
-                // console.log(action);
+                // console.log(HANDLE_GAME_STATUS, action);
                 draft.gameStarted = action.gameStarted;
                 draft.gamePaused = action.gamePaused;
                 break;
@@ -93,7 +94,8 @@ const gameReducer = (state = initialState, action) =>
                 draft.gameEvents.push({
                     eventType: action.eventType,
                     team: action.team,
-                    id: action.id
+                    id: action.id,
+                    memberType: action.memberType
                 });
                 break;
             case ADD_GOAL:
@@ -101,7 +103,7 @@ const gameReducer = (state = initialState, action) =>
             case ADD_RED_CARD:
             case ADD_BLUE_CARD:
             case ADD_SUSPENSION: {
-                // console.log(action);
+                // console.log(updatedData, action);
                 // UpdatedData is determined in the previous switch statement
                 draft[`dataTeam${action.team}`][updatedData] += 1;
                 const { memberType } = action;
