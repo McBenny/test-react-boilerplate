@@ -158,8 +158,8 @@ export function Settings({
     };
 
     /**
-     * If a team has no players or has only one players and it's id is 0 (unknown players),
-     * an empty players is created to allow for an input line
+     * If a team has no players or has only one player and it's id is 0 (unknown player),
+     * an empty player is created to allow for an input line
      */
     useEffect(() => {
         onOpenSettings(settingsData);

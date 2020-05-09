@@ -38,7 +38,6 @@ export function handleGameStatus(data) {
     };
 }
 
-// TODO: Add the type of member to distinguish players and officials
 export function addEvent(data) {
     return {
         type: ADD_EVENT,
