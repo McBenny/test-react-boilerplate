@@ -90,8 +90,6 @@ const gameReducer = (state = initialState, action) =>
                 draft.gamePaused = action.gamePaused;
                 break;
             case ADD_EVENT:
-                // TODO: Add the type of member to distinguish players and officials
-                console.log(ADD_EVENT, action);
                 draft.gameEvents.push({
                     eventType: action.eventType,
                     team: action.team,
