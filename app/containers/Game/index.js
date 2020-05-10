@@ -42,6 +42,7 @@ import {
 } from './constants';
 import './styles.scss';
 import { MAX_NUMBER } from '../Settings/constants';
+import PlayPause from '../../components/Play-pause';
 
 const key = 'game';
 
@@ -58,9 +59,9 @@ export function Game({
 }) {
     useInjectReducer({ key, reducer });
 
-    const [settingsScreenVisibility, setSettingsScreenVisibility] = useState(false);
-    const openSettings = () => {
-        setSettingsScreenVisibility(true);
+    const [popupVisibility, setPopupVisibility] = useState({ players: false, playPause: false, settings: false });
+    const openPopup = popup => {
+        setPopupVisibility({ ...popupVisibility, [popup]: true });
     };
 
     const initialPlayersData = {
@@ -70,7 +71,6 @@ export function Game({
         playersList: [],
         officialsList: []
     };
-    const [playersScreenVisibility, setPlayersScreenVisibility] = useState(false);
     const [playersData, setPlayersData] = useState(initialPlayersData);
     const openPlayers = ({ team, type, eventType }) => {
         setPlayersData({
@@ -83,7 +83,7 @@ export function Game({
     };
     useEffect(() => {
         if (playersData !== initialPlayersData) {
-            setPlayersScreenVisibility(true);
+            openPopup('players');
         }
     }, [playersData]);
 
@@ -176,9 +176,19 @@ export function Game({
             <ul>
                 <li>{date}</li>
                 <li>
-                    <button type="button" onClick={openSettings}>
+                    <button type="button" onClick={() => openPopup('settings')}>
                         {messages.settings.open}
                     </button>
+                </li>
+                <li>
+                    <button type="button" onClick={() => openPopup('playPause')}>
+                        Display Play-pause screen
+                    </button>
+                    {popupVisibility.playPause ? (
+                        <PlayPause popupManagement={{ setPopupVisibility, popupVisibility }} />
+                    ) : (
+                        ''
+                    )}
                 </li>
                 <li>
                     <button type="button" onClick={handleStartButton}>
@@ -339,14 +349,14 @@ export function Game({
             </ul>
             <h2>Game log:</h2>
             {gameEventsLog()}
-            {settingsScreenVisibility ? (
-                <Settings setScreenVisibility={setSettingsScreenVisibility} settingsData={settings} />
+            {popupVisibility.settings ? (
+                <Settings popupManagement={{ setPopupVisibility, popupVisibility }} settingsData={settings} />
             ) : (
                 ''
             )}
-            {playersScreenVisibility ? (
+            {popupVisibility.players ? (
                 <Players
-                    setScreenVisibility={setPlayersScreenVisibility}
+                    popupManagement={{ setPopupVisibility, popupVisibility }}
                     eventType={playersData.eventType}
                     playersListType={playersData.playersListType}
                     team={playersData.playersTeam}

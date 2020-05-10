@@ -11,9 +11,11 @@ import {
 } from '../../containers/Game/constants';
 import { MAX_NUMBER } from '../../containers/Settings/constants';
 
-function Players({ setScreenVisibility, eventType, playersListType, team, playersList, officialsList, actionHandler }) {
+function Players({ popupManagement, eventType, playersListType, team, playersList, officialsList, actionHandler }) {
+    // TODO: make this a common function
     const closePopIn = () => {
-        setScreenVisibility(false);
+        const { setPopupVisibility, popupVisibility } = popupManagement;
+        setPopupVisibility({ ...popupVisibility, players: false });
     };
 
     /**
@@ -120,7 +122,7 @@ function Players({ setScreenVisibility, eventType, playersListType, team, player
 }
 
 Players.propTypes = {
-    setScreenVisibility: PropTypes.func,
+    popupManagement: PropTypes.object,
     eventType: PropTypes.string,
     playersListType: PropTypes.string,
     team: PropTypes.string,

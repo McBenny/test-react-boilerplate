@@ -37,10 +37,11 @@ export const EVENT_TYPES = {
 export const PERIODS = {
     0: 'warm-up',
     1: 'half-time 1',
-    2: 'half-time 2',
-    3: 'extra-time half-time 1',
-    4: 'extra-time half-time 2',
-    5: 'full-time'
+    2: 'half-time',
+    3: 'half-time 2',
+    4: 'extra-time half-time 1',
+    5: 'extra-time half-time 2',
+    6: 'full-time'
 };
 
 export const UNKNOWN_PLAYER = {
