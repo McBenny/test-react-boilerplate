@@ -17,3 +17,13 @@ export function compareValues(key, isAscending = true) {
         return isAscending ? comparison : comparison * -1;
     };
 }
+
+/**
+ * This function returns true if the given number is even, false otherwise
+ * @param n {number}
+ * @returns {boolean}
+ * https://stackoverflow.com/questions/6211613/testing-whether-a-value-is-odd-or-even#answer-6211660
+ */
+export function isEven(n) {
+    return Number(n) % 2 === 0;
+}

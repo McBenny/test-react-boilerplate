@@ -20,6 +20,7 @@ export const ADD_RED_CARD = 'boilerplate/Game/ADD_RED_CARD';
 export const ADD_BLUE_CARD = 'boilerplate/Game/ADD_BLUE_CARD';
 export const ADD_SUSPENSION = 'boilerplate/Game/ADD_SUSPENSION';
 export const ADD_TIMEOUT = 'boilerplate/Game/ADD_TIMEOUT';
+export const STORE_SCORE = 'boilerplate/Game/STORE_SCORE';
 
 export const EVENT_TYPES = {
     goal: 'goal',
@@ -29,19 +30,25 @@ export const EVENT_TYPES = {
     suspension: '2 minutes',
     timeout: 'time out',
     gameStart: 'start game',
-    gameEnd: 'end game',
     periodStart: 'start period',
-    periodEnd: 'end period'
+    gamePaused: 'game paused',
+    gameResumed: 'game resumed',
+    periodEnd: 'end period',
+    gameEnd: 'end game'
 };
 
+// Even numbers represent non-playable periods (used in /components/Play-pause)
+// Numbers of playing periods match the score periods in ./Game/reducer.js:initialState.currentScore
 export const PERIODS = {
     0: 'warm-up',
     1: 'half-time 1',
     2: 'half-time',
     3: 'half-time 2',
-    4: 'extra-time half-time 1',
-    5: 'extra-time half-time 2',
-    6: 'full-time'
+    4: 'full-time',
+    5: 'extra-time half-time 1',
+    6: 'extra-time half-time',
+    7: 'extra-time half-time 2',
+    8: 'full-time + extra-time'
 };
 
 export const UNKNOWN_PLAYER = {
