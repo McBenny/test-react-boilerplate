@@ -142,8 +142,8 @@ These features should also apply to the fouls, any foul registered should be edi
 - [X] refactor players/officials management to reduce code amount, use common names (member/players, reference/number)
 - [X] display list of players per foul
 - [X] keep current score on every event
-- [ ] on start/stop, allow for choice between pause/resume or close/open a period
-- [ ] create a generic pop-in with generic features (open/close)
+- [X] on start/stop, allow for choice between pause/resume or close/open a period
+- [X] create a generic pop-in with generic features (open/close)
 - [ ] add a colour to each team
 - [ ] add game officials (referees, scorekeeper (table), timekeeper (scoreboard/buzzer))
 - [ ] in players pop-in, list players and officials in different tabs
