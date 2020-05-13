@@ -17,7 +17,8 @@ import {
     ADD_RED_CARD,
     ADD_BLUE_CARD,
     ADD_SUSPENSION,
-    ADD_TIMEOUT
+    ADD_TIMEOUT,
+    STORE_SCORE
 } from './constants';
 import { initialState as initialSettings } from '../Settings/reducer';
 
@@ -38,6 +39,13 @@ export const initialState = {
     gameStarted: false,
     gamePaused: true,
     currentPeriod: 0,
+    currentScore: {
+        // These numbers match the playing periods in ./Game/constants.js:PERIODS
+        half1: '',
+        half3: '',
+        half5: '',
+        half7: ''
+    },
     dataTeamA: {
         goals: 0,
         yellowCards: 0,
@@ -88,6 +96,7 @@ const gameReducer = (state = initialState, action) =>
                 // console.log(HANDLE_GAME_STATUS, action);
                 draft.gameStarted = action.gameStarted;
                 draft.gamePaused = action.gamePaused;
+                draft.currentPeriod = action.currentPeriod;
                 break;
             case ADD_EVENT: {
                 // console.log(ADD_EVENT, action);
@@ -129,6 +138,10 @@ const gameReducer = (state = initialState, action) =>
             case ADD_TIMEOUT:
                 // console.log(ADD_TIMEOUT, action);
                 draft[`dataTeam${action.team}`].timeouts += 1;
+                break;
+            case STORE_SCORE:
+                // console.log(STORE_SCORE, action);
+                draft.currentScore[`half${action.id}`] = action.currentScore;
                 break;
             default:
         }

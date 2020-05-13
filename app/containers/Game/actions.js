@@ -15,7 +15,7 @@
  *    }
  */
 
-import { SAVE_SETTINGS, HANDLE_GAME_STATUS, ADD_EVENT } from './constants';
+import { SAVE_SETTINGS, HANDLE_GAME_STATUS, ADD_EVENT, STORE_SCORE } from './constants';
 
 /**
  * Saves the settings
@@ -48,6 +48,13 @@ export function addEvent(data) {
 export function addAction(data) {
     return {
         type: data.type,
+        ...data
+    };
+}
+
+export function storeScore(data) {
+    return {
+        type: STORE_SCORE,
         ...data
     };
 }

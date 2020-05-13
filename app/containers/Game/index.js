@@ -20,11 +20,13 @@ import {
     makeSelectGameStarted,
     makeSelectGamePaused,
     makeSelectGameEvents,
+    makeSelectPeriod,
+    makeSelectScore,
     makeSelectDataTeamA,
     makeSelectDataTeamB
 } from './selectors';
 import reducer from './reducer';
-import { addEvent, addAction, handleGameStatus } from './actions';
+import { addEvent, addAction, handleGameStatus, storeScore } from './actions';
 import { messages } from './messages';
 
 import Settings from '../Settings';
@@ -42,6 +44,8 @@ import {
 } from './constants';
 import './styles.scss';
 import { MAX_NUMBER } from '../Settings/constants';
+import PlayPause from '../../components/Play-pause';
+import { isEven } from '../../utils/utilities';
 
 const key = 'game';
 
@@ -51,16 +55,19 @@ export function Game({
     gameStarted,
     gamePaused,
     gameEvents,
+    currentPeriod,
+    currentScore,
     onHandleGameStatus,
     onAddAction,
+    onStoreScore,
     dataTeamA,
     dataTeamB
 }) {
     useInjectReducer({ key, reducer });
 
-    const [settingsScreenVisibility, setSettingsScreenVisibility] = useState(false);
-    const openSettings = () => {
-        setSettingsScreenVisibility(true);
+    const [popupVisibility, setPopupVisibility] = useState({ players: false, playPause: false, settings: false });
+    const openPopup = popup => {
+        setPopupVisibility({ ...popupVisibility, [popup]: true });
     };
 
     const initialPlayersData = {
@@ -70,7 +77,6 @@ export function Game({
         playersList: [],
         officialsList: []
     };
-    const [playersScreenVisibility, setPlayersScreenVisibility] = useState(false);
     const [playersData, setPlayersData] = useState(initialPlayersData);
     const openPlayers = ({ team, type, eventType }) => {
         setPlayersData({
@@ -83,24 +89,24 @@ export function Game({
     };
     useEffect(() => {
         if (playersData !== initialPlayersData) {
-            setPlayersScreenVisibility(true);
+            openPopup('players');
         }
     }, [playersData]);
 
     const score = { teamA: dataTeamA.goals, teamB: dataTeamB.goals };
-    const handleStartButton = () => {
-        let eventType;
-        if (gameStarted) {
-            eventType = gamePaused ? EVENT_TYPES.periodStart : EVENT_TYPES.periodEnd;
-        } else {
-            eventType = EVENT_TYPES.gameStart;
-        }
+    const handleStartButton = ({ gameStatus = true, gamePauseStatus, eventType, period, id }) => {
         onHandleGameStatus({
-            gameStarted: true,
-            gamePaused: !gamePaused,
+            gameStarted: gameStatus,
+            gamePaused: !gamePauseStatus,
+            currentPeriod: period,
+            memberType: 'Event period',
             eventType,
-            score
+            score,
+            id
         });
+        if ((eventType === EVENT_TYPES.periodEnd || eventType === EVENT_TYPES.gameEnd) && !isEven(id)) {
+            onStoreScore({ id, currentScore: `${score.teamA}-${score.teamB}` });
+        }
     };
 
     const handleTimeoutButton = team => {
@@ -176,14 +182,64 @@ export function Game({
             <ul>
                 <li>{date}</li>
                 <li>
-                    <button type="button" onClick={openSettings}>
+                    <button type="button" onClick={() => openPopup('settings')}>
                         {messages.settings.open}
                     </button>
                 </li>
                 <li>
-                    <button type="button" onClick={handleStartButton}>
+                    Period: {currentPeriod}{' '}
+                    <button
+                        type="button"
+                        onClick={() => openPopup('playPause')}
+                        disabled={!gameStarted && (currentPeriod === 4 || currentPeriod === 8)}
+                    >
                         {displayStartButtonMessage()}
                     </button>
+                    {popupVisibility.playPause ? (
+                        <PlayPause
+                            popupManagement={{ setPopupVisibility, popupVisibility }}
+                            gameStarted={gameStarted}
+                            gamePaused={gamePaused}
+                            period={currentPeriod}
+                            startHandler={handleStartButton}
+                        />
+                    ) : (
+                        ''
+                    )}
+                </li>
+                <li>
+                    {currentScore.half1 ? (
+                        <React.Fragment>
+                            Score half-time 1: {currentScore.half1}
+                            <br />
+                        </React.Fragment>
+                    ) : (
+                        ''
+                    )}
+                    {currentScore.half3 ? (
+                        <React.Fragment>
+                            Score half-time 2: {currentScore.half3}
+                            <br />
+                        </React.Fragment>
+                    ) : (
+                        ''
+                    )}
+                    {currentScore.half5 ? (
+                        <React.Fragment>
+                            Score Extra-time half-time 1: {currentScore.half5}
+                            <br />
+                        </React.Fragment>
+                    ) : (
+                        ''
+                    )}
+                    {currentScore.half7 ? (
+                        <React.Fragment>
+                            Score Extra-time half-time 2: {currentScore.half7}
+                            <br />
+                        </React.Fragment>
+                    ) : (
+                        ''
+                    )}
                 </li>
                 <li>
                     Score: {dataTeamA.goals} - {dataTeamB.goals}
@@ -339,14 +395,14 @@ export function Game({
             </ul>
             <h2>Game log:</h2>
             {gameEventsLog()}
-            {settingsScreenVisibility ? (
-                <Settings setScreenVisibility={setSettingsScreenVisibility} settingsData={settings} />
+            {popupVisibility.settings ? (
+                <Settings popupManagement={{ setPopupVisibility, popupVisibility }} settingsData={settings} />
             ) : (
                 ''
             )}
-            {playersScreenVisibility ? (
+            {popupVisibility.players ? (
                 <Players
-                    setScreenVisibility={setPlayersScreenVisibility}
+                    popupManagement={{ setPopupVisibility, popupVisibility }}
                     eventType={playersData.eventType}
                     playersListType={playersData.playersListType}
                     team={playersData.playersTeam}
@@ -367,8 +423,11 @@ Game.propTypes = {
     gameStarted: PropTypes.bool,
     gamePaused: PropTypes.bool,
     gameEvents: PropTypes.array,
+    currentPeriod: PropTypes.number,
+    currentScore: PropTypes.object,
     onHandleGameStatus: PropTypes.func,
     onAddAction: PropTypes.func,
+    onStoreScore: PropTypes.func,
     dataTeamA: PropTypes.object,
     dataTeamB: PropTypes.object
 };
@@ -379,6 +438,8 @@ const mapStateToProps = createStructuredSelector({
     gameStarted: makeSelectGameStarted(),
     gamePaused: makeSelectGamePaused(),
     gameEvents: makeSelectGameEvents(),
+    currentPeriod: makeSelectPeriod(),
+    currentScore: makeSelectScore(),
     dataTeamA: makeSelectDataTeamA(),
     dataTeamB: makeSelectDataTeamB()
 });
@@ -392,6 +453,9 @@ export function mapDispatchToProps(dispatch) {
         onAddAction: data => {
             dispatch(addAction(data));
             dispatch(addAction({ ...data, type: ADD_EVENT }));
+        },
+        onStoreScore: data => {
+            dispatch(storeScore(data));
         }
     };
 }

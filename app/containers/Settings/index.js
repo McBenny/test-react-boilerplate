@@ -29,10 +29,16 @@ export function Settings({
     onChangeMember,
     onSaveSettings,
     onOpenSettings,
-    setScreenVisibility,
+    popupManagement,
     settingsData
 }) {
     useInjectReducer({ key, reducer });
+
+    // TODO: make this a common function
+    const closePopIn = () => {
+        const { setPopupVisibility, popupVisibility } = popupManagement;
+        setPopupVisibility({ ...popupVisibility, settings: false });
+    };
 
     const saveInitialisation = e => {
         e.preventDefault();
@@ -44,12 +50,7 @@ export function Settings({
             ...settingsData,
             teams
         });
-        setScreenVisibility(false);
-    };
-
-    // TODO: make this a common function
-    const closePopIn = () => {
-        setScreenVisibility(false);
+        closePopIn();
     };
 
     const handleChangeTeamName = (e, team) => {
@@ -230,7 +231,7 @@ Settings.propTypes = {
     onChangeMember: PropTypes.func,
     onSaveSettings: PropTypes.func,
     onOpenSettings: PropTypes.func,
-    setScreenVisibility: PropTypes.func,
+    popupManagement: PropTypes.object,
     settingsData: PropTypes.object
 };
 
