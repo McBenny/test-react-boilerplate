@@ -5,7 +5,5 @@ export const messages = {
     resume: 'Resume',
     endPeriod: 'End',
     startPeriod: 'Start',
-    endGame: 'End game',
-    cancel: 'Cancel',
-    close: 'Close'
+    endGame: 'End game'
 };

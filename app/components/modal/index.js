@@ -8,7 +8,7 @@ import useOutsideClick from '../../utils/use-outside-click';
 
 // Styles
 import './styles.scss';
-import { messages } from './messages';
+import { messages as modalMessages, messages } from './messages';
 
 // Helpers
 import { ESCAPE_KEY_CODE, ESCAPE_KEY_NAME } from '../../utils/constants';
@@ -16,6 +16,14 @@ import { ESCAPE_KEY_CODE, ESCAPE_KEY_NAME } from '../../utils/constants';
 export const MODAL_TYPE = {
     floating: 'floating'
 };
+
+export function cancelButton(closeHandler, popup) {
+    return (
+        <button type="button" onClick={() => closeHandler(popup)}>
+            {modalMessages.cancel}
+        </button>
+    );
+}
 
 /**
  *
