@@ -3,13 +3,10 @@ import PropTypes from 'prop-types';
 import { messages } from './messages';
 import { EVENT_TYPES, PERIODS } from '../../containers/Game/constants';
 import { isEven } from '../../utils/utilities';
+import Modal from '../modal';
 
-function PlayPause({ popupManagement, gameStarted, gamePaused, period, startHandler }) {
-    // TODO: make this a common function
-    const closePopIn = () => {
-        const { setPopupVisibility, popupVisibility } = popupManagement;
-        setPopupVisibility({ ...popupVisibility, playPause: false });
-    };
+function PlayPause({ gameStarted, gamePaused, period, startHandler, closeHandler }) {
+    const popup = 'playPause';
 
     const startButton = () => {
         if (!gameStarted) {
@@ -20,7 +17,7 @@ function PlayPause({ popupManagement, gameStarted, gamePaused, period, startHand
                     id: period,
                     period: period + 1
                 });
-                closePopIn();
+                closeHandler(popup);
             };
             return (
                 <button type="button" onClick={handleStartButton}>
@@ -40,7 +37,7 @@ function PlayPause({ popupManagement, gameStarted, gamePaused, period, startHand
                     id: period,
                     period
                 });
-                closePopIn();
+                closeHandler(popup);
             };
             return (
                 <button type="button" onClick={handlePauseResumeButton}>
@@ -61,7 +58,7 @@ function PlayPause({ popupManagement, gameStarted, gamePaused, period, startHand
                     id: period,
                     period: period + 1
                 });
-                closePopIn();
+                closeHandler(popup);
             };
             return (
                 <button type="button" onClick={handlePauseResumeButton}>
@@ -81,7 +78,7 @@ function PlayPause({ popupManagement, gameStarted, gamePaused, period, startHand
                     id: period + 1,
                     period: period + 1
                 });
-                closePopIn();
+                closeHandler(popup);
             };
             return (
                 <button type="button" onClick={handlePauseResumeButton}>
@@ -102,7 +99,7 @@ function PlayPause({ popupManagement, gameStarted, gamePaused, period, startHand
                     id: period,
                     period: period + 1
                 });
-                closePopIn();
+                closeHandler(popup);
             };
             return (
                 <button type="button" onClick={handleEndButton}>
@@ -114,35 +111,33 @@ function PlayPause({ popupManagement, gameStarted, gamePaused, period, startHand
     };
 
     const cancelButton = (
-        <button type="button" onClick={closePopIn}>
+        <button type="button" onClick={() => closeHandler(popup)}>
             {messages.cancel}
         </button>
     );
 
     return (
         <React.Fragment>
-            <h2 className="title title--2">{messages.title}</h2>
-            <ul>
-                <li>{startButton()}</li>
-                <li>{pauseResumeButton()}</li>
-                <li>{endPeriodButton()}</li>
-                <li>{startPeriodButton()}</li>
-                <li>{endGameButton()}</li>
-                <li>{cancelButton}</li>
-            </ul>
-            <button type="button" onClick={closePopIn}>
-                {messages.close}
-            </button>
+            <Modal title={messages.title} closeHandler={closeHandler} popup={popup}>
+                <ul>
+                    <li>{startButton()}</li>
+                    <li>{pauseResumeButton()}</li>
+                    <li>{endPeriodButton()}</li>
+                    <li>{startPeriodButton()}</li>
+                    <li>{endGameButton()}</li>
+                    <li>{cancelButton}</li>
+                </ul>
+            </Modal>
         </React.Fragment>
     );
 }
 
 PlayPause.propTypes = {
-    popupManagement: PropTypes.object,
     gameStarted: PropTypes.bool,
     gamePaused: PropTypes.bool,
     period: PropTypes.number,
-    startHandler: PropTypes.func
+    startHandler: PropTypes.func,
+    closeHandler: PropTypes.func
 };
 
 export default PlayPause;

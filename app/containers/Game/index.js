@@ -65,9 +65,13 @@ export function Game({
 }) {
     useInjectReducer({ key, reducer });
 
+    // Popups management
     const [popupVisibility, setPopupVisibility] = useState({ players: false, playPause: false, settings: false });
     const openPopup = popup => {
         setPopupVisibility({ ...popupVisibility, [popup]: true });
+    };
+    const closePopup = popup => {
+        setPopupVisibility({ ...popupVisibility, [popup]: false });
     };
 
     const initialPlayersData = {
@@ -108,6 +112,12 @@ export function Game({
             onStoreScore({ id, currentScore: `${score.teamA}-${score.teamB}` });
         }
     };
+    const displayStartButtonMessage = () => {
+        if (gameStarted) {
+            return gamePaused ? messages.startButton.resume : messages.startButton.pause;
+        }
+        return messages.startButton.start;
+    };
 
     const handleTimeoutButton = team => {
         onAddAction({
@@ -116,13 +126,6 @@ export function Game({
             team,
             score
         });
-    };
-
-    const displayStartButtonMessage = () => {
-        if (gameStarted) {
-            return gamePaused ? messages.startButton.resume : messages.startButton.pause;
-        }
-        return messages.startButton.start;
     };
 
     const addActionPerTeam = ({ eventType, type, team, id, memberType }) => {
@@ -197,11 +200,11 @@ export function Game({
                     </button>
                     {popupVisibility.playPause ? (
                         <PlayPause
-                            popupManagement={{ setPopupVisibility, popupVisibility }}
                             gameStarted={gameStarted}
                             gamePaused={gamePaused}
                             period={currentPeriod}
                             startHandler={handleStartButton}
+                            closeHandler={closePopup}
                         />
                     ) : (
                         ''
