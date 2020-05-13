@@ -111,18 +111,16 @@ function PlayPause({ gameStarted, gamePaused, period, startHandler, closeHandler
     };
 
     return (
-        <React.Fragment>
-            <Modal title={messages.title} closeHandler={closeHandler} popup={popup}>
-                <ul>
-                    <li>{startButton()}</li>
-                    <li>{pauseResumeButton()}</li>
-                    <li>{endPeriodButton()}</li>
-                    <li>{startPeriodButton()}</li>
-                    <li>{endGameButton()}</li>
-                    <li>{cancelButton(closeHandler, popup)}</li>
-                </ul>
-            </Modal>
-        </React.Fragment>
+        <Modal title={messages.title} closeHandler={closeHandler} popup={popup}>
+            <ul>
+                <li>{startButton()}</li>
+                <li>{pauseResumeButton()}</li>
+                <li>{endPeriodButton()}</li>
+                <li>{startPeriodButton()}</li>
+                <li>{endGameButton()}</li>
+                <li>{cancelButton(closeHandler, popup)}</li>
+            </ul>
+        </Modal>
     );
 }
 

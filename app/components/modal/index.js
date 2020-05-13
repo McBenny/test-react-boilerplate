@@ -13,10 +13,6 @@ import { messages as modalMessages, messages } from './messages';
 // Helpers
 import { ESCAPE_KEY_CODE, ESCAPE_KEY_NAME } from '../../utils/constants';
 
-export const MODAL_TYPE = {
-    floating: 'floating'
-};
-
 export function cancelButton(closeHandler, popup) {
     return (
         <button type="button" onClick={() => closeHandler(popup)}>
@@ -53,7 +49,7 @@ function Modal({ title, children, closeHandler, popup, additionalClasses, contai
 
     // Click outside
     const modalContainerRef = useRef(null);
-    useOutsideClick([modalContainerRef], closeHandler);
+    useOutsideClick([modalContainerRef], () => closeHandler(popup));
 
     const modalTemplate = (
         <div ref={modalContainerRef}>
@@ -79,8 +75,8 @@ Modal.propTypes = {
     children: PropTypes.any,
     closeHandler: PropTypes.func.isRequired,
     popup: PropTypes.string,
-    containerStyle: PropTypes.object,
-    additionalClasses: PropTypes.string
+    additionalClasses: PropTypes.string,
+    containerStyle: PropTypes.object
 };
 
 export default Modal;
