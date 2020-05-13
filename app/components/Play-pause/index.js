@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { messages } from './messages';
 import { EVENT_TYPES, PERIODS } from '../../containers/Game/constants';
 import { isEven } from '../../utils/utilities';
-import Modal from '../modal';
+import Modal, { cancelButton } from '../modal';
 
 function PlayPause({ gameStarted, gamePaused, period, startHandler, closeHandler }) {
     const popup = 'playPause';
@@ -110,12 +110,6 @@ function PlayPause({ gameStarted, gamePaused, period, startHandler, closeHandler
         return false;
     };
 
-    const cancelButton = (
-        <button type="button" onClick={() => closeHandler(popup)}>
-            {messages.cancel}
-        </button>
-    );
-
     return (
         <React.Fragment>
             <Modal title={messages.title} closeHandler={closeHandler} popup={popup}>
@@ -125,7 +119,7 @@ function PlayPause({ gameStarted, gamePaused, period, startHandler, closeHandler
                     <li>{endPeriodButton()}</li>
                     <li>{startPeriodButton()}</li>
                     <li>{endGameButton()}</li>
-                    <li>{cancelButton}</li>
+                    <li>{cancelButton(closeHandler, popup)}</li>
                 </ul>
             </Modal>
         </React.Fragment>

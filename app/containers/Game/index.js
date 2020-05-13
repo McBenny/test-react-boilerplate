@@ -398,20 +398,16 @@ export function Game({
             </ul>
             <h2>Game log:</h2>
             {gameEventsLog()}
-            {popupVisibility.settings ? (
-                <Settings popupManagement={{ setPopupVisibility, popupVisibility }} settingsData={settings} />
-            ) : (
-                ''
-            )}
+            {popupVisibility.settings ? <Settings settingsData={settings} closeHandler={closePopup} /> : ''}
             {popupVisibility.players ? (
                 <Players
-                    popupManagement={{ setPopupVisibility, popupVisibility }}
                     eventType={playersData.eventType}
                     playersListType={playersData.playersListType}
                     team={playersData.playersTeam}
                     playersList={playersData.playersList}
                     officialsList={playersData.officialsList}
                     actionHandler={addActionPerTeam}
+                    closeHandler={closePopup}
                 />
             ) : (
                 ''

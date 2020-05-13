@@ -5,7 +5,7 @@
  *
  */
 
-import React, { Fragment, memo, useEffect } from 'react';
+import React, { memo, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
@@ -19,6 +19,7 @@ import reducer from './reducer';
 import { messages } from './messages';
 import { saveSettings } from '../Game/actions';
 import { EMPTY_MEMBER, OFFICIALS_REFERENCES, MAX_NUMBER } from './constants';
+import Modal, { cancelButton } from '../../components/modal';
 
 const key = 'settings';
 
@@ -29,16 +30,11 @@ export function Settings({
     onChangeMember,
     onSaveSettings,
     onOpenSettings,
-    popupManagement,
-    settingsData
+    settingsData,
+    closeHandler
 }) {
     useInjectReducer({ key, reducer });
-
-    // TODO: make this a common function
-    const closePopIn = () => {
-        const { setPopupVisibility, popupVisibility } = popupManagement;
-        setPopupVisibility({ ...popupVisibility, settings: false });
-    };
+    const popup = 'settings';
 
     const saveInitialisation = e => {
         e.preventDefault();
@@ -50,7 +46,7 @@ export function Settings({
             ...settingsData,
             teams
         });
-        closePopIn();
+        closeHandler(popup);
     };
 
     const handleChangeTeamName = (e, team) => {
@@ -182,8 +178,7 @@ export function Settings({
     }, []);
 
     return (
-        <Fragment>
-            <h2>{messages.header}</h2>
+        <Modal title={messages.header} closeHandler={closeHandler} popup={popup}>
             <form action="" onSubmit={saveInitialisation}>
                 <h3>{messages.teamA}</h3>
                 <p>
@@ -215,12 +210,10 @@ export function Settings({
                 {playersList('B')}
                 <h4>{messages.listOfOfficials}</h4>
                 {officialsList('B')}
-                <button type="button" onClick={closePopIn}>
-                    {messages.close}
-                </button>{' '}
                 <button type="submit">{messages.save}</button>
+                {cancelButton(closeHandler, popup)}
             </form>
-        </Fragment>
+        </Modal>
     );
 }
 
@@ -231,8 +224,8 @@ Settings.propTypes = {
     onChangeMember: PropTypes.func,
     onSaveSettings: PropTypes.func,
     onOpenSettings: PropTypes.func,
-    popupManagement: PropTypes.object,
-    settingsData: PropTypes.object
+    settingsData: PropTypes.object,
+    closeHandler: PropTypes.func
 };
 
 const mapStateToProps = createStructuredSelector({
