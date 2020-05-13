@@ -10,13 +10,10 @@ import {
     UNKNOWN_PLAYER
 } from '../../containers/Game/constants';
 import { MAX_NUMBER } from '../../containers/Settings/constants';
+import Modal, { cancelButton } from '../modal';
 
-function Players({ popupManagement, eventType, playersListType, team, playersList, officialsList, actionHandler }) {
-    // TODO: make this a common function
-    const closePopIn = () => {
-        const { setPopupVisibility, popupVisibility } = popupManagement;
-        setPopupVisibility({ ...popupVisibility, players: false });
-    };
+function Players({ eventType, playersListType, team, playersList, officialsList, actionHandler, closeHandler }) {
+    const popup = 'players';
 
     /**
      * According to the rules of handball:
@@ -72,7 +69,7 @@ function Players({ popupManagement, eventType, playersListType, team, playersLis
                         id: member.id,
                         memberType: type
                     });
-                    closePopIn();
+                    closeHandler(popup);
                 }}
                 disabled={isDisabled}
                 title={isDisabled ? messages.maxActionsReached : ''}
@@ -106,29 +103,24 @@ function Players({ popupManagement, eventType, playersListType, team, playersLis
     };
 
     return (
-        <React.Fragment>
-            <h2 className="title title--2">
-                {messages.title}: {playersListType}
-            </h2>
+        <Modal title={`${messages.title}: ${playersListType}`} closeHandler={closeHandler} popup={popup}>
             <h3>{messages.listOfPlayers}</h3>
             {playersListDisplay()}
             {playersListType !== ADD_GOAL ? <h3>{messages.listOfOfficials}</h3> : ''}
             {playersListType !== ADD_GOAL ? officialsListDisplay() : ''}
-            <button type="button" onClick={closePopIn}>
-                {messages.close}
-            </button>
-        </React.Fragment>
+            {cancelButton(closeHandler, popup)}
+        </Modal>
     );
 }
 
 Players.propTypes = {
-    popupManagement: PropTypes.object,
     eventType: PropTypes.string,
     playersListType: PropTypes.string,
     team: PropTypes.string,
     playersList: PropTypes.array,
     officialsList: PropTypes.array,
-    actionHandler: PropTypes.func
+    actionHandler: PropTypes.func,
+    closeHandler: PropTypes.func
 };
 
 export default Players;
