@@ -56,3 +56,5 @@ export const UNKNOWN_PLAYER = {
     id: 0,
     name: '(unknown)'
 };
+
+export const GAMES_PREFIX = 'game-';

@@ -14,6 +14,7 @@ import nextId from 'react-id-generator';
 import { createStructuredSelector } from 'reselect';
 
 import { useInjectReducer } from '../../utils/injectReducer';
+import LocalStorage from '../../utils/local-storage';
 import {
     makeSelectDate,
     makeSelectSettings,
@@ -64,6 +65,27 @@ export function Game({
     dataTeamB
 }) {
     useInjectReducer({ key, reducer });
+
+    const gameId = sessionStorage.getItem('gameId');
+
+    const saveGameInStorage = () => {
+        if (gameId === null) {
+            window.location = '/';
+        }
+        LocalStorage.set(gameId, {
+            settings,
+            gameId,
+            date,
+            gameStarted,
+            gamePaused,
+            currentPeriod,
+            currentScore,
+            dataTeamA,
+            dataTeamB,
+            gameEvents
+        });
+    };
+    useEffect(saveGameInStorage, [gameId, gameStarted, gameEvents, settings]);
 
     // Popups management
     const [popupVisibility, setPopupVisibility] = useState({ players: false, playPause: false, settings: false });

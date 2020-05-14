@@ -21,6 +21,7 @@ import {
     STORE_SCORE
 } from './constants';
 import { initialState as initialSettings } from '../Settings/reducer';
+import LocalStorage from '../../utils/local-storage';
 
 const getToday = () => {
     const today = new Date();
@@ -35,6 +36,7 @@ const getToday = () => {
 // The initial state of the App
 export const initialState = {
     settings: initialSettings,
+    gameId: sessionStorage.getItem('gameId'),
     date: getToday(),
     gameStarted: false,
     gamePaused: true,
@@ -65,8 +67,11 @@ export const initialState = {
     gameEvents: []
 };
 
+const savedState = LocalStorage.get(sessionStorage.getItem('gameId') || '');
+const useableState = savedState !== '' ? savedState : initialState;
+
 /* eslint-disable default-case, no-param-reassign */
-const gameReducer = (state = initialState, action) =>
+const gameReducer = (state = useableState, action) =>
     produce(state, draft => {
         let updatedData;
         switch (action.type) {
@@ -94,6 +99,7 @@ const gameReducer = (state = initialState, action) =>
                 break;
             case HANDLE_GAME_STATUS:
                 // console.log(HANDLE_GAME_STATUS, action);
+                draft.gameId = action.gameId;
                 draft.gameStarted = action.gameStarted;
                 draft.gamePaused = action.gamePaused;
                 draft.currentPeriod = action.currentPeriod;

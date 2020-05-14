@@ -44,7 +44,6 @@ import {
  * }
  */
 export const initialState = {
-    gameId: '',
     competition: '',
     round: '',
     gender: '',
