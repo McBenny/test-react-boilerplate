@@ -7,13 +7,14 @@ import {
     ADD_YELLOW_CARD,
     ADD_BLUE_CARD,
     ADD_SUSPENSION,
-    UNKNOWN_PLAYER
+    UNKNOWN_PLAYER,
+    POPUPS
 } from '../../containers/Game/constants';
 import { MAX_NUMBER } from '../../containers/Settings/constants';
 import Modal, { cancelButton } from '../modal';
 
 function Players({ eventType, playersListType, team, playersList, officialsList, actionHandler, closeHandler }) {
-    const popup = 'players';
+    const popup = POPUPS.players;
 
     /**
      * According to the rules of handball:

@@ -58,3 +58,9 @@ export const UNKNOWN_PLAYER = {
 };
 
 export const GAMES_PREFIX = 'game-';
+
+export const POPUPS = {
+    players: 'players',
+    playPause: 'playPause',
+    settings: 'settings'
+};

@@ -35,6 +35,7 @@ import { messages } from './messages';
 import { saveSettings } from '../Game/actions';
 import { EMPTY_MEMBER, GENDERS, MAX_NUMBER, OFFICIALS_REFERENCES, UUID_PREFIX } from './constants';
 import Modal, { cancelButton } from '../../components/modal';
+import { POPUPS } from '../Game/constants';
 
 const key = 'settings';
 
@@ -56,7 +57,7 @@ export function Settings({
     closeHandler
 }) {
     useInjectReducer({ key, reducer });
-    const popup = 'settings';
+    const popup = POPUPS.settings;
 
     const handleChangeCompetition = e => {
         onChangeCompetition({ competition: e.target.value });

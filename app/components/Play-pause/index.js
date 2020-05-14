@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { messages } from './messages';
-import { EVENT_TYPES, PERIODS } from '../../containers/Game/constants';
+import { EVENT_TYPES, PERIODS, POPUPS } from '../../containers/Game/constants';
 import { isEven } from '../../utils/utilities';
 import Modal, { cancelButton } from '../modal';
 
 function PlayPause({ gameStarted, gamePaused, period, startHandler, closeHandler }) {
-    const popup = 'playPause';
+    const popup = POPUPS.playPause;
 
     const startButton = () => {
         if (!gameStarted) {

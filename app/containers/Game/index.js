@@ -41,7 +41,8 @@ import {
     ADD_SUSPENSION,
     ADD_TIMEOUT,
     ADD_YELLOW_CARD,
-    EVENT_TYPES
+    EVENT_TYPES,
+    POPUPS
 } from './constants';
 import './styles.scss';
 import { MAX_NUMBER } from '../Settings/constants';
@@ -115,7 +116,7 @@ export function Game({
     };
     useEffect(() => {
         if (playersData !== initialPlayersData) {
-            openPopup('players');
+            openPopup(POPUPS.players);
         }
     }, [playersData]);
 
@@ -207,7 +208,7 @@ export function Game({
             <ul>
                 <li>{date}</li>
                 <li>
-                    <button type="button" onClick={() => openPopup('settings')}>
+                    <button type="button" onClick={() => openPopup(POPUPS.settings)}>
                         {messages.settings.open}
                     </button>
                 </li>
@@ -215,7 +216,7 @@ export function Game({
                     Period: {currentPeriod}{' '}
                     <button
                         type="button"
-                        onClick={() => openPopup('playPause')}
+                        onClick={() => openPopup(POPUPS.playPause)}
                         disabled={!gameStarted && (currentPeriod === 4 || currentPeriod === 8)}
                     >
                         {displayStartButtonMessage()}
