@@ -11,20 +11,42 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 
 import { createStructuredSelector } from 'reselect';
+import { v4 as uuidv4 } from 'uuid';
 
 import { useInjectReducer } from '../../utils/injectReducer';
-import { changeTeamName, addEmptyMember, changeMember, initSettings } from './actions';
-import { makeSelectTeams } from './selectors';
+import {
+    addEmptyMember,
+    changeCompetition,
+    changeGender,
+    changeMember,
+    changeRound,
+    changeTeamName,
+    initSettings
+} from './actions';
+import {
+    makeSelectCompetition,
+    makeSelectGameId,
+    makeSelectGender,
+    makeSelectRound,
+    makeSelectTeams
+} from './selectors';
 import reducer from './reducer';
 import { messages } from './messages';
 import { saveSettings } from '../Game/actions';
-import { EMPTY_MEMBER, OFFICIALS_REFERENCES, MAX_NUMBER } from './constants';
+import { EMPTY_MEMBER, GENDERS, MAX_NUMBER, OFFICIALS_REFERENCES, UUID_PREFIX } from './constants';
 import Modal, { cancelButton } from '../../components/modal';
 
 const key = 'settings';
 
 export function Settings({
+    gameId,
+    competition,
+    round,
+    gender,
     teams,
+    onChangeCompetition,
+    onChangeRound,
+    onChangeGender,
     onChangeTeamName,
     onAddEmptyMember,
     onChangeMember,
@@ -36,6 +58,22 @@ export function Settings({
     useInjectReducer({ key, reducer });
     const popup = 'settings';
 
+    const handleChangeCompetition = e => {
+        onChangeCompetition({ competition: e.target.value });
+    };
+
+    const handleChangeRound = e => {
+        onChangeRound({ round: e.target.value });
+    };
+
+    const handleChangeGender = e => {
+        onChangeGender({ gender: e.target.value });
+    };
+
+    const handleChangeTeamName = (e, team) => {
+        onChangeTeamName({ team, teamName: e.target.value });
+    };
+
     const saveInitialisation = e => {
         e.preventDefault();
         const teamACleaned = teams.A.players.filter(member => member.reference !== 0);
@@ -44,13 +82,22 @@ export function Settings({
         teams.B.players.splice(0, teams.B.players.length, ...teamBCleaned);
         onSaveSettings({
             ...settingsData,
+            gameId: gameId === '' ? `${UUID_PREFIX}${uuidv4()}` : gameId,
+            competition,
+            round,
+            gender,
             teams
         });
         closeHandler(popup);
     };
 
-    const handleChangeTeamName = (e, team) => {
-        onChangeTeamName({ team, teamName: e.target.value });
+    const gendersList = () => {
+        const gendersKeys = Object.keys(GENDERS);
+        return gendersKeys.map(genderKey => (
+            <option key={`genders${genderKey}`} value={genderKey}>
+                {GENDERS[genderKey]}
+            </option>
+        ));
     };
 
     const addMemberButton = (team, type, id) => (
@@ -180,9 +227,31 @@ export function Settings({
     return (
         <Modal title={messages.header} closeHandler={closeHandler} popup={popup}>
             <form action="" onSubmit={saveInitialisation}>
+                <h3>{messages.competition}</h3>
+                <p>
+                    <label htmlFor="competition">{messages.competitionName}*:</label>{' '}
+                    <input
+                        type="text"
+                        id="competition"
+                        onChange={e => handleChangeCompetition(e)}
+                        value={competition}
+                        required
+                    />
+                </p>
+                <p>
+                    <label htmlFor="round">{messages.round}:</label>{' '}
+                    <input type="text" id="round" onChange={e => handleChangeRound(e)} value={round} />
+                </p>
+                <p>
+                    <label htmlFor="gender">{messages.gender}*:</label>{' '}
+                    <select id="gender" onChange={e => handleChangeGender(e)} value={gender} required>
+                        <option value="">{messages.selectGender}</option>
+                        {gendersList()}
+                    </select>
+                </p>
                 <h3>{messages.teamA}</h3>
                 <p>
-                    <label htmlFor="teamAName">{messages.teamA}:</label>{' '}
+                    <label htmlFor="teamAName">{messages.teamA}*:</label>{' '}
                     <input
                         type="text"
                         id="teamAName"
@@ -197,7 +266,7 @@ export function Settings({
                 {officialsList('A')}
                 <h3>{messages.teamB}</h3>
                 <p>
-                    <label htmlFor="teamBName">{messages.teamB}:</label>{' '}
+                    <label htmlFor="teamBName">{messages.teamB}*:</label>{' '}
                     <input
                         type="text"
                         id="teamBName"
@@ -218,7 +287,14 @@ export function Settings({
 }
 
 Settings.propTypes = {
+    gameId: PropTypes.string,
+    competition: PropTypes.string,
+    round: PropTypes.string,
+    gender: PropTypes.string,
     teams: PropTypes.object,
+    onChangeCompetition: PropTypes.func,
+    onChangeRound: PropTypes.func,
+    onChangeGender: PropTypes.func,
     onChangeTeamName: PropTypes.func,
     onAddEmptyMember: PropTypes.func,
     onChangeMember: PropTypes.func,
@@ -229,11 +305,18 @@ Settings.propTypes = {
 };
 
 const mapStateToProps = createStructuredSelector({
+    gameId: makeSelectGameId(),
+    competition: makeSelectCompetition(),
+    round: makeSelectRound(),
+    gender: makeSelectGender(),
     teams: makeSelectTeams()
 });
 
 export function mapDispatchToProps(dispatch) {
     return {
+        onChangeCompetition: data => dispatch(changeCompetition(data)),
+        onChangeRound: data => dispatch(changeRound(data)),
+        onChangeGender: data => dispatch(changeGender(data)),
         onChangeTeamName: data => dispatch(changeTeamName(data)),
         onAddEmptyMember: data => dispatch(addEmptyMember(data)),
         onChangeMember: data => dispatch(changeMember(data)),

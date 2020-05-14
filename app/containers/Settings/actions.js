@@ -15,7 +15,55 @@
  *    }
  */
 
-import { CHANGE_TEAM_NAME, INIT_SETTINGS, ADD_EMPTY_MEMBER, CHANGE_MEMBER } from './constants';
+import {
+    CHANGE_COMPETITION,
+    CHANGE_ROUND,
+    CHANGE_GENDER,
+    GENDERS,
+    CHANGE_TEAM_NAME,
+    INIT_SETTINGS,
+    ADD_EMPTY_MEMBER,
+    CHANGE_MEMBER
+} from './constants';
+
+/**
+ * Changes the input field of the form
+ * @param  {string} competition The new text of the input field
+ * @return {object} An action object with a type of CHANGE_COMPETITION
+ */
+export function changeCompetition({ competition }) {
+    return {
+        type: CHANGE_COMPETITION,
+        competition
+    };
+}
+
+/**
+ * Changes the input field of the form
+ * @param  {string} round The new text of the input field
+ * @return {object} An action object with a type of CHANGE_ROUND
+ */
+export function changeRound({ round }) {
+    return {
+        type: CHANGE_ROUND,
+        round
+    };
+}
+
+/**
+ * Changes the input field of the form
+ * @param  {string} gender The new text of the input field
+ * @return {object} An action object with a type of CHANGE_GENDER
+ */
+export function changeGender({ gender }) {
+    if (GENDERS[gender]) {
+        return {
+            type: CHANGE_GENDER,
+            gender
+        };
+    }
+    return false;
+}
 
 /**
  * Changes the input field of the form

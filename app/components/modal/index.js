@@ -61,7 +61,7 @@ function Modal({ title, children, closeHandler, popup, additionalClasses, contai
                             {messages.close}
                         </button>
                     </div>
-                    {children}
+                    <div className="modal__variable-height">{children}</div>
                 </div>
             </FocusTrap>
         </div>
