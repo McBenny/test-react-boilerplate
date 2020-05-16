@@ -1,6 +1,11 @@
 export const messages = {
     header: 'Settings',
     save: 'Save settings',
+    competition: 'Competition',
+    competitionName: 'Competition name',
+    round: 'Round',
+    gender: 'Gender',
+    selectGender: 'Select a gender...',
     teamA: 'Home team',
     teamB: 'Visitor team',
     listOfPlayers: 'List of players',

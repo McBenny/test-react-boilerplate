@@ -56,3 +56,11 @@ export const UNKNOWN_PLAYER = {
     id: 0,
     name: '(unknown)'
 };
+
+export const GAMES_PREFIX = 'game-';
+
+export const POPUPS = {
+    players: 'players',
+    playPause: 'playPause',
+    settings: 'settings'
+};

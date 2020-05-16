@@ -7,13 +7,14 @@ import {
     ADD_YELLOW_CARD,
     ADD_BLUE_CARD,
     ADD_SUSPENSION,
-    UNKNOWN_PLAYER
+    UNKNOWN_PLAYER,
+    POPUPS
 } from '../../containers/Game/constants';
-import { MAX_NUMBER } from '../../containers/Settings/constants';
+import { MAX_NUMBER, PERSONS_TYPES } from '../../containers/Settings/constants';
 import Modal, { cancelButton } from '../modal';
 
 function Players({ eventType, playersListType, team, playersList, officialsList, actionHandler, closeHandler }) {
-    const popup = 'players';
+    const popup = POPUPS.players;
 
     /**
      * According to the rules of handball:
@@ -50,15 +51,15 @@ function Players({ eventType, playersListType, team, playersList, officialsList,
             membersListSorted.splice(membersListSorted.length, 0, membersListSorted.splice(0, 1)[0]);
         } else {
             membersListSorted = playersList.sort(compareValues('reference', true));
-            if (unknownMemberInserted.length !== 0) {
-                membersListSorted.shift();
-            }
         }
         return membersListSorted;
     };
 
     const buttonTemplate = (member, type, isDisabled) => (
-        <li key={`${playersListType}${type}Reference${member.id}`}>
+        <li
+            key={`${playersListType}${type}Reference${member.id}`}
+            hidden={playersListType !== ADD_GOAL && member.id === 0}
+        >
             <button
                 type="button"
                 onClick={() => {
@@ -83,7 +84,7 @@ function Players({ eventType, playersListType, team, playersList, officialsList,
         const cleanMembersList = createPlayersList();
         const buffer = cleanMembersList.map(member => {
             const memberDisabled = isMemberDisabled(member);
-            return buttonTemplate(member, 'players', memberDisabled);
+            return buttonTemplate(member, PERSONS_TYPES.players, memberDisabled);
         });
         if (cleanMembersList.length === 0) {
             return <p>{messages.noPlayers}</p>;
@@ -94,7 +95,7 @@ function Players({ eventType, playersListType, team, playersList, officialsList,
     const officialsListDisplay = () => {
         const buffer = officialsList.map(member => {
             const memberDisabled = isMemberDisabled(member);
-            return buttonTemplate(member, 'officials', memberDisabled);
+            return buttonTemplate(member, PERSONS_TYPES.officials, memberDisabled);
         });
         if (officialsList.length === 0) {
             return <p>{messages.noOfficials}</p>;

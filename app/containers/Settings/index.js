@@ -13,18 +13,41 @@ import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
 
 import { useInjectReducer } from '../../utils/injectReducer';
-import { changeTeamName, addEmptyMember, changeMember, initSettings } from './actions';
-import { makeSelectTeams } from './selectors';
+import { generateId } from '../../utils/utilities';
+
+import { addEmptyMember, changeSetting, changeTeamName, changeMember, initSettings } from './actions';
+import {
+    makeSelectCompetition,
+    makeSelectGameId,
+    makeSelectGender,
+    makeSelectRound,
+    makeSelectTeams
+} from './selectors';
 import reducer from './reducer';
 import { messages } from './messages';
 import { saveSettings } from '../Game/actions';
-import { EMPTY_MEMBER, OFFICIALS_REFERENCES, MAX_NUMBER } from './constants';
+import {
+    CHANGE_COMPETITION,
+    CHANGE_GENDER,
+    CHANGE_ROUND,
+    EMPTY_MEMBER,
+    GENDERS,
+    MAX_NUMBER,
+    OFFICIALS_REFERENCES,
+    PERSONS_TYPES
+} from './constants';
 import Modal, { cancelButton } from '../../components/modal';
+import { POPUPS } from '../Game/constants';
 
 const key = 'settings';
 
 export function Settings({
+    gameId,
+    competition,
+    round,
+    gender,
     teams,
+    onChangeSetting,
     onChangeTeamName,
     onAddEmptyMember,
     onChangeMember,
@@ -34,23 +57,47 @@ export function Settings({
     closeHandler
 }) {
     useInjectReducer({ key, reducer });
-    const popup = 'settings';
+    const popup = POPUPS.settings;
+
+    const handleChangeSetting = (e, setting) => {
+        onChangeSetting({ type: setting, data: e.target.value });
+    };
+
+    const handleChangeTeamName = (e, team) => {
+        onChangeTeamName({ team, teamName: e.target.value });
+    };
 
     const saveInitialisation = e => {
         e.preventDefault();
-        const teamACleaned = teams.A.players.filter(member => member.reference !== 0);
-        const teamBCleaned = teams.B.players.filter(member => member.reference !== 0);
-        teams.A.players.splice(0, teams.A.players.length, ...teamACleaned);
-        teams.B.players.splice(0, teams.B.players.length, ...teamBCleaned);
+        const teamAPlayersCleaned = teams.A.players.filter(member => member.reference !== 0 || member.id === 0);
+        const teamAOfficialsCleaned = teams.A.officials.filter(member => member.name !== '');
+        teams.A.players.splice(0, teams.A.players.length, ...teamAPlayersCleaned);
+        teams.A.officials.splice(0, teams.A.officials.length, ...teamAOfficialsCleaned);
+
+        const teamBPlayersCleaned = teams.B.players.filter(member => member.reference !== 0 || member.id === 0);
+        const teamBOfficialsCleaned = teams.B.officials.filter(member => member.name !== '');
+        teams.B.players.splice(0, teams.B.players.length, ...teamBPlayersCleaned);
+        teams.B.officials.splice(0, teams.B.officials.length, ...teamBOfficialsCleaned);
+
+        const newGameId = generateId();
         onSaveSettings({
             ...settingsData,
+            gameId: gameId === '' ? newGameId : gameId,
+            competition,
+            round,
+            gender,
             teams
         });
         closeHandler(popup);
     };
 
-    const handleChangeTeamName = (e, team) => {
-        onChangeTeamName({ team, teamName: e.target.value });
+    const gendersList = () => {
+        const gendersKeys = Object.keys(GENDERS);
+        return gendersKeys.map(genderKey => (
+            <option key={`genders${genderKey}`} value={genderKey}>
+                {GENDERS[genderKey]}
+            </option>
+        ));
     };
 
     const addMemberButton = (team, type, id) => (
@@ -62,20 +109,20 @@ export function Settings({
                     id,
                     team,
                     memberType: type,
-                    reference: type === 'players' ? 0 : OFFICIALS_REFERENCES[id - 1]
+                    reference: type === PERSONS_TYPES.players ? 0 : OFFICIALS_REFERENCES[id - 1]
                 })
             }
-            title={messages[type === 'player' ? 'addPlayer' : 'addOfficial']}
+            title={messages[type === PERSONS_TYPES.players ? 'addPlayer' : 'addOfficial']}
         >
             +
         </button>
     );
 
-    const memberLineTemplate = (team, member, type, index, membersLength) => {
+    const memberLineTemplate = (team, member, type) => {
         let label;
         let pattern;
         let patternTitle;
-        if (type === 'players') {
+        if (type === PERSONS_TYPES.players) {
             label = 'playerNumberAndName';
             pattern = '[0-9][0-9]*';
             patternTitle = 'numberPattern';
@@ -103,7 +150,7 @@ export function Settings({
                     pattern={pattern}
                     title={messages[patternTitle]}
                     required
-                    disabled={type === 'officials'}
+                    disabled={type === PERSONS_TYPES.officials}
                 />{' '}
                 <input
                     type="text"
@@ -119,39 +166,30 @@ export function Settings({
                     }
                     value={member.name}
                 />{' '}
-                {index < MAX_NUMBER[type] - 1 && index === membersLength - 1 && addMemberButton(team, type, index + 2)}
             </li>
         );
     };
 
-    const playersList = team => {
-        if (teams[team].players.length > 0) {
-            const membersNotUnknown = teams[team].players.filter(member => member.id !== 0);
-            const membersLength = membersNotUnknown.length;
-            const buffer = membersNotUnknown.map((member, index) => {
+    const displayMembersList = (team, memberType) => {
+        const membersList = teams[team][memberType];
+        const membersLength = membersList.length;
+        let buffer;
+        let maxId = 0;
+        if (membersLength > 0) {
+            maxId = membersList.reduce((max, member) => (member.id > max ? member.id : max), membersList[0].id);
+            buffer = membersList.map(member => {
                 if (member.id !== 0) {
-                    return memberLineTemplate(team, member, 'players', index, membersLength);
+                    return memberLineTemplate(team, member, memberType);
                 }
                 return '';
             });
-            return <ul>{buffer}</ul>;
         }
-        return null;
-    };
-
-    const officialsList = team => {
-        if (teams[team].officials.length > 0) {
-            const membersNotUnknown = teams[team].officials.filter(member => member.id !== 0);
-            const membersLength = membersNotUnknown.length;
-            const buffer = membersNotUnknown.map((member, index) => {
-                if (member.id !== 0) {
-                    return memberLineTemplate(team, member, 'officials', index, membersLength);
-                }
-                return '';
-            });
-            return <ul>{buffer}</ul>;
-        }
-        return null;
+        return (
+            <React.Fragment>
+                {buffer !== '' ? <ul>{buffer}</ul> : ''}
+                {membersLength < MAX_NUMBER[memberType] && addMemberButton(team, memberType, maxId + 1)}
+            </React.Fragment>
+        );
     };
 
     /**
@@ -160,29 +198,36 @@ export function Settings({
      */
     useEffect(() => {
         onOpenSettings(settingsData);
-        ['A', 'B'].map(team => {
-            if (
-                teams[team].players.length === 0 ||
-                (teams[team].players.length === 1 && teams[team].players[0].id === 0)
-            ) {
-                onAddEmptyMember({ ...EMPTY_MEMBER.players, id: 1, team, memberType: 'players' });
-            }
-            if (
-                teams[team].officials.length === 0 ||
-                (teams[team].officials.length === 1 && teams[team].officials[0].id === 0)
-            ) {
-                onAddEmptyMember({ ...EMPTY_MEMBER.officials, id: 1, team, memberType: 'officials' });
-            }
-            return true;
-        });
-    }, []);
+    }, ['']);
 
     return (
         <Modal title={messages.header} closeHandler={closeHandler} popup={popup}>
             <form action="" onSubmit={saveInitialisation}>
+                <h3>{messages.competition}</h3>
+                <p>
+                    <label htmlFor="competition">{messages.competitionName}*:</label>{' '}
+                    <input
+                        type="text"
+                        id="competition"
+                        onChange={e => handleChangeSetting(e, CHANGE_COMPETITION)}
+                        value={competition}
+                        required
+                    />
+                </p>
+                <p>
+                    <label htmlFor="round">{messages.round}:</label>{' '}
+                    <input type="text" id="round" onChange={e => handleChangeSetting(e, CHANGE_ROUND)} value={round} />
+                </p>
+                <p>
+                    <label htmlFor="gender">{messages.gender}*:</label>{' '}
+                    <select id="gender" onChange={e => handleChangeSetting(e, CHANGE_GENDER)} value={gender} required>
+                        <option value="">{messages.selectGender}</option>
+                        {gendersList()}
+                    </select>
+                </p>
                 <h3>{messages.teamA}</h3>
                 <p>
-                    <label htmlFor="teamAName">{messages.teamA}:</label>{' '}
+                    <label htmlFor="teamAName">{messages.teamA}*:</label>{' '}
                     <input
                         type="text"
                         id="teamAName"
@@ -192,12 +237,12 @@ export function Settings({
                     />
                 </p>
                 <h4>{messages.listOfPlayers}</h4>
-                {playersList('A')}
+                {displayMembersList('A', PERSONS_TYPES.players)}
                 <h4>{messages.listOfOfficials}</h4>
-                {officialsList('A')}
+                {displayMembersList('A', PERSONS_TYPES.officials)}
                 <h3>{messages.teamB}</h3>
                 <p>
-                    <label htmlFor="teamBName">{messages.teamB}:</label>{' '}
+                    <label htmlFor="teamBName">{messages.teamB}*:</label>{' '}
                     <input
                         type="text"
                         id="teamBName"
@@ -207,9 +252,9 @@ export function Settings({
                     />
                 </p>
                 <h4>{messages.listOfPlayers}</h4>
-                {playersList('B')}
+                {displayMembersList('B', PERSONS_TYPES.players)}
                 <h4>{messages.listOfOfficials}</h4>
-                {officialsList('B')}
+                {displayMembersList('B', PERSONS_TYPES.officials)}
                 <button type="submit">{messages.save}</button>
                 {cancelButton(closeHandler, popup)}
             </form>
@@ -218,7 +263,12 @@ export function Settings({
 }
 
 Settings.propTypes = {
+    gameId: PropTypes.string,
+    competition: PropTypes.string,
+    round: PropTypes.string,
+    gender: PropTypes.string,
     teams: PropTypes.object,
+    onChangeSetting: PropTypes.func,
     onChangeTeamName: PropTypes.func,
     onAddEmptyMember: PropTypes.func,
     onChangeMember: PropTypes.func,
@@ -229,11 +279,16 @@ Settings.propTypes = {
 };
 
 const mapStateToProps = createStructuredSelector({
+    gameId: makeSelectGameId(),
+    competition: makeSelectCompetition(),
+    round: makeSelectRound(),
+    gender: makeSelectGender(),
     teams: makeSelectTeams()
 });
 
 export function mapDispatchToProps(dispatch) {
     return {
+        onChangeSetting: data => dispatch(changeSetting(data)),
         onChangeTeamName: data => dispatch(changeTeamName(data)),
         onAddEmptyMember: data => dispatch(addEmptyMember(data)),
         onChangeMember: data => dispatch(changeMember(data)),

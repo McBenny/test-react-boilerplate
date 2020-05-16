@@ -9,6 +9,9 @@
  * export const YOUR_ACTION_CONSTANT = 'yourproject/YourContainer/YOUR_ACTION_CONSTANT';
  */
 
+export const CHANGE_COMPETITION = 'boilerplate/Settings/CHANGE_COMPETITION';
+export const CHANGE_ROUND = 'boilerplate/Settings/CHANGE_ROUND';
+export const CHANGE_GENDER = 'boilerplate/Settings/CHANGE_GENDER';
 export const CHANGE_TEAM_NAME = 'boilerplate/Settings/CHANGE_TEAM_NAME';
 export const ADD_EMPTY_MEMBER = 'boilerplate/Settings/ADD_EMPTY_MEMBER';
 export const CHANGE_MEMBER = 'boilerplate/Settings/CHANGE_MEMBER';
@@ -43,4 +46,17 @@ export const MAX_NUMBER = {
     blueCards: 1,
     suspensions: 2,
     timeouts: 3
+};
+
+export const GENDERS = {
+    men: 'Men',
+    women: 'Women',
+    mixed: 'Mixed'
+};
+
+export const UUID_PREFIX = 'uuid-';
+
+export const PERSONS_TYPES = {
+    players: 'players',
+    officials: 'officials'
 };

@@ -1,3 +1,14 @@
+import { v4 as uuidv4 } from 'uuid';
+import { UUID_PREFIX } from '../containers/Settings/constants';
+
+/**
+ * Generates a unique gameId
+ * @returns {string} starting with UUID_PREFIX
+ */
+export function generateId() {
+    return `${UUID_PREFIX}${uuidv4()}`;
+}
+
 /**
  * This function sorts an array of object by ascending order of the key provided, by default.
  * @param key           The object key to sort on (No test about its existence)

@@ -42,6 +42,24 @@
         color: #00f;
     }
 
+    &__variable-height { // This allows for internal scrolls inside pop-ups. BA 2020-01-24
+        flex-shrink: 1;
+
+        /* stylelint-disable */
+        /* IE11 doesn't support the short-hand property "flex" properly, 40vh is a semi-magic number. BA 2020-02-25 */
+        flex-grow: 0;
+        flex-basis: 40vh;
+        /* stylelint-enable */
+
+        /* This is what other browsers apply, basically leaving them do the math. BA 2020-02-25 */
+        @supports (flex-basis: calc(70vh - 5px)) {
+            flex-basis: auto;
+        }
+
+        overflow-y: auto;
+        padding-bottom: 1px; // account for the border size
+    }
+
     &__text {
         margin-bottom: 1em;
         text-align: center;

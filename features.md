@@ -97,7 +97,7 @@ This screen shows the current status of the game:
 - [X] Teams playing,
 - [X] current score,
 - [X] fouls received by players per team,
-- [ ] current half time.
+- [X] current half time.
 
 From this screen it's possible to access other screens:
 - [X] Game settings: to alter the game's settings (add a player, change a referee...),
@@ -106,7 +106,7 @@ From this screen it's possible to access other screens:
 - [ ] Edit score screen: to edit the score if a mistake has been made
 
 This screen also allows for certain actions:
-- [ ] select/change half-time,
+- [X] select/change half-time,
 - [ ] export game data
 
 ###Add a goal / Add a foul
@@ -133,6 +133,8 @@ It should be possible to also add a goal anywhere in the list.
 
 These features should also apply to the fouls, any foul registered should be editable and removable, it should also be possible to add a foul.
 
+##BUGS
+
 ##TODO
 - [X] allow for timeouts per team
 - [X] Make add a player in settings "dynamic"
@@ -144,9 +146,10 @@ These features should also apply to the fouls, any foul registered should be edi
 - [X] keep current score on every event
 - [X] on start/stop, allow for choice between pause/resume or close/open a period
 - [X] create a generic pop-in with generic features (open/close)
+- [X] save data locally and retrieve them
 - [ ] add a colour to each team
 - [ ] add game officials (referees, scorekeeper (table), timekeeper (scoreboard/buzzer))
 - [ ] in players pop-in, list players and officials in different tabs
 - [ ] allow for removal of a player
 - [ ] Removing a player gives everything he holds to "unknown players"
-- [ ] Changing the number, _first or last name_ of a player updates every occurrence of that player,
+- [X] Changing the number, _first or last name_ of a player updates every occurrence of that player,

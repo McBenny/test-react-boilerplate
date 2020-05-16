@@ -14,6 +14,8 @@ import nextId from 'react-id-generator';
 import { createStructuredSelector } from 'reselect';
 
 import { useInjectReducer } from '../../utils/injectReducer';
+import { URLS } from '../App/constants';
+import LocalStorage from '../../utils/local-storage';
 import {
     makeSelectDate,
     makeSelectSettings,
@@ -40,7 +42,8 @@ import {
     ADD_SUSPENSION,
     ADD_TIMEOUT,
     ADD_YELLOW_CARD,
-    EVENT_TYPES
+    EVENT_TYPES,
+    POPUPS
 } from './constants';
 import './styles.scss';
 import { MAX_NUMBER } from '../Settings/constants';
@@ -64,6 +67,27 @@ export function Game({
     dataTeamB
 }) {
     useInjectReducer({ key, reducer });
+
+    const gameId = sessionStorage.getItem('gameId');
+
+    const saveGameInStorage = () => {
+        if (gameId === null) {
+            window.location = URLS.index;
+        }
+        LocalStorage.set(gameId, {
+            settings,
+            gameId,
+            date,
+            gameStarted,
+            gamePaused,
+            currentPeriod,
+            currentScore,
+            dataTeamA,
+            dataTeamB,
+            gameEvents
+        });
+    };
+    useEffect(saveGameInStorage, [gameId, gameStarted, gameEvents, settings]);
 
     // Popups management
     const [popupVisibility, setPopupVisibility] = useState({ players: false, playPause: false, settings: false });
@@ -93,7 +117,7 @@ export function Game({
     };
     useEffect(() => {
         if (playersData !== initialPlayersData) {
-            openPopup('players');
+            openPopup(POPUPS.players);
         }
     }, [playersData]);
 
@@ -185,7 +209,7 @@ export function Game({
             <ul>
                 <li>{date}</li>
                 <li>
-                    <button type="button" onClick={() => openPopup('settings')}>
+                    <button type="button" onClick={() => openPopup(POPUPS.settings)}>
                         {messages.settings.open}
                     </button>
                 </li>
@@ -193,7 +217,7 @@ export function Game({
                     Period: {currentPeriod}{' '}
                     <button
                         type="button"
-                        onClick={() => openPopup('playPause')}
+                        onClick={() => openPopup(POPUPS.playPause)}
                         disabled={!gameStarted && (currentPeriod === 4 || currentPeriod === 8)}
                     >
                         {displayStartButtonMessage()}

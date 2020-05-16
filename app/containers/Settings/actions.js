@@ -15,7 +15,24 @@
  *    }
  */
 
-import { CHANGE_TEAM_NAME, INIT_SETTINGS, ADD_EMPTY_MEMBER, CHANGE_MEMBER } from './constants';
+import { CHANGE_GENDER, GENDERS, CHANGE_TEAM_NAME, INIT_SETTINGS, ADD_EMPTY_MEMBER, CHANGE_MEMBER } from './constants';
+
+/**
+ * Changes a single input field of the form
+ * @param  {string} type The type of actions to perform
+ * @param  {string} data The new text of the input field
+ * @return {object} An action object with a type of CHANGE_XXX
+ */
+export function changeSetting({ type, data }) {
+    if (type !== CHANGE_GENDER || (type === CHANGE_GENDER && GENDERS[data])) {
+        return {
+            type,
+            data
+        };
+    }
+    // Minimum object to return as an action
+    return { type: null };
+}
 
 /**
  * Changes the input field of the form
