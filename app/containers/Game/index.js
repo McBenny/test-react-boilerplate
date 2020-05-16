@@ -14,6 +14,7 @@ import nextId from 'react-id-generator';
 import { createStructuredSelector } from 'reselect';
 
 import { useInjectReducer } from '../../utils/injectReducer';
+import { URLS } from '../App/constants';
 import LocalStorage from '../../utils/local-storage';
 import {
     makeSelectDate,
@@ -71,7 +72,7 @@ export function Game({
 
     const saveGameInStorage = () => {
         if (gameId === null) {
-            window.location = '/';
+            window.location = URLS.index;
         }
         LocalStorage.set(gameId, {
             settings,

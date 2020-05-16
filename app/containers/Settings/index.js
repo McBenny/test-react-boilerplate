@@ -11,18 +11,11 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 
 import { createStructuredSelector } from 'reselect';
-import { v4 as uuidv4 } from 'uuid';
 
 import { useInjectReducer } from '../../utils/injectReducer';
-import {
-    addEmptyMember,
-    changeCompetition,
-    changeGender,
-    changeMember,
-    changeRound,
-    changeTeamName,
-    initSettings
-} from './actions';
+import { generateId } from '../../utils/utilities';
+
+import { addEmptyMember, changeSetting, changeTeamName, changeMember, initSettings } from './actions';
 import {
     makeSelectCompetition,
     makeSelectGameId,
@@ -33,7 +26,16 @@ import {
 import reducer from './reducer';
 import { messages } from './messages';
 import { saveSettings } from '../Game/actions';
-import { EMPTY_MEMBER, GENDERS, MAX_NUMBER, OFFICIALS_REFERENCES, UUID_PREFIX } from './constants';
+import {
+    CHANGE_COMPETITION,
+    CHANGE_GENDER,
+    CHANGE_ROUND,
+    EMPTY_MEMBER,
+    GENDERS,
+    MAX_NUMBER,
+    OFFICIALS_REFERENCES,
+    PERSONS_TYPES
+} from './constants';
 import Modal, { cancelButton } from '../../components/modal';
 import { POPUPS } from '../Game/constants';
 
@@ -45,9 +47,7 @@ export function Settings({
     round,
     gender,
     teams,
-    onChangeCompetition,
-    onChangeRound,
-    onChangeGender,
+    onChangeSetting,
     onChangeTeamName,
     onAddEmptyMember,
     onChangeMember,
@@ -59,16 +59,8 @@ export function Settings({
     useInjectReducer({ key, reducer });
     const popup = POPUPS.settings;
 
-    const handleChangeCompetition = e => {
-        onChangeCompetition({ competition: e.target.value });
-    };
-
-    const handleChangeRound = e => {
-        onChangeRound({ round: e.target.value });
-    };
-
-    const handleChangeGender = e => {
-        onChangeGender({ gender: e.target.value });
+    const handleChangeSetting = (e, setting) => {
+        onChangeSetting({ type: setting, data: e.target.value });
     };
 
     const handleChangeTeamName = (e, team) => {
@@ -87,9 +79,10 @@ export function Settings({
         teams.B.players.splice(0, teams.B.players.length, ...teamBPlayersCleaned);
         teams.B.officials.splice(0, teams.B.officials.length, ...teamBOfficialsCleaned);
 
+        const newGameId = generateId();
         onSaveSettings({
             ...settingsData,
-            gameId: gameId === '' ? `${UUID_PREFIX}${uuidv4()}` : gameId,
+            gameId: gameId === '' ? newGameId : gameId,
             competition,
             round,
             gender,
@@ -116,10 +109,10 @@ export function Settings({
                     id,
                     team,
                     memberType: type,
-                    reference: type === 'players' ? 0 : OFFICIALS_REFERENCES[id - 1]
+                    reference: type === PERSONS_TYPES.players ? 0 : OFFICIALS_REFERENCES[id - 1]
                 })
             }
-            title={messages[type === 'players' ? 'addPlayer' : 'addOfficial']}
+            title={messages[type === PERSONS_TYPES.players ? 'addPlayer' : 'addOfficial']}
         >
             +
         </button>
@@ -129,7 +122,7 @@ export function Settings({
         let label;
         let pattern;
         let patternTitle;
-        if (type === 'players') {
+        if (type === PERSONS_TYPES.players) {
             label = 'playerNumberAndName';
             pattern = '[0-9][0-9]*';
             patternTitle = 'numberPattern';
@@ -157,7 +150,7 @@ export function Settings({
                     pattern={pattern}
                     title={messages[patternTitle]}
                     required
-                    disabled={type === 'officials'}
+                    disabled={type === PERSONS_TYPES.officials}
                 />{' '}
                 <input
                     type="text"
@@ -216,18 +209,18 @@ export function Settings({
                     <input
                         type="text"
                         id="competition"
-                        onChange={e => handleChangeCompetition(e)}
+                        onChange={e => handleChangeSetting(e, CHANGE_COMPETITION)}
                         value={competition}
                         required
                     />
                 </p>
                 <p>
                     <label htmlFor="round">{messages.round}:</label>{' '}
-                    <input type="text" id="round" onChange={e => handleChangeRound(e)} value={round} />
+                    <input type="text" id="round" onChange={e => handleChangeSetting(e, CHANGE_ROUND)} value={round} />
                 </p>
                 <p>
                     <label htmlFor="gender">{messages.gender}*:</label>{' '}
-                    <select id="gender" onChange={e => handleChangeGender(e)} value={gender} required>
+                    <select id="gender" onChange={e => handleChangeSetting(e, CHANGE_GENDER)} value={gender} required>
                         <option value="">{messages.selectGender}</option>
                         {gendersList()}
                     </select>
@@ -244,9 +237,9 @@ export function Settings({
                     />
                 </p>
                 <h4>{messages.listOfPlayers}</h4>
-                {displayMembersList('A', 'players')}
+                {displayMembersList('A', PERSONS_TYPES.players)}
                 <h4>{messages.listOfOfficials}</h4>
-                {displayMembersList('A', 'officials')}
+                {displayMembersList('A', PERSONS_TYPES.officials)}
                 <h3>{messages.teamB}</h3>
                 <p>
                     <label htmlFor="teamBName">{messages.teamB}*:</label>{' '}
@@ -259,9 +252,9 @@ export function Settings({
                     />
                 </p>
                 <h4>{messages.listOfPlayers}</h4>
-                {displayMembersList('B', 'players')}
+                {displayMembersList('B', PERSONS_TYPES.players)}
                 <h4>{messages.listOfOfficials}</h4>
-                {displayMembersList('B', 'officials')}
+                {displayMembersList('B', PERSONS_TYPES.officials)}
                 <button type="submit">{messages.save}</button>
                 {cancelButton(closeHandler, popup)}
             </form>
@@ -275,9 +268,7 @@ Settings.propTypes = {
     round: PropTypes.string,
     gender: PropTypes.string,
     teams: PropTypes.object,
-    onChangeCompetition: PropTypes.func,
-    onChangeRound: PropTypes.func,
-    onChangeGender: PropTypes.func,
+    onChangeSetting: PropTypes.func,
     onChangeTeamName: PropTypes.func,
     onAddEmptyMember: PropTypes.func,
     onChangeMember: PropTypes.func,
@@ -297,9 +288,7 @@ const mapStateToProps = createStructuredSelector({
 
 export function mapDispatchToProps(dispatch) {
     return {
-        onChangeCompetition: data => dispatch(changeCompetition(data)),
-        onChangeRound: data => dispatch(changeRound(data)),
-        onChangeGender: data => dispatch(changeGender(data)),
+        onChangeSetting: data => dispatch(changeSetting(data)),
         onChangeTeamName: data => dispatch(changeTeamName(data)),
         onAddEmptyMember: data => dispatch(addEmptyMember(data)),
         onChangeMember: data => dispatch(changeMember(data)),

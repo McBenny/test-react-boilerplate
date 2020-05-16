@@ -15,54 +15,23 @@
  *    }
  */
 
-import {
-    CHANGE_COMPETITION,
-    CHANGE_ROUND,
-    CHANGE_GENDER,
-    GENDERS,
-    CHANGE_TEAM_NAME,
-    INIT_SETTINGS,
-    ADD_EMPTY_MEMBER,
-    CHANGE_MEMBER
-} from './constants';
+import { CHANGE_GENDER, GENDERS, CHANGE_TEAM_NAME, INIT_SETTINGS, ADD_EMPTY_MEMBER, CHANGE_MEMBER } from './constants';
 
 /**
- * Changes the input field of the form
- * @param  {string} competition The new text of the input field
- * @return {object} An action object with a type of CHANGE_COMPETITION
+ * Changes a single input field of the form
+ * @param  {string} type The type of actions to perform
+ * @param  {string} data The new text of the input field
+ * @return {object} An action object with a type of CHANGE_XXX
  */
-export function changeCompetition({ competition }) {
-    return {
-        type: CHANGE_COMPETITION,
-        competition
-    };
-}
-
-/**
- * Changes the input field of the form
- * @param  {string} round The new text of the input field
- * @return {object} An action object with a type of CHANGE_ROUND
- */
-export function changeRound({ round }) {
-    return {
-        type: CHANGE_ROUND,
-        round
-    };
-}
-
-/**
- * Changes the input field of the form
- * @param  {string} gender The new text of the input field
- * @return {object} An action object with a type of CHANGE_GENDER
- */
-export function changeGender({ gender }) {
-    if (GENDERS[gender]) {
+export function changeSetting({ type, data }) {
+    if (type !== CHANGE_GENDER || (type === CHANGE_GENDER && GENDERS[data])) {
         return {
-            type: CHANGE_GENDER,
-            gender
+            type,
+            data
         };
     }
-    return false;
+    // Minimum object to return as an action
+    return { type: null };
 }
 
 /**

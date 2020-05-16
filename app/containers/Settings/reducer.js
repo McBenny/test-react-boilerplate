@@ -16,7 +16,8 @@ import {
     INIT_SETTINGS,
     EMPTY_MEMBER,
     ADD_EMPTY_MEMBER,
-    CHANGE_MEMBER
+    CHANGE_MEMBER,
+    PERSONS_TYPES
 } from './constants';
 
 // The initial state of the App
@@ -64,18 +65,25 @@ export const initialState = {
 /* eslint-disable default-case, no-param-reassign */
 const settingsReducer = (state = initialState, action) =>
     produce(state, draft => {
+        let updatedData;
         switch (action.type) {
             case CHANGE_COMPETITION:
-                // console.log(CHANGE_COMPETITION, action);
-                draft.competition = action.competition;
+                updatedData = 'competition';
                 break;
             case CHANGE_ROUND:
-                // console.log(CHANGE_ROUND, action);
-                draft.round = action.round;
+                updatedData = 'round';
                 break;
             case CHANGE_GENDER:
+                updatedData = 'gender';
+                break;
+            default:
+        }
+        switch (action.type) {
+            case CHANGE_COMPETITION:
+            case CHANGE_ROUND:
+            case CHANGE_GENDER:
                 // console.log(CHANGE_GENDER, action);
-                draft.gender = action.gender;
+                draft[updatedData] = action.data;
                 break;
             case CHANGE_TEAM_NAME:
                 // console.log(CHANGE_TEAM_NAME, action);
@@ -95,7 +103,8 @@ const settingsReducer = (state = initialState, action) =>
                 break;
             case CHANGE_MEMBER: {
                 // console.log(CHANGE_MEMBER, action);
-                const reference = action.memberType === 'players' ? parseInt(action.reference, 10) : action.reference;
+                const reference =
+                    action.memberType === PERSONS_TYPES.players ? parseInt(action.reference, 10) : action.reference;
                 draft.teams[action.team][action.memberType] = draft.teams[action.team][action.memberType].map(
                     member => {
                         if (member.id === action.id) {

@@ -7,26 +7,25 @@
 
 import React, { Fragment } from 'react';
 
-import { v4 as uuidv4 } from 'uuid';
-
 import LocalStorage from '../../utils/local-storage';
+import { generateId } from '../../utils/utilities';
+import { URLS } from '../App/constants';
 import { GAMES_PREFIX } from '../Game/constants';
 
 import { messages } from './messages';
-import { UUID_PREFIX } from '../Settings/constants';
 
 export default function SplashScreen() {
     const createGame = () => {
-        const gameId = `${UUID_PREFIX}${uuidv4()}`;
+        const gameId = generateId();
         const gameKey = `${GAMES_PREFIX}${gameId}`;
         LocalStorage.set(gameKey, '');
         sessionStorage.setItem('gameId', gameKey);
-        window.location.href = 'game';
+        window.location.href = URLS.game;
     };
 
     const loadGame = gameKey => {
         sessionStorage.setItem('gameId', gameKey);
-        window.location.href = 'game';
+        window.location.href = URLS.game;
     };
 
     const savedGames = () => {

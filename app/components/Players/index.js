@@ -10,7 +10,7 @@ import {
     UNKNOWN_PLAYER,
     POPUPS
 } from '../../containers/Game/constants';
-import { MAX_NUMBER } from '../../containers/Settings/constants';
+import { MAX_NUMBER, PERSONS_TYPES } from '../../containers/Settings/constants';
 import Modal, { cancelButton } from '../modal';
 
 function Players({ eventType, playersListType, team, playersList, officialsList, actionHandler, closeHandler }) {
@@ -84,7 +84,7 @@ function Players({ eventType, playersListType, team, playersList, officialsList,
         const cleanMembersList = createPlayersList();
         const buffer = cleanMembersList.map(member => {
             const memberDisabled = isMemberDisabled(member);
-            return buttonTemplate(member, 'players', memberDisabled);
+            return buttonTemplate(member, PERSONS_TYPES.players, memberDisabled);
         });
         if (cleanMembersList.length === 0) {
             return <p>{messages.noPlayers}</p>;
@@ -95,7 +95,7 @@ function Players({ eventType, playersListType, team, playersList, officialsList,
     const officialsListDisplay = () => {
         const buffer = officialsList.map(member => {
             const memberDisabled = isMemberDisabled(member);
-            return buttonTemplate(member, 'officials', memberDisabled);
+            return buttonTemplate(member, PERSONS_TYPES.officials, memberDisabled);
         });
         if (officialsList.length === 0) {
             return <p>{messages.noOfficials}</p>;
