@@ -134,6 +134,7 @@ It should be possible to also add a goal anywhere in the list.
 These features should also apply to the fouls, any foul registered should be editable and removable, it should also be possible to add a foul.
 
 ##BUGS
+- [ ] 2 fouls from the same player generate duplicate ids
 
 ##TODO
 - [X] allow for timeouts per team
@@ -147,6 +148,7 @@ These features should also apply to the fouls, any foul registered should be edi
 - [X] on start/stop, allow for choice between pause/resume or close/open a period
 - [X] create a generic pop-in with generic features (open/close)
 - [X] save data locally and retrieve them
+- [ ] group players in fouls
 - [ ] add a colour to each team
 - [ ] add game officials (referees, scorekeeper (table), timekeeper (scoreboard/buzzer))
 - [ ] in players pop-in, list players and officials in different tabs
