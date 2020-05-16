@@ -134,7 +134,6 @@ It should be possible to also add a goal anywhere in the list.
 These features should also apply to the fouls, any foul registered should be editable and removable, it should also be possible to add a foul.
 
 ##BUGS
-- [ ] 2 fouls from the same player generate duplicate ids
 
 ##TODO
 - [X] allow for timeouts per team
