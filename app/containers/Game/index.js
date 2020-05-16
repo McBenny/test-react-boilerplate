@@ -48,7 +48,7 @@ import {
 import './styles.scss';
 import { MAX_NUMBER } from '../Settings/constants';
 import PlayPause from '../../components/Play-pause';
-import { isEven } from '../../utils/utilities';
+import { isEven, compareValues } from '../../utils/utilities';
 
 const key = 'game';
 
@@ -172,14 +172,38 @@ export function Game({
     const foulPlayersLog = (team, foul) => {
         const log = gameEvents.filter(event => event.team === team && event.eventType === EVENT_TYPES[foul]);
         if (log.length > 0) {
-            const buffer = log.map(event => {
-                const eventMember = settings.teams[team][event.memberType].filter(member => member.id === event.id);
-                return (
-                    <li key={`${foul}${team}${event.memberType}${eventMember[0].id}`}>
-                        {eventMember[0].reference} {eventMember[0].name}
-                    </li>
+            // Creates a list of made-up uids from the ids coupled with member type
+            const uids = log.map(member => `${member.id}-${member.memberType}`);
+
+            // Creates an object of UNIQUE previous uids as keys with their respective count as values
+            const foulsCount = uids.reduce((map, val) => {
+                // eslint-disable-next-line no-param-reassign
+                map[val] = (map[val] || 0) + 1;
+                return map;
+            }, {});
+
+            // Creates an array of the unique uids
+            const filteredUids = Object.keys(foulsCount);
+
+            // Creates an array of members with their data according to the list of unique uids, adds the counts
+            const faultyMembers = filteredUids.map(uid => {
+                const [memberId, memberType] = uid.split('-');
+                const memberData = settings.teams[team][memberType].filter(
+                    member => member.id === parseInt(memberId, 10)
                 );
+                return {
+                    ...memberData[0],
+                    memberType,
+                    count: foulsCount[uid]
+                };
             });
+            const faultyMembersSorted = faultyMembers.sort(compareValues('reference', true, true));
+            const buffer = faultyMembersSorted.map(faultyMember => (
+                <li key={`${foul}${team}${faultyMember.memberType}${faultyMember.id}`}>
+                    {faultyMember.reference} {faultyMember.name}{' '}
+                    {faultyMember.count > 1 ? `(${faultyMember.count})` : ''}
+                </li>
+            ));
             return <ul>{buffer}</ul>;
         }
         return '';
