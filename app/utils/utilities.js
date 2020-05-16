@@ -13,16 +13,23 @@ export function generateId() {
  * This function sorts an array of object by ascending order of the key provided, by default.
  * @param key           The object key to sort on (No test about its existence)
  * @param isAscending   Setting this to false requests a descending order
+ * @param mixed         set to true to compare strings and numbers in ASCII order
  * @returns {function(*, *): number}
- * Usage:               const mySortedArray = myArray.sort(compareValues('myObjectKey', true);
+ * Usage:               const mySortedArray = myArray.sort(compareValues('myObjectKey', true));
  * Source:              https://www.sitepoint.com/sort-an-array-of-objects-in-javascript/#creatingadynamicsortingfunction
  */
-export function compareValues(key, isAscending = true) {
+export function compareValues(key, isAscending = true, mixed = false) {
     return function innerSort(a, b) {
         let comparison = 0;
-        if (a[key] > b[key]) {
+        let aKey = a[key];
+        let bKey = b[key];
+        if (mixed) {
+            aKey = aKey.toString();
+            bKey = bKey.toString();
+        }
+        if (aKey > bKey) {
             comparison = 1;
-        } else if (a[key] < b[key]) {
+        } else if (aKey < bKey) {
             comparison = -1;
         }
         return isAscending ? comparison : comparison * -1;
