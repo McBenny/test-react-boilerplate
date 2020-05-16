@@ -51,15 +51,15 @@ function Players({ eventType, playersListType, team, playersList, officialsList,
             membersListSorted.splice(membersListSorted.length, 0, membersListSorted.splice(0, 1)[0]);
         } else {
             membersListSorted = playersList.sort(compareValues('reference', true));
-            if (unknownMemberInserted.length !== 0) {
-                membersListSorted.shift();
-            }
         }
         return membersListSorted;
     };
 
     const buttonTemplate = (member, type, isDisabled) => (
-        <li key={`${playersListType}${type}Reference${member.id}`}>
+        <li
+            key={`${playersListType}${type}Reference${member.id}`}
+            hidden={playersListType !== ADD_GOAL && member.id === 0}
+        >
             <button
                 type="button"
                 onClick={() => {

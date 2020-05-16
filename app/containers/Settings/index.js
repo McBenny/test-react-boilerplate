@@ -77,10 +77,16 @@ export function Settings({
 
     const saveInitialisation = e => {
         e.preventDefault();
-        const teamACleaned = teams.A.players.filter(member => member.reference !== 0);
-        const teamBCleaned = teams.B.players.filter(member => member.reference !== 0);
-        teams.A.players.splice(0, teams.A.players.length, ...teamACleaned);
-        teams.B.players.splice(0, teams.B.players.length, ...teamBCleaned);
+        const teamAPlayersCleaned = teams.A.players.filter(member => member.reference !== 0 || member.id === 0);
+        const teamAOfficialsCleaned = teams.A.officials.filter(member => member.name !== '');
+        teams.A.players.splice(0, teams.A.players.length, ...teamAPlayersCleaned);
+        teams.A.officials.splice(0, teams.A.officials.length, ...teamAOfficialsCleaned);
+
+        const teamBPlayersCleaned = teams.B.players.filter(member => member.reference !== 0 || member.id === 0);
+        const teamBOfficialsCleaned = teams.B.officials.filter(member => member.name !== '');
+        teams.B.players.splice(0, teams.B.players.length, ...teamBPlayersCleaned);
+        teams.B.officials.splice(0, teams.B.officials.length, ...teamBOfficialsCleaned);
+
         onSaveSettings({
             ...settingsData,
             gameId: gameId === '' ? `${UUID_PREFIX}${uuidv4()}` : gameId,
@@ -113,13 +119,13 @@ export function Settings({
                     reference: type === 'players' ? 0 : OFFICIALS_REFERENCES[id - 1]
                 })
             }
-            title={messages[type === 'player' ? 'addPlayer' : 'addOfficial']}
+            title={messages[type === 'players' ? 'addPlayer' : 'addOfficial']}
         >
             +
         </button>
     );
 
-    const memberLineTemplate = (team, member, type, index, membersLength) => {
+    const memberLineTemplate = (team, member, type) => {
         let label;
         let pattern;
         let patternTitle;
@@ -167,39 +173,30 @@ export function Settings({
                     }
                     value={member.name}
                 />{' '}
-                {index < MAX_NUMBER[type] - 1 && index === membersLength - 1 && addMemberButton(team, type, index + 2)}
             </li>
         );
     };
 
-    const playersList = team => {
-        if (teams[team].players.length > 0) {
-            const membersNotUnknown = teams[team].players.filter(member => member.id !== 0);
-            const membersLength = membersNotUnknown.length;
-            const buffer = membersNotUnknown.map((member, index) => {
+    const displayMembersList = (team, memberType) => {
+        const membersList = teams[team][memberType];
+        const membersLength = membersList.length;
+        let buffer;
+        let maxId = 0;
+        if (membersLength > 0) {
+            maxId = membersList.reduce((max, member) => (member.id > max ? member.id : max), membersList[0].id);
+            buffer = membersList.map(member => {
                 if (member.id !== 0) {
-                    return memberLineTemplate(team, member, 'players', index, membersLength);
+                    return memberLineTemplate(team, member, memberType);
                 }
                 return '';
             });
-            return <ul>{buffer}</ul>;
         }
-        return null;
-    };
-
-    const officialsList = team => {
-        if (teams[team].officials.length > 0) {
-            const membersNotUnknown = teams[team].officials.filter(member => member.id !== 0);
-            const membersLength = membersNotUnknown.length;
-            const buffer = membersNotUnknown.map((member, index) => {
-                if (member.id !== 0) {
-                    return memberLineTemplate(team, member, 'officials', index, membersLength);
-                }
-                return '';
-            });
-            return <ul>{buffer}</ul>;
-        }
-        return null;
+        return (
+            <React.Fragment>
+                {buffer !== '' ? <ul>{buffer}</ul> : ''}
+                {membersLength < MAX_NUMBER[memberType] && addMemberButton(team, memberType, maxId + 1)}
+            </React.Fragment>
+        );
     };
 
     /**
@@ -208,22 +205,7 @@ export function Settings({
      */
     useEffect(() => {
         onOpenSettings(settingsData);
-        ['A', 'B'].map(team => {
-            if (
-                teams[team].players.length === 0 ||
-                (teams[team].players.length === 1 && teams[team].players[0].id === 0)
-            ) {
-                onAddEmptyMember({ ...EMPTY_MEMBER.players, id: 1, team, memberType: 'players' });
-            }
-            if (
-                teams[team].officials.length === 0 ||
-                (teams[team].officials.length === 1 && teams[team].officials[0].id === 0)
-            ) {
-                onAddEmptyMember({ ...EMPTY_MEMBER.officials, id: 1, team, memberType: 'officials' });
-            }
-            return true;
-        });
-    }, []);
+    }, ['']);
 
     return (
         <Modal title={messages.header} closeHandler={closeHandler} popup={popup}>
@@ -262,9 +244,9 @@ export function Settings({
                     />
                 </p>
                 <h4>{messages.listOfPlayers}</h4>
-                {playersList('A')}
+                {displayMembersList('A', 'players')}
                 <h4>{messages.listOfOfficials}</h4>
-                {officialsList('A')}
+                {displayMembersList('A', 'officials')}
                 <h3>{messages.teamB}</h3>
                 <p>
                     <label htmlFor="teamBName">{messages.teamB}*:</label>{' '}
@@ -277,9 +259,9 @@ export function Settings({
                     />
                 </p>
                 <h4>{messages.listOfPlayers}</h4>
-                {playersList('B')}
+                {displayMembersList('B', 'players')}
                 <h4>{messages.listOfOfficials}</h4>
-                {officialsList('B')}
+                {displayMembersList('B', 'officials')}
                 <button type="submit">{messages.save}</button>
                 {cancelButton(closeHandler, popup)}
             </form>
