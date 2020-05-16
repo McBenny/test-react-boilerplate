@@ -148,6 +148,7 @@ These features should also apply to the fouls, any foul registered should be edi
 - [X] create a generic pop-in with generic features (open/close)
 - [X] save data locally and retrieve them
 - [X] group players in fouls
+- [ ] add the captain
 - [ ] add a colour to each team
 - [ ] add game officials (referees, scorekeeper (table), timekeeper (scoreboard/buzzer))
 - [ ] in players pop-in, list players and officials in different tabs
