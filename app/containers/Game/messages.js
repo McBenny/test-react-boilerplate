@@ -16,5 +16,6 @@ export const messages = {
     addRedCard: 'Add a red card',
     addBlueCard: 'Add a blue card',
     addTimeout: 'Add a timeout',
-    maxTimeoutsReached: 'The team already used all their timeouts'
+    maxTimeoutsReached: 'The team already used all their timeouts',
+    unknownPlayer: 'unidentified'
 };

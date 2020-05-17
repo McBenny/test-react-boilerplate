@@ -15,7 +15,15 @@
  *    }
  */
 
-import { CHANGE_GENDER, GENDERS, CHANGE_TEAM_NAME, INIT_SETTINGS, ADD_EMPTY_MEMBER, CHANGE_MEMBER } from './constants';
+import {
+    CHANGE_GENDER,
+    GENDERS,
+    CHANGE_TEAM_NAME,
+    CHANGE_TEAM_CAPTAIN,
+    INIT_SETTINGS,
+    ADD_EMPTY_MEMBER,
+    CHANGE_MEMBER
+} from './constants';
 
 /**
  * Changes a single input field of the form
@@ -45,6 +53,20 @@ export function changeTeamName({ team, teamName }) {
         type: CHANGE_TEAM_NAME,
         team,
         teamName
+    };
+}
+
+/**
+ * Changes the input field of the form
+ * @param  {string} team The reference of the team
+ * @param  {string} captain The new text of the input field
+ * @return {object} An action object with a type of CHANGE_TEAM_CAPTAIN
+ */
+export function changeTeamCaptain({ team, captain }) {
+    return {
+        type: CHANGE_TEAM_CAPTAIN,
+        team,
+        captain
     };
 }
 

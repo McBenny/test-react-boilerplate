@@ -10,6 +10,7 @@
  */
 
 import { EMPTY_MEMBER } from '../Settings/constants';
+import { messages } from './messages';
 
 export const SAVE_SETTINGS = 'boilerplate/Game/SAVE_SETTINGS';
 export const HANDLE_GAME_STATUS = 'boilerplate/Game/HANDLE_GAME_STATUS';
@@ -54,7 +55,7 @@ export const PERIODS = {
 export const UNKNOWN_PLAYER = {
     ...EMPTY_MEMBER.players,
     id: 0,
-    name: '(unknown)'
+    name: `(${messages.unknownPlayer})`
 };
 
 export const GAMES_PREFIX = 'game-';

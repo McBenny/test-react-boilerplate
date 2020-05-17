@@ -13,7 +13,16 @@ import {
 import { MAX_NUMBER, PERSONS_TYPES } from '../../containers/Settings/constants';
 import Modal, { cancelButton } from '../modal';
 
-function Players({ eventType, playersListType, team, playersList, officialsList, actionHandler, closeHandler }) {
+function Players({
+    eventType,
+    playersListType,
+    team,
+    playersList,
+    captainId,
+    officialsList,
+    actionHandler,
+    closeHandler
+}) {
     const popup = POPUPS.players;
 
     /**
@@ -75,7 +84,8 @@ function Players({ eventType, playersListType, team, playersList, officialsList,
                 disabled={isDisabled}
                 title={isDisabled ? messages.maxActionsReached : ''}
             >
-                {member.reference} {member.name}
+                {member.reference} {member.name}{' '}
+                {captainId !== 0 && captainId === member.id ? `(${messages.captainInitial})` : ''}
             </button>
         </li>
     );
@@ -119,6 +129,7 @@ Players.propTypes = {
     playersListType: PropTypes.string,
     team: PropTypes.string,
     playersList: PropTypes.array,
+    captainId: PropTypes.number,
     officialsList: PropTypes.array,
     actionHandler: PropTypes.func,
     closeHandler: PropTypes.func

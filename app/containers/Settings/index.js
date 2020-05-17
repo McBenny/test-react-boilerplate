@@ -13,9 +13,16 @@ import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
 
 import { useInjectReducer } from '../../utils/injectReducer';
-import { generateId } from '../../utils/utilities';
+import { compareValues, generateId } from '../../utils/utilities';
 
-import { addEmptyMember, changeSetting, changeTeamName, changeMember, initSettings } from './actions';
+import {
+    addEmptyMember,
+    changeSetting,
+    changeTeamName,
+    changeMember,
+    changeTeamCaptain,
+    initSettings
+} from './actions';
 import {
     makeSelectCompetition,
     makeSelectGameId,
@@ -51,6 +58,7 @@ export function Settings({
     onChangeTeamName,
     onAddEmptyMember,
     onChangeMember,
+    onChangeTeamCaptain,
     onSaveSettings,
     onOpenSettings,
     settingsData,
@@ -65,6 +73,10 @@ export function Settings({
 
     const handleChangeTeamName = (e, team) => {
         onChangeTeamName({ team, teamName: e.target.value });
+    };
+
+    const handleChangeTeamCaptain = (e, team) => {
+        onChangeTeamCaptain({ team, captain: parseInt(e.target.value, 10) });
     };
 
     const saveInitialisation = e => {
@@ -192,6 +204,16 @@ export function Settings({
         );
     };
 
+    const captainList = team => {
+        const teamPlayers = teams[team].players;
+        const teamPlayersSorted = teamPlayers.sort(compareValues('reference'));
+        return teamPlayersSorted.map(player => (
+            <option key={`${team}player${player.id}`} value={player.id}>
+                {`${player.reference} ${player.name}`}
+            </option>
+        ));
+    };
+
     /**
      * If a team has no players or has only one player and it's id is 0 (unknown player),
      * an empty player is created to allow for an input line
@@ -238,6 +260,13 @@ export function Settings({
                 </p>
                 <h4>{messages.listOfPlayers}</h4>
                 {displayMembersList('A', PERSONS_TYPES.players)}
+                <p>
+                    <label htmlFor="gender">{messages.captain}:</label>{' '}
+                    <select id="captainA" onChange={e => handleChangeTeamCaptain(e, 'A')} value={teams.A.captain}>
+                        <option value="0">{messages.selectCaptain}</option>
+                        {captainList('A')}
+                    </select>
+                </p>
                 <h4>{messages.listOfOfficials}</h4>
                 {displayMembersList('A', PERSONS_TYPES.officials)}
                 <h3>{messages.teamB}</h3>
@@ -253,6 +282,13 @@ export function Settings({
                 </p>
                 <h4>{messages.listOfPlayers}</h4>
                 {displayMembersList('B', PERSONS_TYPES.players)}
+                <p>
+                    <label htmlFor="gender">{messages.captain}:</label>{' '}
+                    <select id="captainB" onChange={e => handleChangeTeamCaptain(e, 'B')} value={teams.B.captain}>
+                        <option value="0">{messages.selectCaptain}</option>
+                        {captainList('B')}
+                    </select>
+                </p>
                 <h4>{messages.listOfOfficials}</h4>
                 {displayMembersList('B', PERSONS_TYPES.officials)}
                 <button type="submit">{messages.save}</button>
@@ -272,6 +308,7 @@ Settings.propTypes = {
     onChangeTeamName: PropTypes.func,
     onAddEmptyMember: PropTypes.func,
     onChangeMember: PropTypes.func,
+    onChangeTeamCaptain: PropTypes.func,
     onSaveSettings: PropTypes.func,
     onOpenSettings: PropTypes.func,
     settingsData: PropTypes.object,
@@ -292,6 +329,7 @@ export function mapDispatchToProps(dispatch) {
         onChangeTeamName: data => dispatch(changeTeamName(data)),
         onAddEmptyMember: data => dispatch(addEmptyMember(data)),
         onChangeMember: data => dispatch(changeMember(data)),
+        onChangeTeamCaptain: data => dispatch(changeTeamCaptain(data)),
         onSaveSettings: data => dispatch(saveSettings(data)),
         onOpenSettings: data => dispatch(initSettings(data))
     };

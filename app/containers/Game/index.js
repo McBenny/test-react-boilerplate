@@ -112,6 +112,7 @@ export function Game({
             playersListType: type,
             playersTeam: team,
             playersList: settings.teams[team].players,
+            captainId: settings.teams[team].captain,
             officialsList: settings.teams[team].officials
         });
     };
@@ -453,6 +454,7 @@ export function Game({
                     playersListType={playersData.playersListType}
                     team={playersData.playersTeam}
                     playersList={playersData.playersList}
+                    captainId={playersData.captainId}
                     officialsList={playersData.officialsList}
                     actionHandler={addActionPerTeam}
                     closeHandler={closePopup}
