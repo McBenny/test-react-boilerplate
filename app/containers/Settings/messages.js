@@ -12,6 +12,8 @@ export const messages = {
     addPlayer: 'Add a player',
     playerNumberAndName: 'Player number and name',
     numberPattern: 'Numbers only, 0 forbidden',
+    captain: 'Captain',
+    selectCaptain: 'Select a captain...',
     listOfOfficials: 'List of officials',
     addOfficial: 'Add an official',
     officialReferenceAndName: 'Official reference and name',
