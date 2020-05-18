@@ -10,5 +10,5 @@ export const messages = {
     noPlayers: 'No players, please insert players in',
     listOfOfficials: 'List of officials',
     noOfficials: 'No officials, please insert officials in',
-    settings: 'settings'
+    settings: 'Settings'
 };

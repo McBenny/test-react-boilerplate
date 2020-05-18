@@ -98,7 +98,7 @@ function Players({
     const membersListDisplay = memberType => {
         const membersList = memberType === PERSONS_TYPES.players ? createPlayersList() : officialsList;
         const buffer = membersList.map(member => {
-            // Display all members if it's a goal, or don;t display "unknown player"
+            // Display all members if it's a goal, or don't display "unknown player"
             if (playersListType === ADD_GOAL || member.id !== 0) {
                 const memberDisabled = isMemberDisabled(member);
                 return buttonTemplate(member, memberType, memberDisabled);
