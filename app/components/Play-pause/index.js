@@ -1,13 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { messages } from './messages';
-import { EVENT_TYPES, PERIODS, POPUPS } from '../../containers/Game/constants';
+import { EVENT_TYPES, PERIODS } from '../../containers/Game/constants';
 import { isEven } from '../../utils/utilities';
 import Modal, { cancelButton } from '../modal';
 
 function PlayPause({ gameStarted, gamePaused, period, startHandler, closeHandler }) {
-    const popup = POPUPS.playPause;
-
     const startButton = () => {
         if (!gameStarted) {
             const handleStartButton = () => {
@@ -17,7 +15,7 @@ function PlayPause({ gameStarted, gamePaused, period, startHandler, closeHandler
                     id: period,
                     period: period + 1
                 });
-                closeHandler(popup);
+                closeHandler();
             };
             return (
                 <button type="button" onClick={handleStartButton}>
@@ -37,7 +35,7 @@ function PlayPause({ gameStarted, gamePaused, period, startHandler, closeHandler
                     id: period,
                     period
                 });
-                closeHandler(popup);
+                closeHandler();
             };
             return (
                 <button type="button" onClick={handlePauseResumeButton}>
@@ -58,7 +56,7 @@ function PlayPause({ gameStarted, gamePaused, period, startHandler, closeHandler
                     id: period,
                     period: period + 1
                 });
-                closeHandler(popup);
+                closeHandler();
             };
             return (
                 <button type="button" onClick={handlePauseResumeButton}>
@@ -78,7 +76,7 @@ function PlayPause({ gameStarted, gamePaused, period, startHandler, closeHandler
                     id: period + 1,
                     period: period + 1
                 });
-                closeHandler(popup);
+                closeHandler();
             };
             return (
                 <button type="button" onClick={handlePauseResumeButton}>
@@ -99,7 +97,7 @@ function PlayPause({ gameStarted, gamePaused, period, startHandler, closeHandler
                     id: period,
                     period: period + 1
                 });
-                closeHandler(popup);
+                closeHandler();
             };
             return (
                 <button type="button" onClick={handleEndButton}>
@@ -111,14 +109,14 @@ function PlayPause({ gameStarted, gamePaused, period, startHandler, closeHandler
     };
 
     return (
-        <Modal title={messages.title} closeHandler={closeHandler} popup={popup}>
+        <Modal title={messages.title} closeHandler={closeHandler}>
             <ul>
                 <li>{startButton()}</li>
                 <li>{pauseResumeButton()}</li>
                 <li>{endPeriodButton()}</li>
                 <li>{startPeriodButton()}</li>
                 <li>{endGameButton()}</li>
-                <li>{cancelButton(closeHandler, popup)}</li>
+                <li>{cancelButton(closeHandler)}</li>
             </ul>
         </Modal>
     );

@@ -49,6 +49,7 @@ import './styles.scss';
 import { MAX_NUMBER } from '../Settings/constants';
 import PlayPause from '../../components/Play-pause';
 import { isEven, compareValues } from '../../utils/utilities';
+import LineUp from '../../components/Line-up';
 
 const key = 'game';
 
@@ -90,12 +91,18 @@ export function Game({
     useEffect(saveGameInStorage, [gameId, gameStarted, gameEvents, settings]);
 
     // Popups management
-    const [popupVisibility, setPopupVisibility] = useState({ players: false, playPause: false, settings: false });
-    const openPopup = popup => {
-        setPopupVisibility({ ...popupVisibility, [popup]: true });
+    const popupsInitialState = {
+        lineUp: false,
+        players: false,
+        playPause: false,
+        settings: false
     };
-    const closePopup = popup => {
-        setPopupVisibility({ ...popupVisibility, [popup]: false });
+    const [popupVisibility, setPopupVisibility] = useState(popupsInitialState);
+    const openPopup = popup => {
+        setPopupVisibility({ ...popupsInitialState, [popup]: true });
+    };
+    const closePopup = () => {
+        setPopupVisibility({ ...popupsInitialState });
     };
 
     const initialPlayersData = {
@@ -121,6 +128,21 @@ export function Game({
             openPopup(POPUPS.players);
         }
     }, [playersData]);
+
+    const [lineUpData, setLineUpData] = useState(initialPlayersData);
+    const openLineUp = ({ team }) => {
+        setLineUpData({
+            playersTeam: team,
+            playersList: settings.teams[team].players,
+            captainId: settings.teams[team].captain,
+            officialsList: settings.teams[team].officials
+        });
+    };
+    useEffect(() => {
+        if (lineUpData !== initialPlayersData) {
+            openPopup(POPUPS.lineUp);
+        }
+    }, [lineUpData]);
 
     const score = { teamA: dataTeamA.goals, teamB: dataTeamB.goals };
     const handleStartButton = ({ gameStatus = true, gamePauseStatus, eventType, period, id }) => {
@@ -370,6 +392,11 @@ export function Game({
                     </button>
                     {foulPlayersLog('A', 'blueCard')}
                 </li>
+                <li>
+                    <button type="button" onClick={() => openLineUp({ team: 'A' })}>
+                        {messages.showLineUp}
+                    </button>
+                </li>
             </ul>
 
             <h2>
@@ -444,6 +471,11 @@ export function Game({
                     </button>
                     {foulPlayersLog('B', 'blueCard')}
                 </li>
+                <li>
+                    <button type="button" onClick={() => openLineUp({ team: 'B' })}>
+                        {messages.showLineUp}
+                    </button>
+                </li>
             </ul>
             <h2>Game log:</h2>
             {gameEventsLog()}
@@ -458,6 +490,19 @@ export function Game({
                     officialsList={playersData.officialsList}
                     actionHandler={addActionPerTeam}
                     closeHandler={closePopup}
+                    openPopup={openPopup}
+                />
+            ) : (
+                ''
+            )}
+            {popupVisibility.lineUp ? (
+                <LineUp
+                    team={lineUpData.playersTeam}
+                    playersList={lineUpData.playersList}
+                    captainId={lineUpData.captainId}
+                    officialsList={lineUpData.officialsList}
+                    closeHandler={closePopup}
+                    openPopup={openPopup}
                 />
             ) : (
                 ''

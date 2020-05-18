@@ -21,10 +21,9 @@ function Players({
     captainId,
     officialsList,
     actionHandler,
-    closeHandler
+    closeHandler,
+    openPopup
 }) {
-    const popup = POPUPS.players;
-
     /**
      * According to the rules of handball:
      *  - in general, when the maximum number of a sanction is reached, referees can't add the same sanction,
@@ -51,14 +50,20 @@ function Players({
 
     const createPlayersList = () => {
         let membersListSorted;
-        const unknownMemberInserted = playersList.filter(member => member.id === 0);
+        // If it's for a goal
         if (playersListType === ADD_GOAL) {
+            // Find the "unknown player"
+            const unknownMemberInserted = playersList.filter(member => member.id === 0);
+            // If he's not found yet, add him
             if (unknownMemberInserted.length === 0) {
                 playersList.push(UNKNOWN_PLAYER);
             }
+            // Then sort the players
             membersListSorted = playersList.sort(compareValues('reference', true));
+            // But place the unknown player at the first position
             membersListSorted.splice(membersListSorted.length, 0, membersListSorted.splice(0, 1)[0]);
         } else {
+            // Just sort the list as there is nothing special
             membersListSorted = playersList.sort(compareValues('reference', true));
         }
         return membersListSorted;
@@ -79,7 +84,7 @@ function Players({
                         id: member.id,
                         memberType: type
                     });
-                    closeHandler(popup);
+                    closeHandler();
                 }}
                 disabled={isDisabled}
                 title={isDisabled ? messages.maxActionsReached : ''}
@@ -90,36 +95,41 @@ function Players({
         </li>
     );
 
-    const playersListDisplay = () => {
-        const cleanMembersList = createPlayersList();
-        const buffer = cleanMembersList.map(member => {
-            const memberDisabled = isMemberDisabled(member);
-            return buttonTemplate(member, PERSONS_TYPES.players, memberDisabled);
+    const membersListDisplay = memberType => {
+        const membersList = memberType === PERSONS_TYPES.players ? createPlayersList() : officialsList;
+        const buffer = membersList.map(member => {
+            // Display all members if it's a goal, or don't display "unknown player"
+            if (playersListType === ADD_GOAL || member.id !== 0) {
+                const memberDisabled = isMemberDisabled(member);
+                return buttonTemplate(member, memberType, memberDisabled);
+            }
+            return '';
         });
-        if (cleanMembersList.length === 0) {
-            return <p>{messages.noPlayers}</p>;
-        }
-        return <ul>{buffer}</ul>;
-    };
-
-    const officialsListDisplay = () => {
-        const buffer = officialsList.map(member => {
-            const memberDisabled = isMemberDisabled(member);
-            return buttonTemplate(member, PERSONS_TYPES.officials, memberDisabled);
-        });
-        if (officialsList.length === 0) {
-            return <p>{messages.noOfficials}</p>;
+        // If no members or one member but this member is the "unknown player" and we're not setting a goal:
+        if (
+            membersList.length === 0 ||
+            (membersList.length === 1 && membersList[0].id === 0 && playersListType !== ADD_GOAL)
+        ) {
+            return (
+                <p>
+                    {messages[memberType === PERSONS_TYPES.players ? 'noPlayers' : 'noOfficials']}{' '}
+                    <button type="button" onClick={() => openPopup(POPUPS.settings)}>
+                        {messages.settings}
+                    </button>
+                    .
+                </p>
+            );
         }
         return <ul>{buffer}</ul>;
     };
 
     return (
-        <Modal title={`${messages.title}: ${playersListType}`} closeHandler={closeHandler} popup={popup}>
+        <Modal title={`${messages.title}: ${playersListType}`} closeHandler={closeHandler}>
             <h3>{messages.listOfPlayers}</h3>
-            {playersListDisplay()}
+            {membersListDisplay(PERSONS_TYPES.players)}
             {playersListType !== ADD_GOAL ? <h3>{messages.listOfOfficials}</h3> : ''}
-            {playersListType !== ADD_GOAL ? officialsListDisplay() : ''}
-            {cancelButton(closeHandler, popup)}
+            {playersListType !== ADD_GOAL ? membersListDisplay(PERSONS_TYPES.officials) : ''}
+            {cancelButton(closeHandler)}
         </Modal>
     );
 }
@@ -132,7 +142,8 @@ Players.propTypes = {
     captainId: PropTypes.number,
     officialsList: PropTypes.array,
     actionHandler: PropTypes.func,
-    closeHandler: PropTypes.func
+    closeHandler: PropTypes.func,
+    openPopup: PropTypes.func
 };
 
 export default Players;
