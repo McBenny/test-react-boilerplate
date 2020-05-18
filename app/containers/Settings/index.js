@@ -44,7 +44,6 @@ import {
     PERSONS_TYPES
 } from './constants';
 import Modal, { cancelButton } from '../../components/modal';
-import { POPUPS } from '../Game/constants';
 
 const key = 'settings';
 
@@ -65,8 +64,6 @@ export function Settings({
     closeHandler
 }) {
     useInjectReducer({ key, reducer });
-    const popup = POPUPS.settings;
-
     const handleChangeSetting = (e, setting) => {
         onChangeSetting({ type: setting, data: e.target.value });
     };
@@ -100,7 +97,7 @@ export function Settings({
             gender,
             teams
         });
-        closeHandler(popup);
+        closeHandler();
     };
 
     const gendersList = () => {
@@ -223,7 +220,7 @@ export function Settings({
     }, ['']);
 
     return (
-        <Modal title={messages.header} closeHandler={closeHandler} popup={popup}>
+        <Modal title={messages.header} closeHandler={closeHandler}>
             <form action="" onSubmit={saveInitialisation}>
                 <h3>{messages.competition}</h3>
                 <p>
@@ -292,7 +289,7 @@ export function Settings({
                 <h4>{messages.listOfOfficials}</h4>
                 {displayMembersList('B', PERSONS_TYPES.officials)}
                 <button type="submit">{messages.save}</button>
-                {cancelButton(closeHandler, popup)}
+                {cancelButton(closeHandler)}
             </form>
         </Modal>
     );

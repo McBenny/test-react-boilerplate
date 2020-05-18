@@ -95,7 +95,7 @@ const settingsReducer = (state = initialState, action) =>
                 draft.teams[action.team].name = action.teamName;
                 break;
             case CHANGE_TEAM_CAPTAIN:
-                console.log(CHANGE_TEAM_NAME, action);
+                // console.log(CHANGE_TEAM_NAME, action);
                 draft.teams[action.team].captain = action.captain;
                 break;
             case ADD_EMPTY_MEMBER:

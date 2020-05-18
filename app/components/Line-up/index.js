@@ -2,137 +2,81 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { compareValues } from '../../utils/utilities';
 import { messages } from './messages';
-import {
-    ADD_GOAL,
-    ADD_YELLOW_CARD,
-    ADD_BLUE_CARD,
-    ADD_SUSPENSION,
-    UNKNOWN_PLAYER,
-    POPUPS
-} from '../../containers/Game/constants';
-import { MAX_NUMBER, PERSONS_TYPES } from '../../containers/Settings/constants';
+import { POPUPS } from '../../containers/Game/constants';
 import Modal, { cancelButton } from '../modal';
+import { PERSONS_TYPES } from '../../containers/Settings/constants';
 
-function Players({
-    eventType,
-    playersListType,
-    team,
-    playersList,
-    captainId,
-    officialsList,
-    actionHandler,
-    closeHandler
-}) {
-    const popup = POPUPS.players;
-
-    /**
-     * According to the rules of handball:
-     *  - in general, when the maximum number of a sanction is reached, referees can't add the same sanction,
-     *  - reaching the maximum number of yellow cards only prevents from receiving another yellow card,
-     *  - reaching maximum number of red cards prevents from playing so only possibility: blue card,
-     *  - a blue card can only be given to a player with a red card. Reaching maximum number of blue cards prevents from everything,
-     *  - reaching maximum number of suspensions still allows for goals and red cards.
-     * @param member
-     * @returns {boolean|boolean}
-     */
-    const isMemberDisabled = member => {
-        const yellowCardsMax =
-            playersListType === ADD_YELLOW_CARD &&
-            (member.yellowCards >= MAX_NUMBER.yellowCards || member.suspensions > 0);
-        const redCardsMax = playersListType !== ADD_BLUE_CARD && member.redCards >= MAX_NUMBER.redCards;
-        const blueCardsMax =
-            playersListType === ADD_BLUE_CARD &&
-            (member.redCards < MAX_NUMBER.redCards || member.blueCards >= MAX_NUMBER.blueCards);
-        const suspensionsMax =
-            (playersListType === ADD_YELLOW_CARD || playersListType === ADD_SUSPENSION) &&
-            member.suspensions >= MAX_NUMBER.suspensions;
-        return yellowCardsMax || redCardsMax || blueCardsMax || suspensionsMax;
-    };
-
-    const createPlayersList = () => {
-        let membersListSorted;
-        const unknownMemberInserted = playersList.filter(member => member.id === 0);
-        if (playersListType === ADD_GOAL) {
-            if (unknownMemberInserted.length === 0) {
-                playersList.push(UNKNOWN_PLAYER);
-            }
-            membersListSorted = playersList.sort(compareValues('reference', true));
-            membersListSorted.splice(membersListSorted.length, 0, membersListSorted.splice(0, 1)[0]);
-        } else {
-            membersListSorted = playersList.sort(compareValues('reference', true));
-        }
-        return membersListSorted;
-    };
-
-    const buttonTemplate = (member, type, isDisabled) => (
-        <li
-            key={`${playersListType}${type}Reference${member.id}`}
-            hidden={playersListType !== ADD_GOAL && member.id === 0}
-        >
-            <button
-                type="button"
-                onClick={() => {
-                    actionHandler({
-                        eventType,
-                        type: playersListType,
-                        team,
-                        id: member.id,
-                        memberType: type
-                    });
-                    closeHandler(popup);
-                }}
-                disabled={isDisabled}
-                title={isDisabled ? messages.maxActionsReached : ''}
-            >
-                {member.reference} {member.name}{' '}
-                {captainId !== 0 && captainId === member.id ? `(${messages.captainInitial})` : ''}
-            </button>
+function LineUp({ team, playersList, captainId, officialsList, closeHandler, openPopup }) {
+    const memberTemplate = (member, memberType) => (
+        <li key={`lineUp${team}${member.id}`}>
+            {member.reference} {member.name}{' '}
+            {captainId !== 0 && captainId === member.id && memberType === PERSONS_TYPES.players
+                ? `(${messages.captainInitial})`
+                : ''}{' '}
+            {member.goals > 0 ? `${messages.goals}: ${member.goals}, ` : ''}
+            {member.yellowCards > 0 ? `${messages.yellowCards}: ${member.yellowCards}, ` : ''}
+            {member.redCards > 0 ? `${messages.redCards}: ${member.redCards}, ` : ''}
+            {member.blueCards > 0 ? `${messages.blueCards}: ${member.blueCards}` : ''}
+            {member.suspensions > 0 ? `${messages.suspension}: ${member.suspensions}` : ''}
         </li>
     );
 
-    const playersListDisplay = () => {
-        const cleanMembersList = createPlayersList();
-        const buffer = cleanMembersList.map(member => {
-            const memberDisabled = isMemberDisabled(member);
-            return buttonTemplate(member, PERSONS_TYPES.players, memberDisabled);
-        });
-        if (cleanMembersList.length === 0) {
-            return <p>{messages.noPlayers}</p>;
+    const membersListDisplay = memberType => {
+        const membersList = memberType === PERSONS_TYPES.players ? playersList : officialsList;
+        const sortedMembersList = membersList.sort(compareValues('reference'));
+        let captainTemplate = '';
+        if (captainId !== 0) {
+            const captain =
+                memberType === PERSONS_TYPES.players && membersList.filter(player => player.id === captainId);
+            if (captain.length === 1) {
+                captainTemplate = memberTemplate(captain[0]);
+            }
         }
-        return <ul>{buffer}</ul>;
-    };
-
-    const officialsListDisplay = () => {
-        const buffer = officialsList.map(member => {
-            const memberDisabled = isMemberDisabled(member);
-            return buttonTemplate(member, PERSONS_TYPES.officials, memberDisabled);
+        const buffer = sortedMembersList.map(member => {
+            // If it's a player, it shouldn't be the "unknown player', nor the captain, all Ok if it's an official
+            if ((member.id !== 0 && member.id !== captainId) || memberType === PERSONS_TYPES.officials) {
+                return memberTemplate(member, memberType);
+            }
+            return '';
         });
-        if (officialsList.length === 0) {
-            return <p>{messages.noOfficials}</p>;
+        // If no members or just one and it's the "unknown player"
+        if (sortedMembersList.length === 0 || (sortedMembersList.length === 1 && sortedMembersList[0].id === 0)) {
+            return (
+                <p>
+                    {messages[memberType === PERSONS_TYPES.players ? 'noPlayers' : 'noOfficials']}{' '}
+                    <button type="button" onClick={() => openPopup(POPUPS.settings)}>
+                        {messages.settings}
+                    </button>
+                    .
+                </p>
+            );
         }
-        return <ul>{buffer}</ul>;
+        return (
+            <ul>
+                {captainTemplate}
+                {buffer}
+            </ul>
+        );
     };
 
     return (
-        <Modal title={`${messages.title}: ${playersListType}`} closeHandler={closeHandler} popup={popup}>
+        <Modal title={messages.title} closeHandler={closeHandler}>
             <h3>{messages.listOfPlayers}</h3>
-            {playersListDisplay()}
-            {playersListType !== ADD_GOAL ? <h3>{messages.listOfOfficials}</h3> : ''}
-            {playersListType !== ADD_GOAL ? officialsListDisplay() : ''}
-            {cancelButton(closeHandler, popup)}
+            {membersListDisplay(PERSONS_TYPES.players)}
+            <h3>{messages.listOfOfficials}</h3>
+            {membersListDisplay(PERSONS_TYPES.officials)}
+            {cancelButton(closeHandler)}
         </Modal>
     );
 }
 
-Players.propTypes = {
-    eventType: PropTypes.string,
-    playersListType: PropTypes.string,
+LineUp.propTypes = {
     team: PropTypes.string,
     playersList: PropTypes.array,
     captainId: PropTypes.number,
     officialsList: PropTypes.array,
-    actionHandler: PropTypes.func,
-    closeHandler: PropTypes.func
+    closeHandler: PropTypes.func,
+    openPopup: PropTypes.func
 };
 
-export default Players;
+export default LineUp;
