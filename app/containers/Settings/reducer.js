@@ -12,6 +12,10 @@ import {
     CHANGE_COMPETITION,
     CHANGE_ROUND,
     CHANGE_GENDER,
+    CHANGE_REFEREE_1,
+    CHANGE_REFEREE_2,
+    CHANGE_SCORE_KEEPER,
+    CHANGE_TIME_KEEPER,
     CHANGE_TEAM_NAME,
     CHANGE_COLOUR,
     CHANGE_TEAM_CAPTAIN,
@@ -31,6 +35,10 @@ import {
  *      competition: {string}
  *      round: {string},
  *      gender: {string}
+ *      referee1: {string}
+ *      referee2: {string}
+ *      scoreKeeper: {string}
+ *      timeKeeper: {string}
  *      teams: {
  *          A: {
  *              players: [],
@@ -56,6 +64,10 @@ export const initialState = {
     competition: '',
     round: '',
     gender: '',
+    referee1: '',
+    referee2: '',
+    scoreKeeper: '',
+    timeKeeper: '',
     teams: {
         A: {
             name: 'Team A',
@@ -90,12 +102,28 @@ const settingsReducer = (state = initialState, action) =>
             case CHANGE_GENDER:
                 updatedData = 'gender';
                 break;
+            case CHANGE_REFEREE_1:
+                updatedData = 'referee1';
+                break;
+            case CHANGE_REFEREE_2:
+                updatedData = 'referee2';
+                break;
+            case CHANGE_SCORE_KEEPER:
+                updatedData = 'scoreKeeper';
+                break;
+            case CHANGE_TIME_KEEPER:
+                updatedData = 'timeKeeper';
+                break;
             default:
         }
         switch (action.type) {
             case CHANGE_COMPETITION:
             case CHANGE_ROUND:
             case CHANGE_GENDER:
+            case CHANGE_REFEREE_1:
+            case CHANGE_REFEREE_2:
+            case CHANGE_SCORE_KEEPER:
+            case CHANGE_TIME_KEEPER:
                 // console.log(CHANGE_GENDER, action);
                 draft[updatedData] = action.data;
                 break;

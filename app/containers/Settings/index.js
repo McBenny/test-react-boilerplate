@@ -28,6 +28,10 @@ import {
     makeSelectCompetition,
     makeSelectGameId,
     makeSelectGender,
+    makeSelectReferee1,
+    makeSelectReferee2,
+    makeSelectScoreKeeper,
+    makeSelectTimeKeeper,
     makeSelectRound,
     makeSelectTeams
 } from './selectors';
@@ -38,6 +42,10 @@ import {
     CHANGE_COMPETITION,
     CHANGE_GENDER,
     CHANGE_ROUND,
+    CHANGE_REFEREE_1,
+    CHANGE_REFEREE_2,
+    CHANGE_SCORE_KEEPER,
+    CHANGE_TIME_KEEPER,
     EMPTY_MEMBER,
     GENDERS,
     MAX_NUMBER,
@@ -54,6 +62,10 @@ export function Settings({
     competition,
     round,
     gender,
+    referee1,
+    referee2,
+    scoreKeeper,
+    timeKeeper,
     teams,
     onChangeSetting,
     onChangeTeamName,
@@ -102,6 +114,10 @@ export function Settings({
             competition,
             round,
             gender,
+            referee1,
+            referee2,
+            scoreKeeper,
+            timeKeeper,
             teams
         });
         closeHandler();
@@ -251,6 +267,42 @@ export function Settings({
                         {gendersList()}
                     </select>
                 </p>
+                <p>
+                    <label htmlFor="referee1">{messages.referee1}:</label>{' '}
+                    <input
+                        type="text"
+                        id="referee1"
+                        onChange={e => handleChangeSetting(e, CHANGE_REFEREE_1)}
+                        value={referee1}
+                    />
+                </p>
+                <p>
+                    <label htmlFor="referee2">{messages.referee2}:</label>{' '}
+                    <input
+                        type="text"
+                        id="referee2"
+                        onChange={e => handleChangeSetting(e, CHANGE_REFEREE_2)}
+                        value={referee2}
+                    />
+                </p>
+                <p>
+                    <label htmlFor="scoreKeeper">{messages.scoreKeeper}:</label>{' '}
+                    <input
+                        type="text"
+                        id="scoreKeeper"
+                        onChange={e => handleChangeSetting(e, CHANGE_SCORE_KEEPER)}
+                        value={scoreKeeper}
+                    />
+                </p>
+                <p>
+                    <label htmlFor="timeKeeper">{messages.timeKeeper}:</label>{' '}
+                    <input
+                        type="text"
+                        id="timeKeeper"
+                        onChange={e => handleChangeSetting(e, CHANGE_TIME_KEEPER)}
+                        value={timeKeeper}
+                    />
+                </p>
                 <h3>{messages.teamA}</h3>
                 <p>
                     <label htmlFor="teamAName">{messages.teamA}*:</label>{' '}
@@ -356,6 +408,10 @@ Settings.propTypes = {
     competition: PropTypes.string,
     round: PropTypes.string,
     gender: PropTypes.string,
+    referee1: PropTypes.string,
+    referee2: PropTypes.string,
+    scoreKeeper: PropTypes.string,
+    timeKeeper: PropTypes.string,
     teams: PropTypes.object,
     onChangeSetting: PropTypes.func,
     onChangeTeamName: PropTypes.func,
@@ -374,6 +430,10 @@ const mapStateToProps = createStructuredSelector({
     competition: makeSelectCompetition(),
     round: makeSelectRound(),
     gender: makeSelectGender(),
+    referee1: makeSelectReferee1(),
+    referee2: makeSelectReferee2(),
+    scoreKeeper: makeSelectScoreKeeper(),
+    timeKeeper: makeSelectTimeKeeper(),
     teams: makeSelectTeams()
 });
 
