@@ -12,6 +12,10 @@
 export const CHANGE_COMPETITION = 'boilerplate/Settings/CHANGE_COMPETITION';
 export const CHANGE_ROUND = 'boilerplate/Settings/CHANGE_ROUND';
 export const CHANGE_GENDER = 'boilerplate/Settings/CHANGE_GENDER';
+export const CHANGE_REFEREE_1 = 'boilerplate/Settings/CHANGE_REFEREE_1';
+export const CHANGE_REFEREE_2 = 'boilerplate/Settings/CHANGE_REFEREE_2';
+export const CHANGE_SCORE_KEEPER = 'boilerplate/Settings/CHANGE_SCORE_KEEPER';
+export const CHANGE_TIME_KEEPER = 'boilerplate/Settings/CHANGE_TIME_KEEPER';
 export const CHANGE_TEAM_NAME = 'boilerplate/Settings/CHANGE_TEAM_NAME';
 export const CHANGE_COLOUR = 'boilerplate/Settings/CHANGE_COLOUR';
 export const CHANGE_TEAM_CAPTAIN = 'boilerplate/Settings/CHANGE_TEAM_CAPTAIN';

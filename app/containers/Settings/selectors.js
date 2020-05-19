@@ -31,10 +31,45 @@ const makeSelectGender = () =>
         settingsState => settingsState.gender
     );
 
+const makeSelectReferee1 = () =>
+    createSelector(
+        selectSettings,
+        settingsState => settingsState.referee1
+    );
+
+const makeSelectReferee2 = () =>
+    createSelector(
+        selectSettings,
+        settingsState => settingsState.referee2
+    );
+
+const makeSelectScoreKeeper = () =>
+    createSelector(
+        selectSettings,
+        settingsState => settingsState.scoreKeeper
+    );
+
+const makeSelectTimeKeeper = () =>
+    createSelector(
+        selectSettings,
+        settingsState => settingsState.timeKeeper
+    );
+
 const makeSelectTeams = () =>
     createSelector(
         selectSettings,
         settingsState => settingsState.teams
     );
 
-export { selectSettings, makeSelectGameId, makeSelectCompetition, makeSelectRound, makeSelectGender, makeSelectTeams };
+export {
+    selectSettings,
+    makeSelectGameId,
+    makeSelectCompetition,
+    makeSelectRound,
+    makeSelectGender,
+    makeSelectReferee1,
+    makeSelectReferee2,
+    makeSelectScoreKeeper,
+    makeSelectTimeKeeper,
+    makeSelectTeams
+};
