@@ -152,7 +152,7 @@ These features should also apply to the fouls, any foul registered should be edi
 - [X] display team line-up with captain first
 - [X] add link to settings form "no players situations"
 - [X] add a colour to each team
-- [ ] add game officials (referees, scorekeeper (table), timekeeper (scoreboard/buzzer))
+- [X] add game officials (referees, scorekeeper (table), timekeeper (scoreboard/buzzer))
 - [ ] in players pop-in, list players and officials in different tabs
 - [ ] inset light effect on players' jerseys: https://codepen.io/mcbenny/pen/ExVOmJm
 - [ ] allow for removal of a player
