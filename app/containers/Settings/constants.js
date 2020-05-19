@@ -13,6 +13,7 @@ export const CHANGE_COMPETITION = 'boilerplate/Settings/CHANGE_COMPETITION';
 export const CHANGE_ROUND = 'boilerplate/Settings/CHANGE_ROUND';
 export const CHANGE_GENDER = 'boilerplate/Settings/CHANGE_GENDER';
 export const CHANGE_TEAM_NAME = 'boilerplate/Settings/CHANGE_TEAM_NAME';
+export const CHANGE_COLOUR = 'boilerplate/Settings/CHANGE_COLOUR';
 export const CHANGE_TEAM_CAPTAIN = 'boilerplate/Settings/CHANGE_TEAM_CAPTAIN';
 export const ADD_EMPTY_MEMBER = 'boilerplate/Settings/ADD_EMPTY_MEMBER';
 export const CHANGE_MEMBER = 'boilerplate/Settings/CHANGE_MEMBER';
@@ -60,4 +61,9 @@ export const UUID_PREFIX = 'uuid-';
 export const PERSONS_TYPES = {
     players: 'players',
     officials: 'officials'
+};
+
+export const TEAM_PARTS = {
+    jersey: 'jersey',
+    reference: 'reference'
 };

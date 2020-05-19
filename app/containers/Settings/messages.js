@@ -7,6 +7,8 @@ export const messages = {
     gender: 'Gender',
     selectGender: 'Select a gender...',
     teamA: 'Home team',
+    jerseyColour: 'Jersey colour',
+    numberColour: 'Number colour',
     teamB: 'Visitor team',
     listOfPlayers: 'List of players',
     addPlayer: 'Add a player',

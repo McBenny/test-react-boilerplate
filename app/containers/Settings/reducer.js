@@ -13,6 +13,7 @@ import {
     CHANGE_ROUND,
     CHANGE_GENDER,
     CHANGE_TEAM_NAME,
+    CHANGE_COLOUR,
     CHANGE_TEAM_CAPTAIN,
     INIT_SETTINGS,
     EMPTY_MEMBER,
@@ -35,12 +36,16 @@ import {
  *              players: [],
  *              captain: 0,
  *              name: {string},
+ *              jersey: {string},
+ *              reference: {string},
  *              officials: []
  *          },
  *          B: {
  *              players: [],
  *              captain: 0,
  *              name: {string},
+ *              jersey: {string},
+ *              reference: {string},
  *              officials: []
  *          }
  *      },
@@ -54,12 +59,16 @@ export const initialState = {
     teams: {
         A: {
             name: 'Team A',
+            jersey: '#ffffff',
+            reference: '#000000',
             captain: 0,
             players: [],
             officials: []
         },
         B: {
             name: 'Team B',
+            jersey: '#000000',
+            reference: '#ffffff',
             captain: 0,
             players: [],
             officials: []
@@ -93,6 +102,10 @@ const settingsReducer = (state = initialState, action) =>
             case CHANGE_TEAM_NAME:
                 // console.log(CHANGE_TEAM_NAME, action);
                 draft.teams[action.team].name = action.teamName;
+                break;
+            case CHANGE_COLOUR:
+                // console.log(CHANGE_COLOUR, action);
+                draft.teams[action.team][action.part] = action.colour;
                 break;
             case CHANGE_TEAM_CAPTAIN:
                 // console.log(CHANGE_TEAM_CAPTAIN, action);

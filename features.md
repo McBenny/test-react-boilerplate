@@ -151,9 +151,13 @@ These features should also apply to the fouls, any foul registered should be edi
 - [X] add the captain
 - [X] display team line-up with captain first
 - [X] add link to settings form "no players situations"
-- [ ] add a colour to each team
+- [X] add a colour to each team
 - [ ] add game officials (referees, scorekeeper (table), timekeeper (scoreboard/buzzer))
 - [ ] in players pop-in, list players and officials in different tabs
+- [ ] inset light effect on players' jerseys: https://codepen.io/mcbenny/pen/ExVOmJm
 - [ ] allow for removal of a player
 - [ ] Removing a player gives everything he holds to "unknown players"
 - [X] Changing the number, _first or last name_ of a player updates every occurrence of that player,
+
+##REFACTORING
+- [ ] move open and close popup functions inside the popup component

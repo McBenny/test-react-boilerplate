@@ -17,6 +17,8 @@ function Players({
     eventType,
     playersListType,
     team,
+    jerseyColour,
+    referenceColour,
     playersList,
     captainId,
     officialsList,
@@ -88,6 +90,7 @@ function Players({
                 }}
                 disabled={isDisabled}
                 title={isDisabled ? messages.maxActionsReached : ''}
+                style={type === PERSONS_TYPES.players ? { backgroundColor: jerseyColour, color: referenceColour } : {}}
             >
                 {member.reference} {member.name}{' '}
                 {captainId !== 0 && captainId === member.id ? `(${messages.captainInitial})` : ''}
@@ -138,6 +141,8 @@ Players.propTypes = {
     eventType: PropTypes.string,
     playersListType: PropTypes.string,
     team: PropTypes.string,
+    jerseyColour: PropTypes.string,
+    referenceColour: PropTypes.string,
     playersList: PropTypes.array,
     captainId: PropTypes.number,
     officialsList: PropTypes.array,
