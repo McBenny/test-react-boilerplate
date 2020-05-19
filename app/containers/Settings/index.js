@@ -19,6 +19,7 @@ import {
     addEmptyMember,
     changeSetting,
     changeTeamName,
+    changeColour,
     changeMember,
     changeTeamCaptain,
     initSettings
@@ -41,7 +42,8 @@ import {
     GENDERS,
     MAX_NUMBER,
     OFFICIALS_REFERENCES,
-    PERSONS_TYPES
+    PERSONS_TYPES,
+    TEAM_PARTS
 } from './constants';
 import Modal, { cancelButton } from '../../components/modal';
 
@@ -55,6 +57,7 @@ export function Settings({
     teams,
     onChangeSetting,
     onChangeTeamName,
+    onChangeColour,
     onAddEmptyMember,
     onChangeMember,
     onChangeTeamCaptain,
@@ -70,6 +73,10 @@ export function Settings({
 
     const handleChangeTeamName = (e, team) => {
         onChangeTeamName({ team, teamName: e.target.value });
+    };
+
+    const handleChangeColour = (e, team, part) => {
+        onChangeColour({ team, part, colour: e.target.value });
     };
 
     const handleChangeTeamCaptain = (e, team) => {
@@ -255,6 +262,35 @@ export function Settings({
                         required
                     />
                 </p>
+                <p>
+                    <label htmlFor="teamAJerseyColour">{messages.jerseyColour}:</label>{' '}
+                    <input
+                        type="color"
+                        id="teamAJerseyColour"
+                        onChange={e => handleChangeColour(e, 'A', TEAM_PARTS.jersey)}
+                        value={teams.A.jersey}
+                        list="presetColors"
+                    />
+                    <datalist id="presetColors">
+                        <option>#198c3b</option>
+                        <option>#fcc625</option>
+                        <option>#000000</option>
+                        <option>#3C8195</option>
+                        <option>#ffffff</option>
+                        <option>#023062</option>
+                        <option>#CE8E07</option>
+                    </datalist>
+                </p>
+                <p>
+                    <label htmlFor="teamANumberColour">{messages.numberColour}:</label>{' '}
+                    <input
+                        type="color"
+                        id="teamANumberColour"
+                        onChange={e => handleChangeColour(e, 'A', TEAM_PARTS.reference)}
+                        value={teams.A.reference}
+                        list="presetColors"
+                    />
+                </p>
                 <h4>{messages.listOfPlayers}</h4>
                 {displayMembersList('A', PERSONS_TYPES.players)}
                 <p>
@@ -275,6 +311,26 @@ export function Settings({
                         onChange={e => handleChangeTeamName(e, 'B')}
                         value={teams.B.name}
                         required
+                    />
+                </p>
+                <p>
+                    <label htmlFor="teamBJerseyColour">{messages.jerseyColour}:</label>{' '}
+                    <input
+                        type="color"
+                        id="teamBJerseyColour"
+                        onChange={e => handleChangeColour(e, 'B', TEAM_PARTS.jersey)}
+                        value={teams.B.jersey}
+                        list="presetColors"
+                    />
+                </p>
+                <p>
+                    <label htmlFor="teamBNumberColour">{messages.numberColour}:</label>{' '}
+                    <input
+                        type="color"
+                        id="teamBNumberColour"
+                        onChange={e => handleChangeColour(e, 'B', TEAM_PARTS.reference)}
+                        value={teams.B.reference}
+                        list="presetColors"
                     />
                 </p>
                 <h4>{messages.listOfPlayers}</h4>
@@ -303,6 +359,7 @@ Settings.propTypes = {
     teams: PropTypes.object,
     onChangeSetting: PropTypes.func,
     onChangeTeamName: PropTypes.func,
+    onChangeColour: PropTypes.func,
     onAddEmptyMember: PropTypes.func,
     onChangeMember: PropTypes.func,
     onChangeTeamCaptain: PropTypes.func,
@@ -324,6 +381,7 @@ export function mapDispatchToProps(dispatch) {
     return {
         onChangeSetting: data => dispatch(changeSetting(data)),
         onChangeTeamName: data => dispatch(changeTeamName(data)),
+        onChangeColour: data => dispatch(changeColour(data)),
         onAddEmptyMember: data => dispatch(addEmptyMember(data)),
         onChangeMember: data => dispatch(changeMember(data)),
         onChangeTeamCaptain: data => dispatch(changeTeamCaptain(data)),

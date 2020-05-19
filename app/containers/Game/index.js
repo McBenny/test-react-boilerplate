@@ -118,6 +118,8 @@ export function Game({
             eventType,
             playersListType: type,
             playersTeam: team,
+            jerseyColour: settings.teams[team].jersey,
+            referenceColour: settings.teams[team].reference,
             playersList: settings.teams[team].players,
             captainId: settings.teams[team].captain,
             officialsList: settings.teams[team].officials
@@ -485,6 +487,8 @@ export function Game({
                     eventType={playersData.eventType}
                     playersListType={playersData.playersListType}
                     team={playersData.playersTeam}
+                    jerseyColour={playersData.jerseyColour}
+                    referenceColour={playersData.referenceColour}
                     playersList={playersData.playersList}
                     captainId={playersData.captainId}
                     officialsList={playersData.officialsList}
