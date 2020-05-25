@@ -10,7 +10,7 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 
-import SplashScreen from '../SplashScreen/Loadable';
+import HomePage from '../HomePage/Loadable';
 import Game from '../Game/Loadable';
 import NotFoundPage from '../NotFoundPage/Loadable';
 
@@ -21,7 +21,7 @@ export default function App() {
     return (
         <div>
             <Switch>
-                <Route exact path={URLS.index} component={SplashScreen} />
+                <Route exact path={URLS.index} component={HomePage} />
                 <Route exact path={URLS.game} component={Game} />
                 <Route component={NotFoundPage} />
             </Switch>

@@ -1,0 +1,63 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<LineUp /> should render and match the snapshot 1`] = `
+<aside
+  class="modal__overlay"
+>
+  <div>
+    <div
+      class="modal "
+    >
+      <div
+        class="modal__header"
+      >
+        <h2
+          class="modal__title"
+        >
+          Line-up
+        </h2>
+        <button
+          type="button"
+        >
+          Close
+        </button>
+      </div>
+      <div
+        class="modal__variable-height"
+      >
+        <h3>
+          List of players
+        </h3>
+        <p>
+          No players, please insert players in
+           
+          <button
+            type="button"
+          >
+            Settings
+          </button>
+          .
+        </p>
+        <h3>
+          List of officials
+        </h3>
+        <p>
+          No officials, please insert officials in
+           
+          <button
+            type="button"
+          >
+            Settings
+          </button>
+          .
+        </p>
+        <button
+          type="button"
+        >
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+</aside>
+`;
