@@ -38,13 +38,6 @@ describe('cancelButton func', () => {
         expect(onClickMock).toHaveBeenCalledTimes(1);
     });
 
-    // it('CLose function is called when keyPress', () => {
-    //     const onClickMock = jest.fn();
-    //     const { container } = render(<Modal {...componentProperties} closeHandler={onClickMock} />);
-    //     fireEvent.keyPress(container, { key: ESCAPE_KEY_NAME, code: ESCAPE_KEY_CODE });
-    //     expect(onClickMock).toHaveBeenCalledTimes(1);
-    // });
-
     it('function is called when cancel button is clicked', () => {
         const onClickMock = jest.fn();
         const { getByRole } = render(cancelButton(onClickMock));
