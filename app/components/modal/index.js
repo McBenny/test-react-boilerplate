@@ -13,14 +13,9 @@ import { messages as modalMessages, messages } from './messages';
 // Helpers
 import { ESCAPE_KEY_CODE, ESCAPE_KEY_NAME } from '../../utils/constants';
 
-export function cancelButton(
-    closeHandlerThatIsAVeryLongNameAndYouHaveToPutItOnSeveralLinesANdSeeIfMyTestIsFailingOrNot
-) {
+export function cancelButton(closeHandler) {
     return (
-        <button
-            type="button"
-            onClick={() => closeHandlerThatIsAVeryLongNameAndYouHaveToPutItOnSeveralLinesANdSeeIfMyTestIsFailingOrNot()}
-        >
+        <button type="button" onClick={() => closeHandler()}>
             {modalMessages.cancel}
         </button>
     );

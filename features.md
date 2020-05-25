@@ -134,6 +134,7 @@ It should be possible to also add a goal anywhere in the list.
 These features should also apply to the fouls, any foul registered should be editable and removable, it should also be possible to add a foul.
 
 ##BUGS
+- [ ] visitor team, without colours doesn't show up in B/W when home with colours does.
 
 ##TODO
 - [X] allow for timeouts per team
