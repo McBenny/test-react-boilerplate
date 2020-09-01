@@ -3,6 +3,7 @@ coverage
 build
 node_modules
 stats.json
+api-test/config/credentials.php
 
 # Cruft
 .DS_Store
