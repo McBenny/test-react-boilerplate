@@ -1,19 +1,10 @@
 <?php
-include_once './credentials.php';
-
 class Database {
-    private $host;
-    private $db_name;
-    private $username;
-    private $password;
+    private $host = "db.host.uri";
+    private $db_name = "db_name";
+    private $username = "user_name";
+    private $password = "password";
     public $conn;
-
-    public function __construct() {
-        $this->host = $h1;
-        $this->db_name = $h2;
-        $this->user_name = $h3;
-        $this->password = $h4;
-    }
 
     public function getConnection() {
         $this->conn = null;

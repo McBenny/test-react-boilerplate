@@ -9,7 +9,7 @@ include_once '../config/database.php';
 include_once '../objects/product.php';
 
 // Instantiate database and product object
-$database = new Database();
+$database = new Database($h1, $h2, $h3, $h4);
 $db = $database->getConnection();
 
 // Initialise object
