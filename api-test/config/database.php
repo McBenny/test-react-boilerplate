@@ -2,10 +2,6 @@
 include_once './credentials.php';
 
 class Database {
-//    private $host = "db5000510146.hosting-data.io";
-//    private $db_name = "dbs489610";
-//    private $username = "dbu631090";
-//    private $password = "F2(mW<!?(X";
     private $host;
     private $db_name;
     private $username;
