@@ -9,6 +9,7 @@
 
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
+import CssBaseline from '@material-ui/core/CssBaseline';
 
 import HomePage from '../HomePage/Loadable';
 import Game from '../Game/Loadable';
@@ -20,6 +21,7 @@ import { URLS } from './constants';
 export default function App() {
     return (
         <div>
+            <CssBaseline />
             <Switch>
                 <Route exact path={URLS.index} component={HomePage} />
                 <Route exact path={URLS.game} component={Game} />

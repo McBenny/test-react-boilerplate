@@ -12,6 +12,13 @@ import { compose } from 'redux';
 
 import { createStructuredSelector } from 'reselect';
 
+import Dialog from '@material-ui/core/Dialog';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+// import DialogContentText from '@material-ui/core/DialogContentText';
+import Button from '@material-ui/core/Button';
+
 import { useInjectReducer } from '../../utils/injectReducer';
 import { compareValues, generateId } from '../../utils/utilities';
 
@@ -53,11 +60,12 @@ import {
     PERSONS_TYPES,
     TEAM_PARTS
 } from './constants';
-import Modal, { cancelButton } from '../../components/modal';
+// import Modal, { cancelButton } from '../../components/modal';
 
 const key = 'settings';
 
 export function Settings({
+    popupVisibility,
     gameId,
     competition,
     round,
@@ -243,167 +251,187 @@ export function Settings({
     }, ['']);
 
     return (
-        <Modal title={messages.header} closeHandler={closeHandler}>
-            <form action="" onSubmit={saveInitialisation}>
-                <h3>{messages.competition}</h3>
-                <p>
-                    <label htmlFor="competition">{messages.competitionName}*:</label>{' '}
-                    <input
-                        type="text"
-                        id="competition"
-                        onChange={e => handleChangeSetting(e, CHANGE_COMPETITION)}
-                        value={competition}
-                        required
-                    />
-                </p>
-                <p>
-                    <label htmlFor="round">{messages.round}:</label>{' '}
-                    <input type="text" id="round" onChange={e => handleChangeSetting(e, CHANGE_ROUND)} value={round} />
-                </p>
-                <p>
-                    <label htmlFor="gender">{messages.gender}*:</label>{' '}
-                    <select id="gender" onChange={e => handleChangeSetting(e, CHANGE_GENDER)} value={gender} required>
-                        <option value="">{messages.selectGender}</option>
-                        {gendersList()}
-                    </select>
-                </p>
-                <p>
-                    <label htmlFor="referee1">{messages.referee1}:</label>{' '}
-                    <input
-                        type="text"
-                        id="referee1"
-                        onChange={e => handleChangeSetting(e, CHANGE_REFEREE_1)}
-                        value={referee1}
-                    />
-                </p>
-                <p>
-                    <label htmlFor="referee2">{messages.referee2}:</label>{' '}
-                    <input
-                        type="text"
-                        id="referee2"
-                        onChange={e => handleChangeSetting(e, CHANGE_REFEREE_2)}
-                        value={referee2}
-                    />
-                </p>
-                <p>
-                    <label htmlFor="scoreKeeper">{messages.scoreKeeper}:</label>{' '}
-                    <input
-                        type="text"
-                        id="scoreKeeper"
-                        onChange={e => handleChangeSetting(e, CHANGE_SCORE_KEEPER)}
-                        value={scoreKeeper}
-                    />
-                </p>
-                <p>
-                    <label htmlFor="timeKeeper">{messages.timeKeeper}:</label>{' '}
-                    <input
-                        type="text"
-                        id="timeKeeper"
-                        onChange={e => handleChangeSetting(e, CHANGE_TIME_KEEPER)}
-                        value={timeKeeper}
-                    />
-                </p>
-                <h3>{messages.teamA}</h3>
-                <p>
-                    <label htmlFor="teamAName">{messages.teamA}*:</label>{' '}
-                    <input
-                        type="text"
-                        id="teamAName"
-                        onChange={e => handleChangeTeamName(e, 'A')}
-                        value={teams.A.name}
-                        required
-                    />
-                </p>
-                <p>
-                    <label htmlFor="teamAJerseyColour">{messages.jerseyColour}:</label>{' '}
-                    <input
-                        type="color"
-                        id="teamAJerseyColour"
-                        onChange={e => handleChangeColour(e, 'A', TEAM_PARTS.jersey)}
-                        value={teams.A.jersey}
-                        list="presetColors"
-                    />
-                    <datalist id="presetColors">
-                        <option>#198c3b</option>
-                        <option>#fcc625</option>
-                        <option>#000000</option>
-                        <option>#3C8195</option>
-                        <option>#ffffff</option>
-                        <option>#023062</option>
-                        <option>#CE8E07</option>
-                    </datalist>
-                </p>
-                <p>
-                    <label htmlFor="teamANumberColour">{messages.numberColour}:</label>{' '}
-                    <input
-                        type="color"
-                        id="teamANumberColour"
-                        onChange={e => handleChangeColour(e, 'A', TEAM_PARTS.reference)}
-                        value={teams.A.reference}
-                        list="presetColors"
-                    />
-                </p>
-                <h4>{messages.listOfPlayers}</h4>
-                {displayMembersList('A', PERSONS_TYPES.players)}
-                <p>
-                    <label htmlFor="gender">{messages.captain}:</label>{' '}
-                    <select id="captainA" onChange={e => handleChangeTeamCaptain(e, 'A')} value={teams.A.captain}>
-                        <option value="0">{messages.selectCaptain}</option>
-                        {captainList('A')}
-                    </select>
-                </p>
-                <h4>{messages.listOfOfficials}</h4>
-                {displayMembersList('A', PERSONS_TYPES.officials)}
-                <h3>{messages.teamB}</h3>
-                <p>
-                    <label htmlFor="teamBName">{messages.teamB}*:</label>{' '}
-                    <input
-                        type="text"
-                        id="teamBName"
-                        onChange={e => handleChangeTeamName(e, 'B')}
-                        value={teams.B.name}
-                        required
-                    />
-                </p>
-                <p>
-                    <label htmlFor="teamBJerseyColour">{messages.jerseyColour}:</label>{' '}
-                    <input
-                        type="color"
-                        id="teamBJerseyColour"
-                        onChange={e => handleChangeColour(e, 'B', TEAM_PARTS.jersey)}
-                        value={teams.B.jersey}
-                        list="presetColors"
-                    />
-                </p>
-                <p>
-                    <label htmlFor="teamBNumberColour">{messages.numberColour}:</label>{' '}
-                    <input
-                        type="color"
-                        id="teamBNumberColour"
-                        onChange={e => handleChangeColour(e, 'B', TEAM_PARTS.reference)}
-                        value={teams.B.reference}
-                        list="presetColors"
-                    />
-                </p>
-                <h4>{messages.listOfPlayers}</h4>
-                {displayMembersList('B', PERSONS_TYPES.players)}
-                <p>
-                    <label htmlFor="gender">{messages.captain}:</label>{' '}
-                    <select id="captainB" onChange={e => handleChangeTeamCaptain(e, 'B')} value={teams.B.captain}>
-                        <option value="0">{messages.selectCaptain}</option>
-                        {captainList('B')}
-                    </select>
-                </p>
-                <h4>{messages.listOfOfficials}</h4>
-                {displayMembersList('B', PERSONS_TYPES.officials)}
-                <button type="submit">{messages.save}</button>
-                {cancelButton(closeHandler)}
-            </form>
-        </Modal>
+        <Dialog open={popupVisibility} onClose={closeHandler} aria-labelledby="alert-dialog-title">
+            <DialogTitle id="simple-dialog-title">{messages.header}</DialogTitle>
+            <DialogContent>
+                <form>
+                    <h3>{messages.competition}</h3>
+                    <p>
+                        <label htmlFor="competition">{messages.competitionName}*:</label>{' '}
+                        <input
+                            type="text"
+                            id="competition"
+                            onChange={e => handleChangeSetting(e, CHANGE_COMPETITION)}
+                            value={competition}
+                            required
+                        />
+                    </p>
+                    <p>
+                        <label htmlFor="round">{messages.round}:</label>{' '}
+                        <input
+                            type="text"
+                            id="round"
+                            onChange={e => handleChangeSetting(e, CHANGE_ROUND)}
+                            value={round}
+                        />
+                    </p>
+                    <p>
+                        <label htmlFor="gender">{messages.gender}*:</label>{' '}
+                        <select
+                            id="gender"
+                            onChange={e => handleChangeSetting(e, CHANGE_GENDER)}
+                            value={gender}
+                            required
+                        >
+                            <option value="">{messages.selectGender}</option>
+                            {gendersList()}
+                        </select>
+                    </p>
+                    <p>
+                        <label htmlFor="referee1">{messages.referee1}:</label>{' '}
+                        <input
+                            type="text"
+                            id="referee1"
+                            onChange={e => handleChangeSetting(e, CHANGE_REFEREE_1)}
+                            value={referee1}
+                        />
+                    </p>
+                    <p>
+                        <label htmlFor="referee2">{messages.referee2}:</label>{' '}
+                        <input
+                            type="text"
+                            id="referee2"
+                            onChange={e => handleChangeSetting(e, CHANGE_REFEREE_2)}
+                            value={referee2}
+                        />
+                    </p>
+                    <p>
+                        <label htmlFor="scoreKeeper">{messages.scoreKeeper}:</label>{' '}
+                        <input
+                            type="text"
+                            id="scoreKeeper"
+                            onChange={e => handleChangeSetting(e, CHANGE_SCORE_KEEPER)}
+                            value={scoreKeeper}
+                        />
+                    </p>
+                    <p>
+                        <label htmlFor="timeKeeper">{messages.timeKeeper}:</label>{' '}
+                        <input
+                            type="text"
+                            id="timeKeeper"
+                            onChange={e => handleChangeSetting(e, CHANGE_TIME_KEEPER)}
+                            value={timeKeeper}
+                        />
+                    </p>
+                    <h3>{messages.teamA}</h3>
+                    <p>
+                        <label htmlFor="teamAName">{messages.teamA}*:</label>{' '}
+                        <input
+                            type="text"
+                            id="teamAName"
+                            onChange={e => handleChangeTeamName(e, 'A')}
+                            value={teams.A.name}
+                            required
+                        />
+                    </p>
+                    <p>
+                        <label htmlFor="teamAJerseyColour">{messages.jerseyColour}:</label>{' '}
+                        <input
+                            type="color"
+                            id="teamAJerseyColour"
+                            onChange={e => handleChangeColour(e, 'A', TEAM_PARTS.jersey)}
+                            value={teams.A.jersey}
+                            list="presetColors"
+                        />
+                        <datalist id="presetColors">
+                            <option>#198c3b</option>
+                            <option>#fcc625</option>
+                            <option>#000000</option>
+                            <option>#3C8195</option>
+                            <option>#ffffff</option>
+                            <option>#023062</option>
+                            <option>#CE8E07</option>
+                        </datalist>
+                    </p>
+                    <p>
+                        <label htmlFor="teamANumberColour">{messages.numberColour}:</label>{' '}
+                        <input
+                            type="color"
+                            id="teamANumberColour"
+                            onChange={e => handleChangeColour(e, 'A', TEAM_PARTS.reference)}
+                            value={teams.A.reference}
+                            list="presetColors"
+                        />
+                    </p>
+                    <h4>{messages.listOfPlayers}</h4>
+                    {displayMembersList('A', PERSONS_TYPES.players)}
+                    <p>
+                        <label htmlFor="gender">{messages.captain}:</label>{' '}
+                        <select id="captainA" onChange={e => handleChangeTeamCaptain(e, 'A')} value={teams.A.captain}>
+                            <option value="0">{messages.selectCaptain}</option>
+                            {captainList('A')}
+                        </select>
+                    </p>
+                    <h4>{messages.listOfOfficials}</h4>
+                    {displayMembersList('A', PERSONS_TYPES.officials)}
+                    <h3>{messages.teamB}</h3>
+                    <p>
+                        <label htmlFor="teamBName">{messages.teamB}*:</label>{' '}
+                        <input
+                            type="text"
+                            id="teamBName"
+                            onChange={e => handleChangeTeamName(e, 'B')}
+                            value={teams.B.name}
+                            required
+                        />
+                    </p>
+                    <p>
+                        <label htmlFor="teamBJerseyColour">{messages.jerseyColour}:</label>{' '}
+                        <input
+                            type="color"
+                            id="teamBJerseyColour"
+                            onChange={e => handleChangeColour(e, 'B', TEAM_PARTS.jersey)}
+                            value={teams.B.jersey}
+                            list="presetColors"
+                        />
+                    </p>
+                    <p>
+                        <label htmlFor="teamBNumberColour">{messages.numberColour}:</label>{' '}
+                        <input
+                            type="color"
+                            id="teamBNumberColour"
+                            onChange={e => handleChangeColour(e, 'B', TEAM_PARTS.reference)}
+                            value={teams.B.reference}
+                            list="presetColors"
+                        />
+                    </p>
+                    <h4>{messages.listOfPlayers}</h4>
+                    {displayMembersList('B', PERSONS_TYPES.players)}
+                    <p>
+                        <label htmlFor="gender">{messages.captain}:</label>{' '}
+                        <select id="captainB" onChange={e => handleChangeTeamCaptain(e, 'B')} value={teams.B.captain}>
+                            <option value="0">{messages.selectCaptain}</option>
+                            {captainList('B')}
+                        </select>
+                    </p>
+                    <h4>{messages.listOfOfficials}</h4>
+                    {displayMembersList('B', PERSONS_TYPES.officials)}
+                </form>
+            </DialogContent>
+            <DialogActions>
+                <Button variant="contained" onClick={closeHandler}>
+                    {messages.cancel}
+                </Button>
+                <Button variant="contained" color="primary" onClick={saveInitialisation}>
+                    {messages.save}
+                </Button>
+            </DialogActions>
+        </Dialog>
     );
 }
 
 Settings.propTypes = {
+    popupVisibility: PropTypes.bool,
     gameId: PropTypes.string,
     competition: PropTypes.string,
     round: PropTypes.string,

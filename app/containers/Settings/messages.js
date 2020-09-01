@@ -1,6 +1,7 @@
 export const messages = {
     header: 'Settings',
     save: 'Save settings',
+    cancel: 'Cancel',
     competition: 'Competition',
     competitionName: 'Competition name',
     round: 'Round',
