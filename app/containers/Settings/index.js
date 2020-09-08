@@ -5,7 +5,7 @@
  *
  */
 
-import React, { memo, useEffect } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
@@ -16,8 +16,17 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-// import DialogContentText from '@material-ui/core/DialogContentText';
+import TextField from '@material-ui/core/TextField';
+import InputLabel from '@material-ui/core/InputLabel';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
+import Sketch from 'react-color/lib/Sketch';
 import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+
+import PersonAddOutlinedIcon from '@material-ui/icons/PersonAddOutlined';
 
 import { useInjectReducer } from '../../utils/injectReducer';
 import { compareValues, generateId } from '../../utils/utilities';
@@ -95,9 +104,14 @@ export function Settings({
         onChangeTeamName({ team, teamName: e.target.value });
     };
 
-    const handleChangeColour = (e, team, part) => {
-        onChangeColour({ team, part, colour: e.target.value });
+    const [teamAJerseyStatus, setTeamAJerseyStatus] = useState(false);
+    const [teamANumberStatus, setTeamANumberStatus] = useState(false);
+    const [teamBJerseyStatus, setTeamBJerseyStatus] = useState(false);
+    const [teamBNumberStatus, setTeamBNumberStatus] = useState(false);
+    const handleChangeColour = (colourCode, team, part) => {
+        onChangeColour({ team, part, colour: colourCode });
     };
+    const presetColours = ['#198c3b', '#fcc625', '#000000', '#3C8195', '#ffffff', '#023062', '#CE8E07'];
 
     const handleChangeTeamCaptain = (e, team) => {
         onChangeTeamCaptain({ team, captain: parseInt(e.target.value, 10) });
@@ -134,15 +148,15 @@ export function Settings({
     const gendersList = () => {
         const gendersKeys = Object.keys(GENDERS);
         return gendersKeys.map(genderKey => (
-            <option key={`genders${genderKey}`} value={genderKey}>
+            <MenuItem key={`genders${genderKey}`} value={genderKey}>
                 {GENDERS[genderKey]}
-            </option>
+            </MenuItem>
         ));
     };
 
     const addMemberButton = (team, type, id) => (
-        <button
-            type="button"
+        <IconButton
+            aria-label={messages.addPlayer}
             onClick={() =>
                 onAddEmptyMember({
                     ...EMPTY_MEMBER[type],
@@ -154,29 +168,32 @@ export function Settings({
             }
             title={messages[type === PERSONS_TYPES.players ? 'addPlayer' : 'addOfficial']}
         >
-            +
-        </button>
+            <PersonAddOutlinedIcon />
+        </IconButton>
     );
 
     const memberLineTemplate = (team, member, type) => {
-        let label;
+        let labelName;
+        let labelNumber;
         let pattern;
         let patternTitle;
         if (type === PERSONS_TYPES.players) {
-            label = 'playerNumberAndName';
+            labelNumber = 'playerNumber';
+            labelName = 'playerName';
             pattern = '[0-9][0-9]*';
             patternTitle = 'numberPattern';
         } else {
-            label = 'officialReferenceAndName';
+            labelNumber = 'officialReference';
+            labelName = 'officialName';
             pattern = '[A-D]';
             patternTitle = 'referencePattern';
         }
         return (
-            <li key={`${type}${team}${member.id}`}>
-                <label htmlFor={`${type}Reference${team}${member.id}`}>{messages[label]}:</label>
-                <input
-                    type="text"
+            <ListItem key={`${type}${team}${member.id}`}>
+                <TextField
                     id={`${type}Reference${team}${member.id}`}
+                    label={messages[labelNumber]}
+                    value={member.reference}
                     onChange={e =>
                         onChangeMember({
                             team,
@@ -186,15 +203,15 @@ export function Settings({
                             name: member.name
                         })
                     }
-                    value={member.reference}
                     pattern={pattern}
                     title={messages[patternTitle]}
                     required
                     disabled={type === PERSONS_TYPES.officials}
-                />{' '}
-                <input
-                    type="text"
+                />
+                <TextField
                     id={`${type}Name${team}${member.id}`}
+                    label={messages[labelName]}
+                    value={member.name}
                     onChange={e =>
                         onChangeMember({
                             team,
@@ -204,9 +221,8 @@ export function Settings({
                             name: e.target.value
                         })
                     }
-                    value={member.name}
-                />{' '}
-            </li>
+                />
+            </ListItem>
         );
     };
 
@@ -226,7 +242,13 @@ export function Settings({
         }
         return (
             <React.Fragment>
-                {buffer !== '' ? <ul>{buffer}</ul> : ''}
+                {buffer !== '' ? (
+                    <List component="nav" aria-labelledby={`listof-${memberType}-${team}`}>
+                        {buffer}
+                    </List>
+                ) : (
+                    ''
+                )}
                 {membersLength < MAX_NUMBER[memberType] && addMemberButton(team, memberType, maxId + 1)}
             </React.Fragment>
         );
@@ -236,9 +258,9 @@ export function Settings({
         const teamPlayers = teams[team].players;
         const teamPlayersSorted = teamPlayers.sort(compareValues('reference'));
         return teamPlayersSorted.map(player => (
-            <option key={`${team}player${player.id}`} value={player.id}>
+            <MenuItem key={`${team}player${player.id}`} value={player.id}>
                 {`${player.reference} ${player.name}`}
-            </option>
+            </MenuItem>
         ));
     };
 
@@ -247,173 +269,226 @@ export function Settings({
      * an empty player is created to allow for an input line
      */
     useEffect(() => {
-        onOpenSettings(settingsData);
-    }, ['']);
+        if (popupVisibility) {
+            onOpenSettings(settingsData);
+        }
+    }, [popupVisibility]);
 
     return (
-        <Dialog open={popupVisibility} onClose={closeHandler} aria-labelledby="alert-dialog-title">
-            <DialogTitle id="simple-dialog-title">{messages.header}</DialogTitle>
+        <Dialog open={popupVisibility} onClose={closeHandler} aria-labelledby="dialog-title-settings">
+            <DialogTitle id="dialog-title-settings">{messages.header}</DialogTitle>
             <DialogContent>
-                <form>
+                <form noValidate>
                     <h3>{messages.competition}</h3>
-                    <p>
-                        <label htmlFor="competition">{messages.competitionName}*:</label>{' '}
-                        <input
-                            type="text"
+                    <div>
+                        <TextField
                             id="competition"
-                            onChange={e => handleChangeSetting(e, CHANGE_COMPETITION)}
+                            label={messages.competitionName}
                             value={competition}
+                            onChange={e => handleChangeSetting(e, CHANGE_COMPETITION)}
                             required
                         />
-                    </p>
-                    <p>
-                        <label htmlFor="round">{messages.round}:</label>{' '}
-                        <input
-                            type="text"
+                        <TextField
                             id="round"
-                            onChange={e => handleChangeSetting(e, CHANGE_ROUND)}
+                            label={messages.round}
                             value={round}
+                            onChange={e => handleChangeSetting(e, CHANGE_ROUND)}
                         />
-                    </p>
-                    <p>
-                        <label htmlFor="gender">{messages.gender}*:</label>{' '}
-                        <select
+                        <InputLabel shrink id="genderLabel">
+                            {messages.gender}
+                        </InputLabel>
+                        <Select
                             id="gender"
-                            onChange={e => handleChangeSetting(e, CHANGE_GENDER)}
+                            labelId="genderLabel"
                             value={gender}
+                            displayEmpty
+                            onChange={e => handleChangeSetting(e, CHANGE_GENDER)}
                             required
                         >
-                            <option value="">{messages.selectGender}</option>
+                            <MenuItem value="">{messages.selectGender}</MenuItem>
                             {gendersList()}
-                        </select>
-                    </p>
-                    <p>
-                        <label htmlFor="referee1">{messages.referee1}:</label>{' '}
-                        <input
-                            type="text"
-                            id="referee1"
-                            onChange={e => handleChangeSetting(e, CHANGE_REFEREE_1)}
-                            value={referee1}
-                        />
-                    </p>
-                    <p>
-                        <label htmlFor="referee2">{messages.referee2}:</label>{' '}
-                        <input
-                            type="text"
-                            id="referee2"
-                            onChange={e => handleChangeSetting(e, CHANGE_REFEREE_2)}
-                            value={referee2}
-                        />
-                    </p>
-                    <p>
-                        <label htmlFor="scoreKeeper">{messages.scoreKeeper}:</label>{' '}
-                        <input
-                            type="text"
-                            id="scoreKeeper"
-                            onChange={e => handleChangeSetting(e, CHANGE_SCORE_KEEPER)}
-                            value={scoreKeeper}
-                        />
-                    </p>
-                    <p>
-                        <label htmlFor="timeKeeper">{messages.timeKeeper}:</label>{' '}
-                        <input
-                            type="text"
-                            id="timeKeeper"
-                            onChange={e => handleChangeSetting(e, CHANGE_TIME_KEEPER)}
-                            value={timeKeeper}
-                        />
-                    </p>
+                        </Select>
+                    </div>
+                    <TextField
+                        id="referee1"
+                        label={messages.referee1}
+                        value={referee1}
+                        onChange={e => handleChangeSetting(e, CHANGE_REFEREE_1)}
+                    />
+                    <TextField
+                        id="referee2"
+                        label={messages.referee2}
+                        value={referee2}
+                        onChange={e => handleChangeSetting(e, CHANGE_REFEREE_2)}
+                    />
+                    <TextField
+                        id="scoreKeeper"
+                        label={messages.scoreKeeper}
+                        value={scoreKeeper}
+                        onChange={e => handleChangeSetting(e, CHANGE_SCORE_KEEPER)}
+                    />
+                    <TextField
+                        id="timeKeeper"
+                        label={messages.timeKeeper}
+                        value={timeKeeper}
+                        onChange={e => handleChangeSetting(e, CHANGE_TIME_KEEPER)}
+                    />
                     <h3>{messages.teamA}</h3>
-                    <p>
-                        <label htmlFor="teamAName">{messages.teamA}*:</label>{' '}
-                        <input
-                            type="text"
-                            id="teamAName"
-                            onChange={e => handleChangeTeamName(e, 'A')}
-                            value={teams.A.name}
-                            required
-                        />
-                    </p>
-                    <p>
-                        <label htmlFor="teamAJerseyColour">{messages.jerseyColour}:</label>{' '}
-                        <input
-                            type="color"
-                            id="teamAJerseyColour"
-                            onChange={e => handleChangeColour(e, 'A', TEAM_PARTS.jersey)}
-                            value={teams.A.jersey}
-                            list="presetColors"
-                        />
-                        <datalist id="presetColors">
-                            <option>#198c3b</option>
-                            <option>#fcc625</option>
-                            <option>#000000</option>
-                            <option>#3C8195</option>
-                            <option>#ffffff</option>
-                            <option>#023062</option>
-                            <option>#CE8E07</option>
-                        </datalist>
-                    </p>
-                    <p>
-                        <label htmlFor="teamANumberColour">{messages.numberColour}:</label>{' '}
-                        <input
-                            type="color"
-                            id="teamANumberColour"
-                            onChange={e => handleChangeColour(e, 'A', TEAM_PARTS.reference)}
-                            value={teams.A.reference}
-                            list="presetColors"
-                        />
-                    </p>
-                    <h4>{messages.listOfPlayers}</h4>
+                    <TextField
+                        id="teamAName"
+                        label={messages.teamA}
+                        value={teams.A.name}
+                        onChange={e => handleChangeTeamName(e, 'A')}
+                        required
+                    />
+                    <Button
+                        onClick={() => setTeamAJerseyStatus(!teamAJerseyStatus)}
+                        variant="contained"
+                        style={{ backgroundColor: teams.A.jersey }}
+                        title={messages.jerseyColour}
+                    >
+                        {messages.jerseyColour}
+                    </Button>
+                    {teamAJerseyStatus ? (
+                        <div className="colour-picker__popover">
+                            <div
+                                className="colour-picker__cover"
+                                onClick={() => setTeamAJerseyStatus(!teamAJerseyStatus)}
+                                onKeyDown={() => setTeamAJerseyStatus(!teamAJerseyStatus)}
+                                role="button"
+                                tabIndex="0"
+                            />
+                            <Sketch
+                                color={teams.A.jersey}
+                                onChangeComplete={colour => handleChangeColour(colour.hex, 'A', TEAM_PARTS.jersey)}
+                                presetColors={presetColours}
+                                disableAlpha
+                            />
+                        </div>
+                    ) : (
+                        ''
+                    )}
+                    <Button
+                        onClick={() => setTeamANumberStatus(!teamANumberStatus)}
+                        variant="contained"
+                        style={{ backgroundColor: teams.A.reference }}
+                        title={messages.numberColour}
+                    >
+                        {messages.numberColour}
+                    </Button>
+                    {teamANumberStatus ? (
+                        <div className="colour-picker__popover">
+                            <div
+                                className="colour-picker__cover"
+                                onClick={() => setTeamANumberStatus(!teamANumberStatus)}
+                                onKeyDown={() => setTeamANumberStatus(!teamANumberStatus)}
+                                role="button"
+                                tabIndex="0"
+                            />
+                            <Sketch
+                                color={teams.A.reference}
+                                onChangeComplete={colour => handleChangeColour(colour.hex, 'A', TEAM_PARTS.reference)}
+                                presetColors={presetColours}
+                                disableAlpha
+                            />
+                        </div>
+                    ) : (
+                        ''
+                    )}
+                    <h4 id={`listof-${PERSONS_TYPES.players}-A`}>{messages.listOfPlayers}</h4>
                     {displayMembersList('A', PERSONS_TYPES.players)}
-                    <p>
-                        <label htmlFor="gender">{messages.captain}:</label>{' '}
-                        <select id="captainA" onChange={e => handleChangeTeamCaptain(e, 'A')} value={teams.A.captain}>
-                            <option value="0">{messages.selectCaptain}</option>
-                            {captainList('A')}
-                        </select>
-                    </p>
+                    <InputLabel shrink id="captainALabel">
+                        {messages.captain}
+                    </InputLabel>
+                    <Select
+                        id="captainA"
+                        labelId="captainALabel"
+                        value={teams.A.captain || ''}
+                        displayEmpty
+                        onChange={e => handleChangeTeamCaptain(e, 'A')}
+                    >
+                        <MenuItem value="">{messages.selectCaptain}</MenuItem>
+                        {captainList('A')}
+                    </Select>
                     <h4>{messages.listOfOfficials}</h4>
                     {displayMembersList('A', PERSONS_TYPES.officials)}
                     <h3>{messages.teamB}</h3>
-                    <p>
-                        <label htmlFor="teamBName">{messages.teamB}*:</label>{' '}
-                        <input
-                            type="text"
-                            id="teamBName"
-                            onChange={e => handleChangeTeamName(e, 'B')}
-                            value={teams.B.name}
-                            required
-                        />
-                    </p>
-                    <p>
-                        <label htmlFor="teamBJerseyColour">{messages.jerseyColour}:</label>{' '}
-                        <input
-                            type="color"
-                            id="teamBJerseyColour"
-                            onChange={e => handleChangeColour(e, 'B', TEAM_PARTS.jersey)}
-                            value={teams.B.jersey}
-                            list="presetColors"
-                        />
-                    </p>
-                    <p>
-                        <label htmlFor="teamBNumberColour">{messages.numberColour}:</label>{' '}
-                        <input
-                            type="color"
-                            id="teamBNumberColour"
-                            onChange={e => handleChangeColour(e, 'B', TEAM_PARTS.reference)}
-                            value={teams.B.reference}
-                            list="presetColors"
-                        />
-                    </p>
+                    <TextField
+                        id="teamBName"
+                        label={messages.teamB}
+                        value={teams.B.name}
+                        onChange={e => handleChangeTeamName(e, 'B')}
+                        required
+                    />
+                    <Button
+                        onClick={() => setTeamBJerseyStatus(!teamBJerseyStatus)}
+                        variant="contained"
+                        style={{ backgroundColor: teams.B.jersey }}
+                        title={messages.jerseyColour}
+                    >
+                        {messages.jerseyColour}
+                    </Button>
+                    {teamBJerseyStatus ? (
+                        <div className="colour-picker__popover">
+                            <div
+                                className="colour-picker__cover"
+                                onClick={() => setTeamBJerseyStatus(!teamBJerseyStatus)}
+                                onKeyDown={() => setTeamBJerseyStatus(!teamBJerseyStatus)}
+                                role="button"
+                                tabIndex="0"
+                            />
+                            <Sketch
+                                color={teams.B.jersey}
+                                onChangeComplete={colour => handleChangeColour(colour.hex, 'B', TEAM_PARTS.jersey)}
+                                presetColors={presetColours}
+                                disableAlpha
+                            />
+                        </div>
+                    ) : (
+                        ''
+                    )}
+                    <Button
+                        onClick={() => setTeamBNumberStatus(!teamBNumberStatus)}
+                        variant="contained"
+                        style={{ backgroundColor: teams.B.reference }}
+                        title={messages.numberColour}
+                    >
+                        {messages.numberColour}
+                    </Button>
+                    {teamBNumberStatus ? (
+                        <div className="colour-picker__popover">
+                            <div
+                                className="colour-picker__cover"
+                                onClick={() => setTeamBNumberStatus(!teamBNumberStatus)}
+                                onKeyDown={() => setTeamBNumberStatus(!teamBNumberStatus)}
+                                role="button"
+                                tabIndex="0"
+                            />
+                            <Sketch
+                                color={teams.B.reference}
+                                onChangeComplete={colour => handleChangeColour(colour.hex, 'B', TEAM_PARTS.reference)}
+                                presetColors={presetColours}
+                                disableAlpha
+                            />
+                        </div>
+                    ) : (
+                        ''
+                    )}
                     <h4>{messages.listOfPlayers}</h4>
                     {displayMembersList('B', PERSONS_TYPES.players)}
-                    <p>
-                        <label htmlFor="gender">{messages.captain}:</label>{' '}
-                        <select id="captainB" onChange={e => handleChangeTeamCaptain(e, 'B')} value={teams.B.captain}>
-                            <option value="0">{messages.selectCaptain}</option>
-                            {captainList('B')}
-                        </select>
-                    </p>
+                    <InputLabel shrink id="captainBLabel">
+                        {messages.captain}
+                    </InputLabel>
+                    <Select
+                        id="captainB"
+                        labelId="captainBLabel"
+                        value={teams.B.captain || ''}
+                        displayEmpty
+                        onChange={e => handleChangeTeamCaptain(e, 'B')}
+                    >
+                        <MenuItem value="">{messages.selectCaptain}</MenuItem>
+                        {captainList('B')}
+                    </Select>
                     <h4>{messages.listOfOfficials}</h4>
                     {displayMembersList('B', PERSONS_TYPES.officials)}
                 </form>

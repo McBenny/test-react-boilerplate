@@ -17,12 +17,14 @@ export const messages = {
     teamB: 'Visitor team',
     listOfPlayers: 'List of players',
     addPlayer: 'Add a player',
-    playerNumberAndName: 'Player number and name',
+    playerNumber: 'Player number',
+    playerName: 'Player name',
     numberPattern: 'Numbers only, 0 forbidden',
     captain: 'Captain',
     selectCaptain: 'Select a captain...',
     listOfOfficials: 'List of officials',
     addOfficial: 'Add an official',
-    officialReferenceAndName: 'Official reference and name',
+    officialReference: 'Official reference',
+    officialName: 'Official name',
     referencePattern: 'Automatic'
 };

@@ -4,4 +4,20 @@ body {
     margin: 0;
 }
 
+.colour-picker {
+    &__popover {
+        position: absolute;
+        top: 0;
+        z-index: 2;
+    }
+
+    &__cover {
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+    }
+}
+
 @import './_title.scss';

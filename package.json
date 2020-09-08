@@ -83,6 +83,7 @@
     "lodash": "^4.17.19",
     "prop-types": "15.7.2",
     "react": "16.8.6",
+    "react-color": "^2.18.1",
     "react-dom": "16.8.6",
     "react-helmet": "6.0.0-beta",
     "react-id-generator": "^3.0.0",
