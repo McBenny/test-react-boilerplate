@@ -1,5 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+
+import Dialog from '@material-ui/core/Dialog';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogActions from '@material-ui/core/DialogActions';
+import Button from '@material-ui/core/Button';
+import SettingsOutlinedIcon from '@material-ui/icons/SettingsOutlined';
+
 import { compareValues } from '../../utils/utilities';
 import { messages } from './messages';
 import {
@@ -11,9 +19,9 @@ import {
     POPUPS
 } from '../../containers/Game/constants';
 import { MAX_NUMBER, PERSONS_TYPES } from '../../containers/Settings/constants';
-import Modal, { cancelButton } from '../modal';
 
 function Players({
+    popupVisibility,
     eventType,
     playersListType,
     team,
@@ -116,9 +124,13 @@ function Players({
             return (
                 <p>
                     {messages[memberType === PERSONS_TYPES.players ? 'noPlayers' : 'noOfficials']}{' '}
-                    <button type="button" onClick={() => openPopup(POPUPS.settings)}>
-                        {messages.settings}
-                    </button>
+                    <Button
+                        variant="contained"
+                        onClick={() => openPopup(POPUPS.settings)}
+                        startIcon={<SettingsOutlinedIcon />}
+                    >
+                        {messages.settings}...
+                    </Button>
                     .
                 </p>
             );
@@ -127,17 +139,25 @@ function Players({
     };
 
     return (
-        <Modal title={`${messages.title}: ${playersListType}`} closeHandler={closeHandler}>
-            <h3>{messages.listOfPlayers}</h3>
-            {membersListDisplay(PERSONS_TYPES.players)}
-            {playersListType !== ADD_GOAL ? <h3>{messages.listOfOfficials}</h3> : ''}
-            {playersListType !== ADD_GOAL ? membersListDisplay(PERSONS_TYPES.officials) : ''}
-            {cancelButton(closeHandler)}
-        </Modal>
+        <Dialog open={popupVisibility} onClose={closeHandler} aria-labelledby="dialog-title-players">
+            <DialogTitle id="dialog-title-players">{`${messages.title}: ${playersListType}`}</DialogTitle>
+            <DialogContent>
+                <h3>{messages.listOfPlayers}</h3>
+                {membersListDisplay(PERSONS_TYPES.players)}
+                {playersListType !== ADD_GOAL ? <h3>{messages.listOfOfficials}</h3> : ''}
+                {playersListType !== ADD_GOAL ? membersListDisplay(PERSONS_TYPES.officials) : ''}
+            </DialogContent>
+            <DialogActions>
+                <Button variant="contained" onClick={closeHandler}>
+                    {messages.cancel}
+                </Button>
+            </DialogActions>
+        </Dialog>
     );
 }
 
 Players.propTypes = {
+    popupVisibility: PropTypes.bool,
     eventType: PropTypes.string,
     playersListType: PropTypes.string,
     team: PropTypes.string,

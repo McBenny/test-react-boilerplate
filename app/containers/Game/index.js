@@ -384,7 +384,7 @@ export function Game({
                                         disabled={!gameStarted || gamePaused}
                                         startIcon={<AddCircleOutlineIcon />}
                                     >
-                                        {messages.addGoal}
+                                        {messages.addGoal}...
                                     </Button>
                                 </li>
                                 <li>
@@ -401,7 +401,7 @@ export function Game({
                                         disabled={!gameStarted || gamePaused}
                                         startIcon={<AddCircleOutlineIcon />}
                                     >
-                                        {messages.addYellowCard}
+                                        {messages.addYellowCard}...
                                     </Button>
                                     {foulPlayersLog('A', 'yellowCard')}
                                 </li>
@@ -419,7 +419,7 @@ export function Game({
                                         disabled={!gameStarted || gamePaused}
                                         startIcon={<AddCircleOutlineIcon />}
                                     >
-                                        {messages.addSuspension}
+                                        {messages.addSuspension}...
                                     </Button>
                                     {foulPlayersLog('A', 'suspension')}
                                 </li>
@@ -437,7 +437,7 @@ export function Game({
                                         disabled={!gameStarted || gamePaused}
                                         startIcon={<AddCircleOutlineIcon />}
                                     >
-                                        {messages.addRedCard}
+                                        {messages.addRedCard}...
                                     </Button>
                                     {foulPlayersLog('A', 'redCard')}
                                 </li>
@@ -455,7 +455,7 @@ export function Game({
                                         disabled={!gameStarted || gamePaused}
                                         startIcon={<AddCircleOutlineIcon />}
                                     >
-                                        {messages.addBlueCard}
+                                        {messages.addBlueCard}...
                                     </Button>
                                     {foulPlayersLog('A', 'blueCard')}
                                 </li>
@@ -500,7 +500,7 @@ export function Game({
                                         disabled={!gameStarted || gamePaused}
                                         startIcon={<AddCircleOutlineIcon />}
                                     >
-                                        {messages.addGoal}
+                                        {messages.addGoal}...
                                     </Button>
                                 </li>
                                 <li>
@@ -517,7 +517,7 @@ export function Game({
                                         disabled={!gameStarted || gamePaused}
                                         startIcon={<AddCircleOutlineIcon />}
                                     >
-                                        {messages.addYellowCard}
+                                        {messages.addYellowCard}...
                                     </Button>
                                     {foulPlayersLog('B', 'yellowCard')}
                                 </li>
@@ -535,7 +535,7 @@ export function Game({
                                         disabled={!gameStarted || gamePaused}
                                         startIcon={<AddCircleOutlineIcon />}
                                     >
-                                        {messages.addSuspension}
+                                        {messages.addSuspension}...
                                     </Button>
                                     {foulPlayersLog('B', 'suspension')}
                                 </li>
@@ -553,7 +553,7 @@ export function Game({
                                         disabled={!gameStarted || gamePaused}
                                         startIcon={<AddCircleOutlineIcon />}
                                     >
-                                        {messages.addRedCard}
+                                        {messages.addRedCard}...
                                     </Button>
                                     {foulPlayersLog('B', 'redCard')}
                                 </li>
@@ -571,7 +571,7 @@ export function Game({
                                         disabled={!gameStarted || gamePaused}
                                         startIcon={<AddCircleOutlineIcon />}
                                     >
-                                        {messages.addBlueCard}
+                                        {messages.addBlueCard}...
                                     </Button>
                                     {foulPlayersLog('B', 'blueCard')}
                                 </li>
@@ -595,23 +595,20 @@ export function Game({
                         popupVisibility={popupVisibility.settings}
                         closeHandler={closePopup}
                     />
-                    {popupVisibility.players ? (
-                        <Players
-                            eventType={playersData.eventType}
-                            playersListType={playersData.playersListType}
-                            team={playersData.playersTeam}
-                            jerseyColour={playersData.jerseyColour}
-                            referenceColour={playersData.referenceColour}
-                            playersList={playersData.playersList}
-                            captainId={playersData.captainId}
-                            officialsList={playersData.officialsList}
-                            actionHandler={addActionPerTeam}
-                            closeHandler={closePopup}
-                            openPopup={openPopup}
-                        />
-                    ) : (
-                        ''
-                    )}
+                    <Players
+                        popupVisibility={popupVisibility.players}
+                        eventType={playersData.eventType}
+                        playersListType={playersData.playersListType}
+                        team={playersData.playersTeam}
+                        jerseyColour={playersData.jerseyColour}
+                        referenceColour={playersData.referenceColour}
+                        playersList={playersData.playersList}
+                        captainId={playersData.captainId}
+                        officialsList={playersData.officialsList}
+                        actionHandler={addActionPerTeam}
+                        closeHandler={closePopup}
+                        openPopup={openPopup}
+                    />
                     {popupVisibility.lineUp ? (
                         <LineUp
                             team={lineUpData.playersTeam}
