@@ -65,6 +65,8 @@
   },
   "dependencies": {
     "@babel/polyfill": "7.4.3",
+    "@material-ui/core": "^4.11.0",
+    "@material-ui/icons": "^4.9.1",
     "chalk": "^2.4.2",
     "compression": "1.7.4",
     "connected-react-router": "6.4.0",
@@ -81,6 +83,7 @@
     "lodash": "^4.17.19",
     "prop-types": "15.7.2",
     "react": "16.8.6",
+    "react-color": "^2.18.1",
     "react-dom": "16.8.6",
     "react-helmet": "6.0.0-beta",
     "react-id-generator": "^3.0.0",

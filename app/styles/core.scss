@@ -4,4 +4,48 @@ body {
     margin: 0;
 }
 
+.colour-picker {
+    &__popover {
+        position: absolute;
+        top: 0;
+        z-index: 2;
+    }
+
+    &__cover {
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+    }
+}
+
+.member {
+    &--players,
+    &--officials {
+        display: initial !important;
+        width: 100%;
+        height: 6rem;
+        background-image: linear-gradient(-80deg,
+            rgba(0, 0, 0, 0.0),
+            rgba(64, 64, 64, 0.2),
+            rgba(0, 0, 0, 0.1),
+            rgba(0, 0, 0, 0.0),
+            rgba(64, 64, 64, 0.2),
+            rgba(0, 0, 0, 0.05),
+            rgba(0, 0, 0, 0.05),
+            rgba(64, 64, 64, 0.3),
+            rgba(0, 0, 0, 0.05),
+            rgba(0, 0, 0, 0.0)
+        );
+        padding: 6px 0.5rem !important;
+        pointer-events: initial !important;
+    }
+
+    &--officials {
+        background-image: linear-gradient(45deg, transparent 50%, rgba(127, 127, 127, 0.85) 50%);
+        padding: 6px 0.5rem !important;
+        pointer-events: initial !important;
+    }
+}
 @import './_title.scss';

@@ -1,128 +1,144 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+
+import Dialog from '@material-ui/core/Dialog';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogActions from '@material-ui/core/DialogActions';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import Button from '@material-ui/core/Button';
+import PlayCircleOutlineIcon from '@material-ui/icons/PlayCircleOutline';
+import PauseCircleOutlineIcon from '@material-ui/icons/PauseCircleOutline';
+import HighlightOffOutlinedIcon from '@material-ui/icons/HighlightOffOutlined';
+
 import { messages } from './messages';
 import { EVENT_TYPES, PERIODS } from '../../containers/Game/constants';
 import { isEven } from '../../utils/utilities';
-import Modal, { cancelButton } from '../modal';
 
-function PlayPause({ gameStarted, gamePaused, period, startHandler, closeHandler }) {
-    const startButton = () => {
-        if (!gameStarted) {
-            const handleStartButton = () => {
-                startHandler({
-                    gamePauseStatus: gamePaused,
-                    eventType: EVENT_TYPES.gameStart,
-                    id: period,
-                    period: period + 1
-                });
-                closeHandler();
-            };
-            return (
-                <button type="button" onClick={handleStartButton}>
-                    {messages.start}
-                </button>
-            );
-        }
-        return false;
+function PlayPause({ popupVisibility, gameStarted, gamePaused, period, startHandler, closeHandler }) {
+    const handleStartButton = () => {
+        startHandler({
+            gamePauseStatus: gamePaused,
+            eventType: EVENT_TYPES.gameStart,
+            id: period,
+            period: period + 1
+        });
+        closeHandler();
     };
 
-    const pauseResumeButton = () => {
-        if (gameStarted && !isEven(period)) {
-            const handlePauseResumeButton = () => {
-                startHandler({
-                    gamePauseStatus: gamePaused,
-                    eventType: gamePaused ? EVENT_TYPES.gameResumed : EVENT_TYPES.gamePaused,
-                    id: period,
-                    period
-                });
-                closeHandler();
-            };
-            return (
-                <button type="button" onClick={handlePauseResumeButton}>
-                    {gamePaused ? messages.resume : messages.pause}
-                </button>
-            );
-        }
-        return false;
+    const handlePauseResumeButton = () => {
+        startHandler({
+            gamePauseStatus: gamePaused,
+            eventType: gamePaused ? EVENT_TYPES.gameResumed : EVENT_TYPES.gamePaused,
+            id: period,
+            period
+        });
+        closeHandler();
     };
 
-    const endPeriodButton = () => {
-        if (gameStarted && !isEven(period)) {
-            const handlePauseResumeButton = () => {
-                startHandler({
-                    gameStatus: period !== 7,
-                    gamePauseStatus: false,
-                    eventType: EVENT_TYPES.periodEnd,
-                    id: period,
-                    period: period + 1
-                });
-                closeHandler();
-            };
-            return (
-                <button type="button" onClick={handlePauseResumeButton}>
-                    {messages.endPeriod} {PERIODS[period]}
-                </button>
-            );
-        }
-        return false;
+    const handleEndPeriodButton = () => {
+        startHandler({
+            gameStatus: period !== 7,
+            gamePauseStatus: false,
+            eventType: EVENT_TYPES.periodEnd,
+            id: period,
+            period: period + 1
+        });
+        closeHandler();
     };
 
-    const startPeriodButton = () => {
-        if (gameStarted && isEven(period)) {
-            const handlePauseResumeButton = () => {
-                startHandler({
-                    gamePauseStatus: true,
-                    eventType: EVENT_TYPES.periodStart,
-                    id: period + 1,
-                    period: period + 1
-                });
-                closeHandler();
-            };
-            return (
-                <button type="button" onClick={handlePauseResumeButton}>
-                    {messages.startPeriod} {PERIODS[period + 1]}
-                </button>
-            );
-        }
-        return false;
+    const handleStartPeriodButton = () => {
+        startHandler({
+            gamePauseStatus: true,
+            eventType: EVENT_TYPES.periodStart,
+            id: period + 1,
+            period: period + 1
+        });
+        closeHandler();
     };
 
-    const endGameButton = () => {
-        if (gameStarted && (period === 3 || period === 7)) {
-            const handleEndButton = () => {
-                startHandler({
-                    gameStatus: false,
-                    gamePauseStatus: false,
-                    eventType: EVENT_TYPES.gameEnd,
-                    id: period,
-                    period: period + 1
-                });
-                closeHandler();
-            };
-            return (
-                <button type="button" onClick={handleEndButton}>
-                    {messages.endGame}
-                </button>
-            );
-        }
-        return false;
+    const handleEndButton = () => {
+        startHandler({
+            gameStatus: false,
+            gamePauseStatus: false,
+            eventType: EVENT_TYPES.gameEnd,
+            id: period,
+            period: period + 1
+        });
+        closeHandler();
     };
 
     return (
-        <Modal title={messages.title} closeHandler={closeHandler}>
-            <ul>
-                <li>{startButton()}</li>
-                <li>{pauseResumeButton()}</li>
-                <li>{endPeriodButton()}</li>
-                <li>{startPeriodButton()}</li>
-                <li>{endGameButton()}</li>
-                <li>{cancelButton(closeHandler)}</li>
-            </ul>
-        </Modal>
+        <Dialog open={popupVisibility} onClose={closeHandler} aria-labelledby="dialog-title-play-pause">
+            <DialogTitle id="dialog-title-play-pause">{messages.title}</DialogTitle>
+            <DialogContent>
+                <List component="nav" aria-label="Actions regarding periods">
+                    {!gameStarted ? (
+                        <ListItem button onClick={handleStartButton}>
+                            <ListItemIcon>
+                                <PlayCircleOutlineIcon />
+                            </ListItemIcon>
+                            <ListItemText primary={messages.start} />
+                        </ListItem>
+                    ) : (
+                        ''
+                    )}
+                    {gameStarted && !isEven(period) ? (
+                        <ListItem button onClick={handlePauseResumeButton}>
+                            <ListItemIcon>
+                                {gamePaused ? <PlayCircleOutlineIcon /> : <PauseCircleOutlineIcon />}
+                            </ListItemIcon>
+                            <ListItemText primary={gamePaused ? messages.resume : messages.pause} />
+                        </ListItem>
+                    ) : (
+                        ''
+                    )}
+                    {gameStarted && !isEven(period) ? (
+                        <ListItem button onClick={handleEndPeriodButton}>
+                            <ListItemIcon>
+                                <HighlightOffOutlinedIcon />
+                            </ListItemIcon>
+                            <ListItemText primary={`${messages.endPeriod} ${PERIODS[period]}`} />
+                        </ListItem>
+                    ) : (
+                        ''
+                    )}
+                    {gameStarted && isEven(period) ? (
+                        <ListItem button onClick={handleStartPeriodButton}>
+                            <ListItemIcon>
+                                <PlayCircleOutlineIcon />
+                            </ListItemIcon>
+                            <ListItemText primary={`${messages.startPeriod} ${PERIODS[period + 1]}`} />
+                        </ListItem>
+                    ) : (
+                        ''
+                    )}
+                    {gameStarted && (period === 3 || period === 7) ? (
+                        <ListItem button onClick={handleEndButton}>
+                            <ListItemIcon>
+                                <HighlightOffOutlinedIcon />
+                            </ListItemIcon>
+                            <ListItemText primary={messages.endGame} />
+                        </ListItem>
+                    ) : (
+                        ''
+                    )}
+                </List>
+            </DialogContent>
+            <DialogActions>
+                <Button variant="contained" onClick={closeHandler}>
+                    {messages.cancel}
+                </Button>
+            </DialogActions>
+        </Dialog>
     );
 }
 
 PlayPause.propTypes = {
+    popupVisibility: PropTypes.bool,
     gameStarted: PropTypes.bool,
     gamePaused: PropTypes.bool,
     period: PropTypes.number,

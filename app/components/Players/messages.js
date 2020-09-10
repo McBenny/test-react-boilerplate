@@ -4,6 +4,7 @@
  */
 export const messages = {
     title: 'Players',
+    cancel: 'Cancel',
     maxActionsReached: 'Invalid choice for this player',
     listOfPlayers: 'List of players',
     captainInitial: 'C',

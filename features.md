@@ -1,5 +1,56 @@
 #Handball scoreboard system
 
+##User authentication
+The system is available without any authentication, and it is able to store data locally without any credentials.
+
+If the user identifies, they can store data online and benefit from data stored by others (teams and players).  
+If a user is identified, their game data are stored online under their account. They can retrieve them on any device. Only data about teams and players inside teams are shared with other identified members
+
+###Users
+The system only collects the minimum amount  of information about the user: email, password and a nickname.
+
+Each identification creates a session with a unique authentication token that allows the system to link the user to their actions and their data. Each session is valid for a limited period of time, unless renewed by the user before it's expiration, in such case it is renewed:
+
+If user session lasts for 30 minutes and user signs in at 2:00pm, the session is due to expire at 2:30pm. If the user interacts with the server at 2:05pm, the session is extended till 2:35pm. If the following interaction with the server occurs at 2:40pm, the session is no more valid, therefore the interaction will be rejected, the user will have to re-sign in and redo their action.
+
+###Required screens/components related to the users
+####Sign up form
+To create their account, the user has to fill a sign up form with the following fields:
+- email address,
+- password,
+- nickname
+
+####Sign in form
+To use the system as an identified user, the users have to sign in through an authentication form with the following fields:
+- email address,
+- password
+
+A link to a "forgot password" screen is provided.
+
+####Forgot password
+If a user loses their password they can ask for a recovery link. It will send them an email with a unique link allowing them to recreate a new password.
+The form consists of the following fields:
+- email address
+
+If the email address provided is found in the database, an email is sent to the user.
+
+####Password recovery email message
+It's an email message sent to the user in case they have forgotten their password. It includes a link to a page allowing the user to create a new password for their account.
+
+####New password form
+This form allows the user to create a new password linked to their account. It sits on a page that is valid only a certain time, through a unique id created when the user uses the "Forgot password" form.
+
+The form consists of the following fields:
+- new password,
+- confirm new password
+
+The two fields must have identical content to be accepted.
+
+####Log out 
+This can be a simple link that enables the user to voluntarily log out of the system. It would invalidate the current session and send the user back to the home page, unidentified.
+
+It's accessible only once the user is identified, it replaces the links to the sin in and sign up forms.
+
 ##Settings:
 Minimum requirements to get started:
 - Create a match:
@@ -154,11 +205,45 @@ These features should also apply to the fouls, any foul registered should be edi
 - [X] add link to settings form "no players situations"
 - [X] add a colour to each team
 - [X] add game officials (referees, scorekeeper (table), timekeeper (scoreboard/buzzer))
-- [ ] in players pop-in, list players and officials in different tabs
-- [ ] inset light effect on players' jerseys: https://codepen.io/mcbenny/pen/ExVOmJm
+- [ ] authenticate users
+- [ ] save team and players data to use in auto-suggest, save colours as well
+- [ ] allow image upload for teams
+- [X] in players pop-in, list players and officials in different tabs
 - [ ] allow for removal of a player
 - [ ] Removing a player gives everything he holds to "unknown players"
 - [X] Changing the number, _first or last name_ of a player updates every occurrence of that player,
 
 ##REFACTORING
-- [ ] move open and close popup functions inside the popup component
+- [ ] Optimise settings page to avoid repetition between A and B teams.
+- [ ] ~~move open and close popup functions inside the popup component~~
+
+##Design assets
+###Fonts
+For score display:
+- [Modern LCD-7](https://www.dafont.com/modern-lcd-7.font?text=score%3A+21-11)
+- [Advanced Pixel LCD-7](https://www.dafont.com/advanced-pixel-lcd-7.font?text=score%3Aa+21-11)
+- [Pixel LCD7](https://www.dafont.com/pixel-lcd7.font?text=score%3A+21-11)
+- + [Oxanium](https://fonts.google.com/specimen/Oxanium?preview.text=21-85&preview.text_type=custom&query=oxa)
+- [ZCOOL QingKe HuangYou](https://fonts.google.com/specimen/ZCOOL+QingKe+HuangYou?preview.text=21-17&preview.text_type=custom&query=zcoo)
+- + [Rajdhani](https://fonts.google.com/specimen/Rajdhani?preview.text=21+-+17&preview.text_type=custom&preview.size=120&sort=popularity&category=Sans+Serif)
+
+For jersey numbers:
+- [Bebas Neue](https://fonts.google.com/specimen/Bebas+Neue?preview.text=26++7++11++1++99&preview.text_type=custom&preview.size=120&sort=popularity)
+- [Russo one](https://fonts.google.com/specimen/Russo+One?preview.text=26++7++11++1++99&preview.text_type=custom&preview.size=120&sort=popularity)
+- + [Teko](https://fonts.google.com/specimen/Teko?preview.text=26++7++11++1++99&preview.text_type=custom&preview.size=120&sort=popularity)
+
+Sans-serif fonts:
+- [Lane](https://www.dafont.com/lane.font?text=score%3A+21-11+Sydney+Uni&fpp=100&l[]=10&l[]=1&back=theme)
+- [Nordica](https://www.dafont.com/nordica.font?text=score%3A+21-11+Sydney+Uni&fpp=100&l[]=10&l[]=1&back=theme)
+
+###Icons
+- + [MaterielUI](https://material-ui.com/components/material-icons/)
+- [FlatIcon](https://www.flaticon.com/)
+- [icon8](https://icons8.com/icons)
+
+###Backgrounds
+- [WebGradients](https://webgradients.com/)
+- [vecteezy](https://www.vecteezy.com/)
+
+###Jerseys
+- insert light effect on players' jerseys: https://codepen.io/mcbenny/pen/ExVOmJm
