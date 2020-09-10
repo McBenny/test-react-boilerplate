@@ -144,6 +144,8 @@ export function Game({
     const openLineUp = ({ team }) => {
         setLineUpData({
             playersTeam: team,
+            jerseyColour: settings.teams[team].jersey,
+            referenceColour: settings.teams[team].reference,
             playersList: settings.teams[team].players,
             captainId: settings.teams[team].captain,
             officialsList: settings.teams[team].officials
@@ -170,12 +172,6 @@ export function Game({
             onStoreScore({ id, currentScore: `${score.teamA}-${score.teamB}` });
         }
     };
-    // const displayStartButtonMessage = () => {
-    //     if (gameStarted) {
-    //         return gamePaused ? messages.startButton.resume : messages.startButton.pause;
-    //     }
-    //     return messages.startButton.start;
-    // };
 
     const TYPE_MESSAGE = 'TYPE_MESSAGE';
     const displayStartButtonData = type => {
@@ -609,18 +605,17 @@ export function Game({
                         closeHandler={closePopup}
                         openPopup={openPopup}
                     />
-                    {popupVisibility.lineUp ? (
-                        <LineUp
-                            team={lineUpData.playersTeam}
-                            playersList={lineUpData.playersList}
-                            captainId={lineUpData.captainId}
-                            officialsList={lineUpData.officialsList}
-                            closeHandler={closePopup}
-                            openPopup={openPopup}
-                        />
-                    ) : (
-                        ''
-                    )}
+                    <LineUp
+                        popupVisibility={popupVisibility.lineUp}
+                        team={lineUpData.playersTeam}
+                        jerseyColour={lineUpData.jerseyColour}
+                        referenceColour={lineUpData.referenceColour}
+                        playersList={lineUpData.playersList}
+                        captainId={lineUpData.captainId}
+                        officialsList={lineUpData.officialsList}
+                        closeHandler={closePopup}
+                        openPopup={openPopup}
+                    />
                 </Container>
             </main>
         </Fragment>

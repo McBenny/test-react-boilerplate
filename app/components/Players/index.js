@@ -5,10 +5,12 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
+import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import SettingsOutlinedIcon from '@material-ui/icons/SettingsOutlined';
 
 import { compareValues } from '../../utils/utilities';
+import './styles.scss';
 import { messages } from './messages';
 import {
     ADD_GOAL,
@@ -80,12 +82,15 @@ function Players({
     };
 
     const buttonTemplate = (member, type, isDisabled) => (
-        <li
+        <Grid
+            item
             key={`${playersListType}${type}Reference${member.id}`}
             hidden={playersListType !== ADD_GOAL && member.id === 0}
+            className="players__grid-item"
         >
-            <button
-                type="button"
+            <Button
+                variant="contained"
+                className={`button member member--${type}`}
                 onClick={() => {
                     actionHandler({
                         eventType,
@@ -98,12 +103,17 @@ function Players({
                 }}
                 disabled={isDisabled}
                 title={isDisabled ? messages.maxActionsReached : ''}
-                style={type === PERSONS_TYPES.players ? { backgroundColor: jerseyColour, color: referenceColour } : {}}
+                style={{
+                    backgroundColor: !isDisabled ? jerseyColour : null,
+                    color: referenceColour
+                }}
             >
-                {member.reference} {member.name}{' '}
-                {captainId !== 0 && captainId === member.id ? `(${messages.captainInitial})` : ''}
-            </button>
-        </li>
+                <span className="member__reference">{member.reference}</span>
+                <span className="member__name">
+                    {member.name} {captainId !== 0 && captainId === member.id ? `(${messages.captainInitial})` : ''}
+                </span>
+            </Button>
+        </Grid>
     );
 
     const membersListDisplay = memberType => {
@@ -135,11 +145,21 @@ function Players({
                 </p>
             );
         }
-        return <ul>{buffer}</ul>;
+        return (
+            <Grid container spacing={1} className="players__grid">
+                {buffer}
+            </Grid>
+        );
     };
 
     return (
-        <Dialog open={popupVisibility} onClose={closeHandler} aria-labelledby="dialog-title-players">
+        <Dialog
+            open={popupVisibility}
+            onClose={closeHandler}
+            aria-labelledby="dialog-title-players"
+            fullWidth
+            maxWidth="md"
+        >
             <DialogTitle id="dialog-title-players">{`${messages.title}: ${playersListType}`}</DialogTitle>
             <DialogContent>
                 <h3>{messages.listOfPlayers}</h3>

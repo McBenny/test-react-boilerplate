@@ -208,13 +208,14 @@ These features should also apply to the fouls, any foul registered should be edi
 - [ ] authenticate users
 - [ ] save team and players data to use in auto-suggest, save colours as well
 - [ ] allow image upload for teams
-- [ ] in players pop-in, list players and officials in different tabs
+- [X] in players pop-in, list players and officials in different tabs
 - [ ] allow for removal of a player
 - [ ] Removing a player gives everything he holds to "unknown players"
 - [X] Changing the number, _first or last name_ of a player updates every occurrence of that player,
 
 ##REFACTORING
-- [ ] move open and close popup functions inside the popup component
+- [ ] Optimise settings page to avoid repetition between A and B teams.
+- [ ] ~~move open and close popup functions inside the popup component~~
 
 ##Design assets
 ###Fonts

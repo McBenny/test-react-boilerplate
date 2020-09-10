@@ -16,16 +16,15 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import TextField from '@material-ui/core/TextField';
-import InputLabel from '@material-ui/core/InputLabel';
-import Select from '@material-ui/core/Select';
-import MenuItem from '@material-ui/core/MenuItem';
-import Sketch from 'react-color/lib/Sketch';
-import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-
+import MenuItem from '@material-ui/core/MenuItem';
+import Sketch from 'react-color/lib/Sketch';
+import InputLabel from '@material-ui/core/InputLabel';
+import TextField from '@material-ui/core/TextField';
+import Select from '@material-ui/core/Select';
+import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
 import PersonAddOutlinedIcon from '@material-ui/icons/PersonAddOutlined';
 
 import { useInjectReducer } from '../../utils/injectReducer';
@@ -69,7 +68,6 @@ import {
     PERSONS_TYPES,
     TEAM_PARTS
 } from './constants';
-// import Modal, { cancelButton } from '../../components/modal';
 
 const key = 'settings';
 
