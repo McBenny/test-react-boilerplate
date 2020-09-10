@@ -1,3 +1,5 @@
+@import "../../styles/variables";
+
 .players {
     &__grid {
         align-items: stretch;
@@ -23,6 +25,7 @@
         left: 50%;
         transform: translateX(-50%);
         width: calc(100% - 1rem);
+        font-family: $fontReferences;
         font-size: 2rem;
     }
 
