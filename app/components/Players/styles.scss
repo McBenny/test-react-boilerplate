@@ -3,6 +3,7 @@
 .players {
     &__grid {
         align-items: stretch;
+        margin-bottom: 2rem;
     }
 
     &__grid-item {
@@ -14,8 +15,9 @@
     position: relative;
     text-align: center;
 
-    &__container {
-    //
+    &__title {
+        margin-top: 0;
+        display: initial;
     }
 
     &__reference {

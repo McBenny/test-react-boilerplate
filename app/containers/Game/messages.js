@@ -12,7 +12,7 @@ export const messages = {
     teamB: 'Visitor team',
     addGoal: 'goal',
     addYellowCard: 'yellow card',
-    addSuspension: '2 minutes',
+    addSuspension: '2 min',
     addRedCard: 'red card',
     addBlueCard: 'blue card',
     addTimeout: 'timeout',
