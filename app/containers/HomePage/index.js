@@ -35,21 +35,25 @@ export default function HomePage() {
 
     const savedGames = () => {
         const localKeys = Object.keys(localStorage);
+        const gamePrefix = /^game-uuid-[a-z0-9-]{36}$/g;
         const buffer = localKeys.map(game => {
-            const gameData = LocalStorage.get(game);
-            return (
-                <ListItem key={gameData.gameId} button>
-                    <ListItemText
-                        onClick={() => loadGame(gameData.gameId)}
-                        primary={`${gameData.settings.teams.A.name} - ${gameData.settings.teams.B.name} (${
-                            gameData.dataTeamA.goals
-                        }-${gameData.dataTeamB.goals})`}
-                        secondary={`${gameData.date} ${gameData.settings.competition}/${gameData.settings.round}/${
-                            gameData.settings.gender
-                        }`}
-                    />
-                </ListItem>
-            );
+            if (game.match(gamePrefix)) {
+                const gameData = LocalStorage.get(game);
+                return (
+                    <ListItem key={gameData.gameId} button>
+                        <ListItemText
+                            onClick={() => loadGame(gameData.gameId)}
+                            primary={`${gameData.settings.teams.A.name} - ${gameData.settings.teams.B.name} (${
+                                gameData.dataTeamA.goals
+                            }-${gameData.dataTeamB.goals})`}
+                            secondary={`${gameData.date} ${gameData.settings.competition}/${gameData.settings.round}/${
+                                gameData.settings.gender
+                            }`}
+                        />
+                    </ListItem>
+                );
+            }
+            return '';
         });
         return (
             <List component="nav" aria-labelledby="gameListTitle">
