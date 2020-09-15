@@ -185,7 +185,7 @@ It should be possible to also add a goal anywhere in the list.
 These features should also apply to the fouls, any foul registered should be editable and removable, it should also be possible to add a foul.
 
 ##BUGS
-- [ ]
+- [X] Getting saved games looks for any saved localStorage [Fixed]
 
 ##TODO
 - [X] allow for timeouts per team
@@ -225,7 +225,7 @@ For score display:
 - [Pixel LCD7](https://www.dafont.com/pixel-lcd7.font?text=score%3A+21-11)
 - + [Oxanium](https://fonts.google.com/specimen/Oxanium?preview.text=21-85&preview.text_type=custom&query=oxa)
 - [ZCOOL QingKe HuangYou](https://fonts.google.com/specimen/ZCOOL+QingKe+HuangYou?preview.text=21-17&preview.text_type=custom&query=zcoo)
-- + [Rajdhani](https://fonts.google.com/specimen/Rajdhani?preview.text=21+-+17&preview.text_type=custom&preview.size=120&sort=popularity&category=Sans+Serif)
+- [Rajdhani](https://fonts.google.com/specimen/Rajdhani?preview.text=21+-+17&preview.text_type=custom&preview.size=120&sort=popularity&category=Sans+Serif)
 
 For jersey numbers:
 - [Bebas Neue](https://fonts.google.com/specimen/Bebas+Neue?preview.text=26++7++11++1++99&preview.text_type=custom&preview.size=120&sort=popularity)
@@ -247,3 +247,18 @@ Sans-serif fonts:
 
 ###Jerseys
 - insert light effect on players' jerseys: https://codepen.io/mcbenny/pen/ExVOmJm
+
+##First feedback
+- [ ] I want to invert the teams in the settings
+- [ ] I want to cancel the last action (an action) +2
+- [ ] I get "NaN" when I erase a number before putting a new one in the settings
+- [ ] Maybe I want to be able to give a letter to a player (when no number, a colour)
+- [ ] I don't want to have to type all the names at the beginning
+- [ ] When I create a player, it jumps from bottom to top of the list, this is annoying
+- [ ] I want to say that a goal was a penalty
+- [ ] I want to say there was a penalty missed
+- [ ] In the line-up, I want to see if the player is a goalie
+- [ ] I'd like to have a picture of each player instead of/with number/name
+- [ ] I'd like to share the results (have a summary sheet)
+- [ ] I'd like to be able to read the game log (show player's name/number, actions etc.)
+- [ ] I want to see the number of players and officials per team in the settings

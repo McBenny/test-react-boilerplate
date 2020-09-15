@@ -21,6 +21,9 @@ import PlayCircleOutlineIcon from '@material-ui/icons/PlayCircleOutline';
 import PauseCircleOutlineIcon from '@material-ui/icons/PauseCircleOutline';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import PeopleOutlineIcon from '@material-ui/icons/PeopleOutline';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
 
 import { useInjectReducer } from '../../utils/injectReducer';
 import { URLS } from '../App/constants';
@@ -52,6 +55,7 @@ import {
     ADD_TIMEOUT,
     ADD_YELLOW_CARD,
     EVENT_TYPES,
+    PERIODS,
     POPUPS
 } from './constants';
 import './styles.scss';
@@ -243,12 +247,23 @@ export function Game({
             });
             const faultyMembersSorted = faultyMembers.sort(compareValues('reference', true, true));
             const buffer = faultyMembersSorted.map(faultyMember => (
-                <li key={`${foul}${team}${faultyMember.memberType}${faultyMember.id}`}>
-                    {faultyMember.reference} {faultyMember.name}{' '}
-                    {faultyMember.count > 1 ? `(${faultyMember.count})` : ''}
-                </li>
+                <ListItem
+                    key={`${foul}${team}${faultyMember.memberType}${faultyMember.id}`}
+                    className="game__member-list-item"
+                >
+                    <ListItemText
+                        primary={`${faultyMember.reference} ${faultyMember.name} ${
+                            faultyMember.count > 1 ? `(${faultyMember.count})` : ''
+                        }`}
+                    />
+                </ListItem>
             ));
-            return <ul>{buffer}</ul>;
+            // return <ul>{buffer}</ul>;
+            return (
+                <List aria-label="Actions regarding periods" className="game__member-list">
+                    {buffer}
+                </List>
+            );
         }
         return '';
     };
@@ -287,13 +302,78 @@ export function Game({
                                 {messages.settings.open}
                             </Button>
                         </li>
-                        <li>
-                            Period code: {currentPeriod}{' '}
+                        {/* <li> */}
+                        {/*    Period code: {currentPeriod}{' '} */}
+                        {/*    <Button */}
+                        {/*        variant="contained" */}
+                        {/*        onClick={() => openPopup(POPUPS.playPause)} */}
+                        {/*        disabled={!gameStarted && (currentPeriod === 4 || currentPeriod === 8)} */}
+                        {/*        startIcon={displayStartButtonData()} */}
+                        {/*    > */}
+                        {/*        {displayStartButtonData(TYPE_MESSAGE)} */}
+                        {/*    </Button> */}
+                        {/*    {popupVisibility.playPause ? ( */}
+                        {/*        <PlayPause */}
+                        {/*            popupVisibility={popupVisibility.playPause} */}
+                        {/*            gameStarted={gameStarted} */}
+                        {/*            gamePaused={gamePaused} */}
+                        {/*            period={currentPeriod} */}
+                        {/*            startHandler={handleStartButton} */}
+                        {/*            closeHandler={closePopup} */}
+                        {/*        /> */}
+                        {/*    ) : ( */}
+                        {/*        '' */}
+                        {/*    )} */}
+                        {/* </li> */}
+                        {/* <li> */}
+                        {/*    {currentScore.half1 ? ( */}
+                        {/*        <React.Fragment> */}
+                        {/*            Score half-time 1: {currentScore.half1} */}
+                        {/*            <br /> */}
+                        {/*        </React.Fragment> */}
+                        {/*    ) : ( */}
+                        {/*        '' */}
+                        {/*    )} */}
+                        {/*    {currentScore.half3 ? ( */}
+                        {/*        <React.Fragment> */}
+                        {/*            Score half-time 2: {currentScore.half3} */}
+                        {/*            <br /> */}
+                        {/*        </React.Fragment> */}
+                        {/*    ) : ( */}
+                        {/*        '' */}
+                        {/*    )} */}
+                        {/*    {currentScore.half5 ? ( */}
+                        {/*        <React.Fragment> */}
+                        {/*            Score Extra-time half-time 1: {currentScore.half5} */}
+                        {/*            <br /> */}
+                        {/*        </React.Fragment> */}
+                        {/*    ) : ( */}
+                        {/*        '' */}
+                        {/*    )} */}
+                        {/*    {currentScore.half7 ? ( */}
+                        {/*        <React.Fragment> */}
+                        {/*            Score Extra-time half-time 2: {currentScore.half7} */}
+                        {/*            <br /> */}
+                        {/*        </React.Fragment> */}
+                        {/*    ) : ( */}
+                        {/*        '' */}
+                        {/*    )} */}
+                        {/* </li> */}
+                        {/* <li> */}
+                        {/*    Score: {dataTeamA.goals} - {dataTeamB.goals} */}
+                        {/* </li> */}
+                    </ul>
+
+                    <div className="game__grid game__grid--score">
+                        <div />
+                        <div />
+                        <div className="game__grid-item game__grid-item--team">
                             <Button
                                 variant="contained"
                                 onClick={() => openPopup(POPUPS.playPause)}
                                 disabled={!gameStarted && (currentPeriod === 4 || currentPeriod === 8)}
                                 startIcon={displayStartButtonData()}
+                                className="game__button game__button--start-stop"
                             >
                                 {displayStartButtonData(TYPE_MESSAGE)}
                             </Button>
@@ -309,45 +389,8 @@ export function Game({
                             ) : (
                                 ''
                             )}
-                        </li>
-                        <li>
-                            {currentScore.half1 ? (
-                                <React.Fragment>
-                                    Score half-time 1: {currentScore.half1}
-                                    <br />
-                                </React.Fragment>
-                            ) : (
-                                ''
-                            )}
-                            {currentScore.half3 ? (
-                                <React.Fragment>
-                                    Score half-time 2: {currentScore.half3}
-                                    <br />
-                                </React.Fragment>
-                            ) : (
-                                ''
-                            )}
-                            {currentScore.half5 ? (
-                                <React.Fragment>
-                                    Score Extra-time half-time 1: {currentScore.half5}
-                                    <br />
-                                </React.Fragment>
-                            ) : (
-                                ''
-                            )}
-                            {currentScore.half7 ? (
-                                <React.Fragment>
-                                    Score Extra-time half-time 2: {currentScore.half7}
-                                    <br />
-                                </React.Fragment>
-                            ) : (
-                                ''
-                            )}
-                        </li>
-                        <li>
-                            Score: {dataTeamA.goals} - {dataTeamB.goals}
-                        </li>
-                    </ul>
+                        </div>
+                    </div>
 
                     <div className="game__grid game__grid--score">
                         <div className="game__grid-item game__grid-item--timeout">
@@ -372,7 +415,41 @@ export function Game({
                             </Button>
                         </div>
                         <div className="game__grid-item game__grid-item--score">
-                            {dataTeamA.goals} - {dataTeamB.goals}
+                            <div className="game__score game__score--half-time">{PERIODS[currentPeriod]}</div>
+                            <div className="game__score">
+                                {dataTeamA.goals} - {dataTeamB.goals}
+                            </div>
+                            <div className="game__score game__score--half-time">
+                                {currentScore.half1 ? (
+                                    <React.Fragment>
+                                        {currentScore.half1} (HT1)
+                                        <br />
+                                    </React.Fragment>
+                                ) : (
+                                    ''
+                                )}
+                                {currentScore.half3 ? (
+                                    <React.Fragment>
+                                        {currentScore.half3} (HT2)
+                                        <br />
+                                    </React.Fragment>
+                                ) : (
+                                    ''
+                                )}
+                                {currentScore.half5 ? (
+                                    <React.Fragment>
+                                        {currentScore.half5} (H1 ext. time)
+                                        <br />
+                                    </React.Fragment>
+                                ) : (
+                                    ''
+                                )}
+                                {currentScore.half7 ? (
+                                    <React.Fragment>{currentScore.half7} (H2 ext. time)</React.Fragment>
+                                ) : (
+                                    ''
+                                )}
+                            </div>
                         </div>
                         <div className="game__grid-item game__grid-item--team">
                             <Button
@@ -410,8 +487,9 @@ export function Game({
                                 }
                                 disabled={!gameStarted || gamePaused}
                                 startIcon={<AddCircleOutlineIcon />}
+                                className="game__button game__button--blue-card"
                             >
-                                {messages.addBlueCard}...
+                                {messages.addBlueCard}
                             </Button>
                             <p>({dataTeamA.blueCards})</p>
                             {foulPlayersLog('A', 'blueCard')}
@@ -428,8 +506,9 @@ export function Game({
                                 }
                                 disabled={!gameStarted || gamePaused}
                                 startIcon={<AddCircleOutlineIcon />}
+                                className="game__button game__button--red-card"
                             >
-                                {messages.addRedCard}...
+                                {messages.addRedCard}
                             </Button>
                             <p>({dataTeamA.redCards})</p>
                             {foulPlayersLog('A', 'redCard')}
@@ -446,8 +525,9 @@ export function Game({
                                 }
                                 disabled={!gameStarted || gamePaused}
                                 startIcon={<AddCircleOutlineIcon />}
+                                className="game__button"
                             >
-                                {messages.addSuspension}...
+                                {messages.addSuspension}
                             </Button>
                             <p>({dataTeamA.suspensions})</p>
                             {foulPlayersLog('A', 'suspension')}
@@ -464,8 +544,9 @@ export function Game({
                                 }
                                 disabled={!gameStarted || gamePaused}
                                 startIcon={<AddCircleOutlineIcon />}
+                                className="game__button game__button--yellow-card"
                             >
-                                {messages.addYellowCard}...
+                                {messages.addYellowCard}
                             </Button>
                             <p>({dataTeamA.yellowCards})</p>
                             {foulPlayersLog('A', 'yellowCard')}
@@ -483,8 +564,9 @@ export function Game({
                                 }
                                 disabled={!gameStarted || gamePaused}
                                 startIcon={<AddCircleOutlineIcon />}
+                                className="game__button game__button--yellow-card"
                             >
-                                {messages.addYellowCard}...
+                                {messages.addYellowCard}
                             </Button>
                             <p>({dataTeamB.yellowCards})</p>
                             {foulPlayersLog('B', 'yellowCard')}
@@ -501,8 +583,9 @@ export function Game({
                                 }
                                 disabled={!gameStarted || gamePaused}
                                 startIcon={<AddCircleOutlineIcon />}
+                                className="game__button"
                             >
-                                {messages.addSuspension}...
+                                {messages.addSuspension}
                             </Button>
                             <p>({dataTeamB.suspensions})</p>
                             {foulPlayersLog('B', 'suspension')}
@@ -519,8 +602,9 @@ export function Game({
                                 }
                                 disabled={!gameStarted || gamePaused}
                                 startIcon={<AddCircleOutlineIcon />}
+                                className="game__button game__button--red-card"
                             >
-                                {messages.addRedCard}...
+                                {messages.addRedCard}
                             </Button>
                             <p>({dataTeamB.redCards})</p>
                             {foulPlayersLog('B', 'redCard')}
@@ -537,8 +621,9 @@ export function Game({
                                 }
                                 disabled={!gameStarted || gamePaused}
                                 startIcon={<AddCircleOutlineIcon />}
+                                className="game__button game__button--blue-card"
                             >
-                                {messages.addBlueCard}...
+                                {messages.addBlueCard}
                             </Button>
                             <p>({dataTeamB.blueCards})</p>
                             {foulPlayersLog('B', 'blueCard')}

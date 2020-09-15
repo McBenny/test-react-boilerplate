@@ -160,11 +160,11 @@ function Players({
             fullWidth
             maxWidth="md"
         >
-            <DialogTitle id="dialog-title-players">{`${messages.title}: ${playersListType}`}</DialogTitle>
+            <DialogTitle id="dialog-title-players">{messages.titles[playersListType]}</DialogTitle>
             <DialogContent>
-                <h3>{messages.listOfPlayers}</h3>
+                <h3 className="member__title">{messages.listOfPlayers}</h3>
                 {membersListDisplay(PERSONS_TYPES.players)}
-                {playersListType !== ADD_GOAL ? <h3>{messages.listOfOfficials}</h3> : ''}
+                {playersListType !== ADD_GOAL ? <h3 className="member__title">{messages.listOfOfficials}</h3> : ''}
                 {playersListType !== ADD_GOAL ? membersListDisplay(PERSONS_TYPES.officials) : ''}
             </DialogContent>
             <DialogActions>

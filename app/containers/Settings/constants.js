@@ -45,7 +45,7 @@ export const EMPTY_MEMBER = {
 };
 
 export const MAX_NUMBER = {
-    players: 16,
+    players: 25,
     officials: 4,
     yellowCards: 1,
     redCards: 1,

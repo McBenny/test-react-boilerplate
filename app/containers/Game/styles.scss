@@ -1,13 +1,14 @@
 @import "../../styles/variables";
 
 body {
-    background-color: lightgoldenrodyellow;
+    background-color: #ffe;
 }
 
 .game {
     &__grid {
         display: grid;
         grid-gap: 1rem;
+        margin-bottom: 1rem;
 
         &--score {
             grid-template-columns: auto 1fr 12rem 1fr auto;
@@ -15,22 +16,21 @@ body {
 
         &--data {
             grid-template-columns: repeat(8, minmax(0, 12.5%));
+            grid-gap: 0.5rem;
             text-align: center;
         }
     }
 
     &__grid-item {
+        border-radius: 0.5rem;
+        box-shadow: 0 0 5px inset rgba(0, 0, 0, 0.3);
         min-height: 50px;
-        background-color: pink;
-
-        &--score {
-            text-align: center;
-            line-height: 4rem;
-            font-family: $fontScore;
-            font-size: 3rem;
-        }
+        padding: 0.5rem;
+        background-color: rgba(255, 255, 255, 0.95);
 
         &--team {
+            box-shadow: none;
+            background-color: transparent;
             line-height: 4rem;
             font-size: 2rem;
 
@@ -45,10 +45,57 @@ body {
     }
 
     &__button {
+        &--start-stop {
+            display: block;
+            margin: auto;
+            white-space: nowrap;
+        }
+
         &--team {
             text-transform: unset;
             font-size: inherit;
             font-weight: 400;
+
+            &:disabled {
+                color: inherit;
+            }
+        }
+
+        &--yellow-card {
+            background-color: yellow;
+        }
+
+        &--red-card {
+            background-color: #ff3232;
+            color: #fff;
+        }
+
+        &--blue-card {
+            background-color: blue;
+            color: #fff;
+        }
+
+        .game__grid-item--fouls & {
+            min-height: 4rem;
+        }
+    }
+
+    &__score {
+        text-align: center;
+        line-height: 4rem;
+        font-family: $fontScore;
+        font-size: 3rem;
+
+        &--half-time {
+            line-height: 1.2rem;
+            font-size: 1rem;
+        }
+    }
+    &__member-list {
+        padding: 0;
+
+        &-item {
+            padding: 0 0.5rem;
         }
     }
 }
