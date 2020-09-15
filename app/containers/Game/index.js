@@ -258,7 +258,6 @@ export function Game({
                     />
                 </ListItem>
             ));
-            // return <ul>{buffer}</ul>;
             return (
                 <List aria-label="Actions regarding periods" className="game__member-list">
                     {buffer}
@@ -302,66 +301,6 @@ export function Game({
                                 {messages.settings.open}
                             </Button>
                         </li>
-                        {/* <li> */}
-                        {/*    Period code: {currentPeriod}{' '} */}
-                        {/*    <Button */}
-                        {/*        variant="contained" */}
-                        {/*        onClick={() => openPopup(POPUPS.playPause)} */}
-                        {/*        disabled={!gameStarted && (currentPeriod === 4 || currentPeriod === 8)} */}
-                        {/*        startIcon={displayStartButtonData()} */}
-                        {/*    > */}
-                        {/*        {displayStartButtonData(TYPE_MESSAGE)} */}
-                        {/*    </Button> */}
-                        {/*    {popupVisibility.playPause ? ( */}
-                        {/*        <PlayPause */}
-                        {/*            popupVisibility={popupVisibility.playPause} */}
-                        {/*            gameStarted={gameStarted} */}
-                        {/*            gamePaused={gamePaused} */}
-                        {/*            period={currentPeriod} */}
-                        {/*            startHandler={handleStartButton} */}
-                        {/*            closeHandler={closePopup} */}
-                        {/*        /> */}
-                        {/*    ) : ( */}
-                        {/*        '' */}
-                        {/*    )} */}
-                        {/* </li> */}
-                        {/* <li> */}
-                        {/*    {currentScore.half1 ? ( */}
-                        {/*        <React.Fragment> */}
-                        {/*            Score half-time 1: {currentScore.half1} */}
-                        {/*            <br /> */}
-                        {/*        </React.Fragment> */}
-                        {/*    ) : ( */}
-                        {/*        '' */}
-                        {/*    )} */}
-                        {/*    {currentScore.half3 ? ( */}
-                        {/*        <React.Fragment> */}
-                        {/*            Score half-time 2: {currentScore.half3} */}
-                        {/*            <br /> */}
-                        {/*        </React.Fragment> */}
-                        {/*    ) : ( */}
-                        {/*        '' */}
-                        {/*    )} */}
-                        {/*    {currentScore.half5 ? ( */}
-                        {/*        <React.Fragment> */}
-                        {/*            Score Extra-time half-time 1: {currentScore.half5} */}
-                        {/*            <br /> */}
-                        {/*        </React.Fragment> */}
-                        {/*    ) : ( */}
-                        {/*        '' */}
-                        {/*    )} */}
-                        {/*    {currentScore.half7 ? ( */}
-                        {/*        <React.Fragment> */}
-                        {/*            Score Extra-time half-time 2: {currentScore.half7} */}
-                        {/*            <br /> */}
-                        {/*        </React.Fragment> */}
-                        {/*    ) : ( */}
-                        {/*        '' */}
-                        {/*    )} */}
-                        {/* </li> */}
-                        {/* <li> */}
-                        {/*    Score: {dataTeamA.goals} - {dataTeamB.goals} */}
-                        {/* </li> */}
                     </ul>
 
                     <div className="game__grid game__grid--score">
