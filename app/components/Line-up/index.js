@@ -12,7 +12,7 @@ import SettingsOutlinedIcon from '@material-ui/icons/SettingsOutlined';
 import { compareValues } from '../../utils/utilities';
 import { messages } from './messages';
 import { POPUPS } from '../../containers/Game/constants';
-import { MEMBERS_TYPES } from '../../containers/Settings/constants';
+import { MEMBERS_QUALIFICATIONS, MEMBERS_TYPES } from '../../containers/Settings/constants';
 
 const memberTemplate = ({ member, memberType, team, captainId, jerseyColour, referenceColour }) => (
     <Grid item key={`lineUp${team}${member.id}`} className="players__grid-item">
@@ -31,6 +31,9 @@ const memberTemplate = ({ member, memberType, team, captainId, jerseyColour, ref
                     {captainId !== 0 && captainId === member.id && memberType === MEMBERS_TYPES.players
                         ? `(${messages.captainInitial})`
                         : ''}{' '}
+                    {member.qualification && member.qualification === MEMBERS_QUALIFICATIONS.players.goalie
+                        ? `(${messages.goalieInitial})`
+                        : ''}
                 </span>
             </Button>
             <div>

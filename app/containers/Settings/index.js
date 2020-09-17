@@ -23,6 +23,8 @@ import Sketch from 'react-color/lib/Sketch';
 import InputLabel from '@material-ui/core/InputLabel';
 import TextField from '@material-ui/core/TextField';
 import Select from '@material-ui/core/Select';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import PersonAddOutlinedIcon from '@material-ui/icons/PersonAddOutlined';
@@ -66,7 +68,8 @@ import {
     MAX_NUMBER,
     OFFICIALS_REFERENCES,
     MEMBERS_TYPES,
-    TEAM_PARTS
+    TEAM_PARTS,
+    MEMBERS_QUALIFICATIONS
 } from './constants';
 
 const key = 'settings';
@@ -173,11 +176,13 @@ export function Settings({
     const memberLineTemplate = (team, member, type) => {
         let labelName;
         let labelNumber;
+        let labelQualification;
         let pattern;
         let patternTitle;
         if (type === MEMBERS_TYPES.players) {
             labelNumber = 'playerNumber';
             labelName = 'playerName';
+            labelQualification = 'playerQualification';
             pattern = '[0-9][0-9]*';
             patternTitle = 'numberPattern';
         } else {
@@ -198,7 +203,8 @@ export function Settings({
                             memberType: type,
                             id: member.id,
                             reference: e.target.value,
-                            name: member.name
+                            name: member.name,
+                            qualification: member.qualification
                         })
                     }
                     pattern={pattern}
@@ -216,10 +222,36 @@ export function Settings({
                             memberType: type,
                             id: member.id,
                             reference: member.reference,
-                            name: e.target.value
+                            name: e.target.value,
+                            qualification: member.qualification
                         })
                     }
                 />
+                {type === MEMBERS_TYPES.players ? (
+                    <FormControlLabel
+                        control={
+                            <Checkbox
+                                checked={member.qualification}
+                                onChange={e =>
+                                    onChangeMember({
+                                        team,
+                                        memberType: type,
+                                        id: member.id,
+                                        reference: member.reference,
+                                        name: member.name,
+                                        qualification: e.target.value
+                                    })
+                                }
+                                name={`${type}Qualification${team}${member.id}`}
+                                color="primary"
+                                value={MEMBERS_QUALIFICATIONS.players.goalie}
+                            />
+                        }
+                        label={messages[labelQualification]}
+                    />
+                ) : (
+                    ''
+                )}
             </ListItem>
         );
     };

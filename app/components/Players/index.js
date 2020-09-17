@@ -20,7 +20,7 @@ import {
     UNKNOWN_PLAYER,
     POPUPS
 } from '../../containers/Game/constants';
-import { MAX_NUMBER, MEMBERS_TYPES } from '../../containers/Settings/constants';
+import { MAX_NUMBER, MEMBERS_QUALIFICATIONS, MEMBERS_TYPES } from '../../containers/Settings/constants';
 
 function Players({
     popupVisibility,
@@ -111,6 +111,9 @@ function Players({
                 <span className="member__reference">{member.reference}</span>
                 <span className="member__name">
                     {member.name} {captainId !== 0 && captainId === member.id ? `(${messages.captainInitial})` : ''}
+                    {member.qualification && member.qualification === MEMBERS_QUALIFICATIONS.players.goalie
+                        ? `(${messages.goalieInitial})`
+                        : ''}
                 </span>
             </Button>
         </Grid>

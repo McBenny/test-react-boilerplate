@@ -147,7 +147,8 @@ const settingsReducer = (state = initialState, action) =>
                         ...EMPTY_MEMBER[action.memberType],
                         id: action.id,
                         name: action.name,
-                        reference: action.reference
+                        reference: action.reference,
+                        qualification: action.qualification
                     }
                 ];
                 break;
@@ -161,7 +162,8 @@ const settingsReducer = (state = initialState, action) =>
                             return {
                                 ...member,
                                 reference,
-                                name: action.name
+                                name: action.name,
+                                qualification: action.qualification
                             };
                         }
                         return member;

@@ -67,6 +67,13 @@ export const MEMBERS_TYPES = {
     officials: 'officials'
 };
 
+export const MEMBERS_QUALIFICATIONS = {
+    players: {
+        goalie: 'goalie'
+    },
+    officials: {}
+};
+
 export const TEAM_PARTS = {
     jersey: 'jersey',
     reference: 'reference'
