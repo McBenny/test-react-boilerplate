@@ -232,6 +232,7 @@ export function Settings({
         if (membersLength > 0) {
             maxId = membersList.reduce((max, member) => (member.id > max ? member.id : max), membersList[0].id);
             buffer = membersList.map(member => {
+                // Clear out the "unidentified" player
                 if (member.id !== 0) {
                     return memberLineTemplate(team, member, memberType);
                 }
@@ -252,8 +253,15 @@ export function Settings({
         );
     };
 
+    /**
+     *
+     * @param team          a letter (A or B) representing the team you want to consider
+     * @param memberType    the constant of the type of members to count
+     * @returns {string|string}
+     */
     const displayMembersCount = (team, memberType) => {
         const membersList = teams[team][memberType];
+        // Clear out the "unidentified" player
         const cleanMembersList = membersList.filter(member => member.reference !== 0);
         const membersNumber = cleanMembersList.length;
         return membersNumber > 0 ? ` (${membersNumber})` : '';
