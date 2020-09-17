@@ -232,6 +232,7 @@ export function Settings({
         if (membersLength > 0) {
             maxId = membersList.reduce((max, member) => (member.id > max ? member.id : max), membersList[0].id);
             buffer = membersList.map(member => {
+                // Clear out the "unidentified" player
                 if (member.id !== 0) {
                     return memberLineTemplate(team, member, memberType);
                 }
@@ -250,6 +251,20 @@ export function Settings({
                 {membersLength < MAX_NUMBER[memberType] && addMemberButton(team, memberType, maxId + 1)}
             </React.Fragment>
         );
+    };
+
+    /**
+     *
+     * @param team          a letter (A or B) representing the team you want to consider
+     * @param memberType    the constant of the type of members to count
+     * @returns {string|string}
+     */
+    const displayMembersCount = (team, memberType) => {
+        const membersList = teams[team][memberType];
+        // Clear out the "unidentified" player
+        const cleanMembersList = membersList.filter(member => member.reference !== 0);
+        const membersNumber = cleanMembersList.length;
+        return membersNumber > 0 ? ` (${membersNumber})` : '';
     };
 
     const captainList = team => {
@@ -393,7 +408,10 @@ export function Settings({
                     ) : (
                         ''
                     )}
-                    <h4 id={`listof-${PERSONS_TYPES.players}-A`}>{messages.listOfPlayers}</h4>
+                    <h4 id={`listof-${PERSONS_TYPES.players}-A`}>
+                        {messages.listOfPlayers}
+                        {displayMembersCount('A', PERSONS_TYPES.players)}
+                    </h4>
                     {displayMembersList('A', PERSONS_TYPES.players)}
                     <InputLabel shrink id="captainALabel">
                         {messages.captain}
@@ -408,7 +426,10 @@ export function Settings({
                         <MenuItem value="">{messages.selectCaptain}</MenuItem>
                         {captainList('A')}
                     </Select>
-                    <h4>{messages.listOfOfficials}</h4>
+                    <h4 id={`listof-${PERSONS_TYPES.officials}-A`}>
+                        {messages.listOfOfficials}
+                        {displayMembersCount('A', PERSONS_TYPES.officials)}
+                    </h4>
                     {displayMembersList('A', PERSONS_TYPES.officials)}
                     <h3>{messages.teamB}</h3>
                     <TextField
@@ -472,7 +493,10 @@ export function Settings({
                     ) : (
                         ''
                     )}
-                    <h4>{messages.listOfPlayers}</h4>
+                    <h4 id={`listof-${PERSONS_TYPES.players}-B`}>
+                        {messages.listOfPlayers}
+                        {displayMembersCount('B', PERSONS_TYPES.players)}
+                    </h4>
                     {displayMembersList('B', PERSONS_TYPES.players)}
                     <InputLabel shrink id="captainBLabel">
                         {messages.captain}
@@ -487,7 +511,10 @@ export function Settings({
                         <MenuItem value="">{messages.selectCaptain}</MenuItem>
                         {captainList('B')}
                     </Select>
-                    <h4>{messages.listOfOfficials}</h4>
+                    <h4 id={`listof-${PERSONS_TYPES.officials}-B`}>
+                        {messages.listOfOfficials}
+                        {displayMembersCount('B', PERSONS_TYPES.officials)}
+                    </h4>
                     {displayMembersList('B', PERSONS_TYPES.officials)}
                 </form>
             </DialogContent>
