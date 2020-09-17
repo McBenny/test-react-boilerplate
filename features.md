@@ -186,6 +186,8 @@ These features should also apply to the fouls, any foul registered should be edi
 
 ##BUGS
 - [X] Getting saved games looks for any saved localStorage [Fixed]
+- [ ] I don't want to get "NaN" when I erase a number before putting a new one in the settings
+- [ ] When I create a player, it jumps from bottom to top of the list, this is annoying
 
 ##TODO
 - [X] allow for timeouts per team
@@ -217,6 +219,28 @@ These features should also apply to the fouls, any foul registered should be edi
 - [ ] Optimise settings page to avoid repetition between A and B teams.
 - [ ] ~~move open and close popup functions inside the popup component~~
 
+##First feedback
+### Priority 1
+- [ ] I don't want to have to type all the names at the beginning
+- [ ] I want to get recorded players easily
+- [ ] I want to be able to read the game log (show player's name/number, actions etc.)
+- [ ] I want to cancel the last action (an action) +2
+- [ ] I want to invert the teams in the settings
+
+###Priority 2
+- [ ] I want to be able to give a letter to a player (when no number, a colour initial maybe?)
+- [ ] I want to see the number of players and officials per team in the settings
+- [ ] I want to see if the player is a goalie (in the line-up)
+- [ ] I want to say that a goal was a penalty
+- [ ] I want to say there was a penalty missed
+
+###Others
+- [ ] I want a picture of each player instead of/with number/name
+- [ ] I want to share the results (have a summary sheet)
+- [ ] I want to see the time
+- [ ] I want to see the time for the 2 minutes suspensions (should it be linked to a time pause, and start when time restarts?)
+- [ ] I want to see the time during timeouts
+
 ##Design assets
 ###Fonts
 For score display:
@@ -247,18 +271,3 @@ Sans-serif fonts:
 
 ###Jerseys
 - insert light effect on players' jerseys: https://codepen.io/mcbenny/pen/ExVOmJm
-
-##First feedback
-- [ ] I want to invert the teams in the settings
-- [ ] I want to cancel the last action (an action) +2
-- [ ] I get "NaN" when I erase a number before putting a new one in the settings
-- [ ] Maybe I want to be able to give a letter to a player (when no number, a colour)
-- [ ] I don't want to have to type all the names at the beginning
-- [ ] When I create a player, it jumps from bottom to top of the list, this is annoying
-- [ ] I want to say that a goal was a penalty
-- [ ] I want to say there was a penalty missed
-- [ ] In the line-up, I want to see if the player is a goalie
-- [ ] I'd like to have a picture of each player instead of/with number/name
-- [ ] I'd like to share the results (have a summary sheet)
-- [ ] I'd like to be able to read the game log (show player's name/number, actions etc.)
-- [ ] I want to see the number of players and officials per team in the settings
