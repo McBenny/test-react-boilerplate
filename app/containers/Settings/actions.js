@@ -105,6 +105,7 @@ export function addEmptyMember(member) {
  * @return {object} An action object with a type of CHANGE_MEMBER
  */
 export function changeMember(member) {
+    console.log('changeMember');
     return {
         type: CHANGE_MEMBER,
         ...member

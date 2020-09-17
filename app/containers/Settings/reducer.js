@@ -23,7 +23,7 @@ import {
     EMPTY_MEMBER,
     ADD_EMPTY_MEMBER,
     CHANGE_MEMBER,
-    PERSONS_TYPES
+    MEMBERS_TYPES
 } from './constants';
 
 // The initial state of the App
@@ -154,7 +154,7 @@ const settingsReducer = (state = initialState, action) =>
             case CHANGE_MEMBER: {
                 // console.log(CHANGE_MEMBER, action);
                 const reference =
-                    action.memberType === PERSONS_TYPES.players ? parseInt(action.reference, 10) : action.reference;
+                    action.memberType === MEMBERS_TYPES.players ? parseInt(action.reference, 10) : action.reference;
                 draft.teams[action.team][action.memberType] = draft.teams[action.team][action.memberType].map(
                     member => {
                         if (member.id === action.id) {

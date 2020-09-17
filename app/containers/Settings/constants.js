@@ -62,7 +62,7 @@ export const GENDERS = {
 
 export const UUID_PREFIX = 'uuid-';
 
-export const PERSONS_TYPES = {
+export const MEMBERS_TYPES = {
     players: 'players',
     officials: 'officials'
 };
