@@ -231,7 +231,7 @@ export function Settings({
                     <FormControlLabel
                         control={
                             <Checkbox
-                                checked={member.qualification}
+                                checked={member.qualification === MEMBERS_QUALIFICATIONS.players.goalie}
                                 onChange={e =>
                                     onChangeMember({
                                         team,
@@ -239,7 +239,7 @@ export function Settings({
                                         id: member.id,
                                         reference: member.reference,
                                         name: member.name,
-                                        qualification: e.target.value
+                                        qualification: e.target.checked
                                     })
                                 }
                                 name={`${type}Qualification${team}${member.id}`}

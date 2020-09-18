@@ -23,7 +23,8 @@ import {
     EMPTY_MEMBER,
     ADD_EMPTY_MEMBER,
     CHANGE_MEMBER,
-    MEMBERS_TYPES
+    MEMBERS_TYPES,
+    MEMBERS_QUALIFICATIONS
 } from './constants';
 
 // The initial state of the App
@@ -148,7 +149,7 @@ const settingsReducer = (state = initialState, action) =>
                         id: action.id,
                         name: action.name,
                         reference: action.reference,
-                        qualification: action.qualification
+                        qualification: action.qualification ? MEMBERS_QUALIFICATIONS.players.goalie : undefined
                     }
                 ];
                 break;
@@ -163,7 +164,7 @@ const settingsReducer = (state = initialState, action) =>
                                 ...member,
                                 reference,
                                 name: action.name,
-                                qualification: action.qualification
+                                qualification: action.qualification ? MEMBERS_QUALIFICATIONS.players.goalie : undefined
                             };
                         }
                         return member;
