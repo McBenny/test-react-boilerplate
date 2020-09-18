@@ -23,7 +23,8 @@ import {
     EMPTY_MEMBER,
     ADD_EMPTY_MEMBER,
     CHANGE_MEMBER,
-    PERSONS_TYPES
+    MEMBERS_TYPES,
+    MEMBERS_QUALIFICATIONS
 } from './constants';
 
 // The initial state of the App
@@ -147,21 +148,23 @@ const settingsReducer = (state = initialState, action) =>
                         ...EMPTY_MEMBER[action.memberType],
                         id: action.id,
                         name: action.name,
-                        reference: action.reference
+                        reference: action.reference,
+                        qualification: action.qualification ? MEMBERS_QUALIFICATIONS.players.goalie : undefined
                     }
                 ];
                 break;
             case CHANGE_MEMBER: {
                 // console.log(CHANGE_MEMBER, action);
                 const reference =
-                    action.memberType === PERSONS_TYPES.players ? parseInt(action.reference, 10) : action.reference;
+                    action.memberType === MEMBERS_TYPES.players ? parseInt(action.reference, 10) : action.reference;
                 draft.teams[action.team][action.memberType] = draft.teams[action.team][action.memberType].map(
                     member => {
                         if (member.id === action.id) {
                             return {
                                 ...member,
                                 reference,
-                                name: action.name
+                                name: action.name,
+                                qualification: action.qualification ? MEMBERS_QUALIFICATIONS.players.goalie : undefined
                             };
                         }
                         return member;

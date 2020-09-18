@@ -20,7 +20,7 @@ import {
     UNKNOWN_PLAYER,
     POPUPS
 } from '../../containers/Game/constants';
-import { MAX_NUMBER, PERSONS_TYPES } from '../../containers/Settings/constants';
+import { MAX_NUMBER, MEMBERS_QUALIFICATIONS, MEMBERS_TYPES } from '../../containers/Settings/constants';
 
 function Players({
     popupVisibility,
@@ -111,13 +111,16 @@ function Players({
                 <span className="member__reference">{member.reference}</span>
                 <span className="member__name">
                     {member.name} {captainId !== 0 && captainId === member.id ? `(${messages.captainInitial})` : ''}
+                    {member.qualification && member.qualification === MEMBERS_QUALIFICATIONS.players.goalie
+                        ? `(${messages.goalieInitial})`
+                        : ''}
                 </span>
             </Button>
         </Grid>
     );
 
     const membersListDisplay = memberType => {
-        const membersList = memberType === PERSONS_TYPES.players ? createPlayersList() : officialsList;
+        const membersList = memberType === MEMBERS_TYPES.players ? createPlayersList() : officialsList;
         const buffer = membersList.map(member => {
             // Display all members if it's a goal, or don't display "unknown player"
             if (playersListType === ADD_GOAL || member.id !== 0) {
@@ -133,7 +136,7 @@ function Players({
         ) {
             return (
                 <p>
-                    {messages[memberType === PERSONS_TYPES.players ? 'noPlayers' : 'noOfficials']}{' '}
+                    {messages[memberType === MEMBERS_TYPES.players ? 'noPlayers' : 'noOfficials']}{' '}
                     <Button
                         variant="contained"
                         onClick={() => openPopup(POPUPS.settings)}
@@ -163,9 +166,9 @@ function Players({
             <DialogTitle id="dialog-title-players">{messages.titles[playersListType]}</DialogTitle>
             <DialogContent>
                 <h3 className="member__title">{messages.listOfPlayers}</h3>
-                {membersListDisplay(PERSONS_TYPES.players)}
+                {membersListDisplay(MEMBERS_TYPES.players)}
                 {playersListType !== ADD_GOAL ? <h3 className="member__title">{messages.listOfOfficials}</h3> : ''}
-                {playersListType !== ADD_GOAL ? membersListDisplay(PERSONS_TYPES.officials) : ''}
+                {playersListType !== ADD_GOAL ? membersListDisplay(MEMBERS_TYPES.officials) : ''}
             </DialogContent>
             <DialogActions>
                 <Button variant="contained" onClick={closeHandler}>

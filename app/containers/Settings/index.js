@@ -23,6 +23,8 @@ import Sketch from 'react-color/lib/Sketch';
 import InputLabel from '@material-ui/core/InputLabel';
 import TextField from '@material-ui/core/TextField';
 import Select from '@material-ui/core/Select';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import PersonAddOutlinedIcon from '@material-ui/icons/PersonAddOutlined';
@@ -65,8 +67,9 @@ import {
     GENDERS,
     MAX_NUMBER,
     OFFICIALS_REFERENCES,
-    PERSONS_TYPES,
-    TEAM_PARTS
+    MEMBERS_TYPES,
+    TEAM_PARTS,
+    MEMBERS_QUALIFICATIONS
 } from './constants';
 
 const key = 'settings';
@@ -161,10 +164,10 @@ export function Settings({
                     id,
                     team,
                     memberType: type,
-                    reference: type === PERSONS_TYPES.players ? 0 : OFFICIALS_REFERENCES[id - 1]
+                    reference: type === MEMBERS_TYPES.players ? 0 : OFFICIALS_REFERENCES[id - 1]
                 })
             }
-            title={messages[type === PERSONS_TYPES.players ? 'addPlayer' : 'addOfficial']}
+            title={messages[type === MEMBERS_TYPES.players ? 'addPlayer' : 'addOfficial']}
         >
             <PersonAddOutlinedIcon />
         </IconButton>
@@ -173,11 +176,13 @@ export function Settings({
     const memberLineTemplate = (team, member, type) => {
         let labelName;
         let labelNumber;
+        let labelQualification;
         let pattern;
         let patternTitle;
-        if (type === PERSONS_TYPES.players) {
+        if (type === MEMBERS_TYPES.players) {
             labelNumber = 'playerNumber';
             labelName = 'playerName';
+            labelQualification = 'playerQualification';
             pattern = '[0-9][0-9]*';
             patternTitle = 'numberPattern';
         } else {
@@ -198,13 +203,14 @@ export function Settings({
                             memberType: type,
                             id: member.id,
                             reference: e.target.value,
-                            name: member.name
+                            name: member.name,
+                            qualification: member.qualification
                         })
                     }
                     pattern={pattern}
                     title={messages[patternTitle]}
                     required
-                    disabled={type === PERSONS_TYPES.officials}
+                    disabled={type === MEMBERS_TYPES.officials}
                 />
                 <TextField
                     id={`${type}Name${team}${member.id}`}
@@ -216,10 +222,36 @@ export function Settings({
                             memberType: type,
                             id: member.id,
                             reference: member.reference,
-                            name: e.target.value
+                            name: e.target.value,
+                            qualification: member.qualification
                         })
                     }
                 />
+                {type === MEMBERS_TYPES.players ? (
+                    <FormControlLabel
+                        control={
+                            <Checkbox
+                                checked={member.qualification === MEMBERS_QUALIFICATIONS.players.goalie}
+                                onChange={e =>
+                                    onChangeMember({
+                                        team,
+                                        memberType: type,
+                                        id: member.id,
+                                        reference: member.reference,
+                                        name: member.name,
+                                        qualification: e.target.checked
+                                    })
+                                }
+                                name={`${type}Qualification${team}${member.id}`}
+                                color="primary"
+                                value={MEMBERS_QUALIFICATIONS.players.goalie}
+                            />
+                        }
+                        label={messages[labelQualification]}
+                    />
+                ) : (
+                    ''
+                )}
             </ListItem>
         );
     };
@@ -408,11 +440,11 @@ export function Settings({
                     ) : (
                         ''
                     )}
-                    <h4 id={`listof-${PERSONS_TYPES.players}-A`}>
+                    <h4 id={`listof-${MEMBERS_TYPES.players}-A`}>
                         {messages.listOfPlayers}
-                        {displayMembersCount('A', PERSONS_TYPES.players)}
+                        {displayMembersCount('A', MEMBERS_TYPES.players)}
                     </h4>
-                    {displayMembersList('A', PERSONS_TYPES.players)}
+                    {displayMembersList('A', MEMBERS_TYPES.players)}
                     <InputLabel shrink id="captainALabel">
                         {messages.captain}
                     </InputLabel>
@@ -426,11 +458,11 @@ export function Settings({
                         <MenuItem value="">{messages.selectCaptain}</MenuItem>
                         {captainList('A')}
                     </Select>
-                    <h4 id={`listof-${PERSONS_TYPES.officials}-A`}>
+                    <h4 id={`listof-${MEMBERS_TYPES.officials}-A`}>
                         {messages.listOfOfficials}
-                        {displayMembersCount('A', PERSONS_TYPES.officials)}
+                        {displayMembersCount('A', MEMBERS_TYPES.officials)}
                     </h4>
-                    {displayMembersList('A', PERSONS_TYPES.officials)}
+                    {displayMembersList('A', MEMBERS_TYPES.officials)}
                     <h3>{messages.teamB}</h3>
                     <TextField
                         id="teamBName"
@@ -493,11 +525,11 @@ export function Settings({
                     ) : (
                         ''
                     )}
-                    <h4 id={`listof-${PERSONS_TYPES.players}-B`}>
+                    <h4 id={`listof-${MEMBERS_TYPES.players}-B`}>
                         {messages.listOfPlayers}
-                        {displayMembersCount('B', PERSONS_TYPES.players)}
+                        {displayMembersCount('B', MEMBERS_TYPES.players)}
                     </h4>
-                    {displayMembersList('B', PERSONS_TYPES.players)}
+                    {displayMembersList('B', MEMBERS_TYPES.players)}
                     <InputLabel shrink id="captainBLabel">
                         {messages.captain}
                     </InputLabel>
@@ -511,11 +543,11 @@ export function Settings({
                         <MenuItem value="">{messages.selectCaptain}</MenuItem>
                         {captainList('B')}
                     </Select>
-                    <h4 id={`listof-${PERSONS_TYPES.officials}-B`}>
+                    <h4 id={`listof-${MEMBERS_TYPES.officials}-B`}>
                         {messages.listOfOfficials}
-                        {displayMembersCount('B', PERSONS_TYPES.officials)}
+                        {displayMembersCount('B', MEMBERS_TYPES.officials)}
                     </h4>
-                    {displayMembersList('B', PERSONS_TYPES.officials)}
+                    {displayMembersList('B', MEMBERS_TYPES.officials)}
                 </form>
             </DialogContent>
             <DialogActions>

@@ -12,7 +12,7 @@ import SettingsOutlinedIcon from '@material-ui/icons/SettingsOutlined';
 import { compareValues } from '../../utils/utilities';
 import { messages } from './messages';
 import { POPUPS } from '../../containers/Game/constants';
-import { PERSONS_TYPES } from '../../containers/Settings/constants';
+import { MEMBERS_QUALIFICATIONS, MEMBERS_TYPES } from '../../containers/Settings/constants';
 
 const memberTemplate = ({ member, memberType, team, captainId, jerseyColour, referenceColour }) => (
     <Grid item key={`lineUp${team}${member.id}`} className="players__grid-item">
@@ -28,9 +28,12 @@ const memberTemplate = ({ member, memberType, team, captainId, jerseyColour, ref
                 <span className="member__reference">{member.reference}</span>
                 <span className="member__name">
                     {member.name}{' '}
-                    {captainId !== 0 && captainId === member.id && memberType === PERSONS_TYPES.players
+                    {captainId !== 0 && captainId === member.id && memberType === MEMBERS_TYPES.players
                         ? `(${messages.captainInitial})`
                         : ''}{' '}
+                    {member.qualification && member.qualification === MEMBERS_QUALIFICATIONS.players.goalie
+                        ? `(${messages.goalieInitial})`
+                        : ''}
                 </span>
             </Button>
             <div>
@@ -61,7 +64,7 @@ const membersListDisplay = ({ memberType, membersList, captainId, team, openPopu
     const sortedMembersList = membersList.sort(compareValues('reference'));
     let captainTemplate = '';
     if (captainId !== 0) {
-        const captain = memberType === PERSONS_TYPES.players && membersList.filter(player => player.id === captainId);
+        const captain = memberType === MEMBERS_TYPES.players && membersList.filter(player => player.id === captainId);
         if (captain.length === 1) {
             captainTemplate = memberTemplate({
                 member: captain[0],
@@ -75,7 +78,7 @@ const membersListDisplay = ({ memberType, membersList, captainId, team, openPopu
     }
     const buffer = sortedMembersList.map(member => {
         // If it's a player, it shouldn't be the "unknown player', nor the captain, all Ok if it's an official
-        if ((member.id && member.id !== 0 && member.id !== captainId) || memberType === PERSONS_TYPES.officials) {
+        if ((member.id && member.id !== 0 && member.id !== captainId) || memberType === MEMBERS_TYPES.officials) {
             return memberTemplate({
                 member,
                 memberType,
@@ -91,7 +94,7 @@ const membersListDisplay = ({ memberType, membersList, captainId, team, openPopu
     if (sortedMembersList.length === 0 || (sortedMembersList.length === 1 && sortedMembersList[0].id === 0)) {
         return (
             <p>
-                {messages[memberType === PERSONS_TYPES.players ? 'noPlayers' : 'noOfficials']}{' '}
+                {messages[memberType === MEMBERS_TYPES.players ? 'noPlayers' : 'noOfficials']}{' '}
                 <Button
                     variant="contained"
                     onClick={() => openPopup(POPUPS.settings)}
@@ -144,7 +147,7 @@ function LineUp({
             <DialogContent>
                 <h3>{messages.listOfPlayers}</h3>
                 {membersListDisplay({
-                    memberType: PERSONS_TYPES.players,
+                    memberType: MEMBERS_TYPES.players,
                     membersList: playersList,
                     captainId,
                     team,
@@ -154,7 +157,7 @@ function LineUp({
                 })}
                 <h3>{messages.listOfOfficials}</h3>
                 {membersListDisplay({
-                    memberType: PERSONS_TYPES.officials,
+                    memberType: MEMBERS_TYPES.officials,
                     membersList: officialsList,
                     captainId,
                     team,

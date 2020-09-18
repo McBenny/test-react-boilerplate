@@ -14,6 +14,7 @@ export const messages = {
     maxActionsReached: 'Invalid choice for this player',
     listOfPlayers: 'List of players',
     captainInitial: 'C',
+    goalieInitial: 'GK',
     noPlayers: 'No players, please insert players in',
     listOfOfficials: 'List of officials',
     noOfficials: 'No officials, please insert officials in',
