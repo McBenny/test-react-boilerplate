@@ -23,7 +23,8 @@ import {
     CHANGE_TEAM_CAPTAIN,
     INIT_SETTINGS,
     ADD_EMPTY_MEMBER,
-    CHANGE_MEMBER
+    CHANGE_MEMBER,
+    SWAP_TEAMS
 } from './constants';
 
 /**
@@ -108,6 +109,18 @@ export function changeMember(member) {
     return {
         type: CHANGE_MEMBER,
         ...member
+    };
+}
+
+/**
+ * Swaps the teams
+ * @param  {object} teams The object containing the 2 teams
+ * @return {object} An action object with a type of SWAP_TEAMS
+ */
+export function swapTeams(teams) {
+    return {
+        type: SWAP_TEAMS,
+        ...teams
     };
 }
 
