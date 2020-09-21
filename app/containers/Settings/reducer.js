@@ -23,7 +23,6 @@ import {
     EMPTY_MEMBER,
     ADD_EMPTY_MEMBER,
     CHANGE_MEMBER,
-    MEMBERS_TYPES,
     MEMBERS_QUALIFICATIONS
 } from './constants';
 
@@ -155,14 +154,12 @@ const settingsReducer = (state = initialState, action) =>
                 break;
             case CHANGE_MEMBER: {
                 // console.log(CHANGE_MEMBER, action);
-                const reference =
-                    action.memberType === MEMBERS_TYPES.players ? parseInt(action.reference, 10) : action.reference;
                 draft.teams[action.team][action.memberType] = draft.teams[action.team][action.memberType].map(
                     member => {
                         if (member.id === action.id) {
                             return {
                                 ...member,
-                                reference,
+                                reference: action.reference,
                                 name: action.name,
                                 qualification: action.qualification ? MEMBERS_QUALIFICATIONS.players.goalie : undefined
                             };

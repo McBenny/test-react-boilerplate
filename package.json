@@ -173,6 +173,7 @@
     "webpack-dev-middleware": "3.6.2",
     "webpack-hot-middleware": "2.24.3",
     "webpack-pwa-manifest": "^4.2.0",
-    "whatwg-fetch": "3.0.0"
+    "whatwg-fetch": "3.0.0",
+    "yargs-parser": ">=13.1.2"
   }
 }

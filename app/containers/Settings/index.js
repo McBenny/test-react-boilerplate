@@ -5,7 +5,7 @@
  *
  */
 
-import React, { memo, useEffect, useState } from 'react';
+import React, { Fragment, memo, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
@@ -105,10 +105,13 @@ export function Settings({
         onChangeTeamName({ team, teamName: e.target.value });
     };
 
-    const [teamAJerseyStatus, setTeamAJerseyStatus] = useState(false);
-    const [teamANumberStatus, setTeamANumberStatus] = useState(false);
-    const [teamBJerseyStatus, setTeamBJerseyStatus] = useState(false);
-    const [teamBNumberStatus, setTeamBNumberStatus] = useState(false);
+    const initialColoursState = {
+        jerseyA: false,
+        referenceA: false,
+        jerseyB: false,
+        referenceB: false
+    };
+    const [teamColoursStatuses, setTeamColoursStatuses] = useState(initialColoursState);
     const handleChangeColour = (colourCode, team, part) => {
         onChangeColour({ team, part, colour: colourCode });
     };
@@ -173,6 +176,13 @@ export function Settings({
         </IconButton>
     );
 
+    /**
+     * Displays 2 input fields to add/read a member's data
+     * @param team    Must be 'A' or 'B' only
+     * @param type    the constant of the type of members to list
+     * @param member  the actual member
+     * @returns {JSX.Element}
+     */
     const memberLineTemplate = (team, member, type) => {
         let labelName;
         let labelNumber;
@@ -256,6 +266,12 @@ export function Settings({
         );
     };
 
+    /**
+     * Displays the formatted members list with/without an "add" button
+     * @param team          Must be 'A' or 'B' only
+     * @param memberType    the constant of the type of members to list
+     * @returns {JSX.Element}
+     */
     const displayMembersList = (team, memberType) => {
         const membersList = teams[team][memberType];
         const membersLength = membersList.length;
@@ -286,8 +302,8 @@ export function Settings({
     };
 
     /**
-     *
-     * @param team          a letter (A or B) representing the team you want to consider
+     * Returns a formatted string with the number of members (type) from specified team
+     * @param team      Must be 'A' or 'B' only
      * @param memberType    the constant of the type of members to count
      * @returns {string|string}
      */
@@ -299,6 +315,11 @@ export function Settings({
         return membersNumber > 0 ? ` (${membersNumber})` : '';
     };
 
+    /**
+     * This is to display a list of players to choose from as a Captain
+     * @param team      Must be 'A' or 'B' only
+     * @returns {*}
+     */
     const captainList = team => {
         const teamPlayers = teams[team].players;
         const teamPlayersSorted = teamPlayers.sort(compareValues('reference'));
@@ -308,6 +329,102 @@ export function Settings({
             </MenuItem>
         ));
     };
+
+    /**
+     * This is to display a colour button that opens a colour picker
+     * @param type      Must be 'jersey' or 'reference'
+     * @param team      Must be 'A' or 'B' only
+     * @returns {JSX.Element}
+     */
+    const displayColourFeature = (type, team) => (
+        <Fragment>
+            <Button
+                onClick={() =>
+                    setTeamColoursStatuses({
+                        ...teamColoursStatuses,
+                        [`${type}${team}`]: !teamColoursStatuses[`${type}${team}`]
+                    })
+                }
+                variant="contained"
+                style={{ backgroundColor: teams[team][type] }}
+                title={messages[`${type}Colour`]}
+            >
+                {messages[`${type}Colour`]}
+            </Button>
+            {teamColoursStatuses[`${type}${team}`] ? (
+                <div className="colour-picker__popover">
+                    <div
+                        className="colour-picker__cover"
+                        onClick={() =>
+                            setTeamColoursStatuses({
+                                ...teamColoursStatuses,
+                                [`${type}${team}`]: !teamColoursStatuses[`${type}${team}`]
+                            })
+                        }
+                        onKeyDown={() =>
+                            setTeamColoursStatuses({
+                                ...teamColoursStatuses,
+                                [`${type}${team}`]: !teamColoursStatuses[`${type}${team}`]
+                            })
+                        }
+                        role="button"
+                        tabIndex="0"
+                    />
+                    <Sketch
+                        color={teams[team][type]}
+                        onChangeComplete={colour => handleChangeColour(colour.hex, team, TEAM_PARTS[type])}
+                        presetColors={presetColours}
+                        disableAlpha
+                    />
+                </div>
+            ) : (
+                ''
+            )}
+        </Fragment>
+    );
+
+    /**
+     * Displays the list of settings per team
+     * @param team      Must be 'A' or 'B' only
+     * @returns {JSX.Element}
+     */
+    const displaySettingsPerTeam = team => (
+        <fieldset>
+            <h3>{messages[`team${team}`]}</h3>
+            <TextField
+                id={`team${team}Name`}
+                label={messages[`team${team}`]}
+                value={teams[team].name}
+                onChange={e => handleChangeTeamName(e, team)}
+                required
+            />
+            {displayColourFeature('jersey', team)}
+            {displayColourFeature('reference', team)}
+            <h4 id={`listof-${MEMBERS_TYPES.players}-${team}`}>
+                {messages.listOfPlayers}
+                {displayMembersCount(team, MEMBERS_TYPES.players)}
+            </h4>
+            {displayMembersList(team, MEMBERS_TYPES.players)}
+            <InputLabel shrink id={`captain${team}Label`}>
+                {messages.captain}
+            </InputLabel>
+            <Select
+                id={`captain${team}`}
+                labelId={`captain${team}Label`}
+                value={teams[team].captain || ''}
+                displayEmpty
+                onChange={e => handleChangeTeamCaptain(e, team)}
+            >
+                <MenuItem value="">{messages.selectCaptain}</MenuItem>
+                {captainList(team)}
+            </Select>
+            <h4 id={`listof-${MEMBERS_TYPES.officials}-${team}`}>
+                {messages.listOfOfficials}
+                {displayMembersCount(team, MEMBERS_TYPES.officials)}
+            </h4>
+            {displayMembersList(team, MEMBERS_TYPES.officials)}
+        </fieldset>
+    );
 
     /**
      * If a team has no players or has only one player and it's id is 0 (unknown player),
@@ -324,230 +441,64 @@ export function Settings({
             <DialogTitle id="dialog-title-settings">{messages.header}</DialogTitle>
             <DialogContent>
                 <form noValidate>
-                    <h3>{messages.competition}</h3>
-                    <div>
+                    <fieldset>
+                        <h3>{messages.competition}</h3>
+                        <div>
+                            <TextField
+                                id="competition"
+                                label={messages.competitionName}
+                                value={competition}
+                                onChange={e => handleChangeSetting(e, CHANGE_COMPETITION)}
+                                required
+                            />
+                            <TextField
+                                id="round"
+                                label={messages.round}
+                                value={round}
+                                onChange={e => handleChangeSetting(e, CHANGE_ROUND)}
+                            />
+                            <InputLabel shrink id="genderLabel">
+                                {messages.gender}
+                            </InputLabel>
+                            <Select
+                                id="gender"
+                                labelId="genderLabel"
+                                value={gender}
+                                displayEmpty
+                                onChange={e => handleChangeSetting(e, CHANGE_GENDER)}
+                                required
+                            >
+                                <MenuItem value="">{messages.selectGender}</MenuItem>
+                                {gendersList()}
+                            </Select>
+                        </div>
                         <TextField
-                            id="competition"
-                            label={messages.competitionName}
-                            value={competition}
-                            onChange={e => handleChangeSetting(e, CHANGE_COMPETITION)}
-                            required
+                            id="referee1"
+                            label={messages.referee1}
+                            value={referee1}
+                            onChange={e => handleChangeSetting(e, CHANGE_REFEREE_1)}
                         />
                         <TextField
-                            id="round"
-                            label={messages.round}
-                            value={round}
-                            onChange={e => handleChangeSetting(e, CHANGE_ROUND)}
+                            id="referee2"
+                            label={messages.referee2}
+                            value={referee2}
+                            onChange={e => handleChangeSetting(e, CHANGE_REFEREE_2)}
                         />
-                        <InputLabel shrink id="genderLabel">
-                            {messages.gender}
-                        </InputLabel>
-                        <Select
-                            id="gender"
-                            labelId="genderLabel"
-                            value={gender}
-                            displayEmpty
-                            onChange={e => handleChangeSetting(e, CHANGE_GENDER)}
-                            required
-                        >
-                            <MenuItem value="">{messages.selectGender}</MenuItem>
-                            {gendersList()}
-                        </Select>
-                    </div>
-                    <TextField
-                        id="referee1"
-                        label={messages.referee1}
-                        value={referee1}
-                        onChange={e => handleChangeSetting(e, CHANGE_REFEREE_1)}
-                    />
-                    <TextField
-                        id="referee2"
-                        label={messages.referee2}
-                        value={referee2}
-                        onChange={e => handleChangeSetting(e, CHANGE_REFEREE_2)}
-                    />
-                    <TextField
-                        id="scoreKeeper"
-                        label={messages.scoreKeeper}
-                        value={scoreKeeper}
-                        onChange={e => handleChangeSetting(e, CHANGE_SCORE_KEEPER)}
-                    />
-                    <TextField
-                        id="timeKeeper"
-                        label={messages.timeKeeper}
-                        value={timeKeeper}
-                        onChange={e => handleChangeSetting(e, CHANGE_TIME_KEEPER)}
-                    />
-                    <h3>{messages.teamA}</h3>
-                    <TextField
-                        id="teamAName"
-                        label={messages.teamA}
-                        value={teams.A.name}
-                        onChange={e => handleChangeTeamName(e, 'A')}
-                        required
-                    />
-                    <Button
-                        onClick={() => setTeamAJerseyStatus(!teamAJerseyStatus)}
-                        variant="contained"
-                        style={{ backgroundColor: teams.A.jersey }}
-                        title={messages.jerseyColour}
-                    >
-                        {messages.jerseyColour}
-                    </Button>
-                    {teamAJerseyStatus ? (
-                        <div className="colour-picker__popover">
-                            <div
-                                className="colour-picker__cover"
-                                onClick={() => setTeamAJerseyStatus(!teamAJerseyStatus)}
-                                onKeyDown={() => setTeamAJerseyStatus(!teamAJerseyStatus)}
-                                role="button"
-                                tabIndex="0"
-                            />
-                            <Sketch
-                                color={teams.A.jersey}
-                                onChangeComplete={colour => handleChangeColour(colour.hex, 'A', TEAM_PARTS.jersey)}
-                                presetColors={presetColours}
-                                disableAlpha
-                            />
-                        </div>
-                    ) : (
-                        ''
-                    )}
-                    <Button
-                        onClick={() => setTeamANumberStatus(!teamANumberStatus)}
-                        variant="contained"
-                        style={{ backgroundColor: teams.A.reference }}
-                        title={messages.numberColour}
-                    >
-                        {messages.numberColour}
-                    </Button>
-                    {teamANumberStatus ? (
-                        <div className="colour-picker__popover">
-                            <div
-                                className="colour-picker__cover"
-                                onClick={() => setTeamANumberStatus(!teamANumberStatus)}
-                                onKeyDown={() => setTeamANumberStatus(!teamANumberStatus)}
-                                role="button"
-                                tabIndex="0"
-                            />
-                            <Sketch
-                                color={teams.A.reference}
-                                onChangeComplete={colour => handleChangeColour(colour.hex, 'A', TEAM_PARTS.reference)}
-                                presetColors={presetColours}
-                                disableAlpha
-                            />
-                        </div>
-                    ) : (
-                        ''
-                    )}
-                    <h4 id={`listof-${MEMBERS_TYPES.players}-A`}>
-                        {messages.listOfPlayers}
-                        {displayMembersCount('A', MEMBERS_TYPES.players)}
-                    </h4>
-                    {displayMembersList('A', MEMBERS_TYPES.players)}
-                    <InputLabel shrink id="captainALabel">
-                        {messages.captain}
-                    </InputLabel>
-                    <Select
-                        id="captainA"
-                        labelId="captainALabel"
-                        value={teams.A.captain || ''}
-                        displayEmpty
-                        onChange={e => handleChangeTeamCaptain(e, 'A')}
-                    >
-                        <MenuItem value="">{messages.selectCaptain}</MenuItem>
-                        {captainList('A')}
-                    </Select>
-                    <h4 id={`listof-${MEMBERS_TYPES.officials}-A`}>
-                        {messages.listOfOfficials}
-                        {displayMembersCount('A', MEMBERS_TYPES.officials)}
-                    </h4>
-                    {displayMembersList('A', MEMBERS_TYPES.officials)}
-                    <h3>{messages.teamB}</h3>
-                    <TextField
-                        id="teamBName"
-                        label={messages.teamB}
-                        value={teams.B.name}
-                        onChange={e => handleChangeTeamName(e, 'B')}
-                        required
-                    />
-                    <Button
-                        onClick={() => setTeamBJerseyStatus(!teamBJerseyStatus)}
-                        variant="contained"
-                        style={{ backgroundColor: teams.B.jersey }}
-                        title={messages.jerseyColour}
-                    >
-                        {messages.jerseyColour}
-                    </Button>
-                    {teamBJerseyStatus ? (
-                        <div className="colour-picker__popover">
-                            <div
-                                className="colour-picker__cover"
-                                onClick={() => setTeamBJerseyStatus(!teamBJerseyStatus)}
-                                onKeyDown={() => setTeamBJerseyStatus(!teamBJerseyStatus)}
-                                role="button"
-                                tabIndex="0"
-                            />
-                            <Sketch
-                                color={teams.B.jersey}
-                                onChangeComplete={colour => handleChangeColour(colour.hex, 'B', TEAM_PARTS.jersey)}
-                                presetColors={presetColours}
-                                disableAlpha
-                            />
-                        </div>
-                    ) : (
-                        ''
-                    )}
-                    <Button
-                        onClick={() => setTeamBNumberStatus(!teamBNumberStatus)}
-                        variant="contained"
-                        style={{ backgroundColor: teams.B.reference }}
-                        title={messages.numberColour}
-                    >
-                        {messages.numberColour}
-                    </Button>
-                    {teamBNumberStatus ? (
-                        <div className="colour-picker__popover">
-                            <div
-                                className="colour-picker__cover"
-                                onClick={() => setTeamBNumberStatus(!teamBNumberStatus)}
-                                onKeyDown={() => setTeamBNumberStatus(!teamBNumberStatus)}
-                                role="button"
-                                tabIndex="0"
-                            />
-                            <Sketch
-                                color={teams.B.reference}
-                                onChangeComplete={colour => handleChangeColour(colour.hex, 'B', TEAM_PARTS.reference)}
-                                presetColors={presetColours}
-                                disableAlpha
-                            />
-                        </div>
-                    ) : (
-                        ''
-                    )}
-                    <h4 id={`listof-${MEMBERS_TYPES.players}-B`}>
-                        {messages.listOfPlayers}
-                        {displayMembersCount('B', MEMBERS_TYPES.players)}
-                    </h4>
-                    {displayMembersList('B', MEMBERS_TYPES.players)}
-                    <InputLabel shrink id="captainBLabel">
-                        {messages.captain}
-                    </InputLabel>
-                    <Select
-                        id="captainB"
-                        labelId="captainBLabel"
-                        value={teams.B.captain || ''}
-                        displayEmpty
-                        onChange={e => handleChangeTeamCaptain(e, 'B')}
-                    >
-                        <MenuItem value="">{messages.selectCaptain}</MenuItem>
-                        {captainList('B')}
-                    </Select>
-                    <h4 id={`listof-${MEMBERS_TYPES.officials}-B`}>
-                        {messages.listOfOfficials}
-                        {displayMembersCount('B', MEMBERS_TYPES.officials)}
-                    </h4>
-                    {displayMembersList('B', MEMBERS_TYPES.officials)}
+                        <TextField
+                            id="scoreKeeper"
+                            label={messages.scoreKeeper}
+                            value={scoreKeeper}
+                            onChange={e => handleChangeSetting(e, CHANGE_SCORE_KEEPER)}
+                        />
+                        <TextField
+                            id="timeKeeper"
+                            label={messages.timeKeeper}
+                            value={timeKeeper}
+                            onChange={e => handleChangeSetting(e, CHANGE_TIME_KEEPER)}
+                        />
+                    </fieldset>
+                    {displaySettingsPerTeam('A')}
+                    {displaySettingsPerTeam('B')}
                 </form>
             </DialogContent>
             <DialogActions>
