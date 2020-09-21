@@ -69,7 +69,8 @@ import {
     OFFICIALS_REFERENCES,
     MEMBERS_TYPES,
     TEAM_PARTS,
-    MEMBERS_QUALIFICATIONS
+    MEMBERS_QUALIFICATIONS,
+    TEAMS_LIST
 } from './constants';
 
 const key = 'settings';
@@ -178,7 +179,7 @@ export function Settings({
 
     /**
      * Displays 2 input fields to add/read a member's data
-     * @param team    Must be 'A' or 'B' only
+     * @param team    Must be TEAMS_LIST.HOME or TEAMS_LIST.AWAY
      * @param type    the constant of the type of members to list
      * @param member  the actual member
      * @returns {JSX.Element}
@@ -268,7 +269,7 @@ export function Settings({
 
     /**
      * Displays the formatted members list with/without an "add" button
-     * @param team          Must be 'A' or 'B' only
+     * @param team          Must be TEAMS_LIST.HOME or TEAMS_LIST.AWAY
      * @param memberType    the constant of the type of members to list
      * @returns {JSX.Element}
      */
@@ -303,7 +304,7 @@ export function Settings({
 
     /**
      * Returns a formatted string with the number of members (type) from specified team
-     * @param team      Must be 'A' or 'B' only
+     * @param team          Must be TEAMS_LIST.HOME or TEAMS_LIST.AWAY
      * @param memberType    the constant of the type of members to count
      * @returns {string|string}
      */
@@ -317,7 +318,7 @@ export function Settings({
 
     /**
      * This is to display a list of players to choose from as a Captain
-     * @param team      Must be 'A' or 'B' only
+     * @param team      Must be TEAMS_LIST.HOME or TEAMS_LIST.AWAY
      * @returns {*}
      */
     const captainList = team => {
@@ -332,8 +333,8 @@ export function Settings({
 
     /**
      * This is to display a colour button that opens a colour picker
-     * @param type      Must be 'jersey' or 'reference'
-     * @param team      Must be 'A' or 'B' only
+     * @param type      Must be TEAM_PARTS.jersey or TEAM_PARTS.reference
+     * @param team      Must be TEAMS_LIST.HOME or TEAMS_LIST.AWAY
      * @returns {JSX.Element}
      */
     const displayColourFeature = (type, team) => (
@@ -385,7 +386,7 @@ export function Settings({
 
     /**
      * Displays the list of settings per team
-     * @param team      Must be 'A' or 'B' only
+     * @param team      Must be TEAMS_LIST.HOME or TEAMS_LIST.AWAY
      * @returns {JSX.Element}
      */
     const displaySettingsPerTeam = team => (
@@ -398,8 +399,8 @@ export function Settings({
                 onChange={e => handleChangeTeamName(e, team)}
                 required
             />
-            {displayColourFeature('jersey', team)}
-            {displayColourFeature('reference', team)}
+            {displayColourFeature(TEAM_PARTS.jersey, team)}
+            {displayColourFeature(TEAM_PARTS.reference, team)}
             <h4 id={`listof-${MEMBERS_TYPES.players}-${team}`}>
                 {messages.listOfPlayers}
                 {displayMembersCount(team, MEMBERS_TYPES.players)}
@@ -497,8 +498,8 @@ export function Settings({
                             onChange={e => handleChangeSetting(e, CHANGE_TIME_KEEPER)}
                         />
                     </fieldset>
-                    {displaySettingsPerTeam('A')}
-                    {displaySettingsPerTeam('B')}
+                    {displaySettingsPerTeam(TEAMS_LIST.HOME)}
+                    {displaySettingsPerTeam(TEAMS_LIST.AWAY)}
                 </form>
             </DialogContent>
             <DialogActions>
