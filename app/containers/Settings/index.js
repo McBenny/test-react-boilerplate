@@ -39,6 +39,7 @@ import {
     changeColour,
     changeMember,
     changeTeamCaptain,
+    swapTeams,
     initSettings
 } from './actions';
 import {
@@ -70,7 +71,8 @@ import {
     MEMBERS_TYPES,
     TEAM_PARTS,
     MEMBERS_QUALIFICATIONS,
-    TEAMS_LIST
+    TEAMS_LIST,
+    SWAP_TEAMS
 } from './constants';
 
 import './styles.scss';
@@ -94,9 +96,11 @@ export function Settings({
     onAddEmptyMember,
     onChangeMember,
     onChangeTeamCaptain,
+    onSwapTeams,
     onSaveSettings,
     onOpenSettings,
     settingsData,
+    gameStarted,
     closeHandler
 }) {
     useInjectReducer({ key, reducer });
@@ -108,12 +112,17 @@ export function Settings({
         onChangeTeamName({ team, teamName: e.target.value });
     };
 
+    const handleSwapTeams = () => {
+        onSwapTeams(teams);
+    };
+
     const initialColoursState = {
         jerseyA: false,
         referenceA: false,
         jerseyB: false,
         referenceB: false
     };
+
     const [teamColoursStatuses, setTeamColoursStatuses] = useState(initialColoursState);
     const handleChangeColour = (colourCode, team, part) => {
         onChangeColour({ team, part, colour: colourCode });
@@ -506,6 +515,18 @@ export function Settings({
                         />
                     </fieldset>
                     {displaySettingsPerTeam(TEAMS_LIST.HOME)}
+                    {!gameStarted ? (
+                        <p>
+                            {messages.swapTeamLabel}{' '}
+                            <Button onClick={e => handleSwapTeams(e, SWAP_TEAMS)} variant="contained">
+                                {messages.swapTeams}
+                            </Button>
+                            <br />
+                            <span className="text__note">{messages.swapTeamNote}</span>
+                        </p>
+                    ) : (
+                        ''
+                    )}
                     {displaySettingsPerTeam(TEAMS_LIST.AWAY)}
                 </form>
             </DialogContent>
@@ -538,9 +559,11 @@ Settings.propTypes = {
     onAddEmptyMember: PropTypes.func,
     onChangeMember: PropTypes.func,
     onChangeTeamCaptain: PropTypes.func,
+    onSwapTeams: PropTypes.func,
     onSaveSettings: PropTypes.func,
     onOpenSettings: PropTypes.func,
     settingsData: PropTypes.object,
+    gameStarted: PropTypes.bool,
     closeHandler: PropTypes.func
 };
 
@@ -564,6 +587,7 @@ export function mapDispatchToProps(dispatch) {
         onAddEmptyMember: data => dispatch(addEmptyMember(data)),
         onChangeMember: data => dispatch(changeMember(data)),
         onChangeTeamCaptain: data => dispatch(changeTeamCaptain(data)),
+        onSwapTeams: data => dispatch(swapTeams(data)),
         onSaveSettings: data => dispatch(saveSettings(data)),
         onOpenSettings: data => dispatch(initSettings(data))
     };

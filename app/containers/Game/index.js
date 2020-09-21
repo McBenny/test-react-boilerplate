@@ -570,111 +570,6 @@ export function Game({
                     </div>
                     <Grid container justify="center" alignItems="flex-start" spacing={3}>
                         <Grid item>
-                            {/* <h2> */}
-                            {/*    {messages.teamA}: {settings.teams.A.name} */}
-                            {/* </h2> */}
-                            {/* <ul> */}
-                            {/*    <li> */}
-                            {/*        Timeouts: {dataTeamA.timeouts} */}
-                            {/*        <Button */}
-                            {/*            variant="contained" */}
-                            {/*            onClick={() => handleTimeoutButton('A')} */}
-                            {/*            disabled={ */}
-                            {/*                !gameStarted || gamePaused || dataTeamA.timeouts >= MAX_NUMBER.timeouts */}
-                            {/*            } */}
-                            {/*            title={ */}
-                            {/*                dataTeamA.timeouts >= MAX_NUMBER.timeouts ? messages.maxTimeoutsReached : '' */}
-                            {/*            } */}
-                            {/*            startIcon={<AddCircleOutlineIcon />} */}
-                            {/*        > */}
-                            {/*            {messages.addTimeout} */}
-                            {/*        </Button> */}
-                            {/*    </li> */}
-                            {/*    <li> */}
-                            {/*        <Button */}
-                            {/*            variant="contained" */}
-                            {/*            onClick={() => */}
-                            {/*                openPlayers({ eventType: EVENT_TYPES.goal, team: 'A', type: ADD_GOAL }) */}
-                            {/*            } */}
-                            {/*            disabled={!gameStarted || gamePaused} */}
-                            {/*            startIcon={<AddCircleOutlineIcon />} */}
-                            {/*        > */}
-                            {/*            {messages.addGoal}... */}
-                            {/*        </Button> */}
-                            {/*    </li> */}
-                            {/*    <li> */}
-                            {/*        Yellow cards: {dataTeamA.yellowCards} */}
-                            {/*        <Button */}
-                            {/*            variant="contained" */}
-                            {/*            onClick={() => */}
-                            {/*                openPlayers({ */}
-                            {/*                    eventType: EVENT_TYPES.yellowCard, */}
-                            {/*                    team: 'A', */}
-                            {/*                    type: ADD_YELLOW_CARD */}
-                            {/*                }) */}
-                            {/*            } */}
-                            {/*            disabled={!gameStarted || gamePaused} */}
-                            {/*            startIcon={<AddCircleOutlineIcon />} */}
-                            {/*        > */}
-                            {/*            {messages.addYellowCard}... */}
-                            {/*        </Button> */}
-                            {/*        {foulPlayersLog('A', 'yellowCard')} */}
-                            {/*    </li> */}
-                            {/*    <li> */}
-                            {/*        2 minutes: {dataTeamA.suspensions} */}
-                            {/*        <Button */}
-                            {/*            variant="contained" */}
-                            {/*            onClick={() => */}
-                            {/*                openPlayers({ */}
-                            {/*                    eventType: EVENT_TYPES.suspension, */}
-                            {/*                    team: 'A', */}
-                            {/*                    type: ADD_SUSPENSION */}
-                            {/*                }) */}
-                            {/*            } */}
-                            {/*            disabled={!gameStarted || gamePaused} */}
-                            {/*            startIcon={<AddCircleOutlineIcon />} */}
-                            {/*        > */}
-                            {/*            {messages.addSuspension}... */}
-                            {/*        </Button> */}
-                            {/*        {foulPlayersLog('A', 'suspension')} */}
-                            {/*    </li> */}
-                            {/*    <li> */}
-                            {/*        Red cards: {dataTeamA.redCards} */}
-                            {/*        <Button */}
-                            {/*            variant="contained" */}
-                            {/*            onClick={() => */}
-                            {/*                openPlayers({ */}
-                            {/*                    eventType: EVENT_TYPES.redCard, */}
-                            {/*                    team: 'A', */}
-                            {/*                    type: ADD_RED_CARD */}
-                            {/*                }) */}
-                            {/*            } */}
-                            {/*            disabled={!gameStarted || gamePaused} */}
-                            {/*            startIcon={<AddCircleOutlineIcon />} */}
-                            {/*        > */}
-                            {/*            {messages.addRedCard}... */}
-                            {/*        </Button> */}
-                            {/*        {foulPlayersLog('A', 'redCard')} */}
-                            {/*    </li> */}
-                            {/*    <li> */}
-                            {/*        Blue cards: {dataTeamA.blueCards} */}
-                            {/*        <Button */}
-                            {/*            variant="contained" */}
-                            {/*            onClick={() => */}
-                            {/*                openPlayers({ */}
-                            {/*                    eventType: EVENT_TYPES.blueCard, */}
-                            {/*                    team: 'A', */}
-                            {/*                    type: ADD_BLUE_CARD */}
-                            {/*                }) */}
-                            {/*            } */}
-                            {/*            disabled={!gameStarted || gamePaused} */}
-                            {/*            startIcon={<AddCircleOutlineIcon />} */}
-                            {/*        > */}
-                            {/*            {messages.addBlueCard}... */}
-                            {/*        </Button> */}
-                            {/*        {foulPlayersLog('A', 'blueCard')} */}
-                            {/*    </li> */}
-                            {/*    <li> */}
                             <Button
                                 variant="contained"
                                 onClick={() => openLineUp({ team: 'A' })}
@@ -682,115 +577,8 @@ export function Game({
                             >
                                 {messages.showLineUp}
                             </Button>
-                            {/*    </li> */}
-                            {/* </ul> */}
                         </Grid>
                         <Grid item>
-                            {/* <h2> */}
-                            {/*    {messages.teamB}: {settings.teams.B.name} */}
-                            {/* </h2> */}
-                            {/* <ul> */}
-                            {/*    <li> */}
-                            {/*        Timeouts: {dataTeamB.timeouts} */}
-                            {/*        <Button */}
-                            {/*            variant="contained" */}
-                            {/*            onClick={() => handleTimeoutButton('B')} */}
-                            {/*            disabled={ */}
-                            {/*                !gameStarted || gamePaused || dataTeamB.timeouts >= MAX_NUMBER.timeouts */}
-                            {/*            } */}
-                            {/*            title={ */}
-                            {/*                dataTeamB.timeouts >= MAX_NUMBER.timeouts ? messages.maxTimeoutsReached : '' */}
-                            {/*            } */}
-                            {/*            startIcon={<AddCircleOutlineIcon />} */}
-                            {/*        > */}
-                            {/*            {messages.addTimeout} */}
-                            {/*        </Button> */}
-                            {/*    </li> */}
-                            {/*    <li> */}
-                            {/*        <Button */}
-                            {/*            variant="contained" */}
-                            {/*            onClick={() => */}
-                            {/*                openPlayers({ eventType: EVENT_TYPES.goal, team: 'B', type: ADD_GOAL }) */}
-                            {/*            } */}
-                            {/*            disabled={!gameStarted || gamePaused} */}
-                            {/*            startIcon={<AddCircleOutlineIcon />} */}
-                            {/*        > */}
-                            {/*            {messages.addGoal}... */}
-                            {/*        </Button> */}
-                            {/*    </li> */}
-                            {/*    <li> */}
-                            {/*        Yellow cards: {dataTeamB.yellowCards} */}
-                            {/*        <Button */}
-                            {/*            variant="contained" */}
-                            {/*            onClick={() => */}
-                            {/*                openPlayers({ */}
-                            {/*                    eventType: EVENT_TYPES.yellowCard, */}
-                            {/*                    team: 'B', */}
-                            {/*                    type: ADD_YELLOW_CARD */}
-                            {/*                }) */}
-                            {/*            } */}
-                            {/*            disabled={!gameStarted || gamePaused} */}
-                            {/*            startIcon={<AddCircleOutlineIcon />} */}
-                            {/*        > */}
-                            {/*            {messages.addYellowCard}... */}
-                            {/*        </Button> */}
-                            {/*        {foulPlayersLog('B', 'yellowCard')} */}
-                            {/*    </li> */}
-                            {/*    <li> */}
-                            {/*        2 minutes: {dataTeamB.suspensions} */}
-                            {/*        <Button */}
-                            {/*            variant="contained" */}
-                            {/*            onClick={() => */}
-                            {/*                openPlayers({ */}
-                            {/*                    eventType: EVENT_TYPES.suspension, */}
-                            {/*                    team: 'B', */}
-                            {/*                    type: ADD_SUSPENSION */}
-                            {/*                }) */}
-                            {/*            } */}
-                            {/*            disabled={!gameStarted || gamePaused} */}
-                            {/*            startIcon={<AddCircleOutlineIcon />} */}
-                            {/*        > */}
-                            {/*            {messages.addSuspension}... */}
-                            {/*        </Button> */}
-                            {/*        {foulPlayersLog('B', 'suspension')} */}
-                            {/*    </li> */}
-                            {/*    <li> */}
-                            {/*        Red cards: {dataTeamB.redCards} */}
-                            {/*        <Button */}
-                            {/*            variant="contained" */}
-                            {/*            onClick={() => */}
-                            {/*                openPlayers({ */}
-                            {/*                    eventType: EVENT_TYPES.redCard, */}
-                            {/*                    team: 'B', */}
-                            {/*                    type: ADD_RED_CARD */}
-                            {/*                }) */}
-                            {/*            } */}
-                            {/*            disabled={!gameStarted || gamePaused} */}
-                            {/*            startIcon={<AddCircleOutlineIcon />} */}
-                            {/*        > */}
-                            {/*            {messages.addRedCard}... */}
-                            {/*        </Button> */}
-                            {/*        {foulPlayersLog('B', 'redCard')} */}
-                            {/*    </li> */}
-                            {/*    <li> */}
-                            {/*        Blue cards: {dataTeamB.blueCards} */}
-                            {/*        <Button */}
-                            {/*            variant="contained" */}
-                            {/*            onClick={() => */}
-                            {/*                openPlayers({ */}
-                            {/*                    eventType: EVENT_TYPES.blueCard, */}
-                            {/*                    team: 'B', */}
-                            {/*                    type: ADD_BLUE_CARD */}
-                            {/*                }) */}
-                            {/*            } */}
-                            {/*            disabled={!gameStarted || gamePaused} */}
-                            {/*            startIcon={<AddCircleOutlineIcon />} */}
-                            {/*        > */}
-                            {/*            {messages.addBlueCard}... */}
-                            {/*        </Button> */}
-                            {/*        {foulPlayersLog('B', 'blueCard')} */}
-                            {/*    </li> */}
-                            {/*    <li> */}
                             <Button
                                 variant="contained"
                                 onClick={() => openLineUp({ team: 'B' })}
@@ -798,8 +586,6 @@ export function Game({
                             >
                                 {messages.showLineUp}
                             </Button>
-                            {/*    </li> */}
-                            {/* </ul> */}
                         </Grid>
                     </Grid>
 
@@ -807,6 +593,7 @@ export function Game({
                     {gameEventsLog()}
                     <Settings
                         settingsData={settings}
+                        gameStarted={gameStarted}
                         popupVisibility={popupVisibility.settings}
                         closeHandler={closePopup}
                     />

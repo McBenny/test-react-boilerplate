@@ -23,7 +23,8 @@ import {
     EMPTY_MEMBER,
     ADD_EMPTY_MEMBER,
     CHANGE_MEMBER,
-    MEMBERS_QUALIFICATIONS
+    MEMBERS_QUALIFICATIONS,
+    SWAP_TEAMS
 } from './constants';
 
 // The initial state of the App
@@ -154,8 +155,6 @@ const settingsReducer = (state = initialState, action) =>
                 break;
             case CHANGE_MEMBER: {
                 // console.log(CHANGE_MEMBER, action);
-                // const reference =
-                //     action.memberType === MEMBERS_TYPES.players ? parseInt(action.reference, 10) : action.reference;
                 draft.teams[action.team][action.memberType] = draft.teams[action.team][action.memberType].map(
                     member => {
                         if (member.id === action.id) {
@@ -171,6 +170,11 @@ const settingsReducer = (state = initialState, action) =>
                 );
                 break;
             }
+            case SWAP_TEAMS:
+                // console.log(SWAP_TEAMS, action);
+                draft.teams.A = action.B;
+                draft.teams.B = action.A;
+                break;
             case INIT_SETTINGS: {
                 // console.log(INIT_SETTINGS, action);
                 const newSettings = Object.keys(action.settings);

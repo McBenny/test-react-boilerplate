@@ -225,7 +225,7 @@ These features should also apply to the fouls, any foul registered should be edi
 - [ ] I want to get recorded players easily
 - [ ] I want to be able to read the game log (show player's name/number, actions etc.)
 - [ ] I want to cancel the last action (an action) +2
-- [ ] I want to invert the teams in the settings
+- [X] I want to invert the teams in the settings
 
 ###Priority 2
 - [X] I want to be able to give a letter to a player (when no number, a colour initial maybe?)

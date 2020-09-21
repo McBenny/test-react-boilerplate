@@ -28,5 +28,8 @@ export const messages = {
     addOfficial: 'Add an official',
     officialReference: 'Official reference',
     officialName: 'Official name',
-    referencePattern: 'Automatic'
+    referencePattern: 'Automatic',
+    swapTeamLabel: 'Want to swap "Home" and "Away" teams?',
+    swapTeamNote: 'This is only possible before the start of the game.',
+    swapTeams: 'Swap teams'
 };
