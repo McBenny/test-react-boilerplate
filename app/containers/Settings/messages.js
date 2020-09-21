@@ -13,7 +13,7 @@ export const messages = {
     timeKeeper: 'Time keeper',
     teamA: 'Home team',
     jerseyColour: 'Jersey colour',
-    numberColour: 'Number colour',
+    referenceColour: 'Number colour',
     teamB: 'Visitor team',
     listOfPlayers: 'List of players',
     addPlayer: 'Add a player',

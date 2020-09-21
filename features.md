@@ -216,7 +216,7 @@ These features should also apply to the fouls, any foul registered should be edi
 - [X] Changing the number, _first or last name_ of a player updates every occurrence of that player,
 
 ##REFACTORING
-- [ ] Optimise settings page to avoid repetition between A and B teams.
+- [X] Optimise settings page to avoid repetition between A and B teams.
 - [ ] ~~move open and close popup functions inside the popup component~~
 
 ##First feedback

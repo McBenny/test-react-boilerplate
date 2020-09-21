@@ -74,6 +74,11 @@ export const MEMBERS_QUALIFICATIONS = {
     officials: {}
 };
 
+export const TEAMS_LIST = {
+    HOME: 'A',
+    AWAY: 'B'
+};
+
 export const TEAM_PARTS = {
     jersey: 'jersey',
     reference: 'reference'
