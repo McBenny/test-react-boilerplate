@@ -458,7 +458,6 @@ export function Settings({
             <DialogTitle id="dialog-title-settings">{messages.header}</DialogTitle>
             <DialogContent>
                 <form noValidate>
-                    {!gameStarted ? 'go!' : 'too late'}
                     <fieldset>
                         <h3>{messages.competition}</h3>
                         <div>
@@ -522,6 +521,8 @@ export function Settings({
                             <Button onClick={e => handleSwapTeams(e, SWAP_TEAMS)} variant="contained">
                                 {messages.swapTeams}
                             </Button>
+                            <br />
+                            <span className="text__note">{messages.swapTeamNote}</span>
                         </p>
                     ) : (
                         ''
