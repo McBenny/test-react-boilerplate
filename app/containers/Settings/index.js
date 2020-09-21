@@ -73,6 +73,8 @@ import {
     TEAMS_LIST
 } from './constants';
 
+import './styles.scss';
+
 const key = 'settings';
 
 export function Settings({
@@ -194,7 +196,7 @@ export function Settings({
             labelNumber = 'playerNumber';
             labelName = 'playerName';
             labelQualification = 'playerQualification';
-            pattern = '[0-9][0-9]*';
+            pattern = '[0-9][0-9]*|[a-zA-Z]{1,3}';
             patternTitle = 'numberPattern';
         } else {
             labelNumber = 'officialReference';
@@ -219,9 +221,13 @@ export function Settings({
                         })
                     }
                     pattern={pattern}
+                    inputProps={{
+                        maxLength: 3
+                    }}
                     title={messages[patternTitle]}
                     required
                     disabled={type === MEMBERS_TYPES.officials}
+                    className="settings__text-input settings__text-input--reference"
                 />
                 <TextField
                     id={`${type}Name${team}${member.id}`}
@@ -256,6 +262,7 @@ export function Settings({
                                 name={`${type}Qualification${team}${member.id}`}
                                 color="primary"
                                 value={MEMBERS_QUALIFICATIONS.players.goalie}
+                                title={messages[`${labelQualification}HelpText`]}
                             />
                         }
                         label={messages[labelQualification]}

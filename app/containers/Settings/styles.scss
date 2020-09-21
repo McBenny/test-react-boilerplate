@@ -1,0 +1,10 @@
+@import "../../styles/variables";
+
+.settings {
+    &__text-input {
+        &--reference input {
+            width: 5rem;
+            text-transform: uppercase;
+        }
+    }
+}

@@ -228,7 +228,7 @@ These features should also apply to the fouls, any foul registered should be edi
 - [ ] I want to invert the teams in the settings
 
 ###Priority 2
-- [ ] I want to be able to give a letter to a player (when no number, a colour initial maybe?)
+- [X] I want to be able to give a letter to a player (when no number, a colour initial maybe?)
 - [X] I want to see the number of players and officials per team in the settings
 - [X] I want to see if the player is a goalie (in the line-up)
 - [ ] I want to say that a goal was a penalty
