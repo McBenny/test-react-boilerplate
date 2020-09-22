@@ -52,16 +52,18 @@ import {
     ADD_GOAL,
     ADD_RED_CARD,
     ADD_SUSPENSION,
-    ADD_TIMEOUT,
+    // ADD_TIMEOUT,
     ADD_YELLOW_CARD,
     EVENT_TYPES,
     PERIODS,
-    POPUPS
+    POPUPS,
+    TIME_DURATIONS
 } from './constants';
 import './styles.scss';
 import { MAX_NUMBER } from '../Settings/constants';
-import PlayPause from '../../components/Play-pause';
 import { isEven, compareValues } from '../../utils/utilities';
+import PlayPause from '../../components/Play-pause';
+import Countdown from '../../components/Countdown';
 import LineUp from '../../components/Line-up';
 
 const key = 'game';
@@ -191,13 +193,18 @@ export function Game({
         return <PlayCircleOutlineIcon />;
     };
 
+    const initialTimeOuts = { A: false, B: false };
+    const [timeOut, setATimeOut] = useState(initialTimeOuts);
+
     const handleTimeoutButton = team => {
-        onAddAction({
-            type: ADD_TIMEOUT,
-            eventType: EVENT_TYPES.timeout,
-            team,
-            score
-        });
+        setATimeOut({ ...timeOut, [team]: true });
+        // TODO: temporarily disabled to allow for testing
+        // onAddAction({
+        //     type: ADD_TIMEOUT,
+        //     eventType: EVENT_TYPES.timeout,
+        //     team,
+        //     score
+        // });
     };
 
     const addActionPerTeam = ({ eventType, type, team, id, memberType }) => {
@@ -342,7 +349,18 @@ export function Game({
                             >
                                 {messages.addTimeout}
                             </Button>
-                            <p>({dataTeamA.timeouts})</p>
+                            <p>
+                                {timeOut.A ? (
+                                    <Countdown
+                                        duration={TIME_DURATIONS.timeout}
+                                        isOnHold={gamePaused}
+                                        callback={() => setATimeOut(initialTimeOuts)}
+                                    />
+                                ) : (
+                                    ''
+                                )}{' '}
+                                ({dataTeamA.timeouts})
+                            </p>
                         </div>
                         <div className="game__grid-item game__grid-item--team game__grid-item--team-A">
                             <Button
@@ -409,7 +427,18 @@ export function Game({
                             >
                                 {messages.addTimeout}
                             </Button>
-                            <p>({dataTeamB.timeouts})</p>
+                            <p>
+                                {timeOut.B ? (
+                                    <Countdown
+                                        duration={TIME_DURATIONS.timeout}
+                                        isOnHold={gamePaused}
+                                        callback={() => setATimeOut(initialTimeOuts)}
+                                    />
+                                ) : (
+                                    ''
+                                )}{' '}
+                                ({dataTeamB.timeouts})
+                            </p>
                         </div>
                     </div>
 

@@ -62,17 +62,17 @@ body {
         }
 
         &--yellow-card {
-            background-color: yellow;
+            background-color: $yellowCardColour;
         }
 
         &--red-card {
-            background-color: #ff3232;
-            color: #fff;
+            background-color: $redCardColour;
+            color: $textReverseColour;
         }
 
         &--blue-card {
-            background-color: blue;
-            color: #fff;
+            background-color: $blueCardColour;
+            color: $textReverseColour;
         }
 
         .game__grid-item--fouls & {

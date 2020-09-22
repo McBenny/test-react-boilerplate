@@ -1,0 +1,40 @@
+@import "../../styles/variables";
+
+.countdown {
+    &__remaining-time {
+        padding: 0.25rem 0.75rem;
+
+        &--ending {
+            background-color: $timeOutWarningColour;
+            animation: warningBlinking 1s infinite;
+        }
+
+        &--ended {
+            background-color: $timeOutEndColour;
+            color: $textReverseColour;
+            animation: fadingOut 5s;
+        }
+    }
+}
+
+@keyframes warningBlinking {
+    from {
+        background-color: $timeOutWarningColour;
+        color: $textReverseColour;
+    }
+
+    to {
+        background-color: transparent;
+        color: $textColour;
+    }
+}
+
+@keyframes fadingOut {
+    50% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
