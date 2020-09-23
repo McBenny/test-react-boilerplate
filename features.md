@@ -238,7 +238,7 @@ These features should also apply to the fouls, any foul registered should be edi
 - [ ] I want a picture of each player instead of/with number/name
 - [ ] I want to share the results (have a summary sheet)
 - [ ] I want to see the time
-- [ ] I want to see the time for the 2 minutes suspensions (should it be linked to a time pause, and start when time restarts?)
+- [X] I want to see the time for the 2 minutes suspensions (should it be linked to a time pause, and start when time restarts?)
 - [X] I want to see the time during timeouts
 
 ##Design assets
