@@ -197,8 +197,18 @@ export function Game({
     const [timeOut, setATimeOut] = useState(initialTimeOuts);
 
     const handleTimeoutButton = team => {
+        // Activates the counter for timeouts
         setATimeOut({ ...timeOut, [team]: true });
+        // Pauses the game
+        handleStartButton({
+            gamePauseStatus: gamePaused,
+            eventType: EVENT_TYPES.gamePaused,
+            id: currentPeriod,
+            period: currentPeriod
+        });
+
         // TODO: temporarily disabled to allow for testing
+        // Adds the tineout to the count of timeouts
         // onAddAction({
         //     type: ADD_TIMEOUT,
         //     eventType: EVENT_TYPES.timeout,
@@ -353,7 +363,6 @@ export function Game({
                                 {timeOut.A ? (
                                     <Countdown
                                         duration={TIME_DURATIONS.timeout}
-                                        isOnHold={gamePaused}
                                         callback={() => setATimeOut(initialTimeOuts)}
                                     />
                                 ) : (
@@ -431,7 +440,6 @@ export function Game({
                                 {timeOut.B ? (
                                     <Countdown
                                         duration={TIME_DURATIONS.timeout}
-                                        isOnHold={gamePaused}
                                         callback={() => setATimeOut(initialTimeOuts)}
                                     />
                                 ) : (
