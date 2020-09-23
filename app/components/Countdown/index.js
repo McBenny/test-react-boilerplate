@@ -2,8 +2,9 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import './styles.scss';
+import { EVENT_TYPES } from '../../containers/Game/constants';
 
-function Countdown({ duration, isOnHold, callback }) {
+function Countdown({ duration, isOnHold, event, callback }) {
     const [remainingTime, setRemainingTime] = useState(duration);
     const [isActive, setIsActive] = useState(false);
 
@@ -53,7 +54,7 @@ function Countdown({ duration, isOnHold, callback }) {
     };
 
     return (
-        <span className="countdown">
+        <span className={`countdown${event === EVENT_TYPES.suspension ? ' countdown--suspension' : ''}`}>
             <span
                 className={`countdown__remaining-time${
                     remainingTime < params.warningDelay && remainingTime !== 0
@@ -70,6 +71,7 @@ function Countdown({ duration, isOnHold, callback }) {
 Countdown.propTypes = {
     duration: PropTypes.number,
     isOnHold: PropTypes.bool,
+    event: PropTypes.string,
     callback: PropTypes.func
 };
 

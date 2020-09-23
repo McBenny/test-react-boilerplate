@@ -1,18 +1,34 @@
 @import "../../styles/variables";
 
 .countdown {
+    $block: &;
+
     &__remaining-time {
+        background-color: transparent;
         padding: 0.25rem 0.75rem;
+
+        #{$block}--suspension & {
+            background-color: $suspensionDefaultColour;
+            color: $textReverseColour;
+        }
 
         &--ending {
             background-color: $timeOutWarningColour;
             animation: warningBlinking 1s infinite;
+
+            #{$block}--suspension & {
+                background-color: $suspensionWarningColour;
+            }
         }
 
         &--ended {
             background-color: $timeOutEndColour;
             color: $textReverseColour;
             animation: fadingOut 5s;
+
+            #{$block}--suspension & {
+                background-color: $suspensionEndColour;
+            }
         }
     }
 }

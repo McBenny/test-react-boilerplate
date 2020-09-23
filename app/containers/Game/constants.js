@@ -57,6 +57,13 @@ export const PERIODS = {
     8: 'full-time + extra-time'
 };
 
+export const FOULS = {
+    yellowCard: 'yellowCard',
+    suspension: 'suspension',
+    redCard: 'redCard',
+    blueCard: 'blueCard'
+};
+
 export const UNKNOWN_PLAYER = {
     ...EMPTY_MEMBER.players,
     id: 0,
