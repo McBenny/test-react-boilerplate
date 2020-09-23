@@ -98,4 +98,10 @@ body {
             padding: 0 0.5rem;
         }
     }
+
+    &__member-reference {
+        text-transform: uppercase;
+        font-family: $fontReferences;
+        font-weight: 600;
+    }
 }

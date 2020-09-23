@@ -294,8 +294,8 @@ export function Game({
                         ) : (
                             ''
                         )}
-                        {/* eslint-enable indent */}
-                        <span className="game__member-reference">{faultyMember.reference}</span> {faultyMember.name}{' '}
+                        {/* eslint-enable indent */}[
+                        <span className="game__member-reference">{faultyMember.reference}</span>] {faultyMember.name}{' '}
                         {faultyMember.count > 1 ? `(${faultyMember.count})` : ''}
                     </ListItemText>
                 </ListItem>
