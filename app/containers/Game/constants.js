@@ -38,6 +38,11 @@ export const EVENT_TYPES = {
     gameEnd: 'end game'
 };
 
+export const TIME_DURATIONS = {
+    suspension: 120,
+    timeout: 60
+};
+
 // Even numbers represent non-playable periods (used in /components/Play-pause)
 // Numbers of playing periods match the score periods in ./Game/reducer.js:initialState.currentScore
 export const PERIODS = {
@@ -50,6 +55,13 @@ export const PERIODS = {
     6: 'extra-time half-time',
     7: 'extra-time half-time 2',
     8: 'full-time + extra-time'
+};
+
+export const FOULS = {
+    yellowCard: 'yellowCard',
+    suspension: 'suspension',
+    redCard: 'redCard',
+    blueCard: 'blueCard'
 };
 
 export const UNKNOWN_PLAYER = {

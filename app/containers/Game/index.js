@@ -55,13 +55,19 @@ import {
     ADD_TIMEOUT,
     ADD_YELLOW_CARD,
     EVENT_TYPES,
+    FOULS,
     PERIODS,
-    POPUPS
+    POPUPS,
+    TIME_DURATIONS
 } from './constants';
-import './styles.scss';
+
 import { MAX_NUMBER } from '../Settings/constants';
-import PlayPause from '../../components/Play-pause';
 import { isEven, compareValues } from '../../utils/utilities';
+
+import './styles.scss';
+
+import PlayPause from '../../components/Play-pause';
+import Countdown from '../../components/Countdown';
 import LineUp from '../../components/Line-up';
 
 const key = 'game';
@@ -191,7 +197,21 @@ export function Game({
         return <PlayCircleOutlineIcon />;
     };
 
+    const initialTimeOuts = { A: false, B: false };
+    const [timeOut, setATimeOut] = useState(initialTimeOuts);
+
     const handleTimeoutButton = team => {
+        // Activates the counter for timeouts
+        setATimeOut({ ...timeOut, [team]: true });
+        // Pauses the game
+        handleStartButton({
+            gamePauseStatus: gamePaused,
+            eventType: EVENT_TYPES.gamePaused,
+            id: currentPeriod,
+            period: currentPeriod
+        });
+
+        // Adds the timeout to the count of timeouts
         onAddAction({
             type: ADD_TIMEOUT,
             eventType: EVENT_TYPES.timeout,
@@ -207,6 +227,11 @@ export function Game({
                 teamA: team === 'A' ? score.teamA + 1 : score.teamA,
                 teamB: team === 'B' ? score.teamB + 1 : score.teamB
             };
+        } else if (eventType === EVENT_TYPES.suspension) {
+            setATimeOut({
+                ...timeOut,
+                [`${FOULS.suspension}${team}${memberType}${id}`]: true
+            });
         }
         onAddAction({ eventType, type, team, id, memberType, score: updatedScore });
     };
@@ -251,11 +276,28 @@ export function Game({
                     key={`${foul}${team}${faultyMember.memberType}${faultyMember.id}`}
                     className="game__member-list-item"
                 >
-                    <ListItemText
-                        primary={`${faultyMember.reference} ${faultyMember.name} ${
-                            faultyMember.count > 1 ? `(${faultyMember.count})` : ''
-                        }`}
-                    />
+                    <ListItemText>
+                        {/* eslint-disable indent */}
+                        {foul === FOULS.suspension &&
+                        timeOut[`${foul}${team}${faultyMember.memberType}${faultyMember.id}`] === true ? (
+                            <Countdown
+                                duration={TIME_DURATIONS.suspension}
+                                isOnHold={gamePaused}
+                                event={EVENT_TYPES.suspension}
+                                callback={() =>
+                                    setATimeOut({
+                                        ...timeOut,
+                                        [`${foul}${team}${faultyMember.memberType}${faultyMember.id}`]: false
+                                    })
+                                }
+                            />
+                        ) : (
+                            ''
+                        )}
+                        {/* eslint-enable indent */}[
+                        <span className="game__member-reference">{faultyMember.reference}</span>] {faultyMember.name}{' '}
+                        {faultyMember.count > 1 ? `(${faultyMember.count})` : ''}
+                    </ListItemText>
                 </ListItem>
             ));
             return (
@@ -342,7 +384,17 @@ export function Game({
                             >
                                 {messages.addTimeout}
                             </Button>
-                            <p>({dataTeamA.timeouts})</p>
+                            <p>
+                                {timeOut.A ? (
+                                    <Countdown
+                                        duration={TIME_DURATIONS.timeout}
+                                        callback={() => setATimeOut({ ...timeOut, A: false })}
+                                    />
+                                ) : (
+                                    ''
+                                )}{' '}
+                                ({dataTeamA.timeouts})
+                            </p>
                         </div>
                         <div className="game__grid-item game__grid-item--team game__grid-item--team-A">
                             <Button
@@ -409,7 +461,17 @@ export function Game({
                             >
                                 {messages.addTimeout}
                             </Button>
-                            <p>({dataTeamB.timeouts})</p>
+                            <p>
+                                {timeOut.B ? (
+                                    <Countdown
+                                        duration={TIME_DURATIONS.timeout}
+                                        callback={() => setATimeOut({ ...timeOut, B: false })}
+                                    />
+                                ) : (
+                                    ''
+                                )}{' '}
+                                ({dataTeamB.timeouts})
+                            </p>
                         </div>
                     </div>
 
@@ -431,7 +493,7 @@ export function Game({
                                 {messages.addBlueCard}
                             </Button>
                             <p>({dataTeamA.blueCards})</p>
-                            {foulPlayersLog('A', 'blueCard')}
+                            {foulPlayersLog('A', FOULS.blueCard)}
                         </div>
                         <div className="game__grid-item game__grid-item--fouls">
                             <Button
@@ -450,7 +512,7 @@ export function Game({
                                 {messages.addRedCard}
                             </Button>
                             <p>({dataTeamA.redCards})</p>
-                            {foulPlayersLog('A', 'redCard')}
+                            {foulPlayersLog('A', FOULS.redCard)}
                         </div>
                         <div className="game__grid-item game__grid-item--fouls">
                             <Button
@@ -469,7 +531,7 @@ export function Game({
                                 {messages.addSuspension}
                             </Button>
                             <p>({dataTeamA.suspensions})</p>
-                            {foulPlayersLog('A', 'suspension')}
+                            {foulPlayersLog('A', FOULS.suspension)}
                         </div>
                         <div className="game__grid-item game__grid-item--fouls">
                             <Button
@@ -488,7 +550,7 @@ export function Game({
                                 {messages.addYellowCard}
                             </Button>
                             <p>({dataTeamA.yellowCards})</p>
-                            {foulPlayersLog('A', 'yellowCard')}
+                            {foulPlayersLog('A', FOULS.yellowCard)}
                         </div>
 
                         <div className="game__grid-item game__grid-item--fouls">
@@ -508,7 +570,7 @@ export function Game({
                                 {messages.addYellowCard}
                             </Button>
                             <p>({dataTeamB.yellowCards})</p>
-                            {foulPlayersLog('B', 'yellowCard')}
+                            {foulPlayersLog('B', FOULS.yellowCard)}
                         </div>
                         <div className="game__grid-item game__grid-item--fouls">
                             <Button
@@ -527,7 +589,7 @@ export function Game({
                                 {messages.addSuspension}
                             </Button>
                             <p>({dataTeamB.suspensions})</p>
-                            {foulPlayersLog('B', 'suspension')}
+                            {foulPlayersLog('B', FOULS.suspension)}
                         </div>
                         <div className="game__grid-item game__grid-item--fouls">
                             <Button
@@ -546,7 +608,7 @@ export function Game({
                                 {messages.addRedCard}
                             </Button>
                             <p>({dataTeamB.redCards})</p>
-                            {foulPlayersLog('B', 'redCard')}
+                            {foulPlayersLog('B', FOULS.redCard)}
                         </div>
                         <div className="game__grid-item game__grid-item--fouls">
                             <Button
@@ -565,7 +627,7 @@ export function Game({
                                 {messages.addBlueCard}
                             </Button>
                             <p>({dataTeamB.blueCards})</p>
-                            {foulPlayersLog('B', 'blueCard')}
+                            {foulPlayersLog('B', FOULS.blueCard)}
                         </div>
                     </div>
                     <Grid container justify="center" alignItems="flex-start" spacing={3}>
