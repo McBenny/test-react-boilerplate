@@ -17,7 +17,7 @@ export const messages = {
     teamB: 'Visitor team',
     listOfPlayers: 'List of players',
     addPlayer: 'Add a player',
-    playerNumber: 'Player number',
+    playerNumber: 'Player #',
     playerName: 'Player name',
     playerQualification: 'GK',
     playerQualificationHelpText: 'Goal Keeper',

@@ -3,12 +3,21 @@
 .settings {
     &__text-input {
         &--reference {
-            margin-right: 1rem;
+            margin-right: 0.5rem;
 
             input {
-                width: 4rem;
+                width: 4.5rem;
+                text-align: right;
                 text-transform: uppercase;
             }
         }
+    }
+
+    &__reference {
+        display: inline-block;
+        margin-right: 0.5rem;
+        min-width: 2rem;
+        text-align: right;
+        text-transform: uppercase;
     }
 }
