@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import Dialog from '@material-ui/core/Dialog';
@@ -7,6 +7,8 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
 import SettingsOutlinedIcon from '@material-ui/icons/SettingsOutlined';
 
 import { compareValues } from '../../utils/utilities';
@@ -36,6 +38,8 @@ function Players({
     closeHandler,
     openPopup
 }) {
+    const [firstRendering, setFirstRendering] = useState(true);
+
     /**
      * According to the rules of handball:
      *  - in general, when the maximum number of a sanction is reached, referees can't add the same sanction,
@@ -60,6 +64,14 @@ function Players({
         return yellowCardsMax || redCardsMax || blueCardsMax || suspensionsMax;
     };
 
+    const [penalty, setPenalty] = useState(false);
+    const handleChangePenalty = e => {
+        setPenalty(e.target.checked);
+    };
+    useEffect(() => {
+        setPenalty(false);
+    }, [popupVisibility]);
+
     const createPlayersList = () => {
         let membersListSorted;
         // If it's for a goal
@@ -71,12 +83,15 @@ function Players({
                 playersList.push(UNKNOWN_PLAYER);
             }
             // Then sort the players
-            membersListSorted = playersList.sort(compareValues('reference', true));
+            membersListSorted = playersList.sort(compareValues('reference', true, true));
             // But place the unknown player at the first position
-            membersListSorted.splice(membersListSorted.length, 0, membersListSorted.splice(0, 1)[0]);
+            if (firstRendering) {
+                membersListSorted.splice(membersListSorted.length, 0, membersListSorted.splice(0, 1)[0]);
+                setFirstRendering(false);
+            }
         } else {
             // Just sort the list as there is nothing special
-            membersListSorted = playersList.sort(compareValues('reference', true));
+            membersListSorted = playersList.sort(compareValues('reference', true, true));
         }
         return membersListSorted;
     };
@@ -94,6 +109,7 @@ function Players({
                 onClick={() => {
                     actionHandler({
                         eventType,
+                        penalty,
                         type: playersListType,
                         team,
                         id: member.id,
@@ -166,9 +182,34 @@ function Players({
             <DialogTitle id="dialog-title-players">{messages.titles[playersListType]}</DialogTitle>
             <DialogContent>
                 <h3 className="member__title">{messages.listOfPlayers}</h3>
+                {playersListType === ADD_GOAL ? (
+                    <div>
+                        <FormControlLabel
+                            control={
+                                <Checkbox
+                                    checked={penalty}
+                                    onChange={e => handleChangePenalty(e)}
+                                    name="penalty"
+                                    color="primary"
+                                    value
+                                />
+                            }
+                            label={messages.penalty}
+                            labelPlacement="start"
+                        />
+                    </div>
+                ) : (
+                    ''
+                )}
                 {membersListDisplay(MEMBERS_TYPES.players)}
-                {playersListType !== ADD_GOAL ? <h3 className="member__title">{messages.listOfOfficials}</h3> : ''}
-                {playersListType !== ADD_GOAL ? membersListDisplay(MEMBERS_TYPES.officials) : ''}
+                {playersListType !== ADD_GOAL ? (
+                    <Fragment>
+                        <h3 className="member__title">{messages.listOfOfficials}</h3>
+                        {membersListDisplay(MEMBERS_TYPES.officials)}
+                    </Fragment>
+                ) : (
+                    ''
+                )}
             </DialogContent>
             <DialogActions>
                 <Button variant="contained" onClick={closeHandler}>

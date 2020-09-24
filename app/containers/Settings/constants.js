@@ -29,6 +29,7 @@ export const EMPTY_MEMBER_DATA = {
     reference: 0,
     name: '',
     goals: 0,
+    penalty: 0,
     yellowCards: 0,
     redCards: 0,
     blueCards: 0,

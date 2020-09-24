@@ -4,6 +4,8 @@ export const messages = {
     ...PlayerMessages,
     title: 'Line-up',
     goals: 'Goals',
+    penaltiesHelpText: 'Penalties',
+    penaltyInitial: 'p',
     yellowCards: 'yellow card',
     redCards: 'red card',
     blueCard: 'blue card',

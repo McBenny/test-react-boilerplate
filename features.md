@@ -188,6 +188,8 @@ These features should also apply to the fouls, any foul registered should be edi
 - [X] Getting saved games looks for any saved localStorage [Fixed]
 - [ ] I don't want to get "NaN" when I erase a number before putting a new one in the settings
 - [ ] When I create a player, it jumps from bottom to top of the list, this is annoying
+- [ ] Players seem to not be sorted "naturally"
+- [ ] Players with letters are not in uppercase in list for captain
 
 ##TODO
 - [X] allow for timeouts per team
@@ -231,7 +233,7 @@ These features should also apply to the fouls, any foul registered should be edi
 - [X] I want to be able to give a letter to a player (when no number, a colour initial maybe?)
 - [X] I want to see the number of players and officials per team in the settings
 - [X] I want to see if the player is a goalie (in the line-up)
-- [ ] I want to say that a goal was a penalty
+- [X] I want to say that a goal was a penalty
 - [ ] I want to say there was a penalty missed
 
 ###Others

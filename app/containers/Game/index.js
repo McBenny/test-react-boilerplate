@@ -220,7 +220,7 @@ export function Game({
         });
     };
 
-    const addActionPerTeam = ({ eventType, type, team, id, memberType }) => {
+    const addActionPerTeam = ({ eventType, penalty = false, type, team, id, memberType }) => {
         let updatedScore = score;
         if (eventType === EVENT_TYPES.goal) {
             updatedScore = {
@@ -233,7 +233,7 @@ export function Game({
                 [`${FOULS.suspension}${team}${memberType}${id}`]: true
             });
         }
-        onAddAction({ eventType, type, team, id, memberType, score: updatedScore });
+        onAddAction({ eventType, penalty, type, team, id, memberType, score: updatedScore });
     };
 
     /**
@@ -318,7 +318,8 @@ export function Game({
             const htmlId = nextId();
             return (
                 <li key={htmlId}>
-                    <strong>Event:</strong> {gameEvent.eventType}, <strong>{gameEvent.team ? 'Team:' : ''}</strong>{' '}
+                    <strong>Event:</strong> {gameEvent.eventType}
+                    {gameEvent.penalty ? ' (penalty)' : ''}, <strong>{gameEvent.team ? 'Team:' : ''}</strong>{' '}
                     {gameEvent.team}, <strong>{gameEvent.memberType ? `${gameEvent.memberType}:` : ''}</strong>{' '}
                     {gameEvent.id}, <strong>Score:</strong> {gameEvent.score.teamA}-{gameEvent.score.teamB}
                 </li>
