@@ -74,9 +74,11 @@ const useableState = savedState !== '' ? savedState : initialState;
 const gameReducer = (state = useableState, action) =>
     produce(state, draft => {
         let updatedData;
+        let penaltyStatus = false;
         switch (action.type) {
             case ADD_GOAL:
                 updatedData = 'goals';
+                penaltyStatus = action.penalty;
                 break;
             case ADD_YELLOW_CARD:
                 updatedData = 'yellowCards';
@@ -106,9 +108,10 @@ const gameReducer = (state = useableState, action) =>
                 break;
             case ADD_EVENT: {
                 // console.log(ADD_EVENT, action);
-                const { id, team, eventType, memberType, score } = action;
+                const { id, team, eventType, memberType, score, penalty } = action;
                 draft.gameEvents.push({
                     eventType,
+                    penalty,
                     team,
                     id,
                     memberType,
@@ -133,7 +136,8 @@ const gameReducer = (state = useableState, action) =>
                         if (member.id === action.id) {
                             return {
                                 ...member,
-                                [updatedData]: member[updatedData] + 1
+                                [updatedData]: member[updatedData] + 1,
+                                penalty: penaltyStatus ? member.penalty + 1 : member.penalty
                             };
                         }
                         return member;

@@ -13,6 +13,7 @@ export const messages = {
     cancel: 'Cancel',
     maxActionsReached: 'Invalid choice for this player',
     listOfPlayers: 'List of players',
+    penalty: 'Is it a penalty?',
     captainInitial: 'C',
     goalieInitial: 'GK',
     noPlayers: 'No players, please insert players in',

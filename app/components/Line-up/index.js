@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 
 import Dialog from '@material-ui/core/Dialog';
@@ -37,8 +37,23 @@ const memberTemplate = ({ member, memberType, team, captainId, jerseyColour, ref
                 </span>
             </Button>
             <div>
-                {member.goals > 0 && `${messages.goals}: ${member.goals}`}
-                {member.goals > 0 && <br />}
+                {member.goals > 0 ? (
+                    <Fragment>
+                        {messages.goals}: {member.goals}
+                        {member.penalty > 0 ? (
+                            <Fragment>
+                                {' '}
+                                (<span title={messages.penaltiesHelpText}>{messages.penaltyInitial}</span>:{' '}
+                                {member.penalty})
+                            </Fragment>
+                        ) : (
+                            ''
+                        )}
+                        <br />
+                    </Fragment>
+                ) : (
+                    ''
+                )}
                 {member.yellowCards > 0 && `${messages.yellowCards}: ${member.yellowCards}`}
                 {member.yellowCards > 0 && <br />}
                 {member.suspensions > 0 && `${messages.suspension}: ${member.suspensions}`}
@@ -61,7 +76,7 @@ memberTemplate.propTypes = {
 };
 
 const membersListDisplay = ({ memberType, membersList, captainId, team, openPopup, jerseyColour, referenceColour }) => {
-    const sortedMembersList = membersList.sort(compareValues('reference'));
+    const sortedMembersList = membersList.sort(compareValues('reference', true, true));
     let captainTemplate = '';
     if (captainId !== 0) {
         const captain = memberType === MEMBERS_TYPES.players && membersList.filter(player => player.id === captainId);
