@@ -342,7 +342,8 @@ export function Settings({
         const teamPlayersSorted = teamPlayers.sort(compareValues('reference', true, true));
         return teamPlayersSorted.map(player => (
             <MenuItem key={`${team}player${player.id}`} value={player.id}>
-                {`${player.reference} ${player.name}`}
+                <span className="settings__reference">{player.reference}</span>
+                {player.name}
             </MenuItem>
         ));
     };
