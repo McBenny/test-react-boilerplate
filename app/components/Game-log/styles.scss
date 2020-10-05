@@ -1,0 +1,26 @@
+.game-log {
+    list-style: decimal;
+    padding-left: 2.5rem;
+
+    &__item {
+        display: list-item;
+    }
+
+    &__event {
+        display: flex;
+    }
+
+    &__detail {
+        min-width: 300px;
+    }
+
+    &__score {
+        margin-left: 1rem;
+    }
+
+    &__goals {
+        &--added {
+            font-weight: 600;
+        }
+    }
+}

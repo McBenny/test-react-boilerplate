@@ -223,23 +223,23 @@ These features should also apply to the fouls, any foul registered should be edi
 
 ##First feedback
 ### Priority 1
+- [ ] I want to be able to read the game log (show player's name/number, actions etc.)
 - [ ] I don't want to have to type all the names at the beginning
 - [ ] I want to get recorded players easily
-- [ ] I want to be able to read the game log (show player's name/number, actions etc.)
 - [ ] I want to cancel the last action (an action) +2
 - [X] I want to invert the teams in the settings
 
 ###Priority 2
+- [ ] I want to say there was a penalty missed
 - [X] I want to be able to give a letter to a player (when no number, a colour initial maybe?)
 - [X] I want to see the number of players and officials per team in the settings
 - [X] I want to see if the player is a goalie (in the line-up)
 - [X] I want to say that a goal was a penalty
-- [ ] I want to say there was a penalty missed
 
 ###Others
-- [ ] I want a picture of each player instead of/with number/name
 - [ ] I want to share the results (have a summary sheet)
 - [ ] I want to see the time
+- [ ] I want a picture of each player instead of/with number/name
 - [X] I want to see the time for the 2 minutes suspensions (should it be linked to a time pause, and start when time restarts?)
 - [X] I want to see the time during timeouts
 
