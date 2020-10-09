@@ -1,8 +1,10 @@
 export const messages = {
-    header: 'Game screen',
+    title: 'Game',
+    returnHome: 'Return home',
     settings: {
         open: 'Open settings...'
     },
+    round: 'round',
     startButton: {
         start: 'Start game',
         pause: 'Pause game',
