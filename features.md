@@ -223,11 +223,11 @@ These features should also apply to the fouls, any foul registered should be edi
 
 ##First feedback
 ### Priority 1
-- [ ] I want to be able to read the game log (show player's name/number, actions etc.)
 - [ ] I don't want to have to type all the names at the beginning
 - [ ] I want to get recorded players easily
 - [ ] I want to cancel the last action (an action) +2
 - [X] I want to invert the teams in the settings
+- [X] I want to be able to read the game log (show player's name/number, actions etc.)
 
 ###Priority 2
 - [ ] I want to say there was a penalty missed

@@ -171,12 +171,12 @@ const GameLog = ({ gameEvents, settingsData }) => {
 
     return (
         <Fragment>
-            <h2>Game log:</h2>
-            <h3>Last action:</h3>
+            <h2>{messages.title}</h2>
+            <h3>{messages.lastAction}:</h3>
             <List component="ol" className="game-log" start={gameEvents.length}>
                 {createBuffer(gameEvents, true)}
             </List>
-            <h3>Full log:</h3>
+            <h3>{messages.fullLog}:</h3>
             <List component="ol" className="game-log">
                 {createBuffer(gameEvents, false)}
             </List>

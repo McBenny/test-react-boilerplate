@@ -5,6 +5,7 @@ import PlayPause from '../index';
 import { messages } from '../messages';
 
 const componentProperties = {
+    popupVisibility: true,
     gameStarted: true,
     gamePaused: false,
     period: 1,
