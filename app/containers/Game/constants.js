@@ -25,17 +25,17 @@ export const STORE_SCORE = 'boilerplate/Game/STORE_SCORE';
 
 export const EVENT_TYPES = {
     goal: 'goal',
-    yellowCard: 'yellow card',
-    redCard: 'red card',
-    blueCard: 'blue card',
-    suspension: '2 minutes',
-    timeout: 'time out',
-    gameStart: 'start game',
-    periodStart: 'start period',
-    gamePaused: 'game paused',
-    gameResumed: 'game resumed',
-    periodEnd: 'end period',
-    gameEnd: 'end game'
+    yellowCard: 'yellowCard',
+    redCard: 'redCard',
+    blueCard: 'blueCard',
+    suspension: 'suspension',
+    timeout: 'timeOut',
+    gameStart: 'startGame',
+    periodStart: 'startPeriod',
+    gamePaused: 'gamePaused',
+    gameResumed: 'gameResumed',
+    periodEnd: 'endPeriod',
+    gameEnd: 'endGame'
 };
 
 export const TIME_DURATIONS = {

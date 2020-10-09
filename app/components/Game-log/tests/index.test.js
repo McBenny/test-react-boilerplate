@@ -1,28 +1,19 @@
 import React from 'react';
 import { render } from '@testing-library/react';
 
-import PlayPause from '../index';
+import GameLog from '../index';
 import { messages } from '../messages';
 
-const componentProperties = {
-    popupVisibility: true,
-    gameStarted: true,
-    gamePaused: false,
-    period: 1,
-    startHandler: () => {},
-    closeHandler: () => {}
-};
-
-describe('<PlayPause />', () => {
+describe('<GameLog />', () => {
     it('should render and match the snapshot', () => {
         const {
             container: { firstChild }
-        } = render(<PlayPause {...componentProperties} />);
+        } = render(<GameLog gameEvents={[]} settingsData={{}} />);
         expect(firstChild).toMatchSnapshot();
     });
 });
 
-describe('PlayPause messages', () => {
+describe('GameLog messages', () => {
     it('should be defined and have at least a title', () => {
         expect(messages).toBeDefined();
         expect(messages.title).toBeDefined();

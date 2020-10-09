@@ -9,7 +9,6 @@ import React, { Fragment, useState, memo, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
-import nextId from 'react-id-generator';
 
 import { createStructuredSelector } from 'reselect';
 
@@ -69,6 +68,7 @@ import './styles.scss';
 import PlayPause from '../../components/Play-pause';
 import Countdown from '../../components/Countdown';
 import LineUp from '../../components/Line-up';
+import GameLog from '../../components/Game-log';
 
 const key = 'game';
 
@@ -307,25 +307,6 @@ export function Game({
             );
         }
         return '';
-    };
-
-    /**
-     * This function generates the list of events of the game (HTML).
-     * @returns {*}
-     */
-    const gameEventsLog = () => {
-        const buffer = gameEvents.map(gameEvent => {
-            const htmlId = nextId();
-            return (
-                <li key={htmlId}>
-                    <strong>Event:</strong> {gameEvent.eventType}
-                    {gameEvent.penalty ? ' (penalty)' : ''}, <strong>{gameEvent.team ? 'Team:' : ''}</strong>{' '}
-                    {gameEvent.team}, <strong>{gameEvent.memberType ? `${gameEvent.memberType}:` : ''}</strong>{' '}
-                    {gameEvent.id}, <strong>Score:</strong> {gameEvent.score.teamA}-{gameEvent.score.teamB}
-                </li>
-            );
-        });
-        return <ul>{buffer}</ul>;
     };
 
     return (
@@ -651,9 +632,7 @@ export function Game({
                             </Button>
                         </Grid>
                     </Grid>
-
-                    <h2>Game log:</h2>
-                    {gameEventsLog()}
+                    <GameLog gameEvents={gameEvents} settingsData={settings} />
                     <Settings
                         settingsData={settings}
                         gameStarted={gameStarted}

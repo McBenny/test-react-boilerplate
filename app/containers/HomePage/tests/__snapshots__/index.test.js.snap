@@ -1,7 +1,32 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`<HomePage /> should render and match the snapshot 1`] = `
-<h1>
-  Handball Scoreboard
-</h1>
+<main>
+  <h1>
+    Handball Scoreboard
+  </h1>
+  <button
+    class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary"
+    tabindex="0"
+    type="button"
+  >
+    <span
+      class="MuiButton-label"
+    >
+      Create a game
+    </span>
+    <span
+      class="MuiTouchRipple-root"
+    />
+  </button>
+  <h2
+    id="gameListTitle"
+  >
+    Saved games
+  </h2>
+  <nav
+    aria-labelledby="gameListTitle"
+    class="MuiList-root MuiList-padding"
+  />
+</main>
 `;

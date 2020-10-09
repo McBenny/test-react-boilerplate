@@ -5,6 +5,7 @@ import LineUp from '../index';
 import { messages } from '../messages';
 
 const componentProperties = {
+    popupVisibility: true,
     team: 'A',
     playersList: [],
     captainId: 0,
