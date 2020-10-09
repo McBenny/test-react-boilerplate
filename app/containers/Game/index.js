@@ -20,6 +20,7 @@ import PlayCircleOutlineIcon from '@material-ui/icons/PlayCircleOutline';
 import PauseCircleOutlineIcon from '@material-ui/icons/PauseCircleOutline';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import PeopleOutlineIcon from '@material-ui/icons/PeopleOutline';
+import HomeOutlined from '@material-ui/icons/HomeOutlined';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -167,6 +168,10 @@ export function Game({
         }
     }, [lineUpData]);
 
+    const returnHomeHandler = () => {
+        window.location.href = URLS.index;
+    };
+
     const score = { teamA: dataTeamA.goals, teamB: dataTeamB.goals };
     const handleStartButton = ({ gameStatus = true, gamePauseStatus, eventType, period, id }) => {
         onHandleGameStatus({
@@ -181,6 +186,29 @@ export function Game({
         if ((eventType === EVENT_TYPES.periodEnd || eventType === EVENT_TYPES.gameEnd) && !isEven(id)) {
             onStoreScore({ id, currentScore: `${score.teamA}-${score.teamB}` });
         }
+    };
+
+    const displayCompetitionDetails = () => {
+        let message = '';
+        if (settings.competition !== '') {
+            message += `${settings.competition} `;
+        }
+        if (settings.gender !== '') {
+            message += ` [${settings.gender}] `;
+        }
+        if (settings.round !== '') {
+            message += ` (${messages.round}: ${settings.round})`;
+        }
+        const teams =
+            settings.teams.A.name !== 'Team A' && settings.teams.B.name !== 'Team B'
+                ? `${settings.teams.A.name} vs ${settings.teams.B.name}`
+                : '';
+        return (
+            <Fragment>
+                <h1 className="title title--1">{message !== '' ? message : messages.title}</h1>
+                {teams !== '' ? <h2 className="title title--subtitle">{teams}</h2> : ''}
+            </Fragment>
+        );
     };
 
     const TYPE_MESSAGE = 'TYPE_MESSAGE';
@@ -313,10 +341,9 @@ export function Game({
         <Fragment>
             <main>
                 <Container maxWidth="lg">
-                    <h1 className="title title--1">{messages.header}</h1>
-                    <ul>
-                        <li>{date}</li>
-                        <li>
+                    <Grid container direction="row" justify="space-between" alignItems="center">
+                        <div>{date}</div>
+                        <div>
                             <Button
                                 variant="contained"
                                 onClick={() => openPopup(POPUPS.settings)}
@@ -324,9 +351,18 @@ export function Game({
                             >
                                 {messages.settings.open}
                             </Button>
-                        </li>
-                    </ul>
-
+                        </div>
+                        <div>
+                            <Button
+                                variant="contained"
+                                onClick={() => returnHomeHandler()}
+                                startIcon={<HomeOutlined />}
+                            >
+                                {messages.returnHome}
+                            </Button>
+                        </div>
+                    </Grid>
+                    {displayCompetitionDetails()}
                     <div className="game__grid game__grid--score">
                         <div />
                         <div />

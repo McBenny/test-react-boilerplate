@@ -187,6 +187,7 @@ These features should also apply to the fouls, any foul registered should be edi
 ##BUGS
 - [X] Getting saved games looks for any saved localStorage [Fixed]
 - [X] I don't want to get "NaN" when I erase a number before putting a new one in the settings
+- [ ] A totally empty player in the settings should not be saved
 - [ ] When I create a player, it jumps from bottom to top of the list, this is annoying
 - [ ] Players seem to not be sorted "naturally"
 - [X] Players with letters are not in uppercase in list for captain
@@ -209,13 +210,16 @@ These features should also apply to the fouls, any foul registered should be edi
 - [X] add link to settings form "no players situations"
 - [X] add a colour to each team
 - [X] add game officials (referees, scorekeeper (table), timekeeper (scoreboard/buzzer))
+- [X] in players pop-in, list players and officials in different tabs
+- [X] Changing the number, _first or last name_ of a player updates every occurrence of that player,
+- [X] Add the competition settings on top of the game screen
+- [ ] Order games by date on selection screen
+- [ ] Order players by ascending numbers
 - [ ] authenticate users
 - [ ] save team and players data to use in auto-suggest, save colours as well
 - [ ] allow image upload for teams
-- [X] in players pop-in, list players and officials in different tabs
 - [ ] allow for removal of a player
 - [ ] Removing a player gives everything he holds to "unknown players"
-- [X] Changing the number, _first or last name_ of a player updates every occurrence of that player,
 
 ##REFACTORING
 - [X] Optimise settings page to avoid repetition between A and B teams.

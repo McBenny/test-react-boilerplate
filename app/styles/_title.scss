@@ -2,9 +2,17 @@
     &--1 {
         margin: 1rem auto 2rem;
         text-align: center;
+        font-size: 1.5rem;
+        font-weight: 600;
+    }
+
+    &--subtitle {
+        margin: -2rem auto 1.5rem;
+        text-align: center;
         font-size: 2rem;
         font-weight: 600;
     }
+
     &--2 {
         margin: 1rem auto 1rem;
         font-size: 1.5rem;
