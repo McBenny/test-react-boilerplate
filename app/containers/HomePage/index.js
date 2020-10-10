@@ -78,7 +78,7 @@ export default function HomePage() {
                                 <br />
                                 <span className="title title--1-5">
                                     score: {game.dataTeamA.goals}-{game.dataTeamB.goals} (
-                                    <span className="game-list__status">{matchStatus}</span>)
+                                    <em className="game-list__status">{matchStatus}</em>)
                                 </span>
                             </span>
                         </span>
