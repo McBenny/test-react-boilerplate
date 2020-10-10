@@ -196,6 +196,7 @@ These features should also apply to the fouls, any foul registered should be edi
 ##TODO
 - [ ] Order games by date on selection screen
 - [ ] Ability to remove a player if he has no event
+- [ ] I want to be able to delete a game (via popup confirmation)
 - [ ] authenticate users
 - [ ] save team and players data to use in auto-suggest, save colours as well
 - [ ] allow image upload for teams

@@ -15,9 +15,11 @@ import Button from '@material-ui/core/Button';
 import LocalStorage from '../../utils/local-storage';
 import { generateId, naturalSorting, formatDate } from '../../utils/utilities';
 import { URLS } from '../App/constants';
-import { GAMES_PREFIX } from '../Game/constants';
+import { EVENT_TYPES, GAMES_PREFIX } from '../Game/constants';
 
 import { messages } from './messages';
+
+import './styles.scss';
 
 export default function HomePage() {
     const createGame = () => {
@@ -43,27 +45,53 @@ export default function HomePage() {
                 cleanLocalStorage[i] = LocalStorage.get(localKeys[i]);
             }
         }
-        const sortedLocalStorage = naturalSorting(cleanLocalStorage, 'date');
+        const sortedLocalStorage = naturalSorting(cleanLocalStorage, 'date', 'DESC');
         const buffer = sortedLocalStorage.map(game => {
             const formattedDate = formatDate(game.date);
+            let matchStatus = messages.notStarted;
+            if (game.gameEvents.length > 0) {
+                const lastEvent = game.gameEvents[game.gameEvents.length - 1];
+                switch (lastEvent.eventType) {
+                    case EVENT_TYPES.gamePaused:
+                        matchStatus = messages.gamePaused;
+                        break;
+                    case EVENT_TYPES.periodEnd:
+                        matchStatus = messages.halfTime;
+                        break;
+                    case EVENT_TYPES.gameEnd:
+                        matchStatus = messages.fullTime;
+                        break;
+                    default:
+                        matchStatus = messages.inProgress;
+                }
+            }
             return (
-                <ListItem key={game.gameId} button>
+                <ListItem key={game.gameId} button className="game-list__item">
                     <ListItemText onClick={() => loadGame(game.gameId)}>
-                        {formattedDate}{' '}
-                        <span className="title title--1">
-                            {game.settings.competition} [{game.settings.gender}]{' '}
-                            {game.settings.round !== '' ? `(round: ${game.settings.round})` : ''}
-                        </span>
-                        <br />
-                        <span className="title title--subtitle">
-                            {game.settings.teams.A.name} vs {game.settings.teams.B.name}
+                        <span className="game-list__content">
+                            <span className="game-list__date">{formattedDate}</span>
+                            <span className="game-list__details">
+                                <span className="title title--1-5">
+                                    {game.settings.competition} [{game.settings.gender}]{' '}
+                                    {game.settings.round !== '' ? `(round: ${game.settings.round})` : ''}
+                                </span>
+                                <br />
+                                <span className="title title--subtitle">
+                                    {game.settings.teams.A.name} vs {game.settings.teams.B.name}
+                                </span>
+                                <br />
+                                <span className="title title--1-5">
+                                    score: {game.dataTeamA.goals}-{game.dataTeamB.goals} (
+                                    <span className="game-list__status">{matchStatus}</span>)
+                                </span>
+                            </span>
                         </span>
                     </ListItemText>
                 </ListItem>
             );
         });
         return (
-            <List component="nav" aria-labelledby="gameListTitle">
+            <List component="nav" className="game-list" aria-labelledby="gameListTitle">
                 {buffer}
             </List>
         );
