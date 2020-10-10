@@ -47,12 +47,10 @@ export function compareValues(key, isAscending = true, mixed = false) {
  */
 export function naturalSorting(myArray, key, order = 'ASC') {
     const collator = new Intl.Collator('en', { numeric: true, sensitivity: 'base' });
-    return myArray.sort((a, b) => {
-        if (order === 'ASC') {
-            return collator.compare(a[key], b[key]);
-        }
-        return collator.compare(b[key], a[key]);
-    });
+    if (order === 'ASC') {
+        return myArray.sort((a, b) => collator.compare(a[key], b[key]));
+    }
+    return myArray.sort((a, b) => collator.compare(b[key], a[key]));
 }
 
 /**

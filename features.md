@@ -227,6 +227,7 @@ These features should also apply to the fouls, any foul registered should be edi
 ##REFACTORING
 - [ ] Separate colours from colour usage
 - [ ] Optimize components calls
+- [ ] Check W3C conformance and accessibility
 - [X] Optimise settings page to avoid repetition between A and B teams.
 - [ ] ~~move open and close popup functions inside the popup component~~
 
