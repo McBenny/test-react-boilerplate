@@ -58,3 +58,12 @@ export function naturalSorting(myArray, key) {
 export function isEven(n) {
     return Number(n) % 2 === 0;
 }
+
+/**
+ * @param date          Provide a date in the form YYYY-MM-DD
+ * @returns {string}    Return a date in the form DD/MM/YYYY
+ */
+export function formatDate(date) {
+    const [year, month, day] = date.split('-');
+    return `${day}/${month}/${year}`;
+}

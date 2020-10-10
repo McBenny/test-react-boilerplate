@@ -62,7 +62,7 @@ import {
 } from './constants';
 
 import { MAX_NUMBER } from '../Settings/constants';
-import { isEven, compareValues } from '../../utils/utilities';
+import { isEven, compareValues, formatDate } from '../../utils/utilities';
 
 import './styles.scss';
 
@@ -172,6 +172,7 @@ export function Game({
         window.location.href = URLS.index;
     };
 
+    const formattedDate = formatDate(date);
     const score = { teamA: dataTeamA.goals, teamB: dataTeamB.goals };
     const handleStartButton = ({ gameStatus = true, gamePauseStatus, eventType, period, id }) => {
         onHandleGameStatus({
@@ -342,7 +343,7 @@ export function Game({
             <main>
                 <Container maxWidth="lg">
                     <Grid container direction="row" justify="space-between" alignItems="center">
-                        <div>{date}</div>
+                        <div>{formattedDate}</div>
                         <div>
                             <Button
                                 variant="contained"
