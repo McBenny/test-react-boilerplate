@@ -1,18 +1,37 @@
-
+//---------------------------
 // Fonts
 $fontReferences: Teko, sans-serif;
 $fontScore: Oxanium, sans-serif;
 
+//---------------------------
 // Colours
-$textColour: #000;
-$textReverseColour: #fff;
+$black-00: #000;
+$black-30: rgba(0, 0, 0, 0.3);
+$blue-00: #00f;
+$green-00: #090;
+$orange-00: #f90;
+$red-00: #f00;
+$white-00: #fff;
+$white-20: rgba(255, 255, 255, 0.2);
+$white-95: rgba(255, 255, 255, 0.95);
+$yellow-00: #ff0;
 
-$yellowCardColour: #ff0;
-$redCardColour: #f00;
-$blueCardColour: #00f;
+// Colour usage
+$textColour: $black-00;
+$textReverseColour: $white-00;
 
-$timeOutWarningColour: #f90;
-$timeOutEndColour: #f00;
-$suspensionDefaultColour: #f00;
-$suspensionWarningColour: #f90;
-$suspensionEndColour: #090;
+$borderStrongColour: $black-00;
+$shadowColour: $black-30;
+
+$yellowCardColour: $yellow-00;
+$redCardColour: $red-00;
+$blueCardColour: $blue-00;
+
+$timeOutWarningColour: $orange-00;
+$timeOutEndColour: $red-00;
+$suspensionDefaultColour: $red-00;
+$suspensionWarningColour: $orange-00;
+$suspensionEndColour: $green-00;
+
+$featuresBackgroundColour: $white-95;
+$zebraBackgroundColour: $white-20;

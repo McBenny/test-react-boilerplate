@@ -1,5 +1,5 @@
 /*
- * SplashScreen
+ * HomePage
  *
  * This is the first thing users see of our App, at the '/' route
  *
@@ -7,18 +7,14 @@
 
 import React, { Fragment } from 'react';
 
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import Button from '@material-ui/core/Button';
+import { List, ListItem, ListItemText, Button } from '@material-ui/core';
 
-import LocalStorage from '../../utils/local-storage';
-import { generateId, naturalSorting, formatDate } from '../../utils/utilities';
 import { URLS } from '../App/constants';
 import { EVENT_TYPES, GAMES_PREFIX } from '../Game/constants';
+import LocalStorage from '../../utils/local-storage';
+import { generateId, naturalSorting, formatDate } from '../../utils/utilities';
 
 import { messages } from './messages';
-
 import './styles.scss';
 
 export default function HomePage() {

@@ -9,43 +9,25 @@ import React, { Fragment, useState, memo, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
-
 import { createStructuredSelector } from 'reselect';
 
-import Container from '@material-ui/core/Container';
-import Grid from '@material-ui/core/Grid';
-import Button from '@material-ui/core/Button';
+import { Container, Grid, List, Button, ListItem, ListItemText } from '@material-ui/core';
 import SettingsOutlinedIcon from '@material-ui/icons/SettingsOutlined';
 import PlayCircleOutlineIcon from '@material-ui/icons/PlayCircleOutline';
 import PauseCircleOutlineIcon from '@material-ui/icons/PauseCircleOutline';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import PeopleOutlineIcon from '@material-ui/icons/PeopleOutline';
 import HomeOutlined from '@material-ui/icons/HomeOutlined';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-
-import { useInjectReducer } from '../../utils/injectReducer';
-import { URLS } from '../App/constants';
-import LocalStorage from '../../utils/local-storage';
-import {
-    makeSelectDate,
-    makeSelectSettings,
-    makeSelectGameStarted,
-    makeSelectGamePaused,
-    makeSelectGameEvents,
-    makeSelectPeriod,
-    makeSelectScore,
-    makeSelectDataTeamA,
-    makeSelectDataTeamB
-} from './selectors';
-import reducer from './reducer';
-import { addEvent, addAction, handleGameStatus, storeScore } from './actions';
-import { messages } from './messages';
 
 import Settings from '../Settings';
 import Players from '../../components/Players';
+import PlayPause from '../../components/Play-pause';
+import Countdown from '../../components/Countdown';
+import LineUp from '../../components/Line-up';
+import GameLog from '../../components/Game-log';
 
+import { URLS } from '../App/constants';
+import { MAX_NUMBER } from '../Settings/constants';
 import {
     ADD_BLUE_CARD,
     ADD_EVENT,
@@ -60,16 +42,27 @@ import {
     POPUPS,
     TIME_DURATIONS
 } from './constants';
-
-import { MAX_NUMBER } from '../Settings/constants';
+import { useInjectReducer } from '../../utils/injectReducer';
+import LocalStorage from '../../utils/local-storage';
 import { isEven, compareValues, formatDate } from '../../utils/utilities';
 
-import './styles.scss';
+import {
+    makeSelectDate,
+    makeSelectSettings,
+    makeSelectGameStarted,
+    makeSelectGamePaused,
+    makeSelectGameEvents,
+    makeSelectPeriod,
+    makeSelectScore,
+    makeSelectDataTeamA,
+    makeSelectDataTeamB
+} from './selectors';
+import reducer from './reducer';
+import { addEvent, addAction, handleGameStatus, storeScore } from './actions';
 
-import PlayPause from '../../components/Play-pause';
-import Countdown from '../../components/Countdown';
-import LineUp from '../../components/Line-up';
-import GameLog from '../../components/Game-log';
+import { messages } from './messages';
+
+import './styles.scss';
 
 const key = 'game';
 

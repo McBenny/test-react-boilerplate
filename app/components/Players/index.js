@@ -1,19 +1,18 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
-import Dialog from '@material-ui/core/Dialog';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogActions from '@material-ui/core/DialogActions';
-import Grid from '@material-ui/core/Grid';
-import Button from '@material-ui/core/Button';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
+import {
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    DialogActions,
+    Grid,
+    Button,
+    FormControlLabel,
+    Checkbox
+} from '@material-ui/core';
 import SettingsOutlinedIcon from '@material-ui/icons/SettingsOutlined';
 
-import { naturalSorting } from '../../utils/utilities';
-import './styles.scss';
-import { messages } from './messages';
 import {
     ADD_GOAL,
     ADD_YELLOW_CARD,
@@ -23,6 +22,10 @@ import {
     POPUPS
 } from '../../containers/Game/constants';
 import { MAX_NUMBER, MEMBERS_QUALIFICATIONS, MEMBERS_TYPES } from '../../containers/Settings/constants';
+import { naturalSorting } from '../../utils/utilities';
+
+import { messages } from './messages';
+import './styles.scss';
 
 function Players({
     popupVisibility,

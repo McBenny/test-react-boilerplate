@@ -1,17 +1,16 @@
 import React, { Fragment, useState } from 'react';
 import PropTypes from 'prop-types';
-
 import nextId from 'react-id-generator';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import Button from '@material-ui/core/Button';
+
+import { List, ListItem, Button } from '@material-ui/core';
 import SpeakerNotesOutlinedIcon from '@material-ui/icons/SpeakerNotesOutlined';
 import SpeakerNotesOffOutlinedIcon from '@material-ui/icons/SpeakerNotesOffOutlined';
-import { messages } from './messages';
 
-import './styles.scss';
 import { TEAMS_LIST } from '../../containers/Settings/constants';
 import { EVENT_TYPES } from '../../containers/Game/constants';
+
+import { messages } from './messages';
+import './styles.scss';
 
 const GameLog = ({ gameEvents, settingsData }) => {
     const [isFullLogVisible, setIsFullLogVisible] = useState(false);

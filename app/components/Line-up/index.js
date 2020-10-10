@@ -1,18 +1,14 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 
-import Dialog from '@material-ui/core/Dialog';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogActions from '@material-ui/core/DialogActions';
-import Grid from '@material-ui/core/Grid';
-import Button from '@material-ui/core/Button';
-
+import { Dialog, DialogTitle, DialogContent, DialogActions, Grid, Button } from '@material-ui/core';
 import SettingsOutlinedIcon from '@material-ui/icons/SettingsOutlined';
-import { naturalSorting } from '../../utils/utilities';
-import { messages } from './messages';
+
 import { POPUPS } from '../../containers/Game/constants';
 import { MEMBERS_QUALIFICATIONS, MEMBERS_TYPES } from '../../containers/Settings/constants';
+import { naturalSorting } from '../../utils/utilities';
+
+import { messages } from './messages';
 
 const memberTemplate = ({ member, memberType, team, captainId, jerseyColour, referenceColour }) => (
     <Grid item key={`lineUp${team}${member.id}`} className="players__grid-item">
