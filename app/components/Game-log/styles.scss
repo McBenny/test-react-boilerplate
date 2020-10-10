@@ -1,21 +1,67 @@
 .game-log {
     list-style: decimal;
-    padding-left: 2.5rem;
+    column-count: 2;
+    transition: all 3s;
 
     &__item {
         display: list-item;
+        page-break-inside: avoid;
+        list-style-position: inside;
+        width: calc(100% - 2.5rem);
+        padding-left: 0.5rem;
+
+        &::marker {
+            min-width: 1.5rem;
+            font-style: italic;
+        }
+
+        &:not(&--invisible):nth-child(even) {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        &:nth-child(-n + 9) {
+            .game-log__event {
+                width: calc(100% - 2rem);
+            }
+        }
+
+        &--invisible {
+            list-style: none;
+        }
+
+        &--gamePaused,
+        &--gameResumed {
+            border-top: 1px dashed black;
+            border-bottom: 1px dashed black;
+        }
+
+        &--timeOut {
+            border-top: 3px double black;
+            border-bottom: 3px double black;
+        }
+
+        &--endPeriod,
+        &--endGame {
+            margin-bottom: 1px;
+            border-bottom: 2px solid black;
+        }
+
+        &--startGame,
+        &--startPeriod {
+            margin-top: 1px;
+            border-top: 2px solid black;
+        }
     }
 
     &__event {
-        display: flex;
-    }
-
-    &__detail {
-        min-width: 300px;
+        display: inline-flex;
+        justify-content: space-between;
+        width: calc(100% - 2.5rem);
     }
 
     &__score {
         margin-left: 1rem;
+        white-space: nowrap;
     }
 
     &__goals {

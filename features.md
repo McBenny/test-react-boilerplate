@@ -185,12 +185,13 @@ It should be possible to also add a goal anywhere in the list.
 These features should also apply to the fouls, any foul registered should be editable and removable, it should also be possible to add a foul.
 
 ##BUGS
-- [X] Getting saved games looks for any saved localStorage [Fixed]
-- [X] I don't want to get "NaN" when I erase a number before putting a new one in the settings
 - [ ] A totally empty player in the settings should not be saved
 - [ ] When I create a player, it jumps from bottom to top of the list, this is annoying
 - [ ] Players seem to not be sorted "naturally"
 - [X] Players with letters are not in uppercase in list for captain
+- [X] I don't want to get "NaN" when I erase a number before putting a new one in the settings
+- [X] Getting saved games looks for any saved localStorage [Fixed]
+- [X] Log seems incomplete
 
 ##TODO
 - [X] allow for timeouts per team
@@ -215,6 +216,7 @@ These features should also apply to the fouls, any foul registered should be edi
 - [X] Add the competition settings on top of the game screen
 - [ ] Order games by date on selection screen
 - [ ] Order players by ascending numbers
+- [ ] Ability to remove a player if he has no event
 - [ ] authenticate users
 - [ ] save team and players data to use in auto-suggest, save colours as well
 - [ ] allow image upload for teams
