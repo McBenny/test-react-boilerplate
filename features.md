@@ -194,7 +194,6 @@ These features should also apply to the fouls, any foul registered should be edi
 - [X] Players seem to not be sorted "naturally"
 
 ##TODO
-- [ ] Order games by date on selection screen
 - [ ] Ability to remove a player if he has no event
 - [ ] I want to be able to delete a game (via popup confirmation)
 - [ ] authenticate users
@@ -223,12 +222,13 @@ These features should also apply to the fouls, any foul registered should be edi
 - [X] Changing the number, _first or last name_ of a player updates every occurrence of that player,
 - [X] Add the competition settings on top of the game screen
 - [X] Order players by ascending numbers
+- [X] Order games by date on selection screen
 
 ##REFACTORING
-- [ ] Separate colours from colour usage
-- [ ] Optimize components calls
 - [ ] Check W3C conformance and accessibility
 - [X] Optimise settings page to avoid repetition between A and B teams.
+- [X] Separate colours from colour usage
+- [X] Optimize components calls
 - [ ] ~~move open and close popup functions inside the popup component~~
 
 ##First feedback

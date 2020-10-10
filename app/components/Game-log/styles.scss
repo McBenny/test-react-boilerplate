@@ -1,3 +1,5 @@
+@import '../../styles/variables';
+
 .game-log {
     list-style: decimal;
     column-count: 2;
@@ -15,7 +17,7 @@
         }
 
         &:not(&--invisible):nth-child(even) {
-            background-color: rgba(255, 255, 255, 0.2);
+            background-color: $zebraBackgroundColour;
         }
 
         &:nth-child(-n + 9) {
@@ -30,25 +32,25 @@
 
         &--gamePaused,
         &--gameResumed {
-            border-top: 1px dashed black;
-            border-bottom: 1px dashed black;
+            border-top: 1px dashed $borderStrongColour;
+            border-bottom: 1px dashed $borderStrongColour;
         }
 
         &--timeOut {
-            border-top: 3px double black;
-            border-bottom: 3px double black;
+            border-top: 3px double $borderStrongColour;
+            border-bottom: 3px double $borderStrongColour;
         }
 
         &--endPeriod,
         &--endGame {
             margin-bottom: 1px;
-            border-bottom: 2px solid black;
+            border-bottom: 2px solid $borderStrongColour;
         }
 
         &--startGame,
         &--startPeriod {
             margin-top: 1px;
-            border-top: 2px solid black;
+            border-top: 2px solid $borderStrongColour;
         }
     }
 

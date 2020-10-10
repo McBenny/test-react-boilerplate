@@ -9,29 +9,49 @@ import React, { Fragment, memo, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
-
 import { createStructuredSelector } from 'reselect';
 
-import Dialog from '@material-ui/core/Dialog';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import MenuItem from '@material-ui/core/MenuItem';
-import Sketch from 'react-color/lib/Sketch';
-import InputLabel from '@material-ui/core/InputLabel';
-import TextField from '@material-ui/core/TextField';
-import Select from '@material-ui/core/Select';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
+import {
+    Dialog,
+    DialogTitle,
+    DialogActions,
+    DialogContent,
+    List,
+    ListItem,
+    MenuItem,
+    InputLabel,
+    TextField,
+    Select,
+    FormControlLabel,
+    Checkbox,
+    Button,
+    IconButton
+} from '@material-ui/core';
 import PersonAddOutlinedIcon from '@material-ui/icons/PersonAddOutlined';
+import Sketch from 'react-color/lib/Sketch';
 
+import {
+    CHANGE_COMPETITION,
+    CHANGE_GENDER,
+    CHANGE_ROUND,
+    CHANGE_REFEREE_1,
+    CHANGE_REFEREE_2,
+    CHANGE_SCORE_KEEPER,
+    CHANGE_TIME_KEEPER,
+    EMPTY_MEMBER,
+    GENDERS,
+    MAX_NUMBER,
+    OFFICIALS_REFERENCES,
+    MEMBERS_TYPES,
+    TEAM_PARTS,
+    MEMBERS_QUALIFICATIONS,
+    TEAMS_LIST,
+    SWAP_TEAMS
+} from './constants';
 import { useInjectReducer } from '../../utils/injectReducer';
 import { compareValues, generateId } from '../../utils/utilities';
 
+import { saveSettings } from '../Game/actions';
 import {
     addEmptyMember,
     changeSetting,
@@ -54,27 +74,8 @@ import {
     makeSelectTeams
 } from './selectors';
 import reducer from './reducer';
-import { messages } from './messages';
-import { saveSettings } from '../Game/actions';
-import {
-    CHANGE_COMPETITION,
-    CHANGE_GENDER,
-    CHANGE_ROUND,
-    CHANGE_REFEREE_1,
-    CHANGE_REFEREE_2,
-    CHANGE_SCORE_KEEPER,
-    CHANGE_TIME_KEEPER,
-    EMPTY_MEMBER,
-    GENDERS,
-    MAX_NUMBER,
-    OFFICIALS_REFERENCES,
-    MEMBERS_TYPES,
-    TEAM_PARTS,
-    MEMBERS_QUALIFICATIONS,
-    TEAMS_LIST,
-    SWAP_TEAMS
-} from './constants';
 
+import { messages } from './messages';
 import './styles.scss';
 
 const key = 'settings';

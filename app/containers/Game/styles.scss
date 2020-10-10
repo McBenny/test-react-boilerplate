@@ -1,9 +1,5 @@
 @import "../../styles/variables";
 
-body {
-    background-color: #ffe;
-}
-
 .game {
     &__grid {
         display: grid;
@@ -23,10 +19,10 @@ body {
 
     &__grid-item {
         border-radius: 0.5rem;
-        box-shadow: 0 0 5px inset rgba(0, 0, 0, 0.3);
+        box-shadow: 0 0 5px inset $shadowColour;
         min-height: 50px;
         padding: 0.5rem;
-        background-color: rgba(255, 255, 255, 0.95);
+        background-color: $featuresBackgroundColour;
 
         &--team {
             box-shadow: none;

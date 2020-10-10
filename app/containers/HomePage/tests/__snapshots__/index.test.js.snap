@@ -26,7 +26,7 @@ exports[`<HomePage /> should render and match the snapshot 1`] = `
   </h2>
   <nav
     aria-labelledby="gameListTitle"
-    class="MuiList-root MuiList-padding"
+    class="MuiList-root game-list MuiList-padding"
   />
 </main>
 `;
