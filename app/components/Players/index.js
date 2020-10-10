@@ -11,7 +11,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import SettingsOutlinedIcon from '@material-ui/icons/SettingsOutlined';
 
-import { compareValues } from '../../utils/utilities';
+import { naturalSorting } from '../../utils/utilities';
 import './styles.scss';
 import { messages } from './messages';
 import {
@@ -83,7 +83,7 @@ function Players({
                 playersList.push(UNKNOWN_PLAYER);
             }
             // Then sort the players
-            membersListSorted = playersList.sort(compareValues('reference', true, true));
+            membersListSorted = naturalSorting(playersList, 'reference');
             // But place the unknown player at the first position
             if (firstRendering) {
                 membersListSorted.splice(membersListSorted.length, 0, membersListSorted.splice(0, 1)[0]);
@@ -91,7 +91,7 @@ function Players({
             }
         } else {
             // Just sort the list as there is nothing special
-            membersListSorted = playersList.sort(compareValues('reference', true, true));
+            membersListSorted = naturalSorting(playersList, 'reference');
         }
         return membersListSorted;
     };

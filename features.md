@@ -187,13 +187,20 @@ These features should also apply to the fouls, any foul registered should be edi
 ##BUGS
 - [ ] A totally empty player in the settings should not be saved
 - [ ] When I create a player, it jumps from bottom to top of the list, this is annoying
-- [ ] Players seem to not be sorted "naturally"
 - [X] Players with letters are not in uppercase in list for captain
 - [X] I don't want to get "NaN" when I erase a number before putting a new one in the settings
 - [X] Getting saved games looks for any saved localStorage [Fixed]
 - [X] Log seems incomplete
+- [X] Players seem to not be sorted "naturally"
 
 ##TODO
+- [ ] Order games by date on selection screen
+- [ ] Ability to remove a player if he has no event
+- [ ] authenticate users
+- [ ] save team and players data to use in auto-suggest, save colours as well
+- [ ] allow image upload for teams
+- [ ] allow for removal of a player
+- [ ] Removing a player gives everything he holds to "unknown players"
 - [X] allow for timeouts per team
 - [X] Make add a player in settings "dynamic"
 - [X] Disable a player if he's disqualified
@@ -214,17 +221,11 @@ These features should also apply to the fouls, any foul registered should be edi
 - [X] in players pop-in, list players and officials in different tabs
 - [X] Changing the number, _first or last name_ of a player updates every occurrence of that player,
 - [X] Add the competition settings on top of the game screen
-- [ ] Order games by date on selection screen
-- [ ] Order players by ascending numbers
-- [ ] Ability to remove a player if he has no event
-- [ ] authenticate users
-- [ ] save team and players data to use in auto-suggest, save colours as well
-- [ ] allow image upload for teams
-- [ ] allow for removal of a player
-- [ ] Removing a player gives everything he holds to "unknown players"
+- [X] Order players by ascending numbers
 
 ##REFACTORING
 - [ ] Separate colours from colour usage
+- [ ] Optimize components calls
 - [X] Optimise settings page to avoid repetition between A and B teams.
 - [ ] ~~move open and close popup functions inside the popup component~~
 

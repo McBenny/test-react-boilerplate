@@ -37,6 +37,19 @@ export function compareValues(key, isAscending = true, mixed = false) {
 }
 
 /**
+ *
+ * @param myArray   The array of objects to sort
+ * @param key       The key inside the objects to use to sort
+ * @returns {*}     a new array
+ * usage:           const mySortedArray = naturalSorting(initialArray, 'sortingKey');
+ * source:          https://stackoverflow.com/questions/2802341/javascript-natural-sort-of-alphanumerical-strings
+ */
+export function naturalSorting(myArray, key) {
+    const collator = new Intl.Collator('en', { numeric: true, sensitivity: 'base' });
+    return myArray.sort((a, b) => collator.compare(a[key], b[key]));
+}
+
+/**
  * This function returns true if the given number is even, false otherwise
  * @param n {number}
  * @returns {boolean}
