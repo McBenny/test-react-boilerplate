@@ -1,9 +1,12 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import nextId from 'react-id-generator';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
+import Button from '@material-ui/core/Button';
+import SpeakerNotesOutlinedIcon from '@material-ui/icons/SpeakerNotesOutlined';
+import SpeakerNotesOffOutlinedIcon from '@material-ui/icons/SpeakerNotesOffOutlined';
 import { messages } from './messages';
 
 import './styles.scss';
@@ -11,6 +14,8 @@ import { TEAMS_LIST } from '../../containers/Settings/constants';
 import { EVENT_TYPES } from '../../containers/Game/constants';
 
 const GameLog = ({ gameEvents, settingsData }) => {
+    const [isFullLogVisible, setIsFullLogVisible] = useState(false);
+
     const getMemberData = event => {
         if (event.memberType !== 'Event period' && event.eventType !== 'timeOut') {
             return settingsData.teams[event.team][event.memberType].filter(member => member.id === event.id);
@@ -55,7 +60,7 @@ const GameLog = ({ gameEvents, settingsData }) => {
             const listOfEvents = isLastAction ? [events[events.length - 1]] : events;
             return listOfEvents.map(gameEvent => {
                 const htmlId = nextId();
-                let template = '';
+                let template;
 
                 const memberData = getMemberData(gameEvent);
                 const formattedScore = displayScore({
@@ -70,7 +75,7 @@ const GameLog = ({ gameEvents, settingsData }) => {
                     case EVENT_TYPES.gameEnd:
                         template = (
                             <div className="game-log__event">
-                                <div className="game-log__detail">
+                                <div>
                                     <strong>{messages[gameEvent.eventType]}</strong>
                                 </div>
                                 {formattedScore}
@@ -82,7 +87,7 @@ const GameLog = ({ gameEvents, settingsData }) => {
                     case EVENT_TYPES.periodStart:
                         template = (
                             <div className="game-log__event">
-                                <div className="game-log__detail">
+                                <div>
                                     <strong>
                                         {messages[gameEvent.eventType]} {messages[`period${gameEvent.id}`]}
                                     </strong>
@@ -96,7 +101,7 @@ const GameLog = ({ gameEvents, settingsData }) => {
                     case EVENT_TYPES.gameResumed:
                         template = (
                             <div className="game-log__event">
-                                <div className="game-log__detail">
+                                <div>
                                     <strong>{messages[gameEvent.eventType]}</strong>
                                 </div>
                             </div>
@@ -106,7 +111,7 @@ const GameLog = ({ gameEvents, settingsData }) => {
                     case EVENT_TYPES.timeout:
                         template = (
                             <div className="game-log__event">
-                                <div className="game-log__detail">
+                                <div>
                                     {messages[`${gameEvent.eventType}For`]} {settingsData.teams[gameEvent.team].name}
                                 </div>
                                 {formattedScore}
@@ -120,8 +125,9 @@ const GameLog = ({ gameEvents, settingsData }) => {
                     case EVENT_TYPES.suspension:
                         template = (
                             <div className="game-log__event">
-                                <div className="game-log__detail">
+                                <div>
                                     {messages[`${gameEvent.eventType}For`]} {memberData[0].name} [
+                                    <strong>{memberData[0].reference}</strong>] (
                                     {settingsData.teams[gameEvent.team].name})
                                 </div>
                                 {formattedScore}
@@ -132,10 +138,10 @@ const GameLog = ({ gameEvents, settingsData }) => {
                     case EVENT_TYPES.goal: {
                         template = (
                             <div className="game-log__event">
-                                <div className="game-log__detail">
+                                <div>
                                     {gameEvent.penalty ? messages.penaltyFor : messages.goalFor}{' '}
                                     {settingsData.teams[gameEvent.team].name} ({memberData[0].name} [
-                                    {memberData[0].reference}])
+                                    <strong>{memberData[0].reference}</strong>])
                                 </div>
                                 {formattedScore}
                             </div>
@@ -158,7 +164,7 @@ const GameLog = ({ gameEvents, settingsData }) => {
                     <ListItem
                         key={htmlId}
                         disableGutters
-                        className="game-log__item"
+                        className={`game-log__item game-log__item--${gameEvent.eventType}`}
                         divider={gameEvent.eventType === EVENT_TYPES.periodEnd}
                     >
                         {template}
@@ -175,11 +181,26 @@ const GameLog = ({ gameEvents, settingsData }) => {
             <h3>{messages.lastAction}:</h3>
             <List component="ol" className="game-log" start={gameEvents.length}>
                 {createBuffer(gameEvents, true)}
+                <ListItem key="log-displayFullLog" disableGutters className="game-log__item game-log__item--invisible">
+                    <Button
+                        variant="contained"
+                        onClick={() => setIsFullLogVisible(!isFullLogVisible)}
+                        startIcon={isFullLogVisible ? <SpeakerNotesOffOutlinedIcon /> : <SpeakerNotesOutlinedIcon />}
+                    >
+                        {isFullLogVisible ? messages.hideFullLog : messages.displayFullLog}
+                    </Button>
+                </ListItem>
             </List>
-            <h3>{messages.fullLog}:</h3>
-            <List component="ol" className="game-log">
-                {createBuffer(gameEvents, false)}
-            </List>
+            {isFullLogVisible ? (
+                <Fragment>
+                    <h3>{messages.fullLog}:</h3>
+                    <List component="ol" className="game-log">
+                        {createBuffer(gameEvents, false)}
+                    </List>
+                </Fragment>
+            ) : (
+                ''
+            )}
         </Fragment>
     );
 };
