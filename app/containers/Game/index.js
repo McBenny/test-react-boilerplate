@@ -61,7 +61,6 @@ import reducer from './reducer';
 import { addEvent, addAction, handleGameStatus, storeScore } from './actions';
 
 import { messages } from './messages';
-
 import './styles.scss';
 
 const key = 'game';
