@@ -181,7 +181,7 @@ const GameLog = ({ gameEvents, settingsData }) => {
             <h3>{messages.lastAction}:</h3>
             <List component="ol" className="game-log" start={gameEvents.length}>
                 {createBuffer(gameEvents, true)}
-                <ListItem key="blah" disableGutters className="game-log__item game-log__item--invisible">
+                <ListItem key="log-displayFullLog" disableGutters className="game-log__item game-log__item--invisible">
                     <Button
                         variant="contained"
                         onClick={() => setIsFullLogVisible(!isFullLogVisible)}

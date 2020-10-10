@@ -224,6 +224,7 @@ These features should also apply to the fouls, any foul registered should be edi
 - [ ] Removing a player gives everything he holds to "unknown players"
 
 ##REFACTORING
+- [ ] Separate colours from colour usage
 - [X] Optimise settings page to avoid repetition between A and B teams.
 - [ ] ~~move open and close popup functions inside the popup component~~
 
