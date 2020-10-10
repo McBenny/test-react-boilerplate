@@ -9,7 +9,7 @@ import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 
 import SettingsOutlinedIcon from '@material-ui/icons/SettingsOutlined';
-import { compareValues } from '../../utils/utilities';
+import { naturalSorting } from '../../utils/utilities';
 import { messages } from './messages';
 import { POPUPS } from '../../containers/Game/constants';
 import { MEMBERS_QUALIFICATIONS, MEMBERS_TYPES } from '../../containers/Settings/constants';
@@ -76,7 +76,7 @@ memberTemplate.propTypes = {
 };
 
 const membersListDisplay = ({ memberType, membersList, captainId, team, openPopup, jerseyColour, referenceColour }) => {
-    const sortedMembersList = membersList.sort(compareValues('reference', true, true));
+    const sortedMembersList = naturalSorting(membersList, 'reference');
     let captainTemplate = '';
     if (captainId !== 0) {
         const captain = memberType === MEMBERS_TYPES.players && membersList.filter(player => player.id === captainId);
