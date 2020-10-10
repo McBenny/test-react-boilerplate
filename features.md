@@ -196,6 +196,7 @@ These features should also apply to the fouls, any foul registered should be edi
 ##TODO
 - [ ] Order games by date on selection screen
 - [ ] Ability to remove a player if he has no event
+- [ ] I want to be able to delete a game (via popup confirmation)
 - [ ] authenticate users
 - [ ] save team and players data to use in auto-suggest, save colours as well
 - [ ] allow image upload for teams
@@ -226,6 +227,7 @@ These features should also apply to the fouls, any foul registered should be edi
 ##REFACTORING
 - [ ] Separate colours from colour usage
 - [ ] Optimize components calls
+- [ ] Check W3C conformance and accessibility
 - [X] Optimise settings page to avoid repetition between A and B teams.
 - [ ] ~~move open and close popup functions inside the popup component~~
 

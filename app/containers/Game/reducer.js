@@ -30,7 +30,7 @@ const getToday = () => {
     let todayMM = today.getMonth() + 1;
     todayMM = todayMM < 10 ? `0${todayMM}` : todayMM;
     const todayYYYY = today.getFullYear();
-    return `${todayDD}/${todayMM}/${todayYYYY}`;
+    return `${todayYYYY}-${todayMM}-${todayDD}`;
 };
 
 // The initial state of the App

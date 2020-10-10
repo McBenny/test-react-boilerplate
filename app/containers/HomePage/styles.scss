@@ -1,0 +1,18 @@
+.game-list {
+    &__content {
+        display: flex;
+    }
+
+    &__date {
+        margin-right: 1rem;
+        padding-top: 0.125rem;
+    }
+
+    &__details {
+        line-height: 1.5rem;
+    }
+
+    &__status {
+        font-style: italic;
+    }
+}

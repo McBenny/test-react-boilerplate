@@ -40,13 +40,17 @@ export function compareValues(key, isAscending = true, mixed = false) {
  *
  * @param myArray   The array of objects to sort
  * @param key       The key inside the objects to use to sort
+ * @param order     Sorting order, default is ascending
  * @returns {*}     a new array
  * usage:           const mySortedArray = naturalSorting(initialArray, 'sortingKey');
  * source:          https://stackoverflow.com/questions/2802341/javascript-natural-sort-of-alphanumerical-strings
  */
-export function naturalSorting(myArray, key) {
+export function naturalSorting(myArray, key, order = 'ASC') {
     const collator = new Intl.Collator('en', { numeric: true, sensitivity: 'base' });
-    return myArray.sort((a, b) => collator.compare(a[key], b[key]));
+    if (order === 'ASC') {
+        return myArray.sort((a, b) => collator.compare(a[key], b[key]));
+    }
+    return myArray.sort((a, b) => collator.compare(b[key], a[key]));
 }
 
 /**
@@ -57,4 +61,13 @@ export function naturalSorting(myArray, key) {
  */
 export function isEven(n) {
     return Number(n) % 2 === 0;
+}
+
+/**
+ * @param date          Provide a date in the form YYYY-MM-DD
+ * @returns {string}    Return a date in the form DD/MM/YYYY
+ */
+export function formatDate(date) {
+    const [year, month, day] = date.split('-');
+    return `${day}/${month}/${year}`;
 }
