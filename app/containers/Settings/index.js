@@ -136,12 +136,16 @@ export function Settings({
 
     const saveInitialisation = e => {
         e.preventDefault();
-        const teamAPlayersCleaned = teams.A.players.filter(member => member.reference !== 0 || member.id === 0);
+        const teamAPlayersCleaned = teams.A.players.filter(
+            member => (member.reference !== '' && member.reference !== '0') || member.id === 0
+        );
         const teamAOfficialsCleaned = teams.A.officials.filter(member => member.name !== '');
         teams.A.players.splice(0, teams.A.players.length, ...teamAPlayersCleaned);
         teams.A.officials.splice(0, teams.A.officials.length, ...teamAOfficialsCleaned);
 
-        const teamBPlayersCleaned = teams.B.players.filter(member => member.reference !== 0 || member.id === 0);
+        const teamBPlayersCleaned = teams.B.players.filter(
+            member => (member.reference !== '' && member.reference !== '0') || member.id === 0
+        );
         const teamBOfficialsCleaned = teams.B.officials.filter(member => member.name !== '');
         teams.B.players.splice(0, teams.B.players.length, ...teamBPlayersCleaned);
         teams.B.officials.splice(0, teams.B.officials.length, ...teamBOfficialsCleaned);
@@ -180,7 +184,7 @@ export function Settings({
                     id,
                     team,
                     memberType: type,
-                    reference: type === MEMBERS_TYPES.players ? 0 : OFFICIALS_REFERENCES[id - 1]
+                    reference: type === MEMBERS_TYPES.players ? '0' : OFFICIALS_REFERENCES[id - 1]
                 })
             }
             title={messages[type === MEMBERS_TYPES.players ? 'addPlayer' : 'addOfficial']}
