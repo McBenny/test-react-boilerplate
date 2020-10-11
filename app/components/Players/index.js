@@ -174,6 +174,7 @@ function Players({
         );
     };
 
+    const cleanPlayersList = playersList.filter(player => player.id !== 0);
     return (
         <Dialog
             open={popupVisibility}
@@ -184,7 +185,9 @@ function Players({
         >
             <DialogTitle id="dialog-title-players">{messages.titles[playersListType]}</DialogTitle>
             <DialogContent>
-                <h3 className="member__title">{messages.listOfPlayers}</h3>
+                <h3 className="member__title">
+                    {messages.listOfPlayers} ({cleanPlayersList.length})
+                </h3>
                 {playersListType === ADD_GOAL ? (
                     <div>
                         <FormControlLabel
@@ -207,7 +210,10 @@ function Players({
                 {membersListDisplay(MEMBERS_TYPES.players)}
                 {playersListType !== ADD_GOAL ? (
                     <Fragment>
-                        <h3 className="member__title">{messages.listOfOfficials}</h3>
+                        <h3 className="member__title">
+                            {messages.listOfOfficials} (
+                            {officialsList.length > 0 ? officialsList.length : messages.none})
+                        </h3>
                         {membersListDisplay(MEMBERS_TYPES.officials)}
                     </Fragment>
                 ) : (

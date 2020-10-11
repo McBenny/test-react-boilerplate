@@ -146,6 +146,7 @@ function LineUp({
     closeHandler,
     openPopup
 }) {
+    const cleanPlayersList = playersList.filter(player => player.id !== 0);
     return (
         <Dialog
             open={popupVisibility}
@@ -156,7 +157,9 @@ function LineUp({
         >
             <DialogTitle id="dialog-title-lineUp">{messages.title}</DialogTitle>
             <DialogContent>
-                <h3>{messages.listOfPlayers}</h3>
+                <h3>
+                    {messages.listOfPlayers} ({cleanPlayersList.length})
+                </h3>
                 {membersListDisplay({
                     memberType: MEMBERS_TYPES.players,
                     membersList: playersList,
@@ -166,7 +169,9 @@ function LineUp({
                     jerseyColour,
                     referenceColour
                 })}
-                <h3>{messages.listOfOfficials}</h3>
+                <h3>
+                    {messages.listOfOfficials} ({officialsList.length > 0 ? officialsList.length : messages.none})
+                </h3>
                 {membersListDisplay({
                     memberType: MEMBERS_TYPES.officials,
                     membersList: officialsList,
