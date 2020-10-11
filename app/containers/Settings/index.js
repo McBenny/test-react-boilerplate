@@ -327,13 +327,7 @@ export function Settings({
         }
         return (
             <React.Fragment>
-                {buffer !== '' ? (
-                    <List component="nav" aria-labelledby={`listof-${memberType}-${team}`}>
-                        {buffer}
-                    </List>
-                ) : (
-                    ''
-                )}
+                {buffer !== '' ? <List>{buffer}</List> : ''}
                 {membersLength < MAX_NUMBER[memberType] && addMemberButton(team, memberType, maxId + 1)}
             </React.Fragment>
         );
@@ -441,6 +435,9 @@ export function Settings({
             {displayColourFeature(TEAM_PARTS.reference, team)}
             <h4 id={`listof-${MEMBERS_TYPES.players}-${team}`}>
                 {messages.listOfPlayers}
+                <span className="sr-only">
+                    {messages.team} {team}
+                </span>
                 {displayMembersCount(team, MEMBERS_TYPES.players)}
             </h4>
             {displayMembersList(team, MEMBERS_TYPES.players)}
@@ -459,6 +456,9 @@ export function Settings({
             </Select>
             <h4 id={`listof-${MEMBERS_TYPES.officials}-${team}`}>
                 {messages.listOfOfficials}
+                <span className="sr-only">
+                    {messages.team} {team}
+                </span>
                 {displayMembersCount(team, MEMBERS_TYPES.officials)}
             </h4>
             {displayMembersList(team, MEMBERS_TYPES.officials)}

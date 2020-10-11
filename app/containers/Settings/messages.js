@@ -11,6 +11,7 @@ export const messages = {
     referee2: 'Referee 2',
     scoreKeeper: 'Score keeper',
     timeKeeper: 'Time keeper',
+    team: 'team',
     teamA: 'Home team',
     jerseyColour: 'Jersey colour',
     referenceColour: 'Number colour',
