@@ -195,8 +195,8 @@ These features should also apply to the fouls, any foul registered should be edi
 
 ##TODO
 - [ ] I want to be able to delete a game (via popup confirmation)
-- [ ] If there are no events, don't show the game log
-- [ ] display the number of players and officials in Players pop-up and Line-up
+- [X] If there are no events, don't show the game log
+- [X] display the number of players and officials in Players pop-up and Line-up
 - [ ] authenticate users
 - [ ] save team and players data to use in auto-suggest, save colours as well
 - [ ] allow image upload for teams

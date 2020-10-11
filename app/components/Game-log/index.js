@@ -174,7 +174,7 @@ const GameLog = ({ gameEvents, settingsData }) => {
         return '';
     };
 
-    return (
+    return gameEvents.length > 0 ? (
         <Fragment>
             <h2>{messages.title}</h2>
             <h3>{messages.lastAction}:</h3>
@@ -201,6 +201,8 @@ const GameLog = ({ gameEvents, settingsData }) => {
                 ''
             )}
         </Fragment>
+    ) : (
+        ''
     );
 };
 
