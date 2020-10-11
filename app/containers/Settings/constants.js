@@ -26,7 +26,7 @@ export const INIT_SETTINGS = 'boilerplate/Settings/INIT_SETTINGS';
 
 export const EMPTY_MEMBER_DATA = {
     id: 1,
-    reference: 0,
+    reference: '',
     name: '',
     goals: 0,
     penalty: 0,

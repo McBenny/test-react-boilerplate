@@ -136,17 +136,33 @@ export function Settings({
 
     const saveInitialisation = e => {
         e.preventDefault();
+        // Keep players if:
+        //   - their reference is not empty,
+        //   - or, even if their reference is empty, keep those who have goals or yellow cards or suspensions or red cards registered
+        // Remove players if their reference if empty AND they have no goals, yellow cards, suspension or red cards registered.
         const teamAPlayersCleaned = teams.A.players.filter(
-            member => (member.reference !== '' && member.reference !== '0') || member.id === 0
+            member =>
+                member.reference !== '' ||
+                member.id === 0 ||
+                member.goals !== 0 ||
+                member.yellowCards !== 0 ||
+                member.suspensions !== 0 ||
+                member.redCards !== 0
         );
-        const teamAOfficialsCleaned = teams.A.officials.filter(member => member.name !== '');
+        const teamAOfficialsCleaned = teams.A.officials.filter(member => member.name.trim() !== '');
         teams.A.players.splice(0, teams.A.players.length, ...teamAPlayersCleaned);
         teams.A.officials.splice(0, teams.A.officials.length, ...teamAOfficialsCleaned);
 
         const teamBPlayersCleaned = teams.B.players.filter(
-            member => (member.reference !== '' && member.reference !== '0') || member.id === 0
+            member =>
+                member.reference !== '' ||
+                member.id === 0 ||
+                member.goals !== 0 ||
+                member.yellowCards !== 0 ||
+                member.suspensions !== 0 ||
+                member.redCards !== 0
         );
-        const teamBOfficialsCleaned = teams.B.officials.filter(member => member.name !== '');
+        const teamBOfficialsCleaned = teams.B.officials.filter(member => member.name.trim() !== '');
         teams.B.players.splice(0, teams.B.players.length, ...teamBPlayersCleaned);
         teams.B.officials.splice(0, teams.B.officials.length, ...teamBOfficialsCleaned);
 
