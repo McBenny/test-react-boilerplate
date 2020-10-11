@@ -195,8 +195,6 @@ These features should also apply to the fouls, any foul registered should be edi
 
 ##TODO
 - [ ] I want to be able to delete a game (via popup confirmation)
-- [ ] If there are no events, don't show the game log
-- [ ] display the number of players and officials in Players pop-up and Line-up
 - [ ] authenticate users
 - [ ] save team and players data to use in auto-suggest, save colours as well
 - [ ] allow image upload for teams
@@ -225,12 +223,14 @@ These features should also apply to the fouls, any foul registered should be edi
 - [X] Order players by ascending numbers
 - [X] Order games by date on selection screen
 - [X] Ability to remove a player if he has no event
+- [X] If there are no events, don't show the game log
+- [X] display the number of players and officials in Players pop-up and Line-up
 
 ##REFACTORING
-- [ ] Check W3C conformance and accessibility
 - [X] Optimise settings page to avoid repetition between A and B teams.
 - [X] Separate colours from colour usage
 - [X] Optimize components calls
+- [X] Check W3C conformance and accessibility
 - [ ] ~~move open and close popup functions inside the popup component~~
 
 ##First feedback
