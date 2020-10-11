@@ -2,13 +2,22 @@
  * This entire object is embedded in /app/components/Line-up/messages.js
  * Remove keys with extreme care.
  */
+import {
+    ADD_GOAL,
+    ADD_YELLOW_CARD,
+    ADD_SUSPENSION,
+    ADD_RED_CARD,
+    ADD_BLUE_CARD
+} from '../../containers/Game/constants';
+
 export const messages = {
     title: 'Players',
     titles: {
-        'boilerplate/Game/ADD_YELLOW_CARD': 'Add a YELLOW card to:',
-        'boilerplate/Game/ADD_SUSPENSION': 'Add a 2 minutes suspension to:',
-        'boilerplate/Game/ADD_RED_CARD': 'Add a RED card to:',
-        'boilerplate/Game/ADD_BLUE_CARD': 'Add a BLUE card to:'
+        [ADD_GOAL]: 'Add a goal for:',
+        [ADD_YELLOW_CARD]: 'Add a YELLOW card to:',
+        [ADD_SUSPENSION]: 'Add a 2 minutes suspension to:',
+        [ADD_RED_CARD]: 'Add a RED card to:',
+        [ADD_BLUE_CARD]: 'Add a BLUE card to:'
     },
     cancel: 'Cancel',
     maxActionsReached: 'Invalid choice for this player',

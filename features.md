@@ -227,10 +227,10 @@ These features should also apply to the fouls, any foul registered should be edi
 - [X] display the number of players and officials in Players pop-up and Line-up
 
 ##REFACTORING
-- [ ] Check W3C conformance and accessibility
 - [X] Optimise settings page to avoid repetition between A and B teams.
 - [X] Separate colours from colour usage
 - [X] Optimize components calls
+- [X] Check W3C conformance and accessibility
 - [ ] ~~move open and close popup functions inside the popup component~~
 
 ##First feedback

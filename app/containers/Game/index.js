@@ -321,11 +321,7 @@ export function Game({
                     </ListItemText>
                 </ListItem>
             ));
-            return (
-                <List aria-label="Actions regarding periods" className="game__member-list">
-                    {buffer}
-                </List>
-            );
+            return <List className="game__member-list">{buffer}</List>;
         }
         return '';
     };
@@ -334,7 +330,7 @@ export function Game({
         <Fragment>
             <main>
                 <Container maxWidth="lg">
-                    <Grid container direction="row" justify="space-between" alignItems="center">
+                    <Grid container direction="row" justify="space-between" alignItems="center" role="navigation">
                         <div>{formattedDate}</div>
                         <div>
                             <Button
