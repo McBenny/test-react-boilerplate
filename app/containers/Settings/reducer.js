@@ -158,9 +158,21 @@ const settingsReducer = (state = initialState, action) =>
                 draft.teams[action.team][action.memberType] = draft.teams[action.team][action.memberType].map(
                     member => {
                         if (member.id === action.id) {
+                            // Keep the coming reference if:
+                            //   - it's not empty,
+                            //   - or, even if it's empty, keep it if the member has no goals or yellow cards or suspensions or red cards registered
+                            // Restore previous reference if the coming reference is empty AND they have goals, yellow cards, suspension or red cards registered.
+                            const reference =
+                                action.reference !== '' ||
+                                (member.goals === 0 &&
+                                    member.yellowCards === 0 &&
+                                    member.suspensions === 0 &&
+                                    member.redCards === 0)
+                                    ? action.reference
+                                    : member.reference;
                             return {
                                 ...member,
-                                reference: action.reference,
+                                reference,
                                 name: action.name,
                                 qualification: action.qualification ? MEMBERS_QUALIFICATIONS.players.goalie : undefined
                             };

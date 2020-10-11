@@ -194,8 +194,9 @@ These features should also apply to the fouls, any foul registered should be edi
 - [X] A totally empty player in the settings should not be saved
 
 ##TODO
-- [ ] Ability to remove a player if he has no event
 - [ ] I want to be able to delete a game (via popup confirmation)
+- [ ] If there are no events, don't show the game log
+- [ ] display the number of players and officials in Players pop-up and Line-up
 - [ ] authenticate users
 - [ ] save team and players data to use in auto-suggest, save colours as well
 - [ ] allow image upload for teams
@@ -223,6 +224,7 @@ These features should also apply to the fouls, any foul registered should be edi
 - [X] Add the competition settings on top of the game screen
 - [X] Order players by ascending numbers
 - [X] Order games by date on selection screen
+- [X] Ability to remove a player if he has no event
 
 ##REFACTORING
 - [ ] Check W3C conformance and accessibility
