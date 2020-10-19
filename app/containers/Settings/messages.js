@@ -21,6 +21,7 @@ export const messages = {
     playerNumber: 'Player #',
     playerName: 'Player name',
     playerQualification: 'GK',
+    removePlayer: 'Remove player',
     playerQualificationHelpText: 'Goal Keeper',
     numberPattern: 'Numbers (0 forbidden), or up to 3 letters',
     captain: 'Captain',
