@@ -1,0 +1,32 @@
+@import 'variables';
+
+//_________________
+// Tables
+.MuiTable {
+    &Container-root {
+        margin-bottom: 1rem;
+        border: 1px solid $borderStrongColour;
+        border-radius: 0.5rem;
+    }
+
+    &Cell-head {
+        background-color: $tableHeaderBackgroundColour;
+        text-align: center !important;
+    }
+
+    &Row-root:nth-child(even) {
+        background-color: $tableStripeBackgroundColour;
+    }
+
+    &Cell-first.MuiTableCell-paddingNone {
+        padding-left: 0.5rem !important;
+    }
+
+    &-root {
+        .MuiFormControl {
+            &-root.MuiFormControl-marginDense {
+                margin: 4px;
+            }
+        }
+    }
+}

@@ -1,3 +1,5 @@
+@import 'variables';
+
 .title {
     &--1 {
         margin: 1rem auto 2rem;
@@ -21,6 +23,24 @@
     &--2 {
         margin: 1rem auto 1rem;
         font-size: 1.5rem;
+        font-weight: 600;
+    }
+
+    &--3 {
+        font-size: 1.25rem;
+        font-weight: 600;
+    }
+
+    &--35 {
+        font-size: 1.5rem;
+        font-weight: 600;
+    }
+
+    &--4 {
+        margin: 1.75rem 0 0.5rem;
+        border-top: 1px solid $shadowColour;
+        padding: 0.5rem 0 0 0.5rem;
+        font-size: 0.875rem;
         font-weight: 600;
     }
 }

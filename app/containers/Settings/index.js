@@ -56,7 +56,7 @@ import {
     SWAP_TEAMS
 } from './constants';
 import { useInjectReducer } from '../../utils/injectReducer';
-import { compareValues, generateId, naturalSorting } from '../../utils/utilities';
+import { generateId, naturalSorting } from '../../utils/utilities';
 
 import { saveSettings } from '../Game/actions';
 import {
@@ -198,24 +198,35 @@ export function Settings({
         ));
     };
 
-    const addMemberButton = (team, type, id) => (
-        <Button
-            onClick={() =>
-                onAddEmptyMember({
-                    ...EMPTY_MEMBER[type],
-                    id,
-                    team,
-                    memberType: type,
-                    reference: type === MEMBERS_TYPES.players ? '100' : OFFICIALS_REFERENCES[id - 1]
-                })
-            }
-            title={messages[type === MEMBERS_TYPES.players ? 'addPlayer' : 'addOfficial']}
-            variant="contained"
-            startIcon={<PersonAddOutlinedIcon />}
-        >
-            {messages[type === MEMBERS_TYPES.players ? 'addPlayer' : 'addOfficial']}
-        </Button>
-    );
+    const addMemberButton = (team, type) => {
+        const membersList = teams[team][type];
+        const membersLength = membersList.length;
+        let maxId = 0;
+        if (membersLength > 0) {
+            maxId = membersList.reduce((max, member) => (member.id > max ? member.id : max), membersList[0].id);
+        }
+        return membersLength < MAX_NUMBER[type] ? (
+            <Button
+                onClick={() => {
+                    onAddEmptyMember({
+                        ...EMPTY_MEMBER[type],
+                        id: maxId + 1,
+                        team,
+                        memberType: type,
+                        reference: type === MEMBERS_TYPES.players ? '100' : OFFICIALS_REFERENCES[maxId]
+                    });
+                }}
+                title={messages[type === MEMBERS_TYPES.players ? 'addPlayer' : 'addOfficial']}
+                variant="contained"
+                startIcon={<PersonAddOutlinedIcon />}
+                className="settings__button settings__button--add-member"
+            >
+                {messages[type === MEMBERS_TYPES.players ? 'addPlayer' : 'addOfficial']}
+            </Button>
+        ) : (
+            ''
+        );
+    };
 
     const hidePlayerLine = currentLine => {
         console.log('hide!', currentLine, currentLine.current, currentLine.current.classList);
@@ -250,7 +261,7 @@ export function Settings({
         }
         return (
             <TableRow key={`${type}${team}${member.id}`} ref={currentLine} className="settings__player-line">
-                <TableCell>
+                <TableCell className="MuiTableCell-first">
                     <TextField
                         id={`${type}Reference${team}${member.id}`}
                         value={member.reference}
@@ -315,10 +326,10 @@ export function Settings({
                                 })
                             }
                             name={`${type}Qualification${team}${member.id}`}
-                            color="primary"
                             value={MEMBERS_QUALIFICATIONS.players.goalie}
                             title={messages[`${labelQualification}HelpText`]}
                             inputProps={{ 'aria-label': messages[labelQualification] }}
+                            color="default"
                         />
                     </TableCell>
                 ) : (
@@ -356,28 +367,6 @@ export function Settings({
         );
     };
 
-    const tableTemplate = (rowList, memberType) => (
-        <TableContainer className="settings__table">
-            <Table padding="none" size="small">
-                <TableHead>
-                    <TableRow>
-                        <TableCell>{messages[`${memberType}Reference`]}</TableCell>
-                        <TableCell>{messages[`${memberType}Name`]}</TableCell>
-                        {memberType === MEMBERS_TYPES.players ? (
-                            <TableCell className="settings__table-header settings__table-header--checkbox">
-                                {messages.playersQualificationHelpText}
-                            </TableCell>
-                        ) : (
-                            <></>
-                        )}
-                        <TableCell className="settings__table-header">{messages[`${memberType}Remove`]}</TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>{rowList}</TableBody>
-            </Table>
-        </TableContainer>
-    );
-
     /**
      * Displays the formatted members list with/without an "add" button
      * @param team          Must be TEAMS_LIST.HOME or TEAMS_LIST.AWAY
@@ -388,9 +377,7 @@ export function Settings({
         const membersList = naturalSorting(teams[team][memberType], 'reference');
         const membersLength = membersList.length;
         let buffer;
-        let maxId = 0;
         if (membersLength > 0) {
-            maxId = membersList.reduce((max, member) => (member.id > max ? member.id : max), membersList[0].id);
             const cleanMembersList = membersList.filter(member => member.id !== 0);
             buffer = cleanMembersList.map(member => {
                 // Clear out the "unidentified" player
@@ -402,23 +389,30 @@ export function Settings({
         }
         if (buffer) {
             return (
-                <Fragment>
-                    <div className="settings__table-container">
-                        {/* eslint-disable indent */}
-                        {buffer !== ''
-                            ? tableTemplate(
-                                  buffer.length > 2 ? buffer.slice(0, Math.ceil(buffer.length / 2)) : buffer,
-                                  memberType
-                              )
-                            : ''}
-                        {/* eslint-enable indent */}
-                        {buffer.length > 2 ? tableTemplate(buffer.slice(Math.ceil(buffer.length / 2)), memberType) : ''}
-                    </div>
-                    {membersLength < MAX_NUMBER[memberType] && addMemberButton(team, memberType, maxId + 1)}
-                </Fragment>
+                <TableContainer>
+                    <Table padding="none" size="small">
+                        <TableHead>
+                            <TableRow>
+                                <TableCell>{messages[`${memberType}Reference`]}</TableCell>
+                                <TableCell>{messages[`${memberType}Name`]}</TableCell>
+                                {memberType === MEMBERS_TYPES.players ? (
+                                    <TableCell className="settings__table-header settings__table-header--checkbox">
+                                        {messages.playersQualificationHelpText}
+                                    </TableCell>
+                                ) : (
+                                    <></>
+                                )}
+                                <TableCell className="settings__table-header">
+                                    {messages[`${memberType}Remove`]}
+                                </TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>{buffer}</TableBody>
+                    </Table>
+                </TableContainer>
             );
         }
-        return membersLength < MAX_NUMBER[memberType] && addMemberButton(team, memberType, maxId + 1);
+        return '';
     };
 
     /**
@@ -442,13 +436,18 @@ export function Settings({
      */
     const captainList = team => {
         const teamPlayers = teams[team].players;
-        const teamPlayersSorted = teamPlayers.sort(compareValues('reference', true, true));
-        return teamPlayersSorted.map(player => (
-            <MenuItem key={`${team}player${player.id}`} value={player.id}>
-                <span className="settings__reference">{player.reference}</span>
-                {player.name}
-            </MenuItem>
-        ));
+        const teamPlayersSorted = naturalSorting(teamPlayers, 'reference');
+        return teamPlayersSorted.map(player => {
+            if (player.id !== 0) {
+                return (
+                    <MenuItem key={`${team}player${player.id}`} value={player.id}>
+                        <span className="settings__reference">{player.reference}</span>
+                        {player.name}
+                    </MenuItem>
+                );
+            }
+            return '';
+        });
     };
 
     /**
@@ -512,9 +511,11 @@ export function Settings({
      * @returns {JSX.Element}
      */
     const displaySettingsPerTeam = team => (
-        <fieldset>
-            <h3>{messages[`team${team}`]}</h3>
-            <div className="settings__grid">
+        <fieldset className="settings__section">
+            <h3 className="title title--3">
+                {messages[`team${team}`]}: <span className="title title--35">{teams[team].name}</span>
+            </h3>
+            <div className="settings__grid settings__grid--half">
                 <TextField
                     id={`team${team}Name`}
                     label={messages[`team${team}`]}
@@ -524,10 +525,12 @@ export function Settings({
                     margin="dense"
                     variant="outlined"
                 />
-                {displayColourFeature(TEAM_PARTS.jersey, team)}
-                {displayColourFeature(TEAM_PARTS.reference, team)}
+                <div className="settings__grid settings__grid--half">
+                    {displayColourFeature(TEAM_PARTS.jersey, team)}
+                    {displayColourFeature(TEAM_PARTS.reference, team)}
+                </div>
             </div>
-            <h4 id={`listof-${MEMBERS_TYPES.players}-${team}`}>
+            <h4 id={`listof-${MEMBERS_TYPES.players}-${team}`} className="title title--4">
                 {messages.listOfPlayers}
                 <span className="sr-only">
                     {messages.team} {team}
@@ -535,23 +538,33 @@ export function Settings({
                 {displayMembersCount(team, MEMBERS_TYPES.players)}
             </h4>
             {displayMembersList(team, MEMBERS_TYPES.players)}
-            <InputLabel shrink id={`captain${team}Label`}>
-                {messages.captain}
-            </InputLabel>
-            <Select
-                id={`captain${team}`}
-                labelId={`captain${team}Label`}
-                value={teams[team].captain || ''}
-                displayEmpty
-                onChange={e => handleChangeTeamCaptain(e, team)}
-                size="small"
-                margin="dense"
-                variant="outlined"
-            >
-                <MenuItem value="">{messages.selectCaptain}</MenuItem>
-                {captainList(team)}
-            </Select>
-            <h4 id={`listof-${MEMBERS_TYPES.officials}-${team}`}>
+            <div className="settings__grid settings__grid--half">
+                {addMemberButton(team, MEMBERS_TYPES.players)}
+                {teams[team][MEMBERS_TYPES.players].length > 0 ? (
+                    <div>
+                        <InputLabel shrink id={`captain${team}Label`}>
+                            {messages.captain}
+                        </InputLabel>
+                        <Select
+                            id={`captain${team}`}
+                            labelId={`captain${team}Label`}
+                            value={teams[team].captain || ''}
+                            displayEmpty
+                            onChange={e => handleChangeTeamCaptain(e, team)}
+                            size="small"
+                            margin="dense"
+                            variant="outlined"
+                            className="settings__select"
+                        >
+                            <MenuItem value="">{messages.selectCaptain}</MenuItem>
+                            {captainList(team)}
+                        </Select>
+                    </div>
+                ) : (
+                    ''
+                )}
+            </div>
+            <h4 id={`listof-${MEMBERS_TYPES.officials}-${team}`} className="title title--4">
                 {messages.listOfOfficials}
                 <span className="sr-only">
                     {messages.team} {team}
@@ -559,6 +572,7 @@ export function Settings({
                 {displayMembersCount(team, MEMBERS_TYPES.officials)}
             </h4>
             {displayMembersList(team, MEMBERS_TYPES.officials)}
+            <div className="settings__grid settings__grid--half">{addMemberButton(team, MEMBERS_TYPES.officials)}</div>
         </fieldset>
     );
 
@@ -583,8 +597,8 @@ export function Settings({
             <DialogTitle id="dialog-title-settings">{messages.header}</DialogTitle>
             <DialogContent>
                 <form noValidate>
-                    <fieldset>
-                        <h3>{messages.competition}</h3>
+                    <fieldset className="settings__section">
+                        <h3>{messages.gameDetails}</h3>
                         <div className="settings__grid">
                             <TextField
                                 id="competition"
@@ -603,7 +617,7 @@ export function Settings({
                                 margin="dense"
                                 variant="outlined"
                             />
-                            <div>
+                            <div className="settings__gender">
                                 <InputLabel shrink id="genderLabel">
                                     {messages.gender}
                                 </InputLabel>
@@ -614,7 +628,10 @@ export function Settings({
                                     displayEmpty
                                     onChange={e => handleChangeSetting(e, CHANGE_GENDER)}
                                     required
-                                    className="settings__gender"
+                                    size="small"
+                                    margin="dense"
+                                    variant="outlined"
+                                    className="settings__select"
                                 >
                                     <MenuItem value="">{messages.selectGender}</MenuItem>
                                     {gendersList()}
@@ -656,7 +673,10 @@ export function Settings({
                             />
                         </div>
                     </fieldset>
-                    {displaySettingsPerTeam(TEAMS_LIST.HOME)}
+                    <div className="settings__grid settings__grid--half">
+                        {displaySettingsPerTeam(TEAMS_LIST.HOME)}
+                        {displaySettingsPerTeam(TEAMS_LIST.AWAY)}
+                    </div>
                     {!gameStarted ? (
                         <p>
                             {messages.swapTeamLabel}{' '}
@@ -669,7 +689,6 @@ export function Settings({
                     ) : (
                         ''
                     )}
-                    {displaySettingsPerTeam(TEAMS_LIST.AWAY)}
                 </form>
             </DialogContent>
             <DialogActions>

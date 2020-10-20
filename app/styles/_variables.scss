@@ -6,9 +6,12 @@ $fontScore: Oxanium, sans-serif;
 //---------------------------
 // Colours
 $black-00: #000;
+$black-10: rgba(0, 0, 0, 0.15);
 $black-30: rgba(0, 0, 0, 0.3);
+$black-50: rgba(0, 0, 0, 0.5);
 $blue-00: #00f;
 $green-00: #090;
+$grey-00: #787878;
 $orange-00: #f90;
 $red-00: #e00;
 $white-00: #fff;
@@ -17,11 +20,15 @@ $white-95: rgba(255, 255, 255, 0.95);
 $yellow-00: #ff0;
 
 // Colour usage
+$bgColour: $white-00;
+
 $textColour: $black-00;
+$textMidColour: $grey-00;
 $textReverseColour: $white-00;
 
 $borderStrongColour: $black-00;
 $shadowColour: $black-30;
+$shadowColourStrong: $black-50;
 
 $yellowCardColour: $yellow-00;
 $redCardColour: $red-00;
@@ -35,3 +42,6 @@ $suspensionEndColour: $green-00;
 
 $featuresBackgroundColour: $white-95;
 $zebraBackgroundColour: $white-20;
+
+$tableHeaderBackgroundColour: $black-50;
+$tableStripeBackgroundColour: $black-10;
