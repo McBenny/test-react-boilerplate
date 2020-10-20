@@ -239,7 +239,7 @@ export function Settings({
         if (type === MEMBERS_TYPES.players) {
             labelNumber = 'playerNumber';
             labelName = 'playerName';
-            labelQualification = 'playerQualification';
+            labelQualification = 'playersQualification';
             pattern = '[0-9][0-9]*|[a-zA-Z]{1,3}';
             patternTitle = 'numberPattern';
         } else {
@@ -300,8 +300,8 @@ export function Settings({
                         variant="outlined"
                     />
                 </TableCell>
-                <TableCell padding="checkbox" align="center">
-                    {type === MEMBERS_TYPES.players ? (
+                {type === MEMBERS_TYPES.players ? (
+                    <TableCell padding="checkbox" align="center">
                         <Checkbox
                             checked={member.qualification === MEMBERS_QUALIFICATIONS.players.goalie}
                             onChange={e =>
@@ -320,14 +320,13 @@ export function Settings({
                             title={messages[`${labelQualification}HelpText`]}
                             inputProps={{ 'aria-label': messages[labelQualification] }}
                         />
-                    ) : (
-                        ''
-                    )}
-                </TableCell>
+                    </TableCell>
+                ) : (
+                    <></>
+                )}
                 <TableCell align="center">
                     {/* eslint-disable indent */}
-                    {type === MEMBERS_TYPES.players &&
-                    member.goals === 0 &&
+                    {member.goals === 0 &&
                     member.yellowCards === 0 &&
                     member.redCards === 0 &&
                     member.suspensions === 0 ? (
@@ -344,7 +343,7 @@ export function Settings({
                                 hidePlayerLine(currentLine);
                             }}
                             size="medium"
-                            arial-label={messages.removePlayer}
+                            arial-label={messages[`${type}Remove`]}
                         >
                             <PersonAddDisabledOutlinedIcon />
                         </IconButton>
@@ -356,6 +355,28 @@ export function Settings({
             </TableRow>
         );
     };
+
+    const tableTemplate = (rowList, memberType) => (
+        <TableContainer className="settings__table">
+            <Table padding="none" size="small">
+                <TableHead>
+                    <TableRow>
+                        <TableCell>{messages[`${memberType}Reference`]}</TableCell>
+                        <TableCell>{messages[`${memberType}Name`]}</TableCell>
+                        {memberType === MEMBERS_TYPES.players ? (
+                            <TableCell className="settings__table-header settings__table-header--checkbox">
+                                {messages.playersQualificationHelpText}
+                            </TableCell>
+                        ) : (
+                            <></>
+                        )}
+                        <TableCell className="settings__table-header">{messages[`${memberType}Remove`]}</TableCell>
+                    </TableRow>
+                </TableHead>
+                <TableBody>{rowList}</TableBody>
+            </Table>
+        </TableContainer>
+    );
 
     /**
      * Displays the formatted members list with/without an "add" button
@@ -383,50 +404,15 @@ export function Settings({
             return (
                 <Fragment>
                     <div className="settings__table-container">
-                        {buffer !== '' ? (
-                            <TableContainer className="settings__table">
-                                <Table padding="none" size="small">
-                                    <TableHead>
-                                        <TableRow>
-                                            <TableCell>{messages.playerNumber}</TableCell>
-                                            <TableCell>{messages.playerName}</TableCell>
-                                            <TableCell className="settings__table-header settings__table-header--checkbox">
-                                                {messages.playerQualificationHelpText}
-                                            </TableCell>
-                                            <TableCell className="settings__table-header">
-                                                {messages.removePlayer}
-                                            </TableCell>
-                                        </TableRow>
-                                    </TableHead>
-                                    <TableBody>
-                                        {buffer.length > 2 ? buffer.slice(0, Math.ceil(buffer.length / 2)) : buffer}
-                                    </TableBody>
-                                </Table>
-                            </TableContainer>
-                        ) : (
-                            ''
-                        )}
-                        {buffer.length > 2 ? (
-                            <TableContainer className="settings__table">
-                                <Table padding="none" size="small">
-                                    <TableHead>
-                                        <TableRow>
-                                            <TableCell>{messages.playerNumber}</TableCell>
-                                            <TableCell>{messages.playerName}</TableCell>
-                                            <TableCell className="settings__table-header settings__table-header--checkbox">
-                                                {messages.playerQualificationHelpText}
-                                            </TableCell>
-                                            <TableCell className="settings__table-header">
-                                                {messages.removePlayer}
-                                            </TableCell>
-                                        </TableRow>
-                                    </TableHead>
-                                    <TableBody>{buffer.slice(Math.ceil(buffer.length / 2))}</TableBody>
-                                </Table>
-                            </TableContainer>
-                        ) : (
-                            ''
-                        )}
+                        {/* eslint-disable indent */}
+                        {buffer !== ''
+                            ? tableTemplate(
+                                  buffer.length > 2 ? buffer.slice(0, Math.ceil(buffer.length / 2)) : buffer,
+                                  memberType
+                              )
+                            : ''}
+                        {/* eslint-enable indent */}
+                        {buffer.length > 2 ? tableTemplate(buffer.slice(Math.ceil(buffer.length / 2)), memberType) : ''}
                     </div>
                     {membersLength < MAX_NUMBER[memberType] && addMemberButton(team, memberType, maxId + 1)}
                 </Fragment>
