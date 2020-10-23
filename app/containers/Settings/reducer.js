@@ -42,19 +42,19 @@ import {
  *      timeKeeper: {string}
  *      teams: {
  *          A: {
- *              players: [],
- *              captain: 0,
  *              name: {string},
  *              jersey: {string},
  *              reference: {string},
+ *              captain: 0,
+ *              players: [],
  *              officials: []
  *          },
  *          B: {
- *              players: [],
- *              captain: 0,
  *              name: {string},
  *              jersey: {string},
  *              reference: {string},
+ *              captain: 0,
+ *              players: [],
  *              officials: []
  *          }
  *      },
@@ -71,7 +71,7 @@ export const initialState = {
     timeKeeper: '',
     teams: {
         A: {
-            name: 'Team A',
+            name: 'Home HC',
             jersey: '#ffffff',
             reference: '#000000',
             captain: 0,
@@ -79,7 +79,7 @@ export const initialState = {
             officials: []
         },
         B: {
-            name: 'Team B',
+            name: 'Away HC',
             jersey: '#000000',
             reference: '#ffffff',
             captain: 0,

@@ -5,7 +5,7 @@
  *
  */
 
-import React, { Fragment, memo, useEffect, useState } from 'react';
+import React, { Fragment, memo, useEffect, useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
@@ -16,18 +16,22 @@ import {
     DialogTitle,
     DialogActions,
     DialogContent,
-    List,
-    ListItem,
     MenuItem,
     InputLabel,
     TextField,
     Select,
-    FormControlLabel,
     Checkbox,
     Button,
-    IconButton
+    IconButton,
+    TableContainer,
+    Table,
+    TableHead,
+    TableBody,
+    TableRow,
+    TableCell
 } from '@material-ui/core';
 import PersonAddOutlinedIcon from '@material-ui/icons/PersonAddOutlined';
+import PersonAddDisabledOutlinedIcon from '@material-ui/icons/PersonAddDisabledOutlined';
 import Sketch from 'react-color/lib/Sketch';
 
 import {
@@ -49,7 +53,7 @@ import {
     SWAP_TEAMS
 } from './constants';
 import { useInjectReducer } from '../../utils/injectReducer';
-import { compareValues, generateId } from '../../utils/utilities';
+import { generateId, naturalSorting } from '../../utils/utilities';
 
 import { saveSettings } from '../Game/actions';
 import {
@@ -191,23 +195,41 @@ export function Settings({
         ));
     };
 
-    const addMemberButton = (team, type, id) => (
-        <IconButton
-            aria-label={messages.addPlayer}
-            onClick={() =>
-                onAddEmptyMember({
-                    ...EMPTY_MEMBER[type],
-                    id,
-                    team,
-                    memberType: type,
-                    reference: type === MEMBERS_TYPES.players ? '0' : OFFICIALS_REFERENCES[id - 1]
-                })
-            }
-            title={messages[type === MEMBERS_TYPES.players ? 'addPlayer' : 'addOfficial']}
-        >
-            <PersonAddOutlinedIcon />
-        </IconButton>
-    );
+    const addMemberButton = (team, type) => {
+        const membersList = teams[team][type];
+        const membersLength = membersList.length;
+        let maxId = 0;
+        if (membersLength > 0) {
+            maxId = membersList.reduce((max, member) => (member.id > max ? member.id : max), membersList[0].id);
+        }
+        return membersLength < MAX_NUMBER[type] ? (
+            <Button
+                onClick={() => {
+                    onAddEmptyMember({
+                        ...EMPTY_MEMBER[type],
+                        id: maxId + 1,
+                        team,
+                        memberType: type,
+                        reference: type === MEMBERS_TYPES.players ? '100' : OFFICIALS_REFERENCES[maxId]
+                    });
+                }}
+                title={messages[type === MEMBERS_TYPES.players ? 'addPlayer' : 'addOfficial']}
+                variant="contained"
+                startIcon={<PersonAddOutlinedIcon />}
+                className="settings__button settings__button--add-member"
+            >
+                {messages[type === MEMBERS_TYPES.players ? 'addPlayer' : 'addOfficial']}
+            </Button>
+        ) : (
+            ''
+        );
+    };
+
+    const hidePlayerLine = currentLine => {
+        // TODO: Remove this and fix the feature
+        console.log('hide!', currentLine, currentLine.current, currentLine.current.classList);
+        currentLine.current.classList.add('settings__player-line--hidden');
+    };
 
     /**
      * Displays 2 input fields to add/read a member's data
@@ -216,6 +238,7 @@ export function Settings({
      * @param member  the actual member
      * @returns {JSX.Element}
      */
+    const currentLine = useRef(null);
     const memberLineTemplate = (team, member, type) => {
         let labelName;
         let labelNumber;
@@ -225,7 +248,7 @@ export function Settings({
         if (type === MEMBERS_TYPES.players) {
             labelNumber = 'playerNumber';
             labelName = 'playerName';
-            labelQualification = 'playerQualification';
+            labelQualification = 'playersQualification';
             pattern = '[0-9][0-9]*|[a-zA-Z]{1,3}';
             patternTitle = 'numberPattern';
         } else {
@@ -235,72 +258,110 @@ export function Settings({
             patternTitle = 'referencePattern';
         }
         return (
-            <ListItem key={`${type}${team}${member.id}`}>
-                <TextField
-                    id={`${type}Reference${team}${member.id}`}
-                    label={messages[labelNumber]}
-                    value={member.reference}
-                    onChange={e =>
-                        onChangeMember({
-                            team,
-                            memberType: type,
-                            id: member.id,
-                            reference: e.target.value,
-                            name: member.name,
-                            qualification: member.qualification
-                        })
-                    }
-                    pattern={pattern}
-                    inputProps={{
-                        maxLength: 3
-                    }}
-                    title={messages[patternTitle]}
-                    required
-                    disabled={type === MEMBERS_TYPES.officials}
-                    className="settings__text-input settings__text-input--reference"
-                />
-                <TextField
-                    id={`${type}Name${team}${member.id}`}
-                    label={messages[labelName]}
-                    value={member.name}
-                    onChange={e =>
-                        onChangeMember({
-                            team,
-                            memberType: type,
-                            id: member.id,
-                            reference: member.reference,
-                            name: e.target.value,
-                            qualification: member.qualification
-                        })
-                    }
-                />
-                {type === MEMBERS_TYPES.players ? (
-                    <FormControlLabel
-                        control={
-                            <Checkbox
-                                checked={member.qualification === MEMBERS_QUALIFICATIONS.players.goalie}
-                                onChange={e =>
-                                    onChangeMember({
-                                        team,
-                                        memberType: type,
-                                        id: member.id,
-                                        reference: member.reference,
-                                        name: member.name,
-                                        qualification: e.target.checked
-                                    })
-                                }
-                                name={`${type}Qualification${team}${member.id}`}
-                                color="primary"
-                                value={MEMBERS_QUALIFICATIONS.players.goalie}
-                                title={messages[`${labelQualification}HelpText`]}
-                            />
+            <TableRow key={`${type}${team}${member.id}`} ref={currentLine} className="settings__player-line">
+                <TableCell className="MuiTableCell-first">
+                    <TextField
+                        id={`${type}Reference${team}${member.id}`}
+                        value={member.reference}
+                        onChange={e =>
+                            onChangeMember({
+                                team,
+                                memberType: type,
+                                id: member.id,
+                                reference: e.target.value,
+                                name: member.name,
+                                qualification: member.qualification
+                            })
                         }
-                        label={messages[labelQualification]}
+                        pattern={pattern}
+                        inputProps={{
+                            maxLength: 3,
+                            'aria-label': messages[labelNumber]
+                        }}
+                        title={messages[patternTitle]}
+                        required
+                        disabled={type === MEMBERS_TYPES.officials}
+                        size="small"
+                        margin="dense"
+                        variant="outlined"
+                        className="settings__text-input settings__text-input--reference"
                     />
+                </TableCell>
+                <TableCell>
+                    <TextField
+                        id={`${type}Name${team}${member.id}`}
+                        value={member.name}
+                        onChange={e =>
+                            onChangeMember({
+                                team,
+                                memberType: type,
+                                id: member.id,
+                                reference: member.reference,
+                                name: e.target.value,
+                                qualification: member.qualification
+                            })
+                        }
+                        inputProps={{
+                            'aria-label': messages[labelName]
+                        }}
+                        size="small"
+                        margin="dense"
+                        variant="outlined"
+                    />
+                </TableCell>
+                {type === MEMBERS_TYPES.players ? (
+                    <TableCell padding="checkbox" align="center">
+                        <Checkbox
+                            checked={member.qualification === MEMBERS_QUALIFICATIONS.players.goalie}
+                            onChange={e =>
+                                onChangeMember({
+                                    team,
+                                    memberType: type,
+                                    id: member.id,
+                                    reference: member.reference,
+                                    name: member.name,
+                                    qualification: e.target.checked
+                                })
+                            }
+                            name={`${type}Qualification${team}${member.id}`}
+                            value={MEMBERS_QUALIFICATIONS.players.goalie}
+                            title={messages[`${labelQualification}HelpText`]}
+                            inputProps={{ 'aria-label': messages[labelQualification] }}
+                            color="default"
+                        />
+                    </TableCell>
                 ) : (
-                    ''
+                    <></>
                 )}
-            </ListItem>
+                <TableCell align="center">
+                    {/* eslint-disable indent */}
+                    {member.goals === 0 &&
+                    member.yellowCards === 0 &&
+                    member.redCards === 0 &&
+                    member.suspensions === 0 ? (
+                        <IconButton
+                            onClick={() => {
+                                onChangeMember({
+                                    team,
+                                    memberType: type,
+                                    id: member.id,
+                                    reference: '',
+                                    name: '',
+                                    qualification: null
+                                });
+                                hidePlayerLine(currentLine);
+                            }}
+                            size="medium"
+                            arial-label={messages[`${type}Remove`]}
+                        >
+                            <PersonAddDisabledOutlinedIcon />
+                        </IconButton>
+                    ) : (
+                        <></>
+                    )}
+                    {/* eslint-enable indent */}
+                </TableCell>
+            </TableRow>
         );
     };
 
@@ -311,26 +372,45 @@ export function Settings({
      * @returns {JSX.Element}
      */
     const displayMembersList = (team, memberType) => {
-        const membersList = teams[team][memberType];
+        const membersList = naturalSorting(teams[team][memberType], 'reference');
         const membersLength = membersList.length;
         let buffer;
-        let maxId = 0;
         if (membersLength > 0) {
-            maxId = membersList.reduce((max, member) => (member.id > max ? member.id : max), membersList[0].id);
-            buffer = membersList.map(member => {
+            const cleanMembersList = membersList.filter(member => member.id !== 0);
+            buffer = cleanMembersList.map(member => {
                 // Clear out the "unidentified" player
                 if (member.id !== 0) {
                     return memberLineTemplate(team, member, memberType);
                 }
-                return '';
+                return false;
             });
         }
-        return (
-            <React.Fragment>
-                {buffer !== '' ? <List>{buffer}</List> : ''}
-                {membersLength < MAX_NUMBER[memberType] && addMemberButton(team, memberType, maxId + 1)}
-            </React.Fragment>
-        );
+        if (buffer) {
+            return (
+                <TableContainer>
+                    <Table padding="none" size="small">
+                        <TableHead>
+                            <TableRow>
+                                <TableCell>{messages[`${memberType}Reference`]}</TableCell>
+                                <TableCell>{messages[`${memberType}Name`]}</TableCell>
+                                {memberType === MEMBERS_TYPES.players ? (
+                                    <TableCell className="settings__table-header settings__table-header--checkbox">
+                                        {messages.playersQualificationHelpText}
+                                    </TableCell>
+                                ) : (
+                                    <></>
+                                )}
+                                <TableCell className="settings__table-header">
+                                    {messages[`${memberType}Remove`]}
+                                </TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>{buffer}</TableBody>
+                    </Table>
+                </TableContainer>
+            );
+        }
+        return <></>;
     };
 
     /**
@@ -354,13 +434,18 @@ export function Settings({
      */
     const captainList = team => {
         const teamPlayers = teams[team].players;
-        const teamPlayersSorted = teamPlayers.sort(compareValues('reference', true, true));
-        return teamPlayersSorted.map(player => (
-            <MenuItem key={`${team}player${player.id}`} value={player.id}>
-                <span className="settings__reference">{player.reference}</span>
-                {player.name}
-            </MenuItem>
-        ));
+        const teamPlayersSorted = naturalSorting(teamPlayers, 'reference');
+        return teamPlayersSorted.map(player => {
+            if (player.id !== 0) {
+                return (
+                    <MenuItem key={`${team}player${player.id}`} value={player.id}>
+                        <span className="settings__reference">{player.reference}</span>
+                        {player.name}
+                    </MenuItem>
+                );
+            }
+            return '';
+        });
     };
 
     /**
@@ -379,6 +464,8 @@ export function Settings({
                     })
                 }
                 variant="contained"
+                size="small"
+                className="settings__button settings__button--colour"
                 style={{ backgroundColor: teams[team][type] }}
                 title={messages[`${type}Colour`]}
             >
@@ -422,18 +509,26 @@ export function Settings({
      * @returns {JSX.Element}
      */
     const displaySettingsPerTeam = team => (
-        <fieldset>
-            <h3>{messages[`team${team}`]}</h3>
-            <TextField
-                id={`team${team}Name`}
-                label={messages[`team${team}`]}
-                value={teams[team].name}
-                onChange={e => handleChangeTeamName(e, team)}
-                required
-            />
-            {displayColourFeature(TEAM_PARTS.jersey, team)}
-            {displayColourFeature(TEAM_PARTS.reference, team)}
-            <h4 id={`listof-${MEMBERS_TYPES.players}-${team}`}>
+        <fieldset className="settings__section">
+            <h3 className="title title--3">
+                {messages[`team${team}`]}: <span className="title title--35">{teams[team].name}</span>
+            </h3>
+            <div className="settings__grid settings__grid--half">
+                <TextField
+                    id={`team${team}Name`}
+                    label={messages[`team${team}`]}
+                    value={teams[team].name}
+                    onChange={e => handleChangeTeamName(e, team)}
+                    required
+                    margin="dense"
+                    variant="outlined"
+                />
+                <div className="settings__grid settings__grid--half">
+                    {displayColourFeature(TEAM_PARTS.jersey, team)}
+                    {displayColourFeature(TEAM_PARTS.reference, team)}
+                </div>
+            </div>
+            <h4 id={`listof-${MEMBERS_TYPES.players}-${team}`} className="title title--4">
                 {messages.listOfPlayers}
                 <span className="sr-only">
                     {messages.team} {team}
@@ -441,20 +536,33 @@ export function Settings({
                 {displayMembersCount(team, MEMBERS_TYPES.players)}
             </h4>
             {displayMembersList(team, MEMBERS_TYPES.players)}
-            <InputLabel shrink id={`captain${team}Label`}>
-                {messages.captain}
-            </InputLabel>
-            <Select
-                id={`captain${team}`}
-                labelId={`captain${team}Label`}
-                value={teams[team].captain || ''}
-                displayEmpty
-                onChange={e => handleChangeTeamCaptain(e, team)}
-            >
-                <MenuItem value="">{messages.selectCaptain}</MenuItem>
-                {captainList(team)}
-            </Select>
-            <h4 id={`listof-${MEMBERS_TYPES.officials}-${team}`}>
+            <div className="settings__grid settings__grid--half">
+                {addMemberButton(team, MEMBERS_TYPES.players)}
+                {teams[team][MEMBERS_TYPES.players].length > 0 ? (
+                    <div>
+                        <InputLabel shrink id={`captain${team}Label`}>
+                            {messages.captain}
+                        </InputLabel>
+                        <Select
+                            id={`captain${team}`}
+                            labelId={`captain${team}Label`}
+                            value={teams[team].captain || ''}
+                            displayEmpty
+                            onChange={e => handleChangeTeamCaptain(e, team)}
+                            size="small"
+                            margin="dense"
+                            variant="outlined"
+                            className="settings__select"
+                        >
+                            <MenuItem value="">{messages.selectCaptain}</MenuItem>
+                            {captainList(team)}
+                        </Select>
+                    </div>
+                ) : (
+                    <></>
+                )}
+            </div>
+            <h4 id={`listof-${MEMBERS_TYPES.officials}-${team}`} className="title title--4">
                 {messages.listOfOfficials}
                 <span className="sr-only">
                     {messages.team} {team}
@@ -462,6 +570,7 @@ export function Settings({
                 {displayMembersCount(team, MEMBERS_TYPES.officials)}
             </h4>
             {displayMembersList(team, MEMBERS_TYPES.officials)}
+            <div className="settings__grid settings__grid--half">{addMemberButton(team, MEMBERS_TYPES.officials)}</div>
         </fieldset>
     );
 
@@ -476,67 +585,96 @@ export function Settings({
     }, [popupVisibility]);
 
     return (
-        <Dialog open={popupVisibility} onClose={closeHandler} aria-labelledby="dialog-title-settings">
+        <Dialog
+            open={popupVisibility}
+            onClose={closeHandler}
+            aria-labelledby="dialog-title-settings"
+            fullWidth
+            maxWidth="md"
+        >
             <DialogTitle id="dialog-title-settings">{messages.header}</DialogTitle>
             <DialogContent>
                 <form noValidate>
-                    <fieldset>
-                        <h3>{messages.competition}</h3>
-                        <div>
+                    <fieldset className="settings__section">
+                        <h3>{messages.gameDetails}</h3>
+                        <div className="settings__grid">
                             <TextField
                                 id="competition"
                                 label={messages.competitionName}
                                 value={competition}
                                 onChange={e => handleChangeSetting(e, CHANGE_COMPETITION)}
                                 required
+                                margin="dense"
+                                variant="outlined"
                             />
                             <TextField
                                 id="round"
                                 label={messages.round}
                                 value={round}
                                 onChange={e => handleChangeSetting(e, CHANGE_ROUND)}
+                                margin="dense"
+                                variant="outlined"
                             />
-                            <InputLabel shrink id="genderLabel">
-                                {messages.gender}
-                            </InputLabel>
-                            <Select
-                                id="gender"
-                                labelId="genderLabel"
-                                value={gender}
-                                displayEmpty
-                                onChange={e => handleChangeSetting(e, CHANGE_GENDER)}
-                                required
-                            >
-                                <MenuItem value="">{messages.selectGender}</MenuItem>
-                                {gendersList()}
-                            </Select>
+                            <div className="settings__gender">
+                                <InputLabel shrink id="genderLabel">
+                                    {messages.gender}
+                                </InputLabel>
+                                <Select
+                                    id="gender"
+                                    labelId="genderLabel"
+                                    value={gender}
+                                    displayEmpty
+                                    onChange={e => handleChangeSetting(e, CHANGE_GENDER)}
+                                    required
+                                    size="small"
+                                    margin="dense"
+                                    variant="outlined"
+                                    className="settings__select"
+                                >
+                                    <MenuItem value="">{messages.selectGender}</MenuItem>
+                                    {gendersList()}
+                                </Select>
+                            </div>
                         </div>
-                        <TextField
-                            id="referee1"
-                            label={messages.referee1}
-                            value={referee1}
-                            onChange={e => handleChangeSetting(e, CHANGE_REFEREE_1)}
-                        />
-                        <TextField
-                            id="referee2"
-                            label={messages.referee2}
-                            value={referee2}
-                            onChange={e => handleChangeSetting(e, CHANGE_REFEREE_2)}
-                        />
-                        <TextField
-                            id="scoreKeeper"
-                            label={messages.scoreKeeper}
-                            value={scoreKeeper}
-                            onChange={e => handleChangeSetting(e, CHANGE_SCORE_KEEPER)}
-                        />
-                        <TextField
-                            id="timeKeeper"
-                            label={messages.timeKeeper}
-                            value={timeKeeper}
-                            onChange={e => handleChangeSetting(e, CHANGE_TIME_KEEPER)}
-                        />
+                        <div className="settings__grid">
+                            <TextField
+                                id="referee1"
+                                label={messages.referee1}
+                                value={referee1}
+                                onChange={e => handleChangeSetting(e, CHANGE_REFEREE_1)}
+                                margin="dense"
+                                variant="outlined"
+                            />
+                            <TextField
+                                id="referee2"
+                                label={messages.referee2}
+                                value={referee2}
+                                onChange={e => handleChangeSetting(e, CHANGE_REFEREE_2)}
+                                margin="dense"
+                                variant="outlined"
+                            />
+                            <TextField
+                                id="scoreKeeper"
+                                label={messages.scoreKeeper}
+                                value={scoreKeeper}
+                                onChange={e => handleChangeSetting(e, CHANGE_SCORE_KEEPER)}
+                                margin="dense"
+                                variant="outlined"
+                            />
+                            <TextField
+                                id="timeKeeper"
+                                label={messages.timeKeeper}
+                                value={timeKeeper}
+                                onChange={e => handleChangeSetting(e, CHANGE_TIME_KEEPER)}
+                                margin="dense"
+                                variant="outlined"
+                            />
+                        </div>
                     </fieldset>
-                    {displaySettingsPerTeam(TEAMS_LIST.HOME)}
+                    <div className="settings__grid settings__grid--half">
+                        {displaySettingsPerTeam(TEAMS_LIST.HOME)}
+                        {displaySettingsPerTeam(TEAMS_LIST.AWAY)}
+                    </div>
                     {!gameStarted ? (
                         <p>
                             {messages.swapTeamLabel}{' '}
@@ -549,7 +687,6 @@ export function Settings({
                     ) : (
                         ''
                     )}
-                    {displaySettingsPerTeam(TEAMS_LIST.AWAY)}
                 </form>
             </DialogContent>
             <DialogActions>

@@ -13,11 +13,11 @@ import {
 export const messages = {
     title: 'Players',
     titles: {
-        [ADD_GOAL]: 'Add a goal for:',
-        [ADD_YELLOW_CARD]: 'Add a YELLOW card to:',
-        [ADD_SUSPENSION]: 'Add a 2 minutes suspension to:',
-        [ADD_RED_CARD]: 'Add a RED card to:',
-        [ADD_BLUE_CARD]: 'Add a BLUE card to:'
+        [ADD_GOAL]: 'Add a goal for',
+        [ADD_YELLOW_CARD]: 'Add a YELLOW card to',
+        [ADD_SUSPENSION]: 'Add a 2 minutes suspension to',
+        [ADD_RED_CARD]: 'Add a RED card to',
+        [ADD_BLUE_CARD]: 'Add a BLUE card to'
     },
     cancel: 'Cancel',
     maxActionsReached: 'Invalid choice for this player',

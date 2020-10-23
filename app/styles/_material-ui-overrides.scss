@@ -1,0 +1,107 @@
+@import 'variables';
+
+//_________________
+// AppBar
+.MuiToolbar-root {
+    justify-content: flex-end;
+    background-color: $appBarColour;
+    color: $textReverseColour;
+}
+
+//_________________
+// Tables
+.MuiTable {
+    &Container-root {
+        margin-bottom: 1rem;
+        border: 1px solid $borderStrongColour;
+        border-radius: 0.5rem;
+    }
+
+    &Cell-head {
+        background-color: $tableHeaderBackgroundColour;
+        text-align: center !important;
+    }
+
+    &Row-root:nth-child(even) {
+        background-color: $tableStripeBackgroundColour;
+    }
+
+    &Cell-first.MuiTableCell-paddingNone {
+        padding-left: 0.5rem !important;
+    }
+
+    &-root {
+        .MuiFormControl {
+            &-root.MuiFormControl-marginDense {
+                margin: 4px;
+            }
+        }
+    }
+}
+
+//_________________
+// Dialog
+.MuiDialog-paper {
+    > * {
+        z-index: 0;
+    }
+
+    &::before {
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 0;
+        width: 100%;
+        height: 100%;
+        background-repeat: no-repeat;
+        background-size: cover;
+        filter: alpha(0.666);
+        content: '';
+    }
+}
+
+.member__popup {
+    &--goal {
+        .MuiDialog-paper::before {
+            background-image: url(../images/background-app.png);
+        }
+    }
+
+    &--yellowcard {
+        .MuiDialog-paper::before {
+            background-image: url(../images/background-yellowcard.png);
+        }
+    }
+
+    &--suspension {
+        .MuiDialog-paper::before {
+            background-image: url(../images/background-suspension.png);
+        }
+    }
+
+    &--redcard {
+        .MuiDialog-paper::before {
+            background-image: url(../images/background-redcard.png);
+        }
+    }
+
+    &--bluecard {
+        .MuiDialog-paper::before {
+            background-image: url(../images/background-bluecard.png);
+        }
+    }
+}
+
+//_________________
+// Buttons
+.MuiButton {
+    &-contained.MuiButton-root {
+        background-color: $buttonBackgroundColour;
+        color: $buttonTextColour;
+
+        &:hover {
+            background-color: darken($buttonBackgroundColour, 10%);
+            color: $buttonTextColour;
+        }
+    }
+}

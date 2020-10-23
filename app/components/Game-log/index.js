@@ -123,7 +123,7 @@ const GameLog = ({ gameEvents, settingsData }) => {
                     case EVENT_TYPES.blueCard:
                     case EVENT_TYPES.suspension:
                         template = (
-                            <div className="game-log__event">
+                            <div className={`game-log__event game-log__event--${gameEvent.eventType.toLowerCase()}`}>
                                 <div>
                                     {messages[`${gameEvent.eventType}For`]} {memberData[0].name} [
                                     <strong>{memberData[0].reference}</strong>] (

@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import {
@@ -174,7 +174,6 @@ function Players({
         );
     };
 
-    const cleanPlayersList = playersList.filter(player => player.id !== 0);
     return (
         <Dialog
             open={popupVisibility}
@@ -182,12 +181,12 @@ function Players({
             aria-labelledby="dialog-title-players"
             fullWidth
             maxWidth="md"
+            className={`member__popup member__popup--${eventType.toLowerCase()}`}
         >
-            <DialogTitle id="dialog-title-players">{messages.titles[playersListType]}</DialogTitle>
+            <DialogTitle id="dialog-title-players" disableTypography>
+                <h2 className="title title--action">{messages.titles[playersListType]}...</h2>
+            </DialogTitle>
             <DialogContent>
-                <h3 className="member__title">
-                    {messages.listOfPlayers} ({cleanPlayersList.length})
-                </h3>
                 {playersListType === ADD_GOAL ? (
                     <div>
                         <FormControlLabel
@@ -208,17 +207,7 @@ function Players({
                     ''
                 )}
                 {membersListDisplay(MEMBERS_TYPES.players)}
-                {playersListType !== ADD_GOAL ? (
-                    <Fragment>
-                        <h3 className="member__title">
-                            {messages.listOfOfficials} (
-                            {officialsList.length > 0 ? officialsList.length : messages.none})
-                        </h3>
-                        {membersListDisplay(MEMBERS_TYPES.officials)}
-                    </Fragment>
-                ) : (
-                    ''
-                )}
+                {playersListType !== ADD_GOAL ? membersListDisplay(MEMBERS_TYPES.officials) : ''}
             </DialogContent>
             <DialogActions>
                 <Button variant="contained" onClick={closeHandler}>
