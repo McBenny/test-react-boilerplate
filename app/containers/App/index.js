@@ -24,7 +24,7 @@ export default function App() {
             <CssBaseline />
             <Switch>
                 <Route exact path={URLS.index} component={HomePage} />
-                <Route path={URLS.game} component={Game} />
+                <Route exact path={URLS.game} component={Game} />
                 <Route component={NotFoundPage} />
             </Switch>
         </div>

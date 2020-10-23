@@ -1,7 +1,3 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<GameLog /> should render and match the snapshot 1`] = `
-<h2>
-  Game log:
-</h2>
-`;
+exports[`<GameLog /> should render and match the snapshot 1`] = ``;
