@@ -16,13 +16,10 @@ import {
     DialogTitle,
     DialogActions,
     DialogContent,
-    // List,
-    // ListItem,
     MenuItem,
     InputLabel,
     TextField,
     Select,
-    // FormControlLabel,
     Checkbox,
     Button,
     IconButton,
@@ -229,6 +226,7 @@ export function Settings({
     };
 
     const hidePlayerLine = currentLine => {
+        // TODO: Remove this and fix the feature
         console.log('hide!', currentLine, currentLine.current, currentLine.current.classList);
         currentLine.current.classList.add('settings__player-line--hidden');
     };
@@ -359,7 +357,7 @@ export function Settings({
                             <PersonAddDisabledOutlinedIcon />
                         </IconButton>
                     ) : (
-                        ''
+                        <></>
                     )}
                     {/* eslint-enable indent */}
                 </TableCell>
@@ -412,7 +410,7 @@ export function Settings({
                 </TableContainer>
             );
         }
-        return '';
+        return <></>;
     };
 
     /**
@@ -561,7 +559,7 @@ export function Settings({
                         </Select>
                     </div>
                 ) : (
-                    ''
+                    <></>
                 )}
             </div>
             <h4 id={`listof-${MEMBERS_TYPES.officials}-${team}`} className="title title--4">
