@@ -37,9 +37,7 @@
     }
 
     &--officials {
-        background-image: linear-gradient(45deg, transparent 50%, rgba(127, 127, 127, 0.85) 50%);
-        padding: 6px 0.5rem !important;
-        pointer-events: initial !important;
+        background-image: linear-gradient(45deg, transparent 50%, $grey-50-85 50%);
     }
 
     &__title {

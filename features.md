@@ -232,6 +232,7 @@ These features should also apply to the fouls, any foul registered should be edi
 - [X] Differentiate backgrounds between goals and fouls
 
 ##REFACTORING
+- [ ] Replace A and B strings by constants
 - [X] Optimise settings page to avoid repetition between A and B teams.
 - [X] Separate colours from colour usage
 - [X] Optimize components calls

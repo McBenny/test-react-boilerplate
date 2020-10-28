@@ -192,14 +192,9 @@ export function Game({
         if (settings.round !== '') {
             message += ` (${messages.round}: ${settings.round})`;
         }
-        // const teams =
-        //     settings.teams.A.name !== 'Team A' && settings.teams.B.name !== 'Team B'
-        //         ? `${settings.teams.A.name} vs ${settings.teams.B.name}`
-        //         : '';
         return (
             <Fragment>
                 <h1 className="title title--1">{message !== '' ? message : messages.title}</h1>
-                {/* teams !== '' ? <h2 className="title title--subtitle">{teams}</h2> : '' */}
             </Fragment>
         );
     };
@@ -350,7 +345,7 @@ export function Game({
                         </IconButton>
                     </Toolbar>
                 </AppBar>
-                <Container maxWidth="false" className="game__console">
+                <Container maxWidth={false} className="game__console">
                     <Container>
                         {displayCompetitionDetails()}
                         <div className="game__grid game__grid--score">
