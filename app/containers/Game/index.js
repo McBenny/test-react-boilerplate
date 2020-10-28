@@ -111,7 +111,7 @@ export function Game({
         const { element, status } = fullScreen;
         if (element === document.documentElement) {
             if (element.requestFullscreen && document.exitFullscreen) {
-                return status ? element.requestFullscreen({ navigationUI: 'hide' }) : document.exitFullscreen();
+                return status ? element.requestFullscreen() : document.exitFullscreen();
             }
             if (element.mozRequestFullScreen) {
                 return status ? element.mozRequestFullScreen() : element.mozExitFullScreen();
@@ -359,7 +359,8 @@ export function Game({
                                     element: document.documentElement
                                 });
                             }}
-                            arial-label={messages.settings.open}
+                            arial-label={messages.fullscreen}
+                            title={messages.fullscreen}
                             edge="end"
                         >
                             {fullScreen.status ? <FullscreenExitOutlinedIcon /> : <FullscreenOutlinedIcon />}

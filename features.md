@@ -216,7 +216,7 @@ These features should also apply to the fouls, any foul registered should be edi
 - [X] group players in fouls
 - [X] add the captain
 - [X] display team line-up with captain first
-- [X] add alink to settings form in "no players situations"
+- [X] add a link to settings form in "no players situations"
 - [X] add a colour to each team
 - [X] add game officials (referees, scorekeeper (table), timekeeper (scoreboard/buzzer))
 - [X] in players pop-in, list players and officials in different tabs
