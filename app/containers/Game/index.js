@@ -11,7 +11,7 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
 
-import { Container, Grid, List, Button, ListItem, ListItemText } from '@material-ui/core';
+import { Container, Grid, List, Button, IconButton, ListItem, ListItemText, AppBar, Toolbar } from '@material-ui/core';
 import SettingsOutlinedIcon from '@material-ui/icons/SettingsOutlined';
 import PlayCircleOutlineIcon from '@material-ui/icons/PlayCircleOutline';
 import PauseCircleOutlineIcon from '@material-ui/icons/PauseCircleOutline';
@@ -192,14 +192,9 @@ export function Game({
         if (settings.round !== '') {
             message += ` (${messages.round}: ${settings.round})`;
         }
-        const teams =
-            settings.teams.A.name !== 'Team A' && settings.teams.B.name !== 'Team B'
-                ? `${settings.teams.A.name} vs ${settings.teams.B.name}`
-                : '';
         return (
             <Fragment>
                 <h1 className="title title--1">{message !== '' ? message : messages.title}</h1>
-                {teams !== '' ? <h2 className="title title--subtitle">{teams}</h2> : ''}
             </Fragment>
         );
     };
@@ -329,367 +324,375 @@ export function Game({
     return (
         <Fragment>
             <main>
-                <Container maxWidth="lg">
-                    <Grid container direction="row" justify="space-between" alignItems="center" role="navigation">
+                <AppBar position="static" className="game__appbar">
+                    <Toolbar variant="dense" className="game__toolbar">
                         <div>{formattedDate}</div>
-                        <div>
-                            <Button
-                                variant="contained"
-                                onClick={() => openPopup(POPUPS.settings)}
-                                startIcon={<SettingsOutlinedIcon />}
-                            >
-                                {messages.settings.open}
-                            </Button>
-                        </div>
-                        <div>
-                            <Button
-                                variant="contained"
-                                onClick={() => returnHomeHandler()}
-                                startIcon={<HomeOutlined />}
-                            >
-                                {messages.returnHome}
-                            </Button>
-                        </div>
-                    </Grid>
-                    {displayCompetitionDetails()}
-                    <div className="game__grid game__grid--score">
-                        <div />
-                        <div />
-                        <div className="game__grid-item game__grid-item--team">
-                            <Button
-                                variant="contained"
-                                onClick={() => openPopup(POPUPS.playPause)}
-                                disabled={!gameStarted && (currentPeriod === 4 || currentPeriod === 8)}
-                                startIcon={displayStartButtonData()}
-                                className="game__button game__button--start-stop"
-                            >
-                                {displayStartButtonData(TYPE_MESSAGE)}
-                            </Button>
-                            {popupVisibility.playPause ? (
-                                <PlayPause
-                                    popupVisibility={popupVisibility.playPause}
-                                    gameStarted={gameStarted}
-                                    gamePaused={gamePaused}
-                                    period={currentPeriod}
-                                    startHandler={handleStartButton}
-                                    closeHandler={closePopup}
-                                />
-                            ) : (
-                                ''
-                            )}
-                        </div>
-                    </div>
-
-                    <div className="game__grid game__grid--score">
-                        <div className="game__grid-item game__grid-item--timeout">
-                            <Button
-                                variant="contained"
-                                onClick={() => handleTimeoutButton('A')}
-                                disabled={!gameStarted || gamePaused || dataTeamA.timeouts >= MAX_NUMBER.timeouts}
-                                title={dataTeamA.timeouts >= MAX_NUMBER.timeouts ? messages.maxTimeoutsReached : ''}
-                                startIcon={<AddCircleOutlineIcon />}
-                            >
-                                {messages.addTimeout}
-                            </Button>
-                            <p>
-                                {timeOut.A ? (
-                                    <Countdown
-                                        duration={TIME_DURATIONS.timeout}
-                                        callback={() => setATimeOut({ ...timeOut, A: false })}
+                        <IconButton
+                            color="inherit"
+                            onClick={() => openPopup(POPUPS.settings)}
+                            arial-label={messages.settings.open}
+                            edge="end"
+                        >
+                            <SettingsOutlinedIcon />
+                        </IconButton>
+                        <IconButton
+                            color="inherit"
+                            onClick={() => returnHomeHandler()}
+                            aria-label={messages.returnHome}
+                            edge="end"
+                        >
+                            <HomeOutlined />
+                        </IconButton>
+                    </Toolbar>
+                </AppBar>
+                <Container maxWidth={false} className="game__console">
+                    <Container>
+                        {displayCompetitionDetails()}
+                        <div className="game__grid game__grid--score">
+                            <div />
+                            <div />
+                            <div className="game__grid-item game__grid-item--team">
+                                <Button
+                                    variant="contained"
+                                    onClick={() => openPopup(POPUPS.playPause)}
+                                    disabled={!gameStarted && (currentPeriod === 4 || currentPeriod === 8)}
+                                    startIcon={displayStartButtonData()}
+                                    className="game__button game__button--start-stop"
+                                >
+                                    {displayStartButtonData(TYPE_MESSAGE)}
+                                </Button>
+                                {popupVisibility.playPause ? (
+                                    <PlayPause
+                                        popupVisibility={popupVisibility.playPause}
+                                        gameStarted={gameStarted}
+                                        gamePaused={gamePaused}
+                                        period={currentPeriod}
+                                        startHandler={handleStartButton}
+                                        closeHandler={closePopup}
                                     />
-                                ) : (
-                                    ''
-                                )}{' '}
-                                ({dataTeamA.timeouts})
-                            </p>
-                        </div>
-                        <div className="game__grid-item game__grid-item--team game__grid-item--team-A">
-                            <Button
-                                onClick={() => openPlayers({ eventType: EVENT_TYPES.goal, team: 'A', type: ADD_GOAL })}
-                                disabled={!gameStarted || gamePaused}
-                                className="game__button game__button--team"
-                            >
-                                {settings.teams.A.name}
-                            </Button>
-                        </div>
-                        <div className="game__grid-item game__grid-item--score">
-                            <div className="game__score game__score--half-time">{PERIODS[currentPeriod]}</div>
-                            <div className="game__score">
-                                {dataTeamA.goals} - {dataTeamB.goals}
-                            </div>
-                            <div className="game__score game__score--half-time">
-                                {currentScore.half1 ? (
-                                    <React.Fragment>
-                                        {currentScore.half1} (HT1)
-                                        <br />
-                                    </React.Fragment>
-                                ) : (
-                                    ''
-                                )}
-                                {currentScore.half3 ? (
-                                    <React.Fragment>
-                                        {currentScore.half3} (HT2)
-                                        <br />
-                                    </React.Fragment>
-                                ) : (
-                                    ''
-                                )}
-                                {currentScore.half5 ? (
-                                    <React.Fragment>
-                                        {currentScore.half5} (H1 ext. time)
-                                        <br />
-                                    </React.Fragment>
-                                ) : (
-                                    ''
-                                )}
-                                {currentScore.half7 ? (
-                                    <React.Fragment>{currentScore.half7} (H2 ext. time)</React.Fragment>
                                 ) : (
                                     ''
                                 )}
                             </div>
                         </div>
-                        <div className="game__grid-item game__grid-item--team">
-                            <Button
-                                onClick={() => openPlayers({ eventType: EVENT_TYPES.goal, team: 'B', type: ADD_GOAL })}
-                                disabled={!gameStarted || gamePaused}
-                                className="game__button game__button--team"
-                            >
-                                {settings.teams.B.name}
-                            </Button>
-                        </div>
-                        <div className="game__grid-item game__grid-item--timeout">
-                            <Button
-                                variant="contained"
-                                onClick={() => handleTimeoutButton('B')}
-                                disabled={!gameStarted || gamePaused || dataTeamB.timeouts >= MAX_NUMBER.timeouts}
-                                title={dataTeamB.timeouts >= MAX_NUMBER.timeouts ? messages.maxTimeoutsReached : ''}
-                                startIcon={<AddCircleOutlineIcon />}
-                            >
-                                {messages.addTimeout}
-                            </Button>
-                            <p>
-                                {timeOut.B ? (
-                                    <Countdown
-                                        duration={TIME_DURATIONS.timeout}
-                                        callback={() => setATimeOut({ ...timeOut, B: false })}
-                                    />
-                                ) : (
-                                    ''
-                                )}{' '}
-                                ({dataTeamB.timeouts})
-                            </p>
-                        </div>
-                    </div>
 
-                    <div className="game__grid game__grid--data">
-                        <div className="game__grid-item game__grid-item--fouls">
-                            <Button
-                                variant="contained"
-                                onClick={() =>
-                                    openPlayers({
-                                        eventType: EVENT_TYPES.blueCard,
-                                        team: 'A',
-                                        type: ADD_BLUE_CARD
-                                    })
-                                }
-                                disabled={!gameStarted || gamePaused}
-                                startIcon={<AddCircleOutlineIcon />}
-                                className="game__button game__button--blue-card"
-                            >
-                                {messages.addBlueCard}
-                            </Button>
-                            <p>({dataTeamA.blueCards})</p>
-                            {foulPlayersLog('A', FOULS.blueCard)}
-                        </div>
-                        <div className="game__grid-item game__grid-item--fouls">
-                            <Button
-                                variant="contained"
-                                onClick={() =>
-                                    openPlayers({
-                                        eventType: EVENT_TYPES.redCard,
-                                        team: 'A',
-                                        type: ADD_RED_CARD
-                                    })
-                                }
-                                disabled={!gameStarted || gamePaused}
-                                startIcon={<AddCircleOutlineIcon />}
-                                className="game__button game__button--red-card"
-                            >
-                                {messages.addRedCard}
-                            </Button>
-                            <p>({dataTeamA.redCards})</p>
-                            {foulPlayersLog('A', FOULS.redCard)}
-                        </div>
-                        <div className="game__grid-item game__grid-item--fouls">
-                            <Button
-                                variant="contained"
-                                onClick={() =>
-                                    openPlayers({
-                                        eventType: EVENT_TYPES.suspension,
-                                        team: 'A',
-                                        type: ADD_SUSPENSION
-                                    })
-                                }
-                                disabled={!gameStarted || gamePaused}
-                                startIcon={<AddCircleOutlineIcon />}
-                                className="game__button"
-                            >
-                                {messages.addSuspension}
-                            </Button>
-                            <p>({dataTeamA.suspensions})</p>
-                            {foulPlayersLog('A', FOULS.suspension)}
-                        </div>
-                        <div className="game__grid-item game__grid-item--fouls">
-                            <Button
-                                variant="contained"
-                                onClick={() =>
-                                    openPlayers({
-                                        eventType: EVENT_TYPES.yellowCard,
-                                        team: 'A',
-                                        type: ADD_YELLOW_CARD
-                                    })
-                                }
-                                disabled={!gameStarted || gamePaused}
-                                startIcon={<AddCircleOutlineIcon />}
-                                className="game__button game__button--yellow-card"
-                            >
-                                {messages.addYellowCard}
-                            </Button>
-                            <p>({dataTeamA.yellowCards})</p>
-                            {foulPlayersLog('A', FOULS.yellowCard)}
+                        <div className="game__grid game__grid--score">
+                            <div className="game__grid-item game__grid-item--timeout">
+                                <Button
+                                    variant="contained"
+                                    onClick={() => handleTimeoutButton('A')}
+                                    disabled={!gameStarted || gamePaused || dataTeamA.timeouts >= MAX_NUMBER.timeouts}
+                                    title={dataTeamA.timeouts >= MAX_NUMBER.timeouts ? messages.maxTimeoutsReached : ''}
+                                    startIcon={<AddCircleOutlineIcon />}
+                                >
+                                    {messages.addTimeout}
+                                </Button>
+                                <p>
+                                    {timeOut.A ? (
+                                        <Countdown
+                                            duration={TIME_DURATIONS.timeout}
+                                            callback={() => setATimeOut({ ...timeOut, A: false })}
+                                        />
+                                    ) : (
+                                        ''
+                                    )}{' '}
+                                    ({dataTeamA.timeouts})
+                                </p>
+                            </div>
+                            <div className="game__grid-item game__grid-item--team game__grid-item--team-A">
+                                <Button
+                                    onClick={() =>
+                                        openPlayers({ eventType: EVENT_TYPES.goal, team: 'A', type: ADD_GOAL })
+                                    }
+                                    disabled={!gameStarted || gamePaused}
+                                    className="game__button game__button--team"
+                                >
+                                    {settings.teams.A.name}
+                                </Button>
+                            </div>
+                            <div className="game__grid-item game__grid-item--score">
+                                <div className="game__score game__score--half-time">{PERIODS[currentPeriod]}</div>
+                                <div className="game__score">
+                                    {dataTeamA.goals} - {dataTeamB.goals}
+                                </div>
+                                <div className="game__score game__score--half-time">
+                                    {currentScore.half1 ? (
+                                        <React.Fragment>
+                                            {currentScore.half1} (HT1)
+                                            <br />
+                                        </React.Fragment>
+                                    ) : (
+                                        ''
+                                    )}
+                                    {currentScore.half3 ? (
+                                        <React.Fragment>
+                                            {currentScore.half3} (HT2)
+                                            <br />
+                                        </React.Fragment>
+                                    ) : (
+                                        ''
+                                    )}
+                                    {currentScore.half5 ? (
+                                        <React.Fragment>
+                                            {currentScore.half5} (H1 ext. time)
+                                            <br />
+                                        </React.Fragment>
+                                    ) : (
+                                        ''
+                                    )}
+                                    {currentScore.half7 ? (
+                                        <React.Fragment>{currentScore.half7} (H2 ext. time)</React.Fragment>
+                                    ) : (
+                                        ''
+                                    )}
+                                </div>
+                            </div>
+                            <div className="game__grid-item game__grid-item--team">
+                                <Button
+                                    onClick={() =>
+                                        openPlayers({ eventType: EVENT_TYPES.goal, team: 'B', type: ADD_GOAL })
+                                    }
+                                    disabled={!gameStarted || gamePaused}
+                                    className="game__button game__button--team"
+                                >
+                                    {settings.teams.B.name}
+                                </Button>
+                            </div>
+                            <div className="game__grid-item game__grid-item--timeout">
+                                <Button
+                                    variant="contained"
+                                    onClick={() => handleTimeoutButton('B')}
+                                    disabled={!gameStarted || gamePaused || dataTeamB.timeouts >= MAX_NUMBER.timeouts}
+                                    title={dataTeamB.timeouts >= MAX_NUMBER.timeouts ? messages.maxTimeoutsReached : ''}
+                                    startIcon={<AddCircleOutlineIcon />}
+                                >
+                                    {messages.addTimeout}
+                                </Button>
+                                <p>
+                                    {timeOut.B ? (
+                                        <Countdown
+                                            duration={TIME_DURATIONS.timeout}
+                                            callback={() => setATimeOut({ ...timeOut, B: false })}
+                                        />
+                                    ) : (
+                                        ''
+                                    )}{' '}
+                                    ({dataTeamB.timeouts})
+                                </p>
+                            </div>
                         </div>
 
-                        <div className="game__grid-item game__grid-item--fouls">
-                            <Button
-                                variant="contained"
-                                onClick={() =>
-                                    openPlayers({
-                                        eventType: EVENT_TYPES.yellowCard,
-                                        team: 'B',
-                                        type: ADD_YELLOW_CARD
-                                    })
-                                }
-                                disabled={!gameStarted || gamePaused}
-                                startIcon={<AddCircleOutlineIcon />}
-                                className="game__button game__button--yellow-card"
-                            >
-                                {messages.addYellowCard}
-                            </Button>
-                            <p>({dataTeamB.yellowCards})</p>
-                            {foulPlayersLog('B', FOULS.yellowCard)}
+                        <div className="game__grid game__grid--data">
+                            <div className="game__grid-item game__grid-item--fouls">
+                                <Button
+                                    variant="contained"
+                                    onClick={() =>
+                                        openPlayers({
+                                            eventType: EVENT_TYPES.blueCard,
+                                            team: 'A',
+                                            type: ADD_BLUE_CARD
+                                        })
+                                    }
+                                    disabled={!gameStarted || gamePaused}
+                                    startIcon={<AddCircleOutlineIcon />}
+                                    className="game__button game__button--blue-card"
+                                >
+                                    {messages.addBlueCard}
+                                </Button>
+                                <p>({dataTeamA.blueCards})</p>
+                                {foulPlayersLog('A', FOULS.blueCard)}
+                            </div>
+                            <div className="game__grid-item game__grid-item--fouls">
+                                <Button
+                                    variant="contained"
+                                    onClick={() =>
+                                        openPlayers({
+                                            eventType: EVENT_TYPES.redCard,
+                                            team: 'A',
+                                            type: ADD_RED_CARD
+                                        })
+                                    }
+                                    disabled={!gameStarted || gamePaused}
+                                    startIcon={<AddCircleOutlineIcon />}
+                                    className="game__button game__button--red-card"
+                                >
+                                    {messages.addRedCard}
+                                </Button>
+                                <p>({dataTeamA.redCards})</p>
+                                {foulPlayersLog('A', FOULS.redCard)}
+                            </div>
+                            <div className="game__grid-item game__grid-item--fouls">
+                                <Button
+                                    variant="contained"
+                                    onClick={() =>
+                                        openPlayers({
+                                            eventType: EVENT_TYPES.suspension,
+                                            team: 'A',
+                                            type: ADD_SUSPENSION
+                                        })
+                                    }
+                                    disabled={!gameStarted || gamePaused}
+                                    startIcon={<AddCircleOutlineIcon />}
+                                    className="game__button game__button--suspension"
+                                >
+                                    {messages.addSuspension}
+                                </Button>
+                                <p>({dataTeamA.suspensions})</p>
+                                {foulPlayersLog('A', FOULS.suspension)}
+                            </div>
+                            <div className="game__grid-item game__grid-item--fouls">
+                                <Button
+                                    variant="contained"
+                                    onClick={() =>
+                                        openPlayers({
+                                            eventType: EVENT_TYPES.yellowCard,
+                                            team: 'A',
+                                            type: ADD_YELLOW_CARD
+                                        })
+                                    }
+                                    disabled={!gameStarted || gamePaused}
+                                    startIcon={<AddCircleOutlineIcon />}
+                                    className="game__button game__button--yellow-card"
+                                >
+                                    {messages.addYellowCard}
+                                </Button>
+                                <p>({dataTeamA.yellowCards})</p>
+                                {foulPlayersLog('A', FOULS.yellowCard)}
+                            </div>
+
+                            <div className="game__grid-item game__grid-item--fouls">
+                                <Button
+                                    variant="contained"
+                                    onClick={() =>
+                                        openPlayers({
+                                            eventType: EVENT_TYPES.yellowCard,
+                                            team: 'B',
+                                            type: ADD_YELLOW_CARD
+                                        })
+                                    }
+                                    disabled={!gameStarted || gamePaused}
+                                    startIcon={<AddCircleOutlineIcon />}
+                                    className="game__button game__button--yellow-card"
+                                >
+                                    {messages.addYellowCard}
+                                </Button>
+                                <p>({dataTeamB.yellowCards})</p>
+                                {foulPlayersLog('B', FOULS.yellowCard)}
+                            </div>
+                            <div className="game__grid-item game__grid-item--fouls">
+                                <Button
+                                    variant="contained"
+                                    onClick={() =>
+                                        openPlayers({
+                                            eventType: EVENT_TYPES.suspension,
+                                            team: 'B',
+                                            type: ADD_SUSPENSION
+                                        })
+                                    }
+                                    disabled={!gameStarted || gamePaused}
+                                    startIcon={<AddCircleOutlineIcon />}
+                                    className="game__button game__button--suspension"
+                                >
+                                    {messages.addSuspension}
+                                </Button>
+                                <p>({dataTeamB.suspensions})</p>
+                                {foulPlayersLog('B', FOULS.suspension)}
+                            </div>
+                            <div className="game__grid-item game__grid-item--fouls">
+                                <Button
+                                    variant="contained"
+                                    onClick={() =>
+                                        openPlayers({
+                                            eventType: EVENT_TYPES.redCard,
+                                            team: 'B',
+                                            type: ADD_RED_CARD
+                                        })
+                                    }
+                                    disabled={!gameStarted || gamePaused}
+                                    startIcon={<AddCircleOutlineIcon />}
+                                    className="game__button game__button--red-card"
+                                >
+                                    {messages.addRedCard}
+                                </Button>
+                                <p>({dataTeamB.redCards})</p>
+                                {foulPlayersLog('B', FOULS.redCard)}
+                            </div>
+                            <div className="game__grid-item game__grid-item--fouls">
+                                <Button
+                                    variant="contained"
+                                    onClick={() =>
+                                        openPlayers({
+                                            eventType: EVENT_TYPES.blueCard,
+                                            team: 'B',
+                                            type: ADD_BLUE_CARD
+                                        })
+                                    }
+                                    disabled={!gameStarted || gamePaused}
+                                    startIcon={<AddCircleOutlineIcon />}
+                                    className="game__button game__button--blue-card"
+                                >
+                                    {messages.addBlueCard}
+                                </Button>
+                                <p>({dataTeamB.blueCards})</p>
+                                {foulPlayersLog('B', FOULS.blueCard)}
+                            </div>
                         </div>
-                        <div className="game__grid-item game__grid-item--fouls">
-                            <Button
-                                variant="contained"
-                                onClick={() =>
-                                    openPlayers({
-                                        eventType: EVENT_TYPES.suspension,
-                                        team: 'B',
-                                        type: ADD_SUSPENSION
-                                    })
-                                }
-                                disabled={!gameStarted || gamePaused}
-                                startIcon={<AddCircleOutlineIcon />}
-                                className="game__button"
-                            >
-                                {messages.addSuspension}
-                            </Button>
-                            <p>({dataTeamB.suspensions})</p>
-                            {foulPlayersLog('B', FOULS.suspension)}
-                        </div>
-                        <div className="game__grid-item game__grid-item--fouls">
-                            <Button
-                                variant="contained"
-                                onClick={() =>
-                                    openPlayers({
-                                        eventType: EVENT_TYPES.redCard,
-                                        team: 'B',
-                                        type: ADD_RED_CARD
-                                    })
-                                }
-                                disabled={!gameStarted || gamePaused}
-                                startIcon={<AddCircleOutlineIcon />}
-                                className="game__button game__button--red-card"
-                            >
-                                {messages.addRedCard}
-                            </Button>
-                            <p>({dataTeamB.redCards})</p>
-                            {foulPlayersLog('B', FOULS.redCard)}
-                        </div>
-                        <div className="game__grid-item game__grid-item--fouls">
-                            <Button
-                                variant="contained"
-                                onClick={() =>
-                                    openPlayers({
-                                        eventType: EVENT_TYPES.blueCard,
-                                        team: 'B',
-                                        type: ADD_BLUE_CARD
-                                    })
-                                }
-                                disabled={!gameStarted || gamePaused}
-                                startIcon={<AddCircleOutlineIcon />}
-                                className="game__button game__button--blue-card"
-                            >
-                                {messages.addBlueCard}
-                            </Button>
-                            <p>({dataTeamB.blueCards})</p>
-                            {foulPlayersLog('B', FOULS.blueCard)}
-                        </div>
-                    </div>
-                    <Grid container justify="center" alignItems="flex-start" spacing={3}>
-                        <Grid item>
-                            <Button
-                                variant="contained"
-                                onClick={() => openLineUp({ team: 'A' })}
-                                startIcon={<PeopleOutlineIcon />}
-                            >
-                                {messages.showLineUp}
-                            </Button>
+                        <Grid container justify="center" alignItems="flex-start" spacing={3}>
+                            <Grid item>
+                                <Button
+                                    variant="contained"
+                                    onClick={() => openLineUp({ team: 'A' })}
+                                    startIcon={<PeopleOutlineIcon />}
+                                >
+                                    {messages.showLineUp}
+                                </Button>
+                            </Grid>
+                            <Grid item>
+                                <Button
+                                    variant="contained"
+                                    onClick={() => openLineUp({ team: 'B' })}
+                                    startIcon={<PeopleOutlineIcon />}
+                                >
+                                    {messages.showLineUp}
+                                </Button>
+                            </Grid>
                         </Grid>
-                        <Grid item>
-                            <Button
-                                variant="contained"
-                                onClick={() => openLineUp({ team: 'B' })}
-                                startIcon={<PeopleOutlineIcon />}
-                            >
-                                {messages.showLineUp}
-                            </Button>
-                        </Grid>
-                    </Grid>
-                    <GameLog gameEvents={gameEvents} settingsData={settings} />
-                    <Settings
-                        settingsData={settings}
-                        gameStarted={gameStarted}
-                        popupVisibility={popupVisibility.settings}
-                        closeHandler={closePopup}
-                    />
-                    <Players
-                        popupVisibility={popupVisibility.players}
-                        eventType={playersData.eventType}
-                        playersListType={playersData.playersListType}
-                        team={playersData.playersTeam}
-                        jerseyColour={playersData.jerseyColour}
-                        referenceColour={playersData.referenceColour}
-                        playersList={playersData.playersList}
-                        captainId={playersData.captainId}
-                        officialsList={playersData.officialsList}
-                        actionHandler={addActionPerTeam}
-                        closeHandler={closePopup}
-                        openPopup={openPopup}
-                    />
-                    <LineUp
-                        popupVisibility={popupVisibility.lineUp}
-                        team={lineUpData.playersTeam}
-                        jerseyColour={lineUpData.jerseyColour}
-                        referenceColour={lineUpData.referenceColour}
-                        playersList={lineUpData.playersList}
-                        captainId={lineUpData.captainId}
-                        officialsList={lineUpData.officialsList}
-                        closeHandler={closePopup}
-                        openPopup={openPopup}
-                    />
+                    </Container>
                 </Container>
+                <div className="game__log">
+                    <GameLog gameEvents={gameEvents} settingsData={settings} />
+                </div>
+                <Settings
+                    settingsData={settings}
+                    gameStarted={gameStarted}
+                    popupVisibility={popupVisibility.settings}
+                    closeHandler={closePopup}
+                />
+                <Players
+                    popupVisibility={popupVisibility.players}
+                    eventType={playersData.eventType}
+                    playersListType={playersData.playersListType}
+                    team={playersData.playersTeam}
+                    jerseyColour={playersData.jerseyColour}
+                    referenceColour={playersData.referenceColour}
+                    playersList={playersData.playersList}
+                    captainId={playersData.captainId}
+                    officialsList={playersData.officialsList}
+                    actionHandler={addActionPerTeam}
+                    closeHandler={closePopup}
+                    openPopup={openPopup}
+                />
+                <LineUp
+                    popupVisibility={popupVisibility.lineUp}
+                    team={lineUpData.playersTeam}
+                    jerseyColour={lineUpData.jerseyColour}
+                    referenceColour={lineUpData.referenceColour}
+                    playersList={lineUpData.playersList}
+                    captainId={lineUpData.captainId}
+                    officialsList={lineUpData.officialsList}
+                    closeHandler={closePopup}
+                    openPopup={openPopup}
+                />
             </main>
         </Fragment>
     );

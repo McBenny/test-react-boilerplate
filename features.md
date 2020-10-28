@@ -185,6 +185,7 @@ It should be possible to also add a goal anywhere in the list.
 These features should also apply to the fouls, any foul registered should be editable and removable, it should also be possible to add a foul.
 
 ##BUGS
+- [ ] Limit the number of yellow cards to 3 per team (allow for a fourth for officials)
 - [ ] When I create a player, it jumps from bottom to top of the list, this is annoying
 - [X] Players with letters are not in uppercase in list for captain
 - [X] I don't want to get "NaN" when I erase a number before putting a new one in the settings
@@ -194,6 +195,9 @@ These features should also apply to the fouls, any foul registered should be edi
 - [X] A totally empty player in the settings should not be saved
 
 ##TODO
+- [ ] Open app in full screen
+- [ ] Give the ability to filter the list of games per date, competition, round or gender on the Home Screen
+- [ ] Sorting line-up: sort players According to their numbers, last name, or number of goals, or fouls
 - [ ] I want to be able to delete a game (via popup confirmation)
 - [ ] authenticate users
 - [ ] save team and players data to use in auto-suggest, save colours as well
@@ -225,8 +229,10 @@ These features should also apply to the fouls, any foul registered should be edi
 - [X] Ability to remove a player if he has no event
 - [X] If there are no events, don't show the game log
 - [X] display the number of players and officials in Players pop-up and Line-up
+- [X] Differentiate backgrounds between goals and fouls
 
 ##REFACTORING
+- [ ] Replace A and B strings by constants
 - [X] Optimise settings page to avoid repetition between A and B teams.
 - [X] Separate colours from colour usage
 - [X] Optimize components calls

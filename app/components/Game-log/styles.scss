@@ -52,6 +52,22 @@
             margin-top: 1px;
             border-top: 2px solid $borderStrongColour;
         }
+
+        &--yellowCard {
+            background-color: $yellowCardColour !important;
+        }
+
+        &--suspension {
+            background-color: $suspensionCardColour !important;
+        }
+
+        &--redCard {
+            background-color: $redCardColour !important;
+        }
+
+        &--blueCard {
+            background-color: $blueCardColour !important;
+        }
     }
 
     &__event {
