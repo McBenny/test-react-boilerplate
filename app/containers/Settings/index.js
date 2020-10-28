@@ -227,12 +227,6 @@ export function Settings({
         );
     };
 
-    // const hidePlayerLine = currentLine => {
-    //     // TODO: Remove this and fix the feature
-    //     console.log('hide!', currentLine, currentLine.current, currentLine.current.classList);
-    //     currentLine.current.classList.add('settings__player-line--hidden');
-    // };
-
     /**
      * Displays 2 input fields to add/read a member's data
      * @param team    Must be TEAMS_LIST.HOME or TEAMS_LIST.AWAY
