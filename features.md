@@ -195,7 +195,6 @@ These features should also apply to the fouls, any foul registered should be edi
 - [X] A totally empty player in the settings should not be saved
 
 ##TODO
-- [ ] Open app in full screen
 - [ ] Give the ability to filter the list of games per date, competition, round or gender on the Home Screen
 - [ ] Sorting line-up: sort players According to their numbers, last name, or number of goals, or fouls
 - [ ] I want to be able to delete a game (via popup confirmation)
@@ -217,7 +216,7 @@ These features should also apply to the fouls, any foul registered should be edi
 - [X] group players in fouls
 - [X] add the captain
 - [X] display team line-up with captain first
-- [X] add link to settings form "no players situations"
+- [X] add alink to settings form in "no players situations"
 - [X] add a colour to each team
 - [X] add game officials (referees, scorekeeper (table), timekeeper (scoreboard/buzzer))
 - [X] in players pop-in, list players and officials in different tabs
@@ -230,6 +229,7 @@ These features should also apply to the fouls, any foul registered should be edi
 - [X] display the number of players and officials in Players pop-up and Line-up
 - [X] Differentiate backgrounds between goals and fouls
 - [X] Allow for removal of a player
+- [X] Open app in full screen
 
 ##REFACTORING
 - [ ] Replace A and B strings by constants
