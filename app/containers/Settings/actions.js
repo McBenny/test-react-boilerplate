@@ -24,6 +24,7 @@ import {
     INIT_SETTINGS,
     ADD_EMPTY_MEMBER,
     CHANGE_MEMBER,
+    REMOVE_MEMBER,
     SWAP_TEAMS
 } from './constants';
 
@@ -108,6 +109,18 @@ export function addEmptyMember(member) {
 export function changeMember(member) {
     return {
         type: CHANGE_MEMBER,
+        ...member
+    };
+}
+
+/**
+ * Suppress a member
+ * @param  {object} member The new text of the input field
+ * @return {object} An action object with a type of CHANGE_MEMBER
+ */
+export function removeMember(member) {
+    return {
+        type: REMOVE_MEMBER,
         ...member
     };
 }

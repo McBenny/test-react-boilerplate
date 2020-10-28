@@ -23,6 +23,7 @@ import {
     EMPTY_MEMBER,
     ADD_EMPTY_MEMBER,
     CHANGE_MEMBER,
+    REMOVE_MEMBER,
     MEMBERS_QUALIFICATIONS,
     SWAP_TEAMS
 } from './constants';
@@ -179,6 +180,13 @@ const settingsReducer = (state = initialState, action) =>
                         }
                         return member;
                     }
+                );
+                break;
+            }
+            case REMOVE_MEMBER: {
+                // console.log(REMOVE_MEMBER, action);
+                draft.teams[action.team][action.memberType] = draft.teams[action.team][action.memberType].filter(
+                    member => member.id !== action.id
                 );
                 break;
             }
