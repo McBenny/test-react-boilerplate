@@ -62,6 +62,7 @@ import {
     changeTeamName,
     changeColour,
     changeMember,
+    removeMember,
     changeTeamCaptain,
     swapTeams,
     initSettings
@@ -100,6 +101,7 @@ export function Settings({
     onChangeColour,
     onAddEmptyMember,
     onChangeMember,
+    onRemoveMember,
     onChangeTeamCaptain,
     onSwapTeams,
     onSaveSettings,
@@ -225,11 +227,11 @@ export function Settings({
         );
     };
 
-    const hidePlayerLine = currentLine => {
-        // TODO: Remove this and fix the feature
-        console.log('hide!', currentLine, currentLine.current, currentLine.current.classList);
-        currentLine.current.classList.add('settings__player-line--hidden');
-    };
+    // const hidePlayerLine = currentLine => {
+    //     // TODO: Remove this and fix the feature
+    //     console.log('hide!', currentLine, currentLine.current, currentLine.current.classList);
+    //     currentLine.current.classList.add('settings__player-line--hidden');
+    // };
 
     /**
      * Displays 2 input fields to add/read a member's data
@@ -340,17 +342,13 @@ export function Settings({
                     member.redCards === 0 &&
                     member.suspensions === 0 ? (
                         <IconButton
-                            onClick={() => {
-                                onChangeMember({
+                            onClick={() =>
+                                onRemoveMember({
                                     team,
                                     memberType: type,
-                                    id: member.id,
-                                    reference: '',
-                                    name: '',
-                                    qualification: null
-                                });
-                                hidePlayerLine(currentLine);
-                            }}
+                                    id: member.id
+                                })
+                            }
                             size="medium"
                             arial-label={messages[`${type}Remove`]}
                         >
@@ -717,6 +715,7 @@ Settings.propTypes = {
     onChangeColour: PropTypes.func,
     onAddEmptyMember: PropTypes.func,
     onChangeMember: PropTypes.func,
+    onRemoveMember: PropTypes.func,
     onChangeTeamCaptain: PropTypes.func,
     onSwapTeams: PropTypes.func,
     onSaveSettings: PropTypes.func,
@@ -745,6 +744,7 @@ export function mapDispatchToProps(dispatch) {
         onChangeColour: data => dispatch(changeColour(data)),
         onAddEmptyMember: data => dispatch(addEmptyMember(data)),
         onChangeMember: data => dispatch(changeMember(data)),
+        onRemoveMember: data => dispatch(removeMember(data)),
         onChangeTeamCaptain: data => dispatch(changeTeamCaptain(data)),
         onSwapTeams: data => dispatch(swapTeams(data)),
         onSaveSettings: data => dispatch(saveSettings(data)),

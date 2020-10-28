@@ -21,6 +21,7 @@ export const CHANGE_COLOUR = 'boilerplate/Settings/CHANGE_COLOUR';
 export const CHANGE_TEAM_CAPTAIN = 'boilerplate/Settings/CHANGE_TEAM_CAPTAIN';
 export const ADD_EMPTY_MEMBER = 'boilerplate/Settings/ADD_EMPTY_MEMBER';
 export const CHANGE_MEMBER = 'boilerplate/Settings/CHANGE_MEMBER';
+export const REMOVE_MEMBER = 'boilerplate/Settings/REMOVE_MEMBER';
 export const SWAP_TEAMS = 'boilerplate/Settings/SWAP_TEAMS';
 export const INIT_SETTINGS = 'boilerplate/Settings/INIT_SETTINGS';
 

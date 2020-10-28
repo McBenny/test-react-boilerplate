@@ -202,7 +202,6 @@ These features should also apply to the fouls, any foul registered should be edi
 - [ ] authenticate users
 - [ ] save team and players data to use in auto-suggest, save colours as well
 - [ ] allow image upload for teams
-- [ ] allow for removal of a player
 - [ ] Removing a player gives everything he holds to "unknown players"
 - [X] allow for timeouts per team
 - [X] Make add a player in settings "dynamic"
@@ -230,6 +229,7 @@ These features should also apply to the fouls, any foul registered should be edi
 - [X] If there are no events, don't show the game log
 - [X] display the number of players and officials in Players pop-up and Line-up
 - [X] Differentiate backgrounds between goals and fouls
+- [X] Allow for removal of a player
 
 ##REFACTORING
 - [ ] Replace A and B strings by constants
