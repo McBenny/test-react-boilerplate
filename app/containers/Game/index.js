@@ -18,8 +18,6 @@ import PauseCircleOutlineIcon from '@material-ui/icons/PauseCircleOutline';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import PeopleOutlineIcon from '@material-ui/icons/PeopleOutline';
 import HomeOutlined from '@material-ui/icons/HomeOutlined';
-import FullscreenOutlinedIcon from '@material-ui/icons/FullscreenOutlined';
-import FullscreenExitOutlinedIcon from '@material-ui/icons/FullscreenExitOutlined';
 
 import Settings from '../Settings';
 import Players from '../../components/Players';
@@ -103,28 +101,6 @@ export function Game({
         });
     };
     useEffect(saveGameInStorage, [gameId, gameStarted, gameEvents, settings]);
-
-    // Fullscreen management
-    // Doesn't work on Chrome as of 86.0
-    const [fullScreen, setFullScreen] = useState({ status: false, element: '' });
-    const handleFullScreen = () => {
-        const { element, status } = fullScreen;
-        if (element === document.documentElement) {
-            if (element.requestFullscreen && document.exitFullscreen) {
-                return status ? element.requestFullscreen() : document.exitFullscreen();
-            }
-            if (element.mozRequestFullScreen) {
-                return status ? element.mozRequestFullScreen() : element.mozExitFullScreen();
-            }
-            if (element.webkitRequestFullscreen) {
-                return status ? element.webkitRequestFullscreen() : element.webkitExitFullscreen();
-            }
-        }
-        return () => {};
-    };
-    useEffect(() => {
-        handleFullScreen();
-    }, [fullScreen]);
 
     // Popups management
     const popupsInitialState = {
@@ -351,20 +327,6 @@ export function Game({
                 <AppBar position="static" className="game__appbar">
                     <Toolbar variant="dense" className="game__toolbar">
                         <div>{formattedDate}</div>
-                        <IconButton
-                            color="inherit"
-                            onClick={() => {
-                                setFullScreen({
-                                    status: !fullScreen.status,
-                                    element: document.documentElement
-                                });
-                            }}
-                            arial-label={messages.fullscreen}
-                            title={messages.fullscreen}
-                            edge="end"
-                        >
-                            {fullScreen.status ? <FullscreenExitOutlinedIcon /> : <FullscreenOutlinedIcon />}
-                        </IconButton>
                         <IconButton
                             color="inherit"
                             onClick={() => openPopup(POPUPS.settings)}
