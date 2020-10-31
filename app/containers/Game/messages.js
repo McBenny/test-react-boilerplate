@@ -1,6 +1,7 @@
 export const messages = {
     title: 'Game',
     returnHome: 'Return home',
+    fullscreen: 'Toggle fullscreen mode',
     settings: {
         open: 'Open settings...'
     },
