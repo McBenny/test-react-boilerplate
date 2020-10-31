@@ -197,7 +197,6 @@ These features should also apply to the fouls, any foul registered should be edi
 ##TODO
 - [ ] Open app in full screen
 - [ ] Give the ability to filter the list of games per date, competition, round or gender on the Home Screen
-- [ ] Sorting line-up: sort players According to their numbers, last name, or number of goals, or fouls
 - [ ] I want to be able to delete a game (via popup confirmation)
 - [ ] authenticate users
 - [ ] save team and players data to use in auto-suggest, save colours as well
@@ -230,6 +229,7 @@ These features should also apply to the fouls, any foul registered should be edi
 - [X] display the number of players and officials in Players pop-up and Line-up
 - [X] Differentiate backgrounds between goals and fouls
 - [X] Allow for removal of a player
+- [X] Sorting line-up: sort players According to their numbers, last name, or number of goals, or fouls
 
 ##REFACTORING
 - [ ] Replace A and B strings by constants
