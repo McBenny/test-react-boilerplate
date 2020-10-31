@@ -9,5 +9,13 @@ export const messages = {
     yellowCards: 'yellow card',
     redCards: 'red card',
     blueCard: 'blue card',
-    suspension: '2 minutes'
+    suspension: '2 minutes',
+    sorting: 'Sort by',
+    sorting_reference: 'number',
+    sorting_name: 'name',
+    sorting_goals: 'goals',
+    sorting_yellowCards: 'yellow cards',
+    sorting_redCards: 'red cards',
+    sorting_blueCards: 'blue cards',
+    sorting_suspensions: '2 minutes'
 };

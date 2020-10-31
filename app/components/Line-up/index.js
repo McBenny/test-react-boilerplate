@@ -1,7 +1,17 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
 import PropTypes from 'prop-types';
 
-import { Dialog, DialogTitle, DialogContent, DialogActions, Grid, Button } from '@material-ui/core';
+import {
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    DialogActions,
+    Grid,
+    Button,
+    RadioGroup,
+    FormControlLabel,
+    Radio
+} from '@material-ui/core';
 import SettingsOutlinedIcon from '@material-ui/icons/SettingsOutlined';
 
 import { POPUPS } from '../../containers/Game/constants';
@@ -9,6 +19,17 @@ import { MEMBERS_QUALIFICATIONS, MEMBERS_TYPES } from '../../containers/Settings
 import { naturalSorting } from '../../utils/utilities';
 
 import { messages } from './messages';
+import './styles.scss';
+
+const SORTING = {
+    reference: 'reference',
+    name: 'name',
+    goals: 'goals',
+    yellowCards: 'yellowCards',
+    suspensions: 'suspensions',
+    redCards: 'redCards',
+    blueCards: 'blueCards'
+};
 
 const memberTemplate = ({ member, memberType, team, captainId, jerseyColour, referenceColour }) => (
     <Grid item key={`lineUp${team}${member.id}`} className="players__grid-item">
@@ -71,8 +92,22 @@ memberTemplate.propTypes = {
     referenceColour: PropTypes.string
 };
 
-const membersListDisplay = ({ memberType, membersList, captainId, team, openPopup, jerseyColour, referenceColour }) => {
-    const sortedMembersList = naturalSorting(membersList, 'reference');
+const membersListDisplay = ({
+    memberType,
+    membersList,
+    sorting,
+    sortingOrder,
+    captainId,
+    team,
+    openPopup,
+    jerseyColour,
+    referenceColour
+}) => {
+    const sortedMembersList = naturalSorting(
+        membersList,
+        memberType === MEMBERS_TYPES.players ? sorting : SORTING.reference,
+        sortingOrder
+    );
     let captainTemplate = '';
     if (captainId !== 0) {
         const captain = memberType === MEMBERS_TYPES.players && membersList.filter(player => player.id === captainId);
@@ -131,9 +166,26 @@ membersListDisplay.propTypes = {
     jerseyColour: PropTypes.string,
     referenceColour: PropTypes.string,
     membersList: PropTypes.array,
+    sorting: PropTypes.string,
+    sortingOrder: PropTypes.string,
     captainId: PropTypes.number,
     openPopup: PropTypes.func
 };
+
+function radioButtonTemplate(value) {
+    return (
+        <FormControlLabel
+            key={`line-up-sorting-${value}`}
+            value={SORTING[value]}
+            control={<Radio disableRipple color="default" />}
+            label={messages[`sorting_${value}`]}
+        />
+    );
+}
+function createRadioList() {
+    const sortingKeys = Object.keys(SORTING);
+    return sortingKeys.map(key => radioButtonTemplate(key));
+}
 
 function LineUp({
     popupVisibility,
@@ -147,6 +199,7 @@ function LineUp({
     openPopup
 }) {
     const cleanPlayersList = playersList.filter(player => player.id !== 0);
+    const [activeSorting, setActiveSorting] = useState(SORTING.reference);
     return (
         <Dialog
             open={popupVisibility}
@@ -155,21 +208,42 @@ function LineUp({
             fullWidth
             maxWidth="md"
         >
-            <DialogTitle id="dialog-title-lineUp">{messages.title}</DialogTitle>
+            <DialogTitle id="dialog-title-lineUp" disableTypography>
+                <h2 className="title title--action">{messages.title}</h2>
+            </DialogTitle>
             <DialogContent>
-                <h3>
+                <h3 className="title title--45">
                     {messages.listOfPlayers} ({cleanPlayersList.length})
                 </h3>
+                {playersList.length > 0 ? (
+                    <RadioGroup
+                        aria-labelledby="sorting"
+                        name="sorting"
+                        value={activeSorting}
+                        onChange={e => setActiveSorting(e.target.value)}
+                        className="line-up__sorting-group"
+                    >
+                        <h4 id="sorting" className="title title--radio-group">
+                            {messages.sorting}
+                        </h4>
+                        {createRadioList()}
+                    </RadioGroup>
+                ) : (
+                    <></>
+                )}
                 {membersListDisplay({
                     memberType: MEMBERS_TYPES.players,
                     membersList: playersList,
+                    sorting: activeSorting,
+                    sortingOrder:
+                        activeSorting === SORTING.reference || activeSorting === SORTING.name ? 'ASC' : 'DESC',
                     captainId,
                     team,
                     openPopup,
                     jerseyColour,
                     referenceColour
                 })}
-                <h3>
+                <h3 className="title title--45">
                     {messages.listOfOfficials} ({officialsList.length > 0 ? officialsList.length : messages.none})
                 </h3>
                 {membersListDisplay({
