@@ -233,11 +233,11 @@ These features should also apply to the fouls, any foul registered should be edi
 - [X] Open app in full screen
 
 ##REFACTORING
-- [ ] Replace A and B strings by constants
 - [X] Optimise settings page to avoid repetition between A and B teams.
 - [X] Separate colours from colour usage
 - [X] Optimize components calls
 - [X] Check W3C conformance and accessibility
+- [X] Replace A and B strings by constants
 - [ ] ~~move open and close popup functions inside the popup component~~
 
 ##First feedback
