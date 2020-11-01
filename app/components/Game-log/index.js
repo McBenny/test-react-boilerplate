@@ -185,7 +185,7 @@ const GameLog = ({ gameEvents, settingsData }) => {
                         template = (
                             <div className="game-log__event">
                                 <div>
-                                    {icon} <SportsSoccerOutlinedIcon />{' '}
+                                    <SportsSoccerOutlinedIcon /> {icon}{' '}
                                     {gameEvent.penalty ? messages.penaltyFor : messages.goalFor}{' '}
                                     {settingsData.teams[gameEvent.team].name} ({memberData[0].name} [
                                     <strong>{memberData[0].reference}</strong>])
@@ -197,15 +197,6 @@ const GameLog = ({ gameEvents, settingsData }) => {
                     }
 
                     default:
-                    // template = (
-                    //     <Fragment>
-                    //         <strong>Event:</strong> {gameEvent.eventType}
-                    //         {gameEvent.penalty ? ' (penalty)' : ''},{' '}
-                    //         <strong>{gameEvent.team ? 'Team:' : ''}</strong> {gameEvent.team},{' '}
-                    //         <strong>{gameEvent.memberType ? `${gameEvent.memberType}:` : ''}</strong> {gameEvent.id}
-                    //         {gameEvent.id}, <strong>Score:</strong> {gameEvent.score.teamA}-{gameEvent.score.teamB}
-                    //     </Fragment>
-                    // );
                 }
                 return (
                     <ListItem
