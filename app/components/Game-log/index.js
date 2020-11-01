@@ -3,8 +3,16 @@ import PropTypes from 'prop-types';
 import nextId from 'react-id-generator';
 
 import { List, ListItem, Button } from '@material-ui/core';
-import SpeakerNotesOutlinedIcon from '@material-ui/icons/SpeakerNotesOutlined';
+import Filter2OutlinedIcon from '@material-ui/icons/Filter2Outlined';
+import Filter7OutlinedIcon from '@material-ui/icons/Filter7Outlined';
+import HighlightOffOutlinedIcon from '@material-ui/icons/HighlightOffOutlined';
+import InsertDriveFileOutlinedIcon from '@material-ui/icons/InsertDriveFileOutlined';
+import PauseCircleOutlineIcon from '@material-ui/icons/PauseCircleOutline';
+import PlayCircleOutlineIcon from '@material-ui/icons/PlayCircleOutline';
 import SpeakerNotesOffOutlinedIcon from '@material-ui/icons/SpeakerNotesOffOutlined';
+import SpeakerNotesOutlinedIcon from '@material-ui/icons/SpeakerNotesOutlined';
+import SportsSoccerOutlinedIcon from '@material-ui/icons/SportsSoccerOutlined';
+import TimerOutlinedIcon from '@material-ui/icons/TimerOutlined';
 
 import { TEAMS_LIST } from '../../containers/Settings/constants';
 import { EVENT_TYPES } from '../../containers/Game/constants';
@@ -72,72 +80,112 @@ const GameLog = ({ gameEvents, settingsData }) => {
                 switch (gameEvent.eventType) {
                     case EVENT_TYPES.gameStart:
                     case EVENT_TYPES.gameEnd:
-                        template = (
-                            <div className="game-log__event">
-                                <div>
-                                    <strong>{messages[gameEvent.eventType]}</strong>
+                        {
+                            const icon =
+                                gameEvent.eventType === EVENT_TYPES.gameStart ? (
+                                    <PlayCircleOutlineIcon />
+                                ) : (
+                                    <HighlightOffOutlinedIcon />
+                                );
+                            template = (
+                                <div className="game-log__event">
+                                    <div>
+                                        {icon} <strong>{messages[gameEvent.eventType]}</strong>
+                                    </div>
+                                    {formattedScore}
                                 </div>
-                                {formattedScore}
-                            </div>
-                        );
+                            );
+                        }
                         break;
 
                     case EVENT_TYPES.periodEnd:
                     case EVENT_TYPES.periodStart:
-                        template = (
-                            <div className="game-log__event">
-                                <div>
-                                    <strong>
-                                        {messages[gameEvent.eventType]} {messages[`period${gameEvent.id}`]}
-                                    </strong>
+                        {
+                            const icon =
+                                gameEvent.eventType === EVENT_TYPES.periodStart ? (
+                                    <PlayCircleOutlineIcon />
+                                ) : (
+                                    <PauseCircleOutlineIcon />
+                                );
+                            template = (
+                                <div className="game-log__event">
+                                    <div>
+                                        <strong>
+                                            {icon} {messages[gameEvent.eventType]} {messages[`period${gameEvent.id}`]}
+                                        </strong>
+                                    </div>
+                                    {formattedScore}
                                 </div>
-                                {formattedScore}
-                            </div>
-                        );
+                            );
+                        }
                         break;
 
                     case EVENT_TYPES.gamePaused:
                     case EVENT_TYPES.gameResumed:
-                        template = (
-                            <div className="game-log__event">
-                                <div>
-                                    <strong>{messages[gameEvent.eventType]}</strong>
+                        {
+                            const icon =
+                                gameEvent.eventType === EVENT_TYPES.gameResumed ? (
+                                    <PlayCircleOutlineIcon />
+                                ) : (
+                                    <PauseCircleOutlineIcon />
+                                );
+                            template = (
+                                <div className="game-log__event">
+                                    <div>
+                                        {icon} <strong>{messages[gameEvent.eventType]}</strong>
+                                    </div>
                                 </div>
-                            </div>
-                        );
+                            );
+                        }
                         break;
 
                     case EVENT_TYPES.timeout:
-                        template = (
-                            <div className="game-log__event">
-                                <div>
-                                    {messages[`${gameEvent.eventType}For`]} {settingsData.teams[gameEvent.team].name}
+                        {
+                            const icon = <TimerOutlinedIcon />;
+                            template = (
+                                <div className="game-log__event">
+                                    <div>
+                                        {icon} {messages[`${gameEvent.eventType}For`]}{' '}
+                                        {settingsData.teams[gameEvent.team].name}
+                                    </div>
+                                    {formattedScore}
                                 </div>
-                                {formattedScore}
-                            </div>
-                        );
+                            );
+                        }
                         break;
 
                     case EVENT_TYPES.yellowCard:
                     case EVENT_TYPES.redCard:
                     case EVENT_TYPES.blueCard:
                     case EVENT_TYPES.suspension:
-                        template = (
-                            <div className={`game-log__event game-log__event--${gameEvent.eventType.toLowerCase()}`}>
-                                <div>
-                                    {messages[`${gameEvent.eventType}For`]} {memberData[0].name} [
-                                    <strong>{memberData[0].reference}</strong>] (
-                                    {settingsData.teams[gameEvent.team].name})
+                        {
+                            const icon =
+                                gameEvent.eventType === EVENT_TYPES.suspension ? (
+                                    <Filter2OutlinedIcon />
+                                ) : (
+                                    <InsertDriveFileOutlinedIcon />
+                                );
+                            template = (
+                                <div
+                                    className={`game-log__event game-log__event--${gameEvent.eventType.toLowerCase()}`}
+                                >
+                                    <div>
+                                        {icon} {messages[`${gameEvent.eventType}For`]} {memberData[0].name} [
+                                        <strong>{memberData[0].reference}</strong>] (
+                                        {settingsData.teams[gameEvent.team].name})
+                                    </div>
+                                    {formattedScore}
                                 </div>
-                                {formattedScore}
-                            </div>
-                        );
+                            );
+                        }
                         break;
 
                     case EVENT_TYPES.goal: {
+                        const icon = gameEvent.penalty ? <Filter7OutlinedIcon /> : <></>;
                         template = (
                             <div className="game-log__event">
                                 <div>
+                                    {icon} <SportsSoccerOutlinedIcon />{' '}
                                     {gameEvent.penalty ? messages.penaltyFor : messages.goalFor}{' '}
                                     {settingsData.teams[gameEvent.team].name} ({memberData[0].name} [
                                     <strong>{memberData[0].reference}</strong>])
@@ -149,15 +197,15 @@ const GameLog = ({ gameEvents, settingsData }) => {
                     }
 
                     default:
-                        template = (
-                            <Fragment>
-                                <strong>Event:</strong> {gameEvent.eventType}
-                                {gameEvent.penalty ? ' (penalty)' : ''},{' '}
-                                <strong>{gameEvent.team ? 'Team:' : ''}</strong> {gameEvent.team},{' '}
-                                <strong>{gameEvent.memberType ? `${gameEvent.memberType}:` : ''}</strong> {gameEvent.id}
-                                {gameEvent.id}, <strong>Score:</strong> {gameEvent.score.teamA}-{gameEvent.score.teamB}
-                            </Fragment>
-                        );
+                    // template = (
+                    //     <Fragment>
+                    //         <strong>Event:</strong> {gameEvent.eventType}
+                    //         {gameEvent.penalty ? ' (penalty)' : ''},{' '}
+                    //         <strong>{gameEvent.team ? 'Team:' : ''}</strong> {gameEvent.team},{' '}
+                    //         <strong>{gameEvent.memberType ? `${gameEvent.memberType}:` : ''}</strong> {gameEvent.id}
+                    //         {gameEvent.id}, <strong>Score:</strong> {gameEvent.score.teamA}-{gameEvent.score.teamB}
+                    //     </Fragment>
+                    // );
                 }
                 return (
                     <ListItem

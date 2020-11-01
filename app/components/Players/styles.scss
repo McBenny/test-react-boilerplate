@@ -68,5 +68,9 @@
         overflow: hidden;
         line-height: 0.75rem;
         font-size: 0.75rem;
+
+        &--unidentified {
+            font-size: 0.66rem;
+        }
     }
 }

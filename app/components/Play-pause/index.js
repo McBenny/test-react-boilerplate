@@ -12,9 +12,9 @@ import {
     ListItemText,
     Button
 } from '@material-ui/core';
+import HighlightOffOutlinedIcon from '@material-ui/icons/HighlightOffOutlined';
 import PlayCircleOutlineIcon from '@material-ui/icons/PlayCircleOutline';
 import PauseCircleOutlineIcon from '@material-ui/icons/PauseCircleOutline';
-import HighlightOffOutlinedIcon from '@material-ui/icons/HighlightOffOutlined';
 
 import { EVENT_TYPES, PERIODS } from '../../containers/Game/constants';
 import { isEven } from '../../utils/utilities';

@@ -30,8 +30,8 @@ import {
     TableRow,
     TableCell
 } from '@material-ui/core';
-import PersonAddOutlinedIcon from '@material-ui/icons/PersonAddOutlined';
 import PersonAddDisabledOutlinedIcon from '@material-ui/icons/PersonAddDisabledOutlined';
+import PersonAddOutlinedIcon from '@material-ui/icons/PersonAddOutlined';
 import Sketch from 'react-color/lib/Sketch';
 
 import {
