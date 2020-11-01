@@ -123,8 +123,13 @@ const membersListDisplay = ({
         }
     }
     const buffer = sortedMembersList.map(member => {
-        // If it's a player, it shouldn't be the "unknown player', nor the captain, all Ok if it's an official
-        if ((member.id && member.id !== 0 && member.id !== captainId) || memberType === MEMBERS_TYPES.officials) {
+        // If (it's an identified player, it shouldn't be the captain) OR (it's the unidentified player, then he should
+        // have goals registered) OR it's an official
+        if (
+            (member.id !== 0 && member.id !== captainId) ||
+            (member.id === 0 && member.goals > 0) ||
+            memberType === MEMBERS_TYPES.officials
+        ) {
             return memberTemplate({
                 member,
                 memberType,

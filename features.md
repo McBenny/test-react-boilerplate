@@ -193,6 +193,7 @@ These features should also apply to the fouls, any foul registered should be edi
 - [X] Log seems incomplete
 - [X] Players seem to not be sorted "naturally"
 - [X] A totally empty player in the settings should not be saved
+- [X] Display unidentified player if there are goals registered
 
 ##TODO
 - [ ] Give the ability to filter the list of games per date, competition, round or gender on the Home Screen
