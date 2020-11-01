@@ -231,6 +231,7 @@ These features should also apply to the fouls, any foul registered should be edi
 - [X] Allow for removal of a player
 - [X] Sorting line-up: sort players According to their numbers, last name, or number of goals, or fouls
 - [X] Open app in full screen
+- [x] Modify icons
 
 ##REFACTORING
 - [X] Optimise settings page to avoid repetition between A and B teams.

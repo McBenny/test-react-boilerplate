@@ -104,6 +104,11 @@
             color: $buttonTextColour;
         }
     }
+
+    &-iconSizeLarge > *:first-child {
+        margin-top: 0.1em;
+        font-size: inherit !important;
+    }
 }
 
 //_________________

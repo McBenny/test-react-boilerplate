@@ -12,14 +12,17 @@ import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
 
 import { Container, Grid, List, Button, IconButton, ListItem, ListItemText, AppBar, Toolbar } from '@material-ui/core';
-import SettingsOutlinedIcon from '@material-ui/icons/SettingsOutlined';
-import PlayCircleOutlineIcon from '@material-ui/icons/PlayCircleOutline';
-import PauseCircleOutlineIcon from '@material-ui/icons/PauseCircleOutline';
-import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
-import PeopleOutlineIcon from '@material-ui/icons/PeopleOutline';
-import HomeOutlined from '@material-ui/icons/HomeOutlined';
-import FullscreenOutlinedIcon from '@material-ui/icons/FullscreenOutlined';
+import Filter2OutlinedIcon from '@material-ui/icons/Filter2Outlined';
 import FullscreenExitOutlinedIcon from '@material-ui/icons/FullscreenExitOutlined';
+import FullscreenOutlinedIcon from '@material-ui/icons/FullscreenOutlined';
+import HomeOutlined from '@material-ui/icons/HomeOutlined';
+import InsertDriveFileOutlinedIcon from '@material-ui/icons/InsertDriveFileOutlined';
+import PauseCircleOutlineIcon from '@material-ui/icons/PauseCircleOutline';
+import PeopleOutlineIcon from '@material-ui/icons/PeopleOutline';
+import PlayCircleOutlineIcon from '@material-ui/icons/PlayCircleOutline';
+import SettingsOutlinedIcon from '@material-ui/icons/SettingsOutlined';
+import SportsSoccerOutlinedIcon from '@material-ui/icons/SportsSoccerOutlined';
+import TimerOutlinedIcon from '@material-ui/icons/TimerOutlined';
 
 import Settings from '../Settings';
 import Players from '../../components/Players';
@@ -105,7 +108,6 @@ export function Game({
     useEffect(saveGameInStorage, [gameId, gameStarted, gameEvents, settings]);
 
     // Fullscreen management
-    // Doesn't work on Chrome as of 86.0
     const [fullScreen, setFullScreen] = useState({ status: false, element: '' });
     const handleFullScreen = () => {
         const { element, status } = fullScreen;
@@ -421,7 +423,7 @@ export function Game({
                                     onClick={() => handleTimeoutButton(TEAMS_LIST.HOME)}
                                     disabled={!gameStarted || gamePaused || dataTeamA.timeouts >= MAX_NUMBER.timeouts}
                                     title={dataTeamA.timeouts >= MAX_NUMBER.timeouts ? messages.maxTimeoutsReached : ''}
-                                    startIcon={<AddCircleOutlineIcon />}
+                                    startIcon={<TimerOutlinedIcon />}
                                 >
                                     {messages.addTimeout}
                                 </Button>
@@ -448,6 +450,8 @@ export function Game({
                                     }
                                     disabled={!gameStarted || gamePaused}
                                     className="game__button game__button--team"
+                                    size="large"
+                                    endIcon={<SportsSoccerOutlinedIcon />}
                                 >
                                     {settings.teams.A.name}
                                 </Button>
@@ -500,6 +504,8 @@ export function Game({
                                     }
                                     disabled={!gameStarted || gamePaused}
                                     className="game__button game__button--team"
+                                    size="large"
+                                    startIcon={<SportsSoccerOutlinedIcon />}
                                 >
                                     {settings.teams.B.name}
                                 </Button>
@@ -510,7 +516,7 @@ export function Game({
                                     onClick={() => handleTimeoutButton(TEAMS_LIST.AWAY)}
                                     disabled={!gameStarted || gamePaused || dataTeamB.timeouts >= MAX_NUMBER.timeouts}
                                     title={dataTeamB.timeouts >= MAX_NUMBER.timeouts ? messages.maxTimeoutsReached : ''}
-                                    startIcon={<AddCircleOutlineIcon />}
+                                    startIcon={<TimerOutlinedIcon />}
                                 >
                                     {messages.addTimeout}
                                 </Button>
@@ -540,7 +546,7 @@ export function Game({
                                         })
                                     }
                                     disabled={!gameStarted || gamePaused}
-                                    startIcon={<AddCircleOutlineIcon />}
+                                    startIcon={<InsertDriveFileOutlinedIcon />}
                                     className="game__button game__button--blue-card"
                                 >
                                     {messages.addBlueCard}
@@ -559,7 +565,7 @@ export function Game({
                                         })
                                     }
                                     disabled={!gameStarted || gamePaused}
-                                    startIcon={<AddCircleOutlineIcon />}
+                                    startIcon={<InsertDriveFileOutlinedIcon />}
                                     className="game__button game__button--red-card"
                                 >
                                     {messages.addRedCard}
@@ -578,7 +584,7 @@ export function Game({
                                         })
                                     }
                                     disabled={!gameStarted || gamePaused}
-                                    startIcon={<AddCircleOutlineIcon />}
+                                    startIcon={<Filter2OutlinedIcon />}
                                     className="game__button game__button--suspension"
                                 >
                                     {messages.addSuspension}
@@ -597,7 +603,7 @@ export function Game({
                                         })
                                     }
                                     disabled={!gameStarted || gamePaused}
-                                    startIcon={<AddCircleOutlineIcon />}
+                                    startIcon={<InsertDriveFileOutlinedIcon />}
                                     className="game__button game__button--yellow-card"
                                 >
                                     {messages.addYellowCard}
@@ -617,7 +623,7 @@ export function Game({
                                         })
                                     }
                                     disabled={!gameStarted || gamePaused}
-                                    startIcon={<AddCircleOutlineIcon />}
+                                    startIcon={<InsertDriveFileOutlinedIcon />}
                                     className="game__button game__button--yellow-card"
                                 >
                                     {messages.addYellowCard}
@@ -636,7 +642,7 @@ export function Game({
                                         })
                                     }
                                     disabled={!gameStarted || gamePaused}
-                                    startIcon={<AddCircleOutlineIcon />}
+                                    startIcon={<Filter2OutlinedIcon />}
                                     className="game__button game__button--suspension"
                                 >
                                     {messages.addSuspension}
@@ -655,7 +661,7 @@ export function Game({
                                         })
                                     }
                                     disabled={!gameStarted || gamePaused}
-                                    startIcon={<AddCircleOutlineIcon />}
+                                    startIcon={<InsertDriveFileOutlinedIcon />}
                                     className="game__button game__button--red-card"
                                 >
                                     {messages.addRedCard}
@@ -674,7 +680,7 @@ export function Game({
                                         })
                                     }
                                     disabled={!gameStarted || gamePaused}
-                                    startIcon={<AddCircleOutlineIcon />}
+                                    startIcon={<InsertDriveFileOutlinedIcon />}
                                     className="game__button game__button--blue-card"
                                 >
                                     {messages.addBlueCard}
