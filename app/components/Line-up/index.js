@@ -205,10 +205,15 @@ function LineUp({
 }) {
     const cleanPlayersList = playersList.filter(player => player.id !== 0);
     const [activeSorting, setActiveSorting] = useState(SORTING.reference);
+    const closeAndReset = () => {
+        setActiveSorting(SORTING.reference);
+        closeHandler();
+    };
+
     return (
         <Dialog
             open={popupVisibility}
-            onClose={closeHandler}
+            onClose={closeAndReset}
             aria-labelledby="dialog-title-lineUp"
             fullWidth
             maxWidth="md"
@@ -262,7 +267,7 @@ function LineUp({
                 })}
             </DialogContent>
             <DialogActions>
-                <Button variant="contained" onClick={closeHandler}>
+                <Button variant="contained" onClick={closeAndReset}>
                     {messages.cancel}
                 </Button>
             </DialogActions>
