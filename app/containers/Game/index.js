@@ -29,7 +29,7 @@ import LineUp from '../../components/Line-up';
 import GameLog from '../../components/Game-log';
 
 import { URLS } from '../App/constants';
-import { MAX_NUMBER } from '../Settings/constants';
+import { MAX_NUMBER, TEAMS_LIST } from '../Settings/constants';
 import {
     ADD_BLUE_CARD,
     ADD_EVENT,
@@ -264,8 +264,8 @@ export function Game({
         let updatedScore = score;
         if (eventType === EVENT_TYPES.goal) {
             updatedScore = {
-                teamA: team === 'A' ? score.teamA + 1 : score.teamA,
-                teamB: team === 'B' ? score.teamB + 1 : score.teamB
+                teamA: team === TEAMS_LIST.HOME ? score.teamA + 1 : score.teamA,
+                teamB: team === TEAMS_LIST.AWAY ? score.teamB + 1 : score.teamB
             };
         } else if (eventType === EVENT_TYPES.suspension) {
             setATimeOut({
@@ -418,7 +418,7 @@ export function Game({
                             <div className="game__grid-item game__grid-item--timeout">
                                 <Button
                                     variant="contained"
-                                    onClick={() => handleTimeoutButton('A')}
+                                    onClick={() => handleTimeoutButton(TEAMS_LIST.HOME)}
                                     disabled={!gameStarted || gamePaused || dataTeamA.timeouts >= MAX_NUMBER.timeouts}
                                     title={dataTeamA.timeouts >= MAX_NUMBER.timeouts ? messages.maxTimeoutsReached : ''}
                                     startIcon={<AddCircleOutlineIcon />}
@@ -440,7 +440,11 @@ export function Game({
                             <div className="game__grid-item game__grid-item--team game__grid-item--team-A">
                                 <Button
                                     onClick={() =>
-                                        openPlayers({ eventType: EVENT_TYPES.goal, team: 'A', type: ADD_GOAL })
+                                        openPlayers({
+                                            eventType: EVENT_TYPES.goal,
+                                            team: TEAMS_LIST.HOME,
+                                            type: ADD_GOAL
+                                        })
                                     }
                                     disabled={!gameStarted || gamePaused}
                                     className="game__button game__button--team"
@@ -488,7 +492,11 @@ export function Game({
                             <div className="game__grid-item game__grid-item--team">
                                 <Button
                                     onClick={() =>
-                                        openPlayers({ eventType: EVENT_TYPES.goal, team: 'B', type: ADD_GOAL })
+                                        openPlayers({
+                                            eventType: EVENT_TYPES.goal,
+                                            team: TEAMS_LIST.AWAY,
+                                            type: ADD_GOAL
+                                        })
                                     }
                                     disabled={!gameStarted || gamePaused}
                                     className="game__button game__button--team"
@@ -499,7 +507,7 @@ export function Game({
                             <div className="game__grid-item game__grid-item--timeout">
                                 <Button
                                     variant="contained"
-                                    onClick={() => handleTimeoutButton('B')}
+                                    onClick={() => handleTimeoutButton(TEAMS_LIST.AWAY)}
                                     disabled={!gameStarted || gamePaused || dataTeamB.timeouts >= MAX_NUMBER.timeouts}
                                     title={dataTeamB.timeouts >= MAX_NUMBER.timeouts ? messages.maxTimeoutsReached : ''}
                                     startIcon={<AddCircleOutlineIcon />}
@@ -527,7 +535,7 @@ export function Game({
                                     onClick={() =>
                                         openPlayers({
                                             eventType: EVENT_TYPES.blueCard,
-                                            team: 'A',
+                                            team: TEAMS_LIST.HOME,
                                             type: ADD_BLUE_CARD
                                         })
                                     }
@@ -538,7 +546,7 @@ export function Game({
                                     {messages.addBlueCard}
                                 </Button>
                                 <p>({dataTeamA.blueCards})</p>
-                                {foulPlayersLog('A', FOULS.blueCard)}
+                                {foulPlayersLog(TEAMS_LIST.HOME, FOULS.blueCard)}
                             </div>
                             <div className="game__grid-item game__grid-item--fouls">
                                 <Button
@@ -546,7 +554,7 @@ export function Game({
                                     onClick={() =>
                                         openPlayers({
                                             eventType: EVENT_TYPES.redCard,
-                                            team: 'A',
+                                            team: TEAMS_LIST.HOME,
                                             type: ADD_RED_CARD
                                         })
                                     }
@@ -557,7 +565,7 @@ export function Game({
                                     {messages.addRedCard}
                                 </Button>
                                 <p>({dataTeamA.redCards})</p>
-                                {foulPlayersLog('A', FOULS.redCard)}
+                                {foulPlayersLog(TEAMS_LIST.HOME, FOULS.redCard)}
                             </div>
                             <div className="game__grid-item game__grid-item--fouls">
                                 <Button
@@ -565,7 +573,7 @@ export function Game({
                                     onClick={() =>
                                         openPlayers({
                                             eventType: EVENT_TYPES.suspension,
-                                            team: 'A',
+                                            team: TEAMS_LIST.HOME,
                                             type: ADD_SUSPENSION
                                         })
                                     }
@@ -576,7 +584,7 @@ export function Game({
                                     {messages.addSuspension}
                                 </Button>
                                 <p>({dataTeamA.suspensions})</p>
-                                {foulPlayersLog('A', FOULS.suspension)}
+                                {foulPlayersLog(TEAMS_LIST.HOME, FOULS.suspension)}
                             </div>
                             <div className="game__grid-item game__grid-item--fouls">
                                 <Button
@@ -584,7 +592,7 @@ export function Game({
                                     onClick={() =>
                                         openPlayers({
                                             eventType: EVENT_TYPES.yellowCard,
-                                            team: 'A',
+                                            team: TEAMS_LIST.HOME,
                                             type: ADD_YELLOW_CARD
                                         })
                                     }
@@ -595,7 +603,7 @@ export function Game({
                                     {messages.addYellowCard}
                                 </Button>
                                 <p>({dataTeamA.yellowCards})</p>
-                                {foulPlayersLog('A', FOULS.yellowCard)}
+                                {foulPlayersLog(TEAMS_LIST.HOME, FOULS.yellowCard)}
                             </div>
 
                             <div className="game__grid-item game__grid-item--fouls">
@@ -604,7 +612,7 @@ export function Game({
                                     onClick={() =>
                                         openPlayers({
                                             eventType: EVENT_TYPES.yellowCard,
-                                            team: 'B',
+                                            team: TEAMS_LIST.AWAY,
                                             type: ADD_YELLOW_CARD
                                         })
                                     }
@@ -615,7 +623,7 @@ export function Game({
                                     {messages.addYellowCard}
                                 </Button>
                                 <p>({dataTeamB.yellowCards})</p>
-                                {foulPlayersLog('B', FOULS.yellowCard)}
+                                {foulPlayersLog(TEAMS_LIST.AWAY, FOULS.yellowCard)}
                             </div>
                             <div className="game__grid-item game__grid-item--fouls">
                                 <Button
@@ -623,7 +631,7 @@ export function Game({
                                     onClick={() =>
                                         openPlayers({
                                             eventType: EVENT_TYPES.suspension,
-                                            team: 'B',
+                                            team: TEAMS_LIST.AWAY,
                                             type: ADD_SUSPENSION
                                         })
                                     }
@@ -634,7 +642,7 @@ export function Game({
                                     {messages.addSuspension}
                                 </Button>
                                 <p>({dataTeamB.suspensions})</p>
-                                {foulPlayersLog('B', FOULS.suspension)}
+                                {foulPlayersLog(TEAMS_LIST.AWAY, FOULS.suspension)}
                             </div>
                             <div className="game__grid-item game__grid-item--fouls">
                                 <Button
@@ -642,7 +650,7 @@ export function Game({
                                     onClick={() =>
                                         openPlayers({
                                             eventType: EVENT_TYPES.redCard,
-                                            team: 'B',
+                                            team: TEAMS_LIST.AWAY,
                                             type: ADD_RED_CARD
                                         })
                                     }
@@ -653,7 +661,7 @@ export function Game({
                                     {messages.addRedCard}
                                 </Button>
                                 <p>({dataTeamB.redCards})</p>
-                                {foulPlayersLog('B', FOULS.redCard)}
+                                {foulPlayersLog(TEAMS_LIST.AWAY, FOULS.redCard)}
                             </div>
                             <div className="game__grid-item game__grid-item--fouls">
                                 <Button
@@ -661,7 +669,7 @@ export function Game({
                                     onClick={() =>
                                         openPlayers({
                                             eventType: EVENT_TYPES.blueCard,
-                                            team: 'B',
+                                            team: TEAMS_LIST.AWAY,
                                             type: ADD_BLUE_CARD
                                         })
                                     }
@@ -672,14 +680,14 @@ export function Game({
                                     {messages.addBlueCard}
                                 </Button>
                                 <p>({dataTeamB.blueCards})</p>
-                                {foulPlayersLog('B', FOULS.blueCard)}
+                                {foulPlayersLog(TEAMS_LIST.AWAY, FOULS.blueCard)}
                             </div>
                         </div>
                         <Grid container justify="center" alignItems="flex-start" spacing={3}>
                             <Grid item>
                                 <Button
                                     variant="contained"
-                                    onClick={() => openLineUp({ team: 'A' })}
+                                    onClick={() => openLineUp({ team: TEAMS_LIST.HOME })}
                                     startIcon={<PeopleOutlineIcon />}
                                 >
                                     {messages.showLineUp}
@@ -688,7 +696,7 @@ export function Game({
                             <Grid item>
                                 <Button
                                     variant="contained"
-                                    onClick={() => openLineUp({ team: 'B' })}
+                                    onClick={() => openLineUp({ team: TEAMS_LIST.AWAY })}
                                     startIcon={<PeopleOutlineIcon />}
                                 >
                                     {messages.showLineUp}
