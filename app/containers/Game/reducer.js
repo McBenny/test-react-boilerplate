@@ -12,12 +12,14 @@ import {
     SAVE_SETTINGS,
     HANDLE_GAME_STATUS,
     ADD_EVENT,
+    REMOVE_EVENT,
     ADD_GOAL,
     ADD_YELLOW_CARD,
     ADD_RED_CARD,
     ADD_BLUE_CARD,
     ADD_SUSPENSION,
     ADD_TIMEOUT,
+    REMOVE_TIMEOUT,
     STORE_SCORE
 } from './constants';
 import { initialState as initialSettings } from '../Settings/reducer';
@@ -104,7 +106,7 @@ const gameReducer = (state = useableState, action) =>
                 draft.gameId = action.gameId;
                 draft.gameStarted = action.gameStarted;
                 draft.gamePaused = action.gamePaused;
-                draft.currentPeriod = action.currentPeriod;
+                draft.currentPeriod = action.currentPeriod !== '' ? action.currentPeriod : draft.currentPeriod - 1;
                 break;
             case ADD_EVENT: {
                 // console.log(ADD_EVENT, action);
@@ -120,6 +122,11 @@ const gameReducer = (state = useableState, action) =>
                         teamB: score.teamB
                     }
                 });
+                break;
+            }
+            case REMOVE_EVENT: {
+                // console.log(REMOVE_EVENT, action);
+                draft.gameEvents.pop();
                 break;
             }
             case ADD_GOAL:
@@ -149,10 +156,16 @@ const gameReducer = (state = useableState, action) =>
                 // console.log(ADD_TIMEOUT, action);
                 draft[`dataTeam${action.team}`].timeouts += 1;
                 break;
-            case STORE_SCORE:
-                // console.log(STORE_SCORE, action);
-                draft.currentScore[`half${action.id}`] = action.currentScore;
+            case REMOVE_TIMEOUT:
+                // console.log(REMOVE_TIMEOUT, action);
+                draft[`dataTeam${action.team}`].timeouts -= 1;
                 break;
+            case STORE_SCORE: {
+                // console.log(STORE_SCORE, action);
+                const periodId = action.id !== '' ? action.id : draft.currentPeriod;
+                draft.currentScore[`half${periodId}`] = action.currentScore;
+                break;
+            }
             default:
         }
     });

@@ -15,12 +15,14 @@ import { messages } from './messages';
 export const SAVE_SETTINGS = 'boilerplate/Game/SAVE_SETTINGS';
 export const HANDLE_GAME_STATUS = 'boilerplate/Game/HANDLE_GAME_STATUS';
 export const ADD_EVENT = 'boilerplate/Game/ADD_EVENT';
+export const REMOVE_EVENT = 'boilerplate/Game/REMOVE_EVENT';
 export const ADD_GOAL = 'boilerplate/Game/ADD_GOAL';
 export const ADD_YELLOW_CARD = 'boilerplate/Game/ADD_YELLOW_CARD';
 export const ADD_RED_CARD = 'boilerplate/Game/ADD_RED_CARD';
 export const ADD_BLUE_CARD = 'boilerplate/Game/ADD_BLUE_CARD';
 export const ADD_SUSPENSION = 'boilerplate/Game/ADD_SUSPENSION';
 export const ADD_TIMEOUT = 'boilerplate/Game/ADD_TIMEOUT';
+export const REMOVE_TIMEOUT = 'boilerplate/Game/REMOVE_TIMEOUT';
 export const STORE_SCORE = 'boilerplate/Game/STORE_SCORE';
 
 export const EVENT_TYPES = {
@@ -76,5 +78,6 @@ export const POPUPS = {
     lineUp: 'lineUp',
     players: 'players',
     playPause: 'playPause',
-    settings: 'settings'
+    settings: 'settings',
+    undo: 'undo'
 };
