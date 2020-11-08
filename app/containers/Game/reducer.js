@@ -12,13 +12,18 @@ import {
     SAVE_SETTINGS,
     HANDLE_GAME_STATUS,
     ADD_EVENT,
-    REMOVE_EVENT,
     ADD_GOAL,
     ADD_YELLOW_CARD,
     ADD_RED_CARD,
     ADD_BLUE_CARD,
     ADD_SUSPENSION,
     ADD_TIMEOUT,
+    REMOVE_EVENT,
+    // REMOVE_GOAL,
+    REMOVE_YELLOW_CARD,
+    REMOVE_RED_CARD,
+    REMOVE_BLUE_CARD,
+    REMOVE_SUSPENSION,
     REMOVE_TIMEOUT,
     STORE_SCORE
 } from './constants';
@@ -83,15 +88,19 @@ const gameReducer = (state = useableState, action) =>
                 penaltyStatus = action.penalty;
                 break;
             case ADD_YELLOW_CARD:
+            case REMOVE_YELLOW_CARD:
                 updatedData = 'yellowCards';
                 break;
             case ADD_RED_CARD:
+            case REMOVE_RED_CARD:
                 updatedData = 'redCards';
                 break;
             case ADD_BLUE_CARD:
+            case REMOVE_BLUE_CARD:
                 updatedData = 'blueCards';
                 break;
             case ADD_SUSPENSION:
+            case REMOVE_SUSPENSION:
                 updatedData = 'suspensions';
                 break;
             default:
@@ -124,11 +133,6 @@ const gameReducer = (state = useableState, action) =>
                 });
                 break;
             }
-            case REMOVE_EVENT: {
-                // console.log(REMOVE_EVENT, action);
-                draft.gameEvents.pop();
-                break;
-            }
             case ADD_GOAL:
             case ADD_YELLOW_CARD:
             case ADD_RED_CARD:
@@ -156,6 +160,33 @@ const gameReducer = (state = useableState, action) =>
                 // console.log(ADD_TIMEOUT, action);
                 draft[`dataTeam${action.team}`].timeouts += 1;
                 break;
+            case REMOVE_EVENT: {
+                // console.log(REMOVE_EVENT, action);
+                draft.gameEvents.pop();
+                break;
+            }
+            case REMOVE_YELLOW_CARD:
+            case REMOVE_SUSPENSION:
+            case REMOVE_RED_CARD:
+            case REMOVE_BLUE_CARD: {
+                // console.log(updatedData, action);
+                // UpdatedData is determined in the previous switch statement
+                draft[`dataTeam${action.team}`][updatedData] -= 1;
+                const { memberType } = action;
+                draft.settings.teams[action.team][memberType] = draft.settings.teams[action.team][memberType].map(
+                    member => {
+                        if (member.id === action.id) {
+                            return {
+                                ...member,
+                                [updatedData]: member[updatedData] - 1,
+                                penalty: penaltyStatus ? member.penalty - 1 : member.penalty
+                            };
+                        }
+                        return member;
+                    }
+                );
+                break;
+            }
             case REMOVE_TIMEOUT:
                 // console.log(REMOVE_TIMEOUT, action);
                 draft[`dataTeam${action.team}`].timeouts -= 1;

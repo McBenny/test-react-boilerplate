@@ -225,6 +225,10 @@ const GameLog = ({ popupVisibility, gameEvents, settingsData, setATimeOut, openH
                                 ) : (
                                     <InsertDriveFileOutlinedIcon />
                                 );
+                            const message1 = messages[`${gameEvent.eventType}For`];
+                            const message2 = `${memberData[0].name} [${memberData[0].reference}] (${
+                                settingsData.teams[gameEvent.team].name
+                            })`;
                             template = (
                                 <div
                                     className={`game-log__event game-log__event--${gameEvent.eventType.toLowerCase()}`}
@@ -235,6 +239,11 @@ const GameLog = ({ popupVisibility, gameEvents, settingsData, setATimeOut, openH
                                         {settingsData.teams[gameEvent.team].name})
                                     </div>
                                     {formattedScore}
+                                    {index === events.length - 1 ? (
+                                        <UndoButton event={gameEvent} icon={icon} message={`${message1} ${message2}`} />
+                                    ) : (
+                                        ''
+                                    )}
                                 </div>
                             );
                         }

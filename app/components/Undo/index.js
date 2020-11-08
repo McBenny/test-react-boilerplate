@@ -3,8 +3,14 @@ import { useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from '@material-ui/core';
 import { messages } from './messages';
-import { EVENT_TYPES } from '../../containers/Game/constants';
-import { handleGameStatus, removeEvent, removeTimeout, storeScore } from '../../containers/Game/actions';
+import {
+    EVENT_TYPES,
+    REMOVE_YELLOW_CARD,
+    REMOVE_SUSPENSION,
+    REMOVE_RED_CARD,
+    REMOVE_BLUE_CARD
+} from '../../containers/Game/constants';
+import { addAction, handleGameStatus, removeEvent, removeTimeout, storeScore } from '../../containers/Game/actions';
 
 function Undo({ popupVisibility, event, setATimeOut, closeHandler }) {
     const dispatch = useDispatch();
@@ -87,6 +93,39 @@ function Undo({ popupVisibility, event, setATimeOut, closeHandler }) {
                 });
                 dispatch(removeEvent());
                 break;
+            case EVENT_TYPES.yellowCard:
+            case EVENT_TYPES.suspension:
+            case EVENT_TYPES.redCard:
+            case EVENT_TYPES.blueCard: {
+                let ACTION;
+                switch (event.eventType) {
+                    case EVENT_TYPES.yellowCard:
+                        ACTION = REMOVE_YELLOW_CARD;
+                        break;
+                    case EVENT_TYPES.suspension:
+                        ACTION = REMOVE_SUSPENSION;
+                        break;
+                    case EVENT_TYPES.redCard:
+                        ACTION = REMOVE_RED_CARD;
+                        break;
+                    case EVENT_TYPES.blueCard:
+                        ACTION = REMOVE_BLUE_CARD;
+                        break;
+                    default:
+                }
+                dispatch(
+                    addAction({
+                        eventType: event.eventType,
+                        penalty: event.penalty,
+                        type: ACTION,
+                        team: event.team,
+                        id: event.id,
+                        memberType: event.memberType
+                    })
+                );
+                dispatch(removeEvent());
+                break;
+            }
             default:
         }
     };
