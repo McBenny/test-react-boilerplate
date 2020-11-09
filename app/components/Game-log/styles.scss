@@ -73,10 +73,12 @@
     &__event {
         display: inline-flex;
         justify-content: space-between;
+        align-items: center;
         width: calc(100% - 2.5rem);
     }
 
     &__score {
+        align-self: flex-start;
         margin-left: 1rem;
         white-space: nowrap;
     }
@@ -85,5 +87,10 @@
         &--added {
             font-weight: 600;
         }
+    }
+
+    &__button {
+        margin: 0 -0.5rem 0 0.5rem;
+        min-width: 5.5rem;
     }
 }

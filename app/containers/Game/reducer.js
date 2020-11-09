@@ -18,6 +18,13 @@ import {
     ADD_BLUE_CARD,
     ADD_SUSPENSION,
     ADD_TIMEOUT,
+    REMOVE_EVENT,
+    REMOVE_GOAL,
+    REMOVE_YELLOW_CARD,
+    REMOVE_SUSPENSION,
+    REMOVE_RED_CARD,
+    REMOVE_BLUE_CARD,
+    REMOVE_TIMEOUT,
     STORE_SCORE
 } from './constants';
 import { initialState as initialSettings } from '../Settings/reducer';
@@ -77,20 +84,25 @@ const gameReducer = (state = useableState, action) =>
         let penaltyStatus = false;
         switch (action.type) {
             case ADD_GOAL:
+            case REMOVE_GOAL:
                 updatedData = 'goals';
                 penaltyStatus = action.penalty;
                 break;
             case ADD_YELLOW_CARD:
+            case REMOVE_YELLOW_CARD:
                 updatedData = 'yellowCards';
                 break;
+            case ADD_SUSPENSION:
+            case REMOVE_SUSPENSION:
+                updatedData = 'suspensions';
+                break;
             case ADD_RED_CARD:
+            case REMOVE_RED_CARD:
                 updatedData = 'redCards';
                 break;
             case ADD_BLUE_CARD:
+            case REMOVE_BLUE_CARD:
                 updatedData = 'blueCards';
-                break;
-            case ADD_SUSPENSION:
-                updatedData = 'suspensions';
                 break;
             default:
         }
@@ -104,7 +116,7 @@ const gameReducer = (state = useableState, action) =>
                 draft.gameId = action.gameId;
                 draft.gameStarted = action.gameStarted;
                 draft.gamePaused = action.gamePaused;
-                draft.currentPeriod = action.currentPeriod;
+                draft.currentPeriod = action.currentPeriod !== '' ? action.currentPeriod : draft.currentPeriod - 1;
                 break;
             case ADD_EVENT: {
                 // console.log(ADD_EVENT, action);
@@ -124,9 +136,9 @@ const gameReducer = (state = useableState, action) =>
             }
             case ADD_GOAL:
             case ADD_YELLOW_CARD:
+            case ADD_SUSPENSION:
             case ADD_RED_CARD:
-            case ADD_BLUE_CARD:
-            case ADD_SUSPENSION: {
+            case ADD_BLUE_CARD: {
                 // console.log(updatedData, action);
                 // UpdatedData is determined in the previous switch statement
                 draft[`dataTeam${action.team}`][updatedData] += 1;
@@ -149,10 +161,44 @@ const gameReducer = (state = useableState, action) =>
                 // console.log(ADD_TIMEOUT, action);
                 draft[`dataTeam${action.team}`].timeouts += 1;
                 break;
-            case STORE_SCORE:
-                // console.log(STORE_SCORE, action);
-                draft.currentScore[`half${action.id}`] = action.currentScore;
+            case REMOVE_EVENT: {
+                // console.log(REMOVE_EVENT, action);
+                draft.gameEvents.pop();
                 break;
+            }
+            case REMOVE_GOAL:
+            case REMOVE_YELLOW_CARD:
+            case REMOVE_SUSPENSION:
+            case REMOVE_RED_CARD:
+            case REMOVE_BLUE_CARD: {
+                // console.log(updatedData, action);
+                // UpdatedData is determined in the previous switch statement
+                draft[`dataTeam${action.team}`][updatedData] -= 1;
+                const { memberType } = action;
+                draft.settings.teams[action.team][memberType] = draft.settings.teams[action.team][memberType].map(
+                    member => {
+                        if (member.id === action.id) {
+                            return {
+                                ...member,
+                                [updatedData]: member[updatedData] - 1,
+                                penalty: penaltyStatus ? member.penalty - 1 : member.penalty
+                            };
+                        }
+                        return member;
+                    }
+                );
+                break;
+            }
+            case REMOVE_TIMEOUT:
+                // console.log(REMOVE_TIMEOUT, action);
+                draft[`dataTeam${action.team}`].timeouts -= 1;
+                break;
+            case STORE_SCORE: {
+                // console.log(STORE_SCORE, action);
+                const periodId = action.id !== '' ? action.id : draft.currentPeriod;
+                draft.currentScore[`half${periodId}`] = action.currentScore;
+                break;
+            }
             default:
         }
     });

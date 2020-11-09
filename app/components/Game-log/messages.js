@@ -20,5 +20,6 @@ export const messages = {
     yellowCardFor: 'Yellow card for',
     redCardFor: 'Red card for',
     blueCardFor: 'Blue card for',
-    suspensionFor: '2 minutes suspension for'
+    suspensionFor: '2 minutes suspension for',
+    undo: 'Undo'
 };

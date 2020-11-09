@@ -15,7 +15,7 @@
  *    }
  */
 
-import { SAVE_SETTINGS, HANDLE_GAME_STATUS, ADD_EVENT, STORE_SCORE } from './constants';
+import { SAVE_SETTINGS, HANDLE_GAME_STATUS, ADD_EVENT, REMOVE_EVENT, REMOVE_TIMEOUT, STORE_SCORE } from './constants';
 
 /**
  * Saves the settings
@@ -45,9 +45,22 @@ export function addEvent(data) {
     };
 }
 
+export function removeEvent() {
+    return {
+        type: REMOVE_EVENT
+    };
+}
+
 export function addAction(data) {
     return {
         type: data.type,
+        ...data
+    };
+}
+
+export function removeTimeout(data) {
+    return {
+        type: REMOVE_TIMEOUT,
         ...data
     };
 }

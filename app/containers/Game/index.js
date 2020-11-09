@@ -133,7 +133,8 @@ export function Game({
         lineUp: false,
         players: false,
         playPause: false,
-        settings: false
+        settings: false,
+        undo: false
     };
     const [popupVisibility, setPopupVisibility] = useState(popupsInitialState);
     const openPopup = popup => {
@@ -712,7 +713,14 @@ export function Game({
                     </Container>
                 </Container>
                 <div className="game__log">
-                    <GameLog gameEvents={gameEvents} settingsData={settings} />
+                    <GameLog
+                        popupVisibility={popupVisibility}
+                        gameEvents={gameEvents}
+                        settingsData={settings}
+                        setATimeOut={setATimeOut}
+                        openHandler={openPopup}
+                        closeHandler={closePopup}
+                    />
                 </div>
                 <Settings
                     settingsData={settings}
