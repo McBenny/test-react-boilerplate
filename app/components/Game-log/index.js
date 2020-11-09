@@ -262,7 +262,7 @@ const GameLog = ({ popupVisibility, gameEvents, settingsData, setATimeOut, openH
                                     <UndoButton
                                         event={gameEvent}
                                         icon={icon}
-                                        message={`${message1} ${message2} ${message3} ${message4}`}
+                                        message={`${message1} ${message2}${message3}${message4}`}
                                     />
                                 )}
                             </div>

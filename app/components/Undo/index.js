@@ -125,6 +125,7 @@ function Undo({ popupVisibility, event, setATimeOut, closeHandler }) {
                 );
                 break;
             }
+
             default:
         }
         dispatch(removeEvent());
