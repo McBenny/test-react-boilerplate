@@ -61,23 +61,31 @@ const GameLog = ({ popupVisibility, gameEvents, settingsData, setATimeOut, openH
 
     const [undoData, setUndoData] = useState(null);
     const UndoButton = ({ event, icon, message }) => (
-        <Button variant="contained" onClick={() => setUndoData({ ...event, icon, message })} startIcon={<UndoIcon />}>
+        <Button
+            variant="contained"
+            size="small"
+            onClick={() => setUndoData({ ...event, icon, message })}
+            className="game-log__button"
+            startIcon={<UndoIcon />}
+        >
             {messages.undo}
         </Button>
     );
 
     UndoButton.propTypes = {
-        event: PropTypes.object,
+        event: PropTypes.object.isRequired,
         icon: PropTypes.any,
-        message: PropTypes.string
+        message: PropTypes.string.isRequired
     };
 
+    // Opens Undo popup
     useEffect(() => {
         if (undoData !== null) {
             openHandler(POPUPS.undo);
         }
     }, [undoData]);
 
+    // Erases undo data when popup is closed
     useEffect(() => {
         if (popupVisibility.undo === false) {
             setUndoData(null);
@@ -108,146 +116,126 @@ const GameLog = ({ popupVisibility, gameEvents, settingsData, setATimeOut, openH
 
                 switch (gameEvent.eventType) {
                     case EVENT_TYPES.gameStart:
-                    case EVENT_TYPES.gameEnd:
-                        {
-                            const icon =
-                                gameEvent.eventType === EVENT_TYPES.gameStart ? (
-                                    <PlayCircleOutlineIcon />
-                                ) : (
-                                    <HighlightOffOutlinedIcon />
-                                );
-                            template = (
-                                <div className="game-log__event">
-                                    <div>
-                                        {icon} <strong>{messages[gameEvent.eventType]}</strong>
-                                    </div>
-                                    {formattedScore}
-                                    {index === events.length - 1 ? (
-                                        <UndoButton
-                                            event={gameEvent}
-                                            icon={icon}
-                                            message={messages[gameEvent.eventType]}
-                                        />
-                                    ) : (
-                                        ''
-                                    )}
-                                </div>
+                    case EVENT_TYPES.gameEnd: {
+                        const icon =
+                            gameEvent.eventType === EVENT_TYPES.gameStart ? (
+                                <PlayCircleOutlineIcon />
+                            ) : (
+                                <HighlightOffOutlinedIcon />
                             );
-                        }
+                        const message1 = messages[gameEvent.eventType];
+                        template = (
+                            <div className="game-log__event">
+                                <div>
+                                    {icon} <strong>{message1}</strong>
+                                </div>
+                                {formattedScore}
+                                {index === events.length - 1 && (
+                                    <UndoButton event={gameEvent} icon={icon} message={message1} />
+                                )}
+                            </div>
+                        );
                         break;
+                    }
 
                     case EVENT_TYPES.periodEnd:
-                    case EVENT_TYPES.periodStart:
-                        {
-                            const icon =
-                                gameEvent.eventType === EVENT_TYPES.periodStart ? (
-                                    <PlayCircleOutlineIcon />
-                                ) : (
-                                    <PauseCircleOutlineIcon />
-                                );
-                            const message1 = messages[gameEvent.eventType];
-                            const message2 = messages[`period${gameEvent.id}`];
-                            template = (
-                                <div className="game-log__event">
-                                    <div>
-                                        <strong>
-                                            {icon} {message1} {message2}
-                                        </strong>
-                                    </div>
-                                    {formattedScore}
-                                    {index === events.length - 1 ? (
-                                        <UndoButton event={gameEvent} icon={icon} message={`${message1} ${message2}`} />
-                                    ) : (
-                                        ''
-                                    )}
-                                </div>
+                    case EVENT_TYPES.periodStart: {
+                        const icon =
+                            gameEvent.eventType === EVENT_TYPES.periodStart ? (
+                                <PlayCircleOutlineIcon />
+                            ) : (
+                                <PauseCircleOutlineIcon />
                             );
-                        }
+                        const message1 = messages[gameEvent.eventType];
+                        const message2 = messages[`period${gameEvent.id}`];
+                        template = (
+                            <div className="game-log__event">
+                                <div>
+                                    <strong>
+                                        {icon} {message1} {message2}
+                                    </strong>
+                                </div>
+                                {formattedScore}
+                                {index === events.length - 1 && (
+                                    <UndoButton event={gameEvent} icon={icon} message={`${message1} ${message2}`} />
+                                )}
+                            </div>
+                        );
                         break;
+                    }
 
                     case EVENT_TYPES.gamePaused:
-                    case EVENT_TYPES.gameResumed:
-                        {
-                            const icon =
-                                gameEvent.eventType === EVENT_TYPES.gameResumed ? (
-                                    <PlayCircleOutlineIcon />
-                                ) : (
-                                    <PauseCircleOutlineIcon />
-                                );
-                            template = (
-                                <div className="game-log__event">
-                                    <div>
-                                        {icon} <strong>{messages[gameEvent.eventType]}</strong>
-                                    </div>
-                                    {index === events.length - 1 ? (
-                                        <UndoButton
-                                            event={gameEvent}
-                                            icon={icon}
-                                            message={messages[gameEvent.eventType]}
-                                        />
-                                    ) : (
-                                        ''
-                                    )}
-                                </div>
+                    case EVENT_TYPES.gameResumed: {
+                        const icon =
+                            gameEvent.eventType === EVENT_TYPES.gameResumed ? (
+                                <PlayCircleOutlineIcon />
+                            ) : (
+                                <PauseCircleOutlineIcon />
                             );
-                        }
+                        const message1 = messages[gameEvent.eventType];
+                        template = (
+                            <div className="game-log__event">
+                                <div>
+                                    {icon} <strong>{message1}</strong>
+                                </div>
+                                {index === events.length - 1 && (
+                                    <UndoButton event={gameEvent} icon={icon} message={message1} />
+                                )}
+                            </div>
+                        );
                         break;
+                    }
 
-                    case EVENT_TYPES.timeout:
-                        {
-                            const icon = <TimerOutlinedIcon />;
-                            const message1 = messages[`${gameEvent.eventType}For`];
-                            const message2 = settingsData.teams[gameEvent.team].name;
-                            template = (
-                                <div className="game-log__event">
-                                    <div>
-                                        {icon} {`${message1} ${message2}`}
-                                    </div>
-                                    {formattedScore}
-                                    {index === events.length - 1 ? (
-                                        <UndoButton event={gameEvent} icon={icon} message={`${message1} ${message2}`} />
-                                    ) : (
-                                        ''
-                                    )}
+                    case EVENT_TYPES.timeout: {
+                        const icon = <TimerOutlinedIcon />;
+                        const message1 = messages[`${gameEvent.eventType}For`];
+                        const message2 = settingsData.teams[gameEvent.team].name;
+                        template = (
+                            <div className="game-log__event">
+                                <div>
+                                    {icon} {`${message1} ${message2}`}
                                 </div>
-                            );
-                        }
+                                {formattedScore}
+                                {index === events.length - 1 && (
+                                    <UndoButton event={gameEvent} icon={icon} message={`${message1} ${message2}`} />
+                                )}
+                            </div>
+                        );
                         break;
+                    }
 
                     case EVENT_TYPES.yellowCard:
                     case EVENT_TYPES.redCard:
                     case EVENT_TYPES.blueCard:
-                    case EVENT_TYPES.suspension:
-                        {
-                            const icon =
-                                gameEvent.eventType === EVENT_TYPES.suspension ? (
-                                    <Filter2OutlinedIcon />
-                                ) : (
-                                    <InsertDriveFileOutlinedIcon />
-                                );
-                            const message1 = messages[`${gameEvent.eventType}For`];
-                            const message2 = `${memberData[0].name} [${memberData[0].reference}] (${
-                                settingsData.teams[gameEvent.team].name
-                            })`;
-                            template = (
-                                <div
-                                    className={`game-log__event game-log__event--${gameEvent.eventType.toLowerCase()}`}
-                                >
-                                    <div>
-                                        {icon} {messages[`${gameEvent.eventType}For`]} {memberData[0].name} [
-                                        <strong>{memberData[0].reference}</strong>] (
-                                        {settingsData.teams[gameEvent.team].name})
-                                    </div>
-                                    {formattedScore}
-                                    {index === events.length - 1 ? (
-                                        <UndoButton event={gameEvent} icon={icon} message={`${message1} ${message2}`} />
-                                    ) : (
-                                        ''
-                                    )}
-                                </div>
+                    case EVENT_TYPES.suspension: {
+                        const icon =
+                            gameEvent.eventType === EVENT_TYPES.suspension ? (
+                                <Filter2OutlinedIcon />
+                            ) : (
+                                <InsertDriveFileOutlinedIcon />
                             );
-                        }
+                        const message1 = `${messages[`${gameEvent.eventType}For`]} ${memberData[0].name} [`;
+                        const message2 = memberData[0].reference;
+                        const message3 = `] (${settingsData.teams[gameEvent.team].name})`;
+                        template = (
+                            <div className={`game-log__event game-log__event--${gameEvent.eventType.toLowerCase()}`}>
+                                <div>
+                                    {icon} {message1}
+                                    <strong>{message2}</strong>
+                                    {message3}
+                                </div>
+                                {formattedScore}
+                                {index === events.length - 1 && (
+                                    <UndoButton
+                                        event={gameEvent}
+                                        icon={icon}
+                                        message={`${message1}${message2}${message3}`}
+                                    />
+                                )}
+                            </div>
+                        );
                         break;
+                    }
 
                     case EVENT_TYPES.goal: {
                         const icon = gameEvent.penalty ? (
@@ -259,20 +247,23 @@ const GameLog = ({ popupVisibility, gameEvents, settingsData, setATimeOut, openH
                             <SportsSoccerOutlinedIcon />
                         );
                         const message1 = gameEvent.penalty ? messages.penaltyFor : messages.goalFor;
-                        const message2 = `${settingsData.teams[gameEvent.team].name} (${memberData[0].name} [${
-                            memberData[0].reference
-                        }]`;
+                        const message2 = `${settingsData.teams[gameEvent.team].name} (${memberData[0].name} [`;
+                        const message3 = memberData[0].reference;
+                        const message4 = `])`;
                         template = (
                             <div className="game-log__event">
                                 <div>
-                                    {icon} {message1} {settingsData.teams[gameEvent.team].name} ({memberData[0].name} [
-                                    <strong>{memberData[0].reference}</strong>])
+                                    {icon} {message1} {message2}
+                                    <strong>{message3}</strong>
+                                    {message4}
                                 </div>
                                 {formattedScore}
-                                {index === events.length - 1 ? (
-                                    <UndoButton event={gameEvent} icon={icon} message={`${message1} ${message2}`} />
-                                ) : (
-                                    ''
+                                {index === events.length - 1 && (
+                                    <UndoButton
+                                        event={gameEvent}
+                                        icon={icon}
+                                        message={`${message1} ${message2} ${message3} ${message4}`}
+                                    />
                                 )}
                             </div>
                         );
@@ -334,13 +325,17 @@ const GameLog = ({ popupVisibility, gameEvents, settingsData, setATimeOut, openH
     );
 };
 
+GameLog.defaultProps = {
+    popupVisibility: false
+};
+
 GameLog.propTypes = {
     popupVisibility: PropTypes.object,
     gameEvents: PropTypes.array,
     settingsData: PropTypes.object,
-    setATimeOut: PropTypes.func,
-    openHandler: PropTypes.func,
-    closeHandler: PropTypes.func
+    setATimeOut: PropTypes.func.isRequired,
+    openHandler: PropTypes.func.isRequired,
+    closeHandler: PropTypes.func.isRequired
 };
 
 export default GameLog;

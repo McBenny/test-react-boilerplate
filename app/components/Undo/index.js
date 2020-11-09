@@ -35,8 +35,8 @@ function Undo({ popupVisibility, event, setATimeOut, closeHandler }) {
                         currentScore: ''
                     })
                 );
-                dispatch(removeEvent());
                 break;
+
             case EVENT_TYPES.periodStart:
             case EVENT_TYPES.periodEnd:
                 dispatch(
@@ -55,8 +55,8 @@ function Undo({ popupVisibility, event, setATimeOut, closeHandler }) {
                         currentScore: ''
                     })
                 );
-                dispatch(removeEvent());
                 break;
+
             case EVENT_TYPES.gamePaused:
             case EVENT_TYPES.gameResumed:
                 dispatch(
@@ -69,8 +69,8 @@ function Undo({ popupVisibility, event, setATimeOut, closeHandler }) {
                         id: 0
                     })
                 );
-                dispatch(removeEvent());
                 break;
+
             case EVENT_TYPES.timeout:
                 dispatch(
                     handleGameStatus({
@@ -87,8 +87,8 @@ function Undo({ popupVisibility, event, setATimeOut, closeHandler }) {
                     A: false,
                     B: false
                 });
-                dispatch(removeEvent());
                 break;
+
             case EVENT_TYPES.goal:
             case EVENT_TYPES.yellowCard:
             case EVENT_TYPES.suspension:
@@ -123,18 +123,19 @@ function Undo({ popupVisibility, event, setATimeOut, closeHandler }) {
                         memberType: event.memberType
                     })
                 );
-                dispatch(removeEvent());
                 break;
             }
             default:
         }
+        dispatch(removeEvent());
+        closeHandler();
     };
 
     if (event !== null) {
         return (
-            <Dialog open={popupVisibility} onClose={closeHandler} aria-labelledby="dialog-title-undo" maxWidth="md">
+            <Dialog open={popupVisibility} onClose={closeHandler} aria-labelledby="dialog-title-undo" maxWidth="xl">
                 <DialogTitle id="dialog-title-undo" disableTypography>
-                    <h2 className="title">{messages.title}...</h2>
+                    <h2 className="title title--action">{messages.title}...</h2>
                 </DialogTitle>
                 <DialogContent>
                     <p>{messages.introduction}</p>
@@ -153,7 +154,7 @@ function Undo({ popupVisibility, event, setATimeOut, closeHandler }) {
             </Dialog>
         );
     }
-    return '';
+    return <></>;
 }
 
 Undo.propTypes = {
