@@ -196,6 +196,7 @@ These features should also apply to the fouls, any foul registered should be edi
 - [X] Display unidentified player if there are goals registered
 
 ##TODO
+- [ ] I want to be able to register an action while the game is on hold (if time is managed)
 - [ ] Give the ability to filter the list of games per date, competition, round or gender on the Home Screen
 - [ ] I want to be able to delete a game (via popup confirmation)
 - [ ] authenticate users
@@ -245,9 +246,9 @@ These features should also apply to the fouls, any foul registered should be edi
 ### Priority 1
 - [ ] I don't want to have to type all the names at the beginning
 - [ ] I want to get recorded players easily
-- [ ] I want to cancel the last action (an action) +2
 - [X] I want to invert the teams in the settings
 - [X] I want to be able to read the game log (show player's name/number, actions etc.)
+- [X] I want to cancel the last action (an action) +2
 
 ###Priority 2
 - [ ] I want to say there was a penalty missed
@@ -258,8 +259,9 @@ These features should also apply to the fouls, any foul registered should be edi
 
 ###Others
 - [ ] I want to share the results (have a summary sheet)
-- [ ] I want to see the time
+- [ ] I want to see the time +3
 - [ ] I want a picture of each player instead of/with number/name
+- [ ] I want to record all shots, including missed or stopped
 - [X] I want to see the time for the 2 minutes suspensions (should it be linked to a time pause, and start when time restarts?)
 - [X] I want to see the time during timeouts
 

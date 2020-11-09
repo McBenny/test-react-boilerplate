@@ -8,7 +8,16 @@ describe('<GameLog />', () => {
     it('should render and match the snapshot', () => {
         const {
             container: { firstChild }
-        } = render(<GameLog gameEvents={[]} settingsData={{}} />);
+        } = render(
+            <GameLog
+                popupVisibility={{ undo: false }}
+                gameEvents={[]}
+                settingsData={{}}
+                setATimeOut={() => {}}
+                openHandler={() => {}}
+                closeHandler={() => {}}
+            />
+        );
         expect(firstChild).toMatchSnapshot();
     });
 });

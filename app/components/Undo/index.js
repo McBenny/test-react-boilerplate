@@ -5,6 +5,7 @@ import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from '@mate
 import { messages } from './messages';
 import {
     EVENT_TYPES,
+    REMOVE_GOAL,
     REMOVE_YELLOW_CARD,
     REMOVE_SUSPENSION,
     REMOVE_RED_CARD,
@@ -15,12 +16,9 @@ import { addAction, handleGameStatus, removeEvent, removeTimeout, storeScore } f
 function Undo({ popupVisibility, event, setATimeOut, closeHandler }) {
     const dispatch = useDispatch();
     const undoEvent = () => {
-        console.log('undo!', event);
-
         switch (event.eventType) {
             case EVENT_TYPES.gameStart:
             case EVENT_TYPES.gameEnd:
-                // console.log('Revert', event.message);
                 dispatch(
                     handleGameStatus({
                         gameStarted: event.eventType === EVENT_TYPES.gameEnd,
@@ -41,7 +39,6 @@ function Undo({ popupVisibility, event, setATimeOut, closeHandler }) {
                 break;
             case EVENT_TYPES.periodStart:
             case EVENT_TYPES.periodEnd:
-                // console.log('Revert', event.message);
                 dispatch(
                     handleGameStatus({
                         gameStarted: true,
@@ -75,7 +72,6 @@ function Undo({ popupVisibility, event, setATimeOut, closeHandler }) {
                 dispatch(removeEvent());
                 break;
             case EVENT_TYPES.timeout:
-                // console.log('Revert', event.message);
                 dispatch(
                     handleGameStatus({
                         gameStarted: true,
@@ -93,12 +89,16 @@ function Undo({ popupVisibility, event, setATimeOut, closeHandler }) {
                 });
                 dispatch(removeEvent());
                 break;
+            case EVENT_TYPES.goal:
             case EVENT_TYPES.yellowCard:
             case EVENT_TYPES.suspension:
             case EVENT_TYPES.redCard:
             case EVENT_TYPES.blueCard: {
                 let ACTION;
                 switch (event.eventType) {
+                    case EVENT_TYPES.goal:
+                        ACTION = REMOVE_GOAL;
+                        break;
                     case EVENT_TYPES.yellowCard:
                         ACTION = REMOVE_YELLOW_CARD;
                         break;

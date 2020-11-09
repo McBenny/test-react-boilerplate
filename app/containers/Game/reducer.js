@@ -19,11 +19,11 @@ import {
     ADD_SUSPENSION,
     ADD_TIMEOUT,
     REMOVE_EVENT,
-    // REMOVE_GOAL,
+    REMOVE_GOAL,
     REMOVE_YELLOW_CARD,
+    REMOVE_SUSPENSION,
     REMOVE_RED_CARD,
     REMOVE_BLUE_CARD,
-    REMOVE_SUSPENSION,
     REMOVE_TIMEOUT,
     STORE_SCORE
 } from './constants';
@@ -84,12 +84,17 @@ const gameReducer = (state = useableState, action) =>
         let penaltyStatus = false;
         switch (action.type) {
             case ADD_GOAL:
+            case REMOVE_GOAL:
                 updatedData = 'goals';
                 penaltyStatus = action.penalty;
                 break;
             case ADD_YELLOW_CARD:
             case REMOVE_YELLOW_CARD:
                 updatedData = 'yellowCards';
+                break;
+            case ADD_SUSPENSION:
+            case REMOVE_SUSPENSION:
+                updatedData = 'suspensions';
                 break;
             case ADD_RED_CARD:
             case REMOVE_RED_CARD:
@@ -98,10 +103,6 @@ const gameReducer = (state = useableState, action) =>
             case ADD_BLUE_CARD:
             case REMOVE_BLUE_CARD:
                 updatedData = 'blueCards';
-                break;
-            case ADD_SUSPENSION:
-            case REMOVE_SUSPENSION:
-                updatedData = 'suspensions';
                 break;
             default:
         }
@@ -135,9 +136,9 @@ const gameReducer = (state = useableState, action) =>
             }
             case ADD_GOAL:
             case ADD_YELLOW_CARD:
+            case ADD_SUSPENSION:
             case ADD_RED_CARD:
-            case ADD_BLUE_CARD:
-            case ADD_SUSPENSION: {
+            case ADD_BLUE_CARD: {
                 // console.log(updatedData, action);
                 // UpdatedData is determined in the previous switch statement
                 draft[`dataTeam${action.team}`][updatedData] += 1;
@@ -165,6 +166,7 @@ const gameReducer = (state = useableState, action) =>
                 draft.gameEvents.pop();
                 break;
             }
+            case REMOVE_GOAL:
             case REMOVE_YELLOW_CARD:
             case REMOVE_SUSPENSION:
             case REMOVE_RED_CARD:

@@ -250,16 +250,30 @@ const GameLog = ({ popupVisibility, gameEvents, settingsData, setATimeOut, openH
                         break;
 
                     case EVENT_TYPES.goal: {
-                        const icon = gameEvent.penalty ? <Filter7OutlinedIcon /> : <></>;
+                        const icon = gameEvent.penalty ? (
+                            <>
+                                <SportsSoccerOutlinedIcon />
+                                <Filter7OutlinedIcon />
+                            </>
+                        ) : (
+                            <SportsSoccerOutlinedIcon />
+                        );
+                        const message1 = gameEvent.penalty ? messages.penaltyFor : messages.goalFor;
+                        const message2 = `${settingsData.teams[gameEvent.team].name} (${memberData[0].name} [${
+                            memberData[0].reference
+                        }]`;
                         template = (
                             <div className="game-log__event">
                                 <div>
-                                    <SportsSoccerOutlinedIcon /> {icon}{' '}
-                                    {gameEvent.penalty ? messages.penaltyFor : messages.goalFor}{' '}
-                                    {settingsData.teams[gameEvent.team].name} ({memberData[0].name} [
+                                    {icon} {message1} {settingsData.teams[gameEvent.team].name} ({memberData[0].name} [
                                     <strong>{memberData[0].reference}</strong>])
                                 </div>
                                 {formattedScore}
+                                {index === events.length - 1 ? (
+                                    <UndoButton event={gameEvent} icon={icon} message={`${message1} ${message2}`} />
+                                ) : (
+                                    ''
+                                )}
                             </div>
                         );
                         break;
