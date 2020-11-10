@@ -14,6 +14,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import HomePage from '../HomePage/Loadable';
 import Game from '../Game/Loadable';
 import NotFoundPage from '../NotFoundPage/Loadable';
+import ScoreSheet from '../ScoreSheet/Loadable';
 
 import '../../styles/core.scss';
 import { URLS } from './constants';
@@ -25,6 +26,7 @@ export default function App() {
             <Switch>
                 <Route exact path={URLS.index} component={HomePage} />
                 <Route exact path={URLS.game} component={Game} />
+                <Route exact path={URLS.scoreSheet} component={ScoreSheet} />
                 <Route component={NotFoundPage} />
             </Switch>
         </div>

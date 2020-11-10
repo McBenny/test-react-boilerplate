@@ -196,6 +196,7 @@ These features should also apply to the fouls, any foul registered should be edi
 - [X] Display unidentified player if there are goals registered
 
 ##TODO
+- [X] Generate a printable/PDF score sheet
 - [ ] I want to be able to register an action while the game is on hold (if time is managed)
 - [ ] Give the ability to filter the list of games per date, competition, round or gender on the Home Screen
 - [ ] I want to be able to delete a game (via popup confirmation)

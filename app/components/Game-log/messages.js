@@ -3,6 +3,7 @@ export const messages = {
     lastAction: 'Last action',
     displayFullLog: 'Display full log',
     hideFullLog: 'Hide full log',
+    displayScoreSheet: 'Display score sheet',
     fullLog: 'Full log',
     startGame: 'Start of the game',
     endGame: 'End of the game',

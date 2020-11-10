@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import nextId from 'react-id-generator';
 
 import { List, ListItem, Button } from '@material-ui/core';
+import AssignmentOutlinedIcon from '@material-ui/icons/AssignmentOutlined';
 import Filter2OutlinedIcon from '@material-ui/icons/Filter2Outlined';
 import Filter7OutlinedIcon from '@material-ui/icons/Filter7Outlined';
 import HighlightOffOutlinedIcon from '@material-ui/icons/HighlightOffOutlined';
@@ -23,9 +24,14 @@ import { messages } from './messages';
 import Undo from '../Undo';
 
 import './styles.scss';
+import { URLS } from '../../containers/App/constants';
 
 const GameLog = ({ popupVisibility, gameEvents, settingsData, setATimeOut, openHandler, closeHandler }) => {
     const [isFullLogVisible, setIsFullLogVisible] = useState(false);
+
+    const goToScoreSheetHandler = () => {
+        window.location.href = URLS.scoreSheet;
+    };
 
     const getMemberData = event => {
         if (event.memberType !== 'Event period' && event.eventType !== 'timeOut') {
@@ -300,6 +306,14 @@ const GameLog = ({ popupVisibility, gameEvents, settingsData, setATimeOut, openH
                         startIcon={isFullLogVisible ? <SpeakerNotesOffOutlinedIcon /> : <SpeakerNotesOutlinedIcon />}
                     >
                         {isFullLogVisible ? messages.hideFullLog : messages.displayFullLog}
+                    </Button>
+                    <Button
+                        variant="contained"
+                        onClick={() => goToScoreSheetHandler()}
+                        startIcon={<AssignmentOutlinedIcon />}
+                        style={{ float: 'right' }}
+                    >
+                        {messages.displayScoreSheet}
                     </Button>
                 </ListItem>
             </List>
