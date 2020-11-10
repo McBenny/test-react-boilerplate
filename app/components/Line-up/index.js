@@ -141,8 +141,11 @@ const membersListDisplay = ({
         }
         return '';
     });
-    // If no members or just one and it's the "unknown player"
-    if (sortedMembersList.length === 0 || (sortedMembersList.length === 1 && sortedMembersList[0].id === 0)) {
+    // If no members or just one and it's the "unknown player" and he has no goals
+    if (
+        sortedMembersList.length === 0 ||
+        (sortedMembersList.length === 1 && sortedMembersList[0].id === 0 && sortedMembersList[0].goals === 0)
+    ) {
         return (
             <p>
                 {messages[memberType === MEMBERS_TYPES.players ? 'noPlayers' : 'noOfficials']}{' '}

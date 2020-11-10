@@ -185,7 +185,6 @@ It should be possible to also add a goal anywhere in the list.
 These features should also apply to the fouls, any foul registered should be editable and removable, it should also be possible to add a foul.
 
 ##BUGS
-- [ ] Display unidentified player if there are goals registered
 - [ ] Limit the number of yellow cards to 3 per team (allow for a fourth for officials)
 - [ ] When I create a player, it jumps from bottom to top of the list, this is annoying
 - [X] Players with letters are not in uppercase in list for captain
@@ -194,6 +193,7 @@ These features should also apply to the fouls, any foul registered should be edi
 - [X] Log seems incomplete
 - [X] Players seem to not be sorted "naturally"
 - [X] A totally empty player in the settings should not be saved
+- [X] Display unidentified player if there are goals registered
 
 ##TODO
 - [ ] I want to be able to register an action while the game is on hold (if time is managed)
