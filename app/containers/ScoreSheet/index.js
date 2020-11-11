@@ -6,14 +6,84 @@
  */
 
 import React, { Fragment } from 'react';
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { compose } from 'redux';
+import { createStructuredSelector } from 'reselect';
+import { v4 as uuidv4 } from 'uuid';
 
 // import { URLS } from '../App/constants';
+import { useInjectReducer } from '../../utils/injectReducer';
+import { capitalize, formatDate } from '../../utils/utilities';
+
+import reducer from '../Game/reducer';
+import { makeSelectDate, makeSelectGameEvents, makeSelectSettings } from '../Game/selectors';
 
 import { messages } from './messages';
+import { messages as lineUpMessages } from '../../components/Line-up/messages';
+import { messages as settingsMessages } from '../Settings/messages';
 import './styles.scss';
+import {
+    EMPTY_MEMBER_DATA,
+    MAX_NUMBER,
+    MEMBERS_TYPES,
+    MEMBERS_QUALIFICATIONS,
+    TEAMS_LIST
+} from '../Settings/constants';
 
-export function ScoreSheet() {
+const key = 'game';
+
+export function ScoreSheet({ settings, date, gameEvents }) {
+    useInjectReducer({ key, reducer });
+    console.log('gameEvents', gameEvents);
+
+    const formattedDate = formatDate(date);
+
+    const listMembers = (team, memberType) => {
+        const members = settings.teams[team][memberType];
+        const captainId = settings.teams[team].captain;
+        const maxMembers =
+            memberType === MEMBERS_TYPES.players && members[0] && members[0].reference === ''
+                ? MAX_NUMBER[memberType] + 1
+                : MAX_NUMBER[memberType];
+        for (let i = members.length; i < maxMembers; i += 1) {
+            members.push(EMPTY_MEMBER_DATA);
+        }
+        return members.map(member => {
+            if (member.id !== 0 || member.goals > 0) {
+                return (
+                    <tr key={uuidv4()}>
+                        <td className="table__cell table__cell--data table__cell--line-head">{member.reference}</td>
+                        <td
+                            className={`table__cell table__cell--data${
+                                member.id !== 0 && member.id === captainId ? ' table__cell--captain' : ''
+                            }`}
+                        >
+                            {member.name}
+                            {member.qualification === MEMBERS_QUALIFICATIONS.players.goalie
+                                ? ` (${lineUpMessages.goalieInitial})`
+                                : ''}
+                            {member.id !== 0 && member.id === captainId ? ` (${lineUpMessages.captainInitial})` : ''}
+                        </td>
+                        <td className="table__cell table__cell--data table__cell--member">{member.goals || ''}</td>
+                        <td className="table__cell table__cell--data table__cell--member">
+                            {member.yellowCards ? 'X' : ''}
+                        </td>
+                        <td className="table__cell table__cell--data table__cell--member">
+                            {member.suspensions || ''}
+                        </td>
+                        <td className="table__cell table__cell--data table__cell--member">
+                            {member.redCards ? 'X' : ''}
+                        </td>
+                        <td className="table__cell table__cell--data table__cell--member">
+                            {member.blueCards ? 'X' : ''}
+                        </td>
+                    </tr>
+                );
+            }
+            return false;
+        });
+    };
     return (
         <Fragment>
             <main>
@@ -29,20 +99,21 @@ export function ScoreSheet() {
                         </tr>
                     </thead>
                     <tbody>
-                        {/**/}
-                        {/* Line 1 */}
-                        {/**/}
                         <tr className="table__row table__row--structure">
                             <td className="table__cell table__cell--structure">
                                 <table className="table table--data">
                                     <thead>
                                         <tr>
-                                            <th className="table__cell table__cell--header">Team A</th>
+                                            <th className="table__cell table__cell--header">
+                                                {settingsMessages.teamA}
+                                            </th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td className="table__cell table__cell--data table__cell--single">UTS</td>
+                                            <td className="table__cell table__cell--data table__cell--single">
+                                                {settings.teams.A.name}
+                                            </td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -51,13 +122,15 @@ export function ScoreSheet() {
                                 <table className="table table--data">
                                     <thead>
                                         <tr>
-                                            <th className="table__cell table__cell--header">Team B</th>
+                                            <th className="table__cell table__cell--header">
+                                                {settingsMessages.teamB}
+                                            </th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr>
                                             <td className="table__cell table__cell--data table__cell--single">
-                                                Harbourside
+                                                {settings.teams.B.name}
                                             </td>
                                         </tr>
                                     </tbody>
@@ -68,15 +141,15 @@ export function ScoreSheet() {
                                     <thead>
                                         <tr>
                                             <th colSpan="3" className="table__cell table__cell--header">
-                                                Half-time result
+                                                {messages.halfTimeResult}
                                             </th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td className="table__cell table__cell--data table__cell--half">10</td>
+                                            <td className="table__cell table__cell--data table__cell--half">-</td>
                                             <td className="table__cell table__cell--data table__cell--colon">:</td>
-                                            <td className="table__cell table__cell--data table__cell--half">9</td>
+                                            <td className="table__cell table__cell--data table__cell--half">-</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -85,130 +158,162 @@ export function ScoreSheet() {
                                 <table className="table table--data">
                                     <thead>
                                         <tr>
-                                            <th className="table__cell table__cell--header">Place</th>
+                                            <th className="table__cell table__cell--header">{messages.place}</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td className="table__cell table__cell--data table__cell--single">
-                                                Sydney NSW
-                                            </td>
+                                            <td className="table__cell table__cell--data table__cell--single">.</td>
                                         </tr>
                                     </tbody>
                                 </table>
                             </td>
                         </tr>
-                        {/**/}
-                        {/* Line 2 */}
-                        {/**/}
                         <tr className="table__row table__row--structure">
                             <td className="table__cell table__cell--structure">
                                 <table className="table table--data">
                                     <thead>
                                         <tr>
-                                            <th className="table__cell table__cell--header">Colour</th>
+                                            <th className="table__cell table__cell--header">
+                                                {settingsMessages.jerseyColour}
+                                            </th>
                                             <th colSpan="3" className="table__cell table__cell--header">
-                                                Timeouts
+                                                {messages.timeouts}
                                             </th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td className="table__cell table__cell--data table__cell--single">White</td>
-                                            <td className="table__cell table__cell--data table__cell--single">14:35</td>
-                                            <td className="table__cell table__cell--data table__cell--single">-</td>
-                                            <td className="table__cell table__cell--data table__cell--single">-</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </td>
-                            <td className="table__cell table__cell--structure">
-                                <table className="table table--data">
-                                    <thead>
-                                        <tr>
-                                            <th className="table__cell table__cell--header">Colour</th>
-                                            <th colSpan="3" className="table__cell table__cell--header">
-                                                Timeouts
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td className="table__cell table__cell--data table__cell--single">Green</td>
-                                            <td className="table__cell table__cell--data table__cell--single">25:05</td>
-                                            <td className="table__cell table__cell--data table__cell--single">10:47</td>
-                                            <td className="table__cell table__cell--data table__cell--single">-</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </td>
-                            <td className="table__cell table__cell--structure">
-                                <table className="table table--data">
-                                    <thead>
-                                        <tr>
-                                            <th colSpan="3" className="table__cell table__cell--header">
-                                                Full time result
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td className="table__cell table__cell--data table__cell--half">17</td>
-                                            <td className="table__cell table__cell--data table__cell--colon">:</td>
-                                            <td className="table__cell table__cell--data table__cell--half">36</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </td>
-                            <td className="table__cell table__cell--structure">
-                                <table className="table table--data">
-                                    <thead>
-                                        <tr>
-                                            <th className="table__cell table__cell--header">Venue</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td className="table__cell table__cell--data table__cell--single">
-                                                Sydney Boys HS
+                                            <td
+                                                className="table__cell table__cell--data table__cell--single"
+                                                style={{
+                                                    backgroundColor: settings.teams.A.jersey,
+                                                    fontWeight: 600,
+                                                    color: settings.teams.A.reference
+                                                }}
+                                            >
+                                                ###
                                             </td>
+                                            <td className="table__cell table__cell--data table__cell--single">-</td>
+                                            <td className="table__cell table__cell--data table__cell--single">-</td>
+                                            <td className="table__cell table__cell--data table__cell--single">-</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                            <td className="table__cell table__cell--structure">
+                                <table className="table table--data">
+                                    <thead>
+                                        <tr>
+                                            <th className="table__cell table__cell--header">
+                                                {settingsMessages.jerseyColour}
+                                            </th>
+                                            <th colSpan="3" className="table__cell table__cell--header">
+                                                {messages.timeouts}
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td
+                                                className="table__cell table__cell--data table__cell--single"
+                                                style={{
+                                                    backgroundColor: settings.teams.B.jersey,
+                                                    fontWeight: 600,
+                                                    color: settings.teams.B.reference
+                                                }}
+                                            >
+                                                ###
+                                            </td>
+                                            <td className="table__cell table__cell--data table__cell--single">-</td>
+                                            <td className="table__cell table__cell--data table__cell--single">-</td>
+                                            <td className="table__cell table__cell--data table__cell--single">-</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                            <td className="table__cell table__cell--structure">
+                                <table className="table table--data">
+                                    <thead>
+                                        <tr>
+                                            <th colSpan="3" className="table__cell table__cell--header">
+                                                {messages.fullTimeResult}
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td className="table__cell table__cell--data table__cell--half">-</td>
+                                            <td className="table__cell table__cell--data table__cell--colon">:</td>
+                                            <td className="table__cell table__cell--data table__cell--half">-</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                            <td className="table__cell table__cell--structure">
+                                <table className="table table--data">
+                                    <thead>
+                                        <tr>
+                                            <th className="table__cell table__cell--header">{messages.venue}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td className="table__cell table__cell--data table__cell--single">.</td>
                                         </tr>
                                     </tbody>
                                 </table>
                             </td>
                         </tr>
-                        {/**/}
-                        {/* Line 3 */}
-                        {/**/}
                         <tr className="table__row table__row--structure">
                             <td colSpan="2" rowSpan="2" className="table__cell table__cell--structure">
                                 <table className="table table--data">
                                     <thead>
                                         <tr>
                                             <th className="table__cell table__cell--header" />
-                                            <th className="table__cell table__cell--header">Officials</th>
-                                            <th className="table__cell table__cell--header">Signature</th>
+                                            <th className="table__cell table__cell--header">{messages.officials}</th>
+                                            <th className="table__cell table__cell--header">{messages.signature}</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr className="table__row table__row--data">
-                                            <td className="table__cell table__cell--data table__cell--line-head">R1</td>
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                        </tr>
-                                        <tr>
-                                            <td className="table__cell table__cell--data table__cell--line-head">R2</td>
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                        </tr>
-                                        <tr>
-                                            <td className="table__cell table__cell--data table__cell--line-head">SK</td>
-                                            <td className="table__cell table__cell--data" />
+                                            <td
+                                                className="table__cell table__cell--data table__cell--line-head"
+                                                title={capitalize(settingsMessages.referee1)}
+                                            >
+                                                {messages.initialReferee1}
+                                            </td>
+                                            <td className="table__cell table__cell--data">{settings.referee1}</td>
                                             <td className="table__cell table__cell--data" />
                                         </tr>
                                         <tr>
-                                            <td className="table__cell table__cell--data table__cell--line-head">TK</td>
+                                            <td
+                                                className="table__cell table__cell--data table__cell--line-head"
+                                                title={capitalize(settingsMessages.referee2)}
+                                            >
+                                                {messages.initialReferee2}
+                                            </td>
+                                            <td className="table__cell table__cell--data">{settings.referee2}</td>
                                             <td className="table__cell table__cell--data" />
+                                        </tr>
+                                        <tr>
+                                            <td
+                                                className="table__cell table__cell--data table__cell--line-head"
+                                                title={capitalize(settingsMessages.scoreKeeper)}
+                                            >
+                                                {messages.initialScoreKeeper}
+                                            </td>
+                                            <td className="table__cell table__cell--data">{settings.scoreKeeper}</td>
+                                            <td className="table__cell table__cell--data" />
+                                        </tr>
+                                        <tr>
+                                            <td
+                                                className="table__cell table__cell--data table__cell--line-head"
+                                                title={capitalize(settingsMessages.timeKeeper)}
+                                            >
+                                                {messages.initialTimeKeeper}
+                                            </td>
+                                            <td className="table__cell table__cell--data">{settings.timeKeeper}</td>
                                             <td className="table__cell table__cell--data" />
                                         </tr>
                                     </tbody>
@@ -219,7 +324,7 @@ export function ScoreSheet() {
                                     <thead>
                                         <tr>
                                             <th colSpan="3" className="table__cell table__cell--header">
-                                                Extra time result
+                                                {messages.extraTimeResult}
                                             </th>
                                         </tr>
                                     </thead>
@@ -236,29 +341,26 @@ export function ScoreSheet() {
                                 <table className="table table--data">
                                     <thead>
                                         <tr>
-                                            <th className="table__cell table__cell--header">Date</th>
+                                            <th className="table__cell table__cell--header">{messages.date}</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr>
                                             <td className="table__cell table__cell--data table__cell--single">
-                                                26/09/2020
+                                                {formattedDate}
                                             </td>
                                         </tr>
                                     </tbody>
                                 </table>
                             </td>
                         </tr>
-                        {/**/}
-                        {/* Line 4 */}
-                        {/**/}
                         <tr className="table__row table__row--structure">
                             <td className="table__cell table__cell--structure table__cell--bottom">
                                 <table className="table table--data">
                                     <thead>
                                         <tr>
                                             <th colSpan="3" className="table__cell table__cell--header">
-                                                After penalties result
+                                                {messages.afterPenaltiesResult}
                                             </th>
                                         </tr>
                                     </thead>
@@ -275,220 +377,101 @@ export function ScoreSheet() {
                                 <table className="table table--data">
                                     <thead>
                                         <tr>
-                                            <th className="table__cell table__cell--header">Time</th>
+                                            <th className="table__cell table__cell--header">{messages.time}</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td className="table__cell table__cell--data table__cell--single">21:20</td>
+                                            <td className="table__cell table__cell--data table__cell--single">.</td>
                                         </tr>
                                     </tbody>
                                 </table>
                             </td>
                         </tr>
-                        {/**/}
-                        {/* Line 5 */}
-                        {/**/}
                         <tr className="table__row table__row--structure">
                             <td colSpan="2" className="table__cell table__cell--structure">
                                 <table className="table table--data">
                                     <thead>
                                         <tr>
-                                            <th className="table__cell table__cell--header">No</th>
-                                            <th className="table__cell table__cell--header">Team A Players</th>
-                                            <th className="table__cell table__cell--header">Goals</th>
-                                            <th className="table__cell table__cell--header">Y</th>
-                                            <th className="table__cell table__cell--header">2</th>
-                                            <th className="table__cell table__cell--header">R</th>
-                                            <th className="table__cell table__cell--header">B</th>
+                                            <th
+                                                className="table__cell table__cell--header"
+                                                title={settingsMessages.playersReference}
+                                            >
+                                                {messages.shortNumber}
+                                            </th>
+                                            <th className="table__cell table__cell--header">
+                                                {settingsMessages.teamA}
+                                                {messages.players}
+                                            </th>
+                                            <th className="table__cell table__cell--header">{lineUpMessages.goals}</th>
+                                            <th
+                                                className="table__cell table__cell--header"
+                                                title={capitalize(lineUpMessages.sorting_yellowCards)}
+                                            >
+                                                Y
+                                            </th>
+                                            <th
+                                                className="table__cell table__cell--header"
+                                                title={capitalize(lineUpMessages.sorting_suspensions)}
+                                            >
+                                                2
+                                            </th>
+                                            <th
+                                                className="table__cell table__cell--header"
+                                                title={capitalize(lineUpMessages.sorting_redCards)}
+                                            >
+                                                R
+                                            </th>
+                                            <th
+                                                className="table__cell table__cell--header"
+                                                title={capitalize(lineUpMessages.sorting_blueCards)}
+                                            >
+                                                B
+                                            </th>
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td className="table__cell table__cell--data table__cell--line-head">26</td>
-                                            <td className="table__cell table__cell--data">Ben Adam</td>
-                                            <td className="table__cell table__cell--data">4</td>
-                                            <td className="table__cell table__cell--data">1</td>
-                                            <td className="table__cell table__cell--data">1</td>
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data">.</td>
-                                        </tr>
-                                        <tr>
-                                            <td className="table__cell table__cell--data table__cell--line-head" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data">.</td>
-                                        </tr>
-                                        <tr>
-                                            <td className="table__cell table__cell--data table__cell--line-head" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data">.</td>
-                                        </tr>
-                                        <tr>
-                                            <td className="table__cell table__cell--data table__cell--line-head" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data">.</td>
-                                        </tr>
-                                        <tr>
-                                            <td className="table__cell table__cell--data table__cell--line-head" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data">.</td>
-                                        </tr>
-                                        <tr>
-                                            <td className="table__cell table__cell--data table__cell--line-head" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data">.</td>
-                                        </tr>
-                                        <tr>
-                                            <td className="table__cell table__cell--data table__cell--line-head" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data">.</td>
-                                        </tr>
-                                        <tr>
-                                            <td className="table__cell table__cell--data table__cell--line-head" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data">.</td>
-                                        </tr>
-                                        <tr>
-                                            <td className="table__cell table__cell--data table__cell--line-head" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data">.</td>
-                                        </tr>
-                                        <tr>
-                                            <td className="table__cell table__cell--data table__cell--line-head" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data">.</td>
-                                        </tr>
-                                        <tr>
-                                            <td className="table__cell table__cell--data table__cell--line-head" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data">.</td>
-                                        </tr>
-                                        <tr>
-                                            <td className="table__cell table__cell--data table__cell--line-head" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data">.</td>
-                                        </tr>
-                                        <tr>
-                                            <td className="table__cell table__cell--data table__cell--line-head" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data">.</td>
-                                        </tr>
-                                        <tr>
-                                            <td className="table__cell table__cell--data table__cell--line-head" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data">.</td>
-                                        </tr>
-                                        <tr>
-                                            <td className="table__cell table__cell--data table__cell--line-head" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data">.</td>
-                                        </tr>
-                                        <tr>
-                                            <td className="table__cell table__cell--data table__cell--line-head" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data">.</td>
-                                        </tr>
-                                        <tr>
-                                            <td
-                                                colSpan="2"
-                                                className="table__cell table__cell--data table__cell--total-label"
-                                            >
-                                                Total
-                                            </td>
-                                            <td className="table__cell table__cell--data table__cell--total" />
-                                            <td className="table__cell table__cell--data table__cell--total" />
-                                            <td className="table__cell table__cell--data table__cell--total" />
-                                            <td className="table__cell table__cell--data table__cell--total" />
-                                            <td className="table__cell table__cell--data table__cell--total" />
-                                        </tr>
-                                    </tbody>
+                                    <tbody>{listMembers(TEAMS_LIST.HOME, MEMBERS_TYPES.players)}</tbody>
                                 </table>
                             </td>
                             <td rowSpan="4" className="table__cell table__cell--structure">
                                 <table className="table table--data">
                                     <thead>
                                         <tr>
-                                            <th className="table__cell table__cell--header">A</th>
-                                            <th colSpan="3" className="table__cell table__cell--header">
-                                                Score
+                                            <th
+                                                className="table__cell table__cell--header"
+                                                title={`${settingsMessages.teamA}: ${
+                                                    settings.teams[TEAMS_LIST.HOME].name
+                                                }`}
+                                            >
+                                                {messages.initialTeamA}
                                             </th>
-                                            <th className="table__cell table__cell--header">B</th>
+                                            <th colSpan="3" className="table__cell table__cell--header">
+                                                {messages.score}
+                                            </th>
+                                            <th
+                                                className="table__cell table__cell--header"
+                                                title={`${settingsMessages.teamB}: ${
+                                                    settings.teams[TEAMS_LIST.AWAY].name
+                                                }`}
+                                            >
+                                                {messages.initialTeamB}
+                                            </th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td className="table__cell table__cell--data table__cell--half">26</td>
-                                            <td className="table__cell table__cell--data table__cell--half">1</td>
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--half" />
                                             <td className="table__cell table__cell--data table__cell--colon">:</td>
-                                            <td className="table__cell table__cell--data table__cell--half">0</td>
+                                            <td className="table__cell table__cell--data table__cell--half" />
                                             <td className="table__cell table__cell--data table__cell--half" />
                                         </tr>
                                         <tr>
                                             <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--half">1</td>
+                                            <td className="table__cell table__cell--data table__cell--half" />
                                             <td className="table__cell table__cell--data table__cell--colon">:</td>
-                                            <td className="table__cell table__cell--data table__cell--half">1</td>
-                                            <td className="table__cell table__cell--data table__cell--half">14</td>
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--half" />
                                         </tr>
                                         <tr>
                                             <td className="table__cell table__cell--data table__cell--half" />
@@ -805,632 +788,486 @@ export function ScoreSheet() {
                                 <table className="table table--data">
                                     <thead>
                                         <tr>
-                                            <th className="table__cell table__cell--header">A</th>
-                                            <th colSpan="3" className="table__cell table__cell--header">
-                                                Score
-                                            </th>
-                                            <th className="table__cell table__cell--header">B</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--colon">:</td>
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                        </tr>
-                                        <tr>
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--colon">:</td>
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                        </tr>
-                                        <tr>
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--colon">:</td>
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                        </tr>
-                                        <tr>
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--colon">:</td>
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                        </tr>
-                                        <tr>
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--colon">:</td>
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                        </tr>
-                                        <tr>
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--colon">:</td>
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                        </tr>
-                                        <tr>
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--colon">:</td>
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                        </tr>
-                                        <tr>
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--colon">:</td>
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                        </tr>
-                                        <tr>
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--colon">:</td>
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                        </tr>
-                                        <tr>
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--colon">:</td>
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                        </tr>
-                                        <tr>
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--colon">:</td>
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                        </tr>
-                                        <tr>
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--colon">:</td>
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                        </tr>
-                                        <tr>
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--colon">:</td>
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                        </tr>
-                                        <tr>
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--colon">:</td>
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                        </tr>
-                                        <tr>
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--colon">:</td>
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                        </tr>
-                                        <tr>
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--colon">:</td>
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                        </tr>
-                                        <tr>
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--colon">:</td>
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                        </tr>
-                                        <tr>
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--colon">:</td>
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                        </tr>
-                                        <tr>
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--colon">:</td>
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                        </tr>
-                                        <tr>
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--colon">:</td>
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                        </tr>
-                                        <tr>
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--colon">:</td>
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                        </tr>
-                                        <tr>
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--colon">:</td>
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                        </tr>
-                                        <tr>
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--colon">:</td>
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                        </tr>
-                                        <tr>
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--colon">:</td>
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                        </tr>
-                                        <tr>
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--colon">:</td>
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                        </tr>
-                                        <tr>
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--colon">:</td>
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                        </tr>
-                                        <tr>
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--colon">:</td>
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                        </tr>
-                                        <tr>
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--colon">:</td>
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                        </tr>
-                                        <tr>
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--colon">:</td>
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                        </tr>
-                                        <tr>
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--colon">:</td>
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                        </tr>
-                                        <tr>
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--colon">:</td>
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                        </tr>
-                                        <tr>
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--colon">:</td>
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                        </tr>
-                                        <tr>
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--colon">:</td>
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                        </tr>
-                                        <tr>
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--colon">:</td>
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                        </tr>
-                                        <tr>
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--colon">:</td>
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                        </tr>
-                                        <tr>
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--colon">:</td>
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                        </tr>
-                                        <tr>
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--colon">:</td>
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                        </tr>
-                                        <tr>
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--colon">:</td>
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                        </tr>
-                                        <tr>
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--colon">:</td>
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                        </tr>
-                                        <tr>
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--colon">:</td>
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                        </tr>
-                                        <tr>
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--colon">:</td>
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                        </tr>
-                                        <tr>
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--colon">:</td>
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                        </tr>
-                                        <tr>
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--colon">:</td>
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                        </tr>
-                                        <tr>
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--colon">:</td>
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                        </tr>
-                                        <tr>
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--colon">:</td>
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                        </tr>
-                                        <tr>
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--colon">:</td>
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                            <td className="table__cell table__cell--data table__cell--half" />
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </td>
-                        </tr>
-                        {/**/}
-                        {/* Line 6 */}
-                        {/**/}
-                        <tr className="table__row table__row--structure">
-                            <td colSpan="2" className="table__cell table__cell--structure">
-                                <table className="table table--data">
-                                    <thead>
-                                        <tr>
-                                            <th className="table__cell table__cell--header">No</th>
-                                            <th className="table__cell table__cell--header">Team A Officials</th>
-                                            <th className="table__cell table__cell--header">Signature</th>
-                                            <th className="table__cell table__cell--header">Y</th>
-                                            <th className="table__cell table__cell--header">2</th>
-                                            <th className="table__cell table__cell--header">R</th>
-                                            <th className="table__cell table__cell--header">B</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td className="table__cell table__cell--data table__cell--line-head">A</td>
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                        </tr>
-                                        <tr>
-                                            <td className="table__cell table__cell--data table__cell--line-head">B</td>
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                        </tr>
-                                        <tr>
-                                            <td className="table__cell table__cell--data table__cell--line-head">C</td>
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                        </tr>
-                                        <tr>
-                                            <td className="table__cell table__cell--data table__cell--line-head">D</td>
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </td>
-                        </tr>
-                        {/**/}
-                        {/* Line 7 */}
-                        {/**/}
-                        <tr className="table__row table__row--structure">
-                            <td colSpan="2" className="table__cell table__cell--structure">
-                                <table className="table table--data">
-                                    <thead>
-                                        <tr>
-                                            <th className="table__cell table__cell--header">No</th>
-                                            <th className="table__cell table__cell--header">Team B Players</th>
-                                            <th className="table__cell table__cell--header">Goals</th>
-                                            <th className="table__cell table__cell--header">Y</th>
-                                            <th className="table__cell table__cell--header">2</th>
-                                            <th className="table__cell table__cell--header">R</th>
-                                            <th className="table__cell table__cell--header">B</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td className="table__cell table__cell--data table__cell--line-head" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data">.</td>
-                                        </tr>
-                                        <tr>
-                                            <td className="table__cell table__cell--data table__cell--line-head" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data">.</td>
-                                        </tr>
-                                        <tr>
-                                            <td className="table__cell table__cell--data table__cell--line-head" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data">.</td>
-                                        </tr>
-                                        <tr>
-                                            <td className="table__cell table__cell--data table__cell--line-head" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data">.</td>
-                                        </tr>
-                                        <tr>
-                                            <td className="table__cell table__cell--data table__cell--line-head" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data">.</td>
-                                        </tr>
-                                        <tr>
-                                            <td className="table__cell table__cell--data table__cell--line-head" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data">.</td>
-                                        </tr>
-                                        <tr>
-                                            <td className="table__cell table__cell--data table__cell--line-head" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data">.</td>
-                                        </tr>
-                                        <tr>
-                                            <td className="table__cell table__cell--data table__cell--line-head" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data">.</td>
-                                        </tr>
-                                        <tr>
-                                            <td className="table__cell table__cell--data table__cell--line-head" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data">.</td>
-                                        </tr>
-                                        <tr>
-                                            <td className="table__cell table__cell--data table__cell--line-head" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data">.</td>
-                                        </tr>
-                                        <tr>
-                                            <td className="table__cell table__cell--data table__cell--line-head" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data">.</td>
-                                        </tr>
-                                        <tr>
-                                            <td className="table__cell table__cell--data table__cell--line-head" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data">.</td>
-                                        </tr>
-                                        <tr>
-                                            <td className="table__cell table__cell--data table__cell--line-head" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data">.</td>
-                                        </tr>
-                                        <tr>
-                                            <td className="table__cell table__cell--data table__cell--line-head" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data">.</td>
-                                        </tr>
-                                        <tr>
-                                            <td className="table__cell table__cell--data table__cell--line-head" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data">.</td>
-                                        </tr>
-                                        <tr>
-                                            <td className="table__cell table__cell--data table__cell--line-head" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data">.</td>
-                                        </tr>
-                                        <tr>
-                                            <td
-                                                colSpan="2"
-                                                className="table__cell table__cell--data table__cell--total-label"
+                                            <th
+                                                className="table__cell table__cell--header"
+                                                title={`${settingsMessages.teamA}: ${
+                                                    settings.teams[TEAMS_LIST.HOME].name
+                                                }`}
                                             >
-                                                Total
-                                            </td>
-                                            <td className="table__cell table__cell--data table__cell--total" />
-                                            <td className="table__cell table__cell--data table__cell--total" />
-                                            <td className="table__cell table__cell--data table__cell--total" />
-                                            <td className="table__cell table__cell--data table__cell--total" />
-                                            <td className="table__cell table__cell--data table__cell--total" />
+                                                {messages.initialTeamA}
+                                            </th>
+                                            <th colSpan="3" className="table__cell table__cell--header">
+                                                {messages.score}
+                                            </th>
+                                            <th
+                                                className="table__cell table__cell--header"
+                                                title={`${settingsMessages.teamB}: ${
+                                                    settings.teams[TEAMS_LIST.AWAY].name
+                                                }`}
+                                            >
+                                                {messages.initialTeamB}
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--colon">:</td>
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                        </tr>
+                                        <tr>
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--colon">:</td>
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                        </tr>
+                                        <tr>
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--colon">:</td>
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                        </tr>
+                                        <tr>
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--colon">:</td>
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                        </tr>
+                                        <tr>
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--colon">:</td>
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                        </tr>
+                                        <tr>
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--colon">:</td>
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                        </tr>
+                                        <tr>
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--colon">:</td>
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                        </tr>
+                                        <tr>
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--colon">:</td>
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                        </tr>
+                                        <tr>
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--colon">:</td>
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                        </tr>
+                                        <tr>
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--colon">:</td>
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                        </tr>
+                                        <tr>
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--colon">:</td>
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                        </tr>
+                                        <tr>
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--colon">:</td>
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                        </tr>
+                                        <tr>
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--colon">:</td>
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                        </tr>
+                                        <tr>
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--colon">:</td>
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                        </tr>
+                                        <tr>
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--colon">:</td>
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                        </tr>
+                                        <tr>
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--colon">:</td>
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                        </tr>
+                                        <tr>
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--colon">:</td>
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                        </tr>
+                                        <tr>
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--colon">:</td>
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                        </tr>
+                                        <tr>
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--colon">:</td>
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                        </tr>
+                                        <tr>
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--colon">:</td>
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                        </tr>
+                                        <tr>
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--colon">:</td>
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                        </tr>
+                                        <tr>
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--colon">:</td>
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                        </tr>
+                                        <tr>
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--colon">:</td>
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                        </tr>
+                                        <tr>
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--colon">:</td>
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                        </tr>
+                                        <tr>
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--colon">:</td>
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                        </tr>
+                                        <tr>
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--colon">:</td>
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                        </tr>
+                                        <tr>
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--colon">:</td>
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                        </tr>
+                                        <tr>
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--colon">:</td>
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                        </tr>
+                                        <tr>
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--colon">:</td>
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                        </tr>
+                                        <tr>
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--colon">:</td>
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                        </tr>
+                                        <tr>
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--colon">:</td>
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                        </tr>
+                                        <tr>
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--colon">:</td>
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                        </tr>
+                                        <tr>
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--colon">:</td>
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                        </tr>
+                                        <tr>
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--colon">:</td>
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                        </tr>
+                                        <tr>
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--colon">:</td>
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                        </tr>
+                                        <tr>
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--colon">:</td>
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                        </tr>
+                                        <tr>
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--colon">:</td>
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                        </tr>
+                                        <tr>
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--colon">:</td>
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                        </tr>
+                                        <tr>
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--colon">:</td>
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                        </tr>
+                                        <tr>
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--colon">:</td>
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                        </tr>
+                                        <tr>
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--colon">:</td>
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                        </tr>
+                                        <tr>
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--colon">:</td>
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                        </tr>
+                                        <tr>
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--colon">:</td>
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                        </tr>
+                                        <tr>
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--colon">:</td>
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                        </tr>
+                                        <tr>
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--colon">:</td>
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                        </tr>
+                                        <tr>
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--colon">:</td>
+                                            <td className="table__cell table__cell--data table__cell--half" />
+                                            <td className="table__cell table__cell--data table__cell--half" />
                                         </tr>
                                     </tbody>
                                 </table>
                             </td>
                         </tr>
-                        {/**/}
-                        {/* Line 8 */}
-                        {/**/}
                         <tr className="table__row table__row--structure">
                             <td colSpan="2" className="table__cell table__cell--structure">
                                 <table className="table table--data">
                                     <thead>
                                         <tr>
-                                            <th className="table__cell table__cell--header">No</th>
-                                            <th className="table__cell table__cell--header">Team B Officials</th>
-                                            <th className="table__cell table__cell--header">Signature</th>
-                                            <th className="table__cell table__cell--header">Y</th>
-                                            <th className="table__cell table__cell--header">2</th>
-                                            <th className="table__cell table__cell--header">R</th>
-                                            <th className="table__cell table__cell--header">B</th>
+                                            <th
+                                                className="table__cell table__cell--header"
+                                                title={settingsMessages.officialsReference}
+                                            >
+                                                {messages.shortNumber}
+                                            </th>
+                                            <th className="table__cell table__cell--header">
+                                                {settingsMessages.teamA} {messages.officials}
+                                            </th>
+                                            <th className="table__cell table__cell--header">{messages.signature}</th>
+                                            <th
+                                                className="table__cell table__cell--header"
+                                                title={capitalize(lineUpMessages.sorting_yellowCards)}
+                                            >
+                                                {messages.initialYellowCards}
+                                            </th>
+                                            <th
+                                                className="table__cell table__cell--header"
+                                                title={capitalize(lineUpMessages.sorting_suspensions)}
+                                            >
+                                                {messages.initialSuspensions}
+                                            </th>
+                                            <th
+                                                className="table__cell table__cell--header"
+                                                title={capitalize(lineUpMessages.sorting_redCards)}
+                                            >
+                                                {messages.initialRedCards}
+                                            </th>
+                                            <th
+                                                className="table__cell table__cell--header"
+                                                title={capitalize(lineUpMessages.sorting_blueCards)}
+                                            >
+                                                {messages.initialBlueCards}
+                                            </th>
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    <tbody>{listMembers(TEAMS_LIST.HOME, MEMBERS_TYPES.officials)}</tbody>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr className="table__row table__row--structure">
+                            <td colSpan="2" className="table__cell table__cell--structure">
+                                <table className="table table--data">
+                                    <thead>
                                         <tr>
-                                            <td className="table__cell table__cell--data table__cell--line-head">A</td>
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
+                                            <th
+                                                className="table__cell table__cell--header"
+                                                title={settingsMessages.playersReference}
+                                            >
+                                                {messages.shortNumber}
+                                            </th>
+                                            <th className="table__cell table__cell--header">
+                                                {settingsMessages.teamB} {messages.players}
+                                            </th>
+                                            <th className="table__cell table__cell--header">{lineUpMessages.goals}</th>
+                                            <th
+                                                className="table__cell table__cell--header"
+                                                title={capitalize(lineUpMessages.sorting_yellowCards)}
+                                            >
+                                                {messages.initialYellowCards}
+                                            </th>
+                                            <th
+                                                className="table__cell table__cell--header"
+                                                title={capitalize(lineUpMessages.sorting_suspensions)}
+                                            >
+                                                {messages.initialSuspensions}
+                                            </th>
+                                            <th
+                                                className="table__cell table__cell--header"
+                                                title={capitalize(lineUpMessages.sorting_redCards)}
+                                            >
+                                                {messages.initialRedCards}
+                                            </th>
+                                            <th
+                                                className="table__cell table__cell--header"
+                                                title={capitalize(lineUpMessages.sorting_blueCards)}
+                                            >
+                                                {messages.initialBlueCards}
+                                            </th>
                                         </tr>
+                                    </thead>
+                                    <tbody>{listMembers(TEAMS_LIST.AWAY, MEMBERS_TYPES.players)}</tbody>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr className="table__row table__row--structure">
+                            <td colSpan="2" className="table__cell table__cell--structure">
+                                <table className="table table--data">
+                                    <thead>
                                         <tr>
-                                            <td className="table__cell table__cell--data table__cell--line-head">B</td>
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
+                                            <th
+                                                className="table__cell table__cell--header"
+                                                title={settingsMessages.officialsReference}
+                                            >
+                                                {messages.shortNumber}
+                                            </th>
+                                            <th className="table__cell table__cell--header">
+                                                {settingsMessages.teamB} {messages.officials}
+                                            </th>
+                                            <th className="table__cell table__cell--header">{messages.signature}</th>
+                                            <th
+                                                className="table__cell table__cell--header"
+                                                title={capitalize(lineUpMessages.sorting_yellowCards)}
+                                            >
+                                                {messages.initialYellowCards}
+                                            </th>
+                                            <th
+                                                className="table__cell table__cell--header"
+                                                title={capitalize(lineUpMessages.sorting_suspensions)}
+                                            >
+                                                {messages.initialSuspensions}
+                                            </th>
+                                            <th
+                                                className="table__cell table__cell--header"
+                                                title={capitalize(lineUpMessages.sorting_redCards)}
+                                            >
+                                                {messages.initialRedCards}
+                                            </th>
+                                            <th
+                                                className="table__cell table__cell--header"
+                                                title={capitalize(lineUpMessages.sorting_blueCards)}
+                                            >
+                                                {messages.initialBlueCards}
+                                            </th>
                                         </tr>
-                                        <tr>
-                                            <td className="table__cell table__cell--data table__cell--line-head">C</td>
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                        </tr>
-                                        <tr>
-                                            <td className="table__cell table__cell--data table__cell--line-head">D</td>
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                            <td className="table__cell table__cell--data" />
-                                        </tr>
-                                    </tbody>
+                                    </thead>
+                                    <tbody>{listMembers(TEAMS_LIST.AWAY, MEMBERS_TYPES.officials)}</tbody>
                                 </table>
                             </td>
                         </tr>
@@ -1441,7 +1278,18 @@ export function ScoreSheet() {
     );
 }
 
-// ScoreSheet.propTypes = {
-// };
+ScoreSheet.propTypes = {
+    settings: PropTypes.object,
+    date: PropTypes.string,
+    gameEvents: PropTypes.array
+};
 
-export default ScoreSheet;
+const mapStateToProps = createStructuredSelector({
+    settings: makeSelectSettings(),
+    date: makeSelectDate(),
+    gameEvents: makeSelectGameEvents()
+});
+
+const withConnect = connect(mapStateToProps);
+
+export default compose(withConnect)(ScoreSheet);

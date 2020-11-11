@@ -86,9 +86,17 @@ $colour-zebra: #ddd;
 
         &--data {
             border: 1px solid $colour-border;
-            height: 1.1875rem;
+            height: 1.5625rem;
             padding: 0.125rem 0.25rem;
             font-size: 0.875rem;
+        }
+
+        &--member {
+            text-align: center;
+        }
+
+        &--captain {
+            font-weight: 600;
         }
 
         &--single {

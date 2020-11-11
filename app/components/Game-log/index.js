@@ -345,7 +345,7 @@ GameLog.defaultProps = {
 
 GameLog.propTypes = {
     popupVisibility: PropTypes.object,
-    gameEvents: PropTypes.array,
+    gameEvents: PropTypes.array.isRequired,
     settingsData: PropTypes.object,
     setATimeOut: PropTypes.func.isRequired,
     openHandler: PropTypes.func.isRequired,
