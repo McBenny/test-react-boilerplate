@@ -15,6 +15,7 @@ import HomePage from '../HomePage/Loadable';
 import Game from '../Game/Loadable';
 import NotFoundPage from '../NotFoundPage/Loadable';
 import ScoreSheet from '../ScoreSheet/Loadable';
+import ScoreSheetAlt from '../ScoreSheet/Loadable-alt';
 
 import '../../styles/core.scss';
 import { URLS } from './constants';
@@ -27,6 +28,7 @@ export default function App() {
                 <Route exact path={URLS.index} component={HomePage} />
                 <Route exact path={URLS.game} component={Game} />
                 <Route exact path={URLS.scoreSheet} component={ScoreSheet} />
+                <Route exact path={URLS.scoreSheetAlt} component={ScoreSheetAlt} />
                 <Route component={NotFoundPage} />
             </Switch>
         </div>

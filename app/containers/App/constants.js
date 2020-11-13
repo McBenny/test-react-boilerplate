@@ -11,5 +11,6 @@
 export const URLS = {
     game: '/game',
     index: '/',
-    scoreSheet: '/score-sheet'
+    scoreSheet: '/score-sheet',
+    scoreSheetAlt: '/score-sheet-alt'
 };
