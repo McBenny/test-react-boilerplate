@@ -52,7 +52,6 @@ import LocalStorage from '../../utils/local-storage';
 import { isEven, compareValues, formatDate } from '../../utils/utilities';
 
 import {
-    makeSelectDate,
     makeSelectSettings,
     makeSelectGameStarted,
     makeSelectGamePaused,
@@ -72,7 +71,6 @@ const key = 'game';
 
 export function Game({
     settings,
-    date,
     gameStarted,
     gamePaused,
     gameEvents,
@@ -95,7 +93,6 @@ export function Game({
         LocalStorage.set(gameId, {
             settings,
             gameId,
-            date,
             gameStarted,
             gamePaused,
             currentPeriod,
@@ -191,7 +188,7 @@ export function Game({
         window.location.href = URLS.index;
     };
 
-    const formattedDate = formatDate(date);
+    const formattedDate = formatDate(settings.date);
     const score = { teamA: dataTeamA.goals, teamB: dataTeamB.goals };
     const handleStartButton = ({ gameStatus = true, gamePauseStatus, eventType, period, id }) => {
         onHandleGameStatus({
@@ -760,7 +757,6 @@ export function Game({
 
 Game.propTypes = {
     settings: PropTypes.object,
-    date: PropTypes.string,
     gameStarted: PropTypes.bool,
     gamePaused: PropTypes.bool,
     gameEvents: PropTypes.array,
@@ -775,7 +771,6 @@ Game.propTypes = {
 
 const mapStateToProps = createStructuredSelector({
     settings: makeSelectSettings(),
-    date: makeSelectDate(),
     gameStarted: makeSelectGameStarted(),
     gamePaused: makeSelectGamePaused(),
     gameEvents: makeSelectGameEvents(),

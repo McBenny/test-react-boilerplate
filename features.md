@@ -233,8 +233,10 @@ These features should also apply to the fouls, any foul registered should be edi
 - [X] Sorting line-up: sort players According to their numbers, last name, or number of goals, or fouls
 - [X] Open app in full screen
 - [x] Modify icons
+- [X] Generate a printable/PDF score sheet
 
 ##REFACTORING
+- [ ] Optimise score sheet to avoid repetition between A and B teams and list of goals.
 - [X] Optimise settings page to avoid repetition between A and B teams.
 - [X] Separate colours from colour usage
 - [X] Optimize components calls

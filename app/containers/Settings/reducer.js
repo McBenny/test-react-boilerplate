@@ -12,6 +12,10 @@ import {
     CHANGE_COMPETITION,
     CHANGE_ROUND,
     CHANGE_GENDER,
+    CHANGE_PLACE,
+    CHANGE_VENUE,
+    CHANGE_DATE,
+    CHANGE_TIME,
     CHANGE_REFEREE_1,
     CHANGE_REFEREE_2,
     CHANGE_SCORE_KEEPER,
@@ -37,6 +41,10 @@ import {
  *      competition: {string}
  *      round: {string},
  *      gender: {string}
+ *      place: {string}
+ *      venue: {string}
+ *      date: {string}
+ *      time: {string}
  *      referee1: {string}
  *      referee2: {string}
  *      scoreKeeper: {string}
@@ -62,10 +70,24 @@ import {
  *  }
  * }
  */
+const getToday = () => {
+    const today = new Date();
+    let todayDD = today.getDate();
+    todayDD = todayDD < 10 ? `0${todayDD}` : todayDD;
+    let todayMM = today.getMonth() + 1;
+    todayMM = todayMM < 10 ? `0${todayMM}` : todayMM;
+    const todayYYYY = today.getFullYear();
+    return `${todayYYYY}-${todayMM}-${todayDD}`;
+};
+
 export const initialState = {
     competition: '',
     round: '',
     gender: '',
+    place: '',
+    venue: '',
+    date: getToday(),
+    time: '20:00',
     referee1: '',
     referee2: '',
     scoreKeeper: '',
@@ -104,6 +126,18 @@ const settingsReducer = (state = initialState, action) =>
             case CHANGE_GENDER:
                 updatedData = 'gender';
                 break;
+            case CHANGE_PLACE:
+                updatedData = 'place';
+                break;
+            case CHANGE_VENUE:
+                updatedData = 'venue';
+                break;
+            case CHANGE_DATE:
+                updatedData = 'date';
+                break;
+            case CHANGE_TIME:
+                updatedData = 'time';
+                break;
             case CHANGE_REFEREE_1:
                 updatedData = 'referee1';
                 break;
@@ -122,6 +156,10 @@ const settingsReducer = (state = initialState, action) =>
             case CHANGE_COMPETITION:
             case CHANGE_ROUND:
             case CHANGE_GENDER:
+            case CHANGE_PLACE:
+            case CHANGE_VENUE:
+            case CHANGE_DATE:
+            case CHANGE_TIME:
             case CHANGE_REFEREE_1:
             case CHANGE_REFEREE_2:
             case CHANGE_SCORE_KEEPER:

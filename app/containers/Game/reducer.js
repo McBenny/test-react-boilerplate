@@ -30,21 +30,10 @@ import {
 import { initialState as initialSettings } from '../Settings/reducer';
 import LocalStorage from '../../utils/local-storage';
 
-const getToday = () => {
-    const today = new Date();
-    let todayDD = today.getDate();
-    todayDD = todayDD < 10 ? `0${todayDD}` : todayDD;
-    let todayMM = today.getMonth() + 1;
-    todayMM = todayMM < 10 ? `0${todayMM}` : todayMM;
-    const todayYYYY = today.getFullYear();
-    return `${todayYYYY}-${todayMM}-${todayDD}`;
-};
-
 // The initial state of the App
 export const initialState = {
     settings: initialSettings,
     gameId: sessionStorage.getItem('gameId'),
-    date: getToday(),
     gameStarted: false,
     gamePaused: true,
     currentPeriod: 0,

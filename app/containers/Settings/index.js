@@ -38,6 +38,10 @@ import {
     CHANGE_COMPETITION,
     CHANGE_GENDER,
     CHANGE_ROUND,
+    CHANGE_PLACE,
+    CHANGE_VENUE,
+    CHANGE_DATE,
+    CHANGE_TIME,
     CHANGE_REFEREE_1,
     CHANGE_REFEREE_2,
     CHANGE_SCORE_KEEPER,
@@ -71,6 +75,10 @@ import {
     makeSelectCompetition,
     makeSelectGameId,
     makeSelectGender,
+    makeSelectPlace,
+    makeSelectVenue,
+    makeSelectDate,
+    makeSelectTime,
     makeSelectReferee1,
     makeSelectReferee2,
     makeSelectScoreKeeper,
@@ -91,6 +99,10 @@ export function Settings({
     competition,
     round,
     gender,
+    place,
+    venue,
+    date,
+    time,
     referee1,
     referee2,
     scoreKeeper,
@@ -179,6 +191,10 @@ export function Settings({
             competition,
             round,
             gender,
+            place,
+            venue,
+            date,
+            time,
             referee1,
             referee2,
             scoreKeeper,
@@ -366,7 +382,7 @@ export function Settings({
     const displayMembersList = (team, memberType) => {
         const membersList = naturalSorting(teams[team][memberType], 'reference');
         const membersLength = membersList.length;
-        let buffer;
+        let buffer = [];
         if (membersLength > 0) {
             const cleanMembersList = membersList.filter(member => member.id !== 0);
             buffer = cleanMembersList.map(member => {
@@ -377,7 +393,7 @@ export function Settings({
                 return false;
             });
         }
-        if (buffer) {
+        if (buffer.length > 0) {
             return (
                 <TableContainer>
                     <Table padding="none" size="small">
@@ -414,7 +430,7 @@ export function Settings({
     const displayMembersCount = (team, memberType) => {
         const membersList = teams[team][memberType];
         // Clear out the "unidentified" player
-        const cleanMembersList = membersList.filter(member => member.reference !== 0);
+        const cleanMembersList = membersList.filter(member => member.reference !== '');
         const membersNumber = cleanMembersList.length;
         return membersNumber > 0 ? ` (${membersNumber})` : '';
     };
@@ -530,7 +546,8 @@ export function Settings({
             {displayMembersList(team, MEMBERS_TYPES.players)}
             <div className="settings__grid settings__grid--half">
                 {addMemberButton(team, MEMBERS_TYPES.players)}
-                {teams[team][MEMBERS_TYPES.players].length > 0 ? (
+                {/* eslint-disable indent */}
+                {teams[team][MEMBERS_TYPES.players].length > 1 ? (
                     <div>
                         <InputLabel shrink id={`captain${team}Label`}>
                             {messages.captain}
@@ -553,6 +570,7 @@ export function Settings({
                 ) : (
                     <></>
                 )}
+                {/* eslint-enable indent */}
             </div>
             <h4 id={`listof-${MEMBERS_TYPES.officials}-${team}`} className="title title--4">
                 {messages.listOfOfficials}
@@ -630,6 +648,45 @@ export function Settings({
                         </div>
                         <div className="settings__grid">
                             <TextField
+                                id="place"
+                                label={messages.place}
+                                value={place}
+                                onChange={e => handleChangeSetting(e, CHANGE_PLACE)}
+                                margin="dense"
+                                variant="outlined"
+                            />
+                            <TextField
+                                id="venue"
+                                label={messages.venue}
+                                value={venue}
+                                onChange={e => handleChangeSetting(e, CHANGE_VENUE)}
+                                margin="dense"
+                                variant="outlined"
+                            />
+                            <TextField
+                                id="date"
+                                label={messages.date}
+                                type="date"
+                                value={date}
+                                onChange={e => handleChangeSetting(e, CHANGE_DATE)}
+                                margin="dense"
+                                variant="outlined"
+                            />
+                            <TextField
+                                id="time"
+                                label={messages.time}
+                                type="time"
+                                value={time}
+                                InputProps={{
+                                    step: 300
+                                }}
+                                onChange={e => handleChangeSetting(e, CHANGE_TIME)}
+                                margin="dense"
+                                variant="outlined"
+                            />
+                        </div>
+                        <div className="settings__grid">
+                            <TextField
                                 id="referee1"
                                 label={messages.referee1}
                                 value={referee1}
@@ -699,6 +756,10 @@ Settings.propTypes = {
     competition: PropTypes.string,
     round: PropTypes.string,
     gender: PropTypes.string,
+    place: PropTypes.string,
+    venue: PropTypes.string,
+    date: PropTypes.string,
+    time: PropTypes.string,
     referee1: PropTypes.string,
     referee2: PropTypes.string,
     scoreKeeper: PropTypes.string,
@@ -724,6 +785,10 @@ const mapStateToProps = createStructuredSelector({
     competition: makeSelectCompetition(),
     round: makeSelectRound(),
     gender: makeSelectGender(),
+    place: makeSelectPlace(),
+    venue: makeSelectVenue(),
+    date: makeSelectDate(),
+    time: makeSelectTime(),
     referee1: makeSelectReferee1(),
     referee2: makeSelectReferee2(),
     scoreKeeper: makeSelectScoreKeeper(),

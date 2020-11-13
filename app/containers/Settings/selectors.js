@@ -31,6 +31,30 @@ const makeSelectGender = () =>
         settingsState => settingsState.gender
     );
 
+const makeSelectPlace = () =>
+    createSelector(
+        selectSettings,
+        settingsState => settingsState.place
+    );
+
+const makeSelectVenue = () =>
+    createSelector(
+        selectSettings,
+        settingsState => settingsState.venue
+    );
+
+const makeSelectDate = () =>
+    createSelector(
+        selectSettings,
+        settingsState => settingsState.date
+    );
+
+const makeSelectTime = () =>
+    createSelector(
+        selectSettings,
+        settingsState => settingsState.time
+    );
+
 const makeSelectReferee1 = () =>
     createSelector(
         selectSettings,
@@ -67,6 +91,10 @@ export {
     makeSelectCompetition,
     makeSelectRound,
     makeSelectGender,
+    makeSelectPlace,
+    makeSelectVenue,
+    makeSelectDate,
+    makeSelectTime,
     makeSelectReferee1,
     makeSelectReferee2,
     makeSelectScoreKeeper,

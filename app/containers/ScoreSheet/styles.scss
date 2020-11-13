@@ -1,0 +1,144 @@
+@import "../../styles/variables";
+
+$colour-title: #aaa;
+$colour-border: #000;
+$colour-neutral: #fff;
+$colour-zebra: #ddd;
+
+.score-sheet {
+    display: inherit;
+
+    &__title {
+        display: flex;
+        justify-content: center;
+        margin: 0;
+        line-height: 1em;
+        font-size: 3rem;
+        font-weight: 600;
+
+        &-details {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            margin-left: 1rem;
+            line-height: 1em;
+            font-size: 1.2rem;
+        }
+    }
+}
+
+.table {
+    width: 100%;
+
+    &--data {
+        tbody tr {
+            .table__cell--data {
+                background-color: $colour-neutral;
+            }
+
+            &:nth-child(even) {
+                .table__cell--data {
+                    background-color: $colour-zebra;
+                }
+            }
+
+            &:last-child {
+                .table__cell--data {
+                    border-bottom: 2px solid $colour-border;
+                }
+            }
+        }
+    }
+
+    &__cell {
+        &:first-child {
+            border-left: 2px solid $colour-border;
+        }
+
+        &:last-child {
+            border-right: 2px solid $colour-border;
+        }
+
+        &--structure {
+            border: 0 !important;
+            padding: 0.25rem 0.5rem;
+            vertical-align: top;
+        }
+
+        &--bottom {
+            vertical-align: bottom;
+        }
+
+        &--header {
+            border-top: 2px solid $colour-border;
+            border-bottom: 1px solid $colour-border;
+            background-color: $colour-title;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        &--data {
+            border: 1px solid $colour-border;
+            height: 1.5625rem;
+            padding: 0.125rem 0.25rem;
+            font-size: 0.875rem;
+        }
+
+        &--member {
+            min-width: 1.5rem;
+            text-align: center;
+        }
+
+        &--captain,
+        &--acting-team {
+            font-weight: 600;
+        }
+
+        &--single {
+            text-align: center;
+        }
+
+        &--line-head {
+            max-width: 1rem;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        &--half {
+            width: calc((100% - 2rem) / 2);
+
+            &:first-child,
+            &:nth-child(2) {
+                text-align: right;
+            }
+        }
+
+        &--break {
+            border-top: 3px double $colour-border;
+            border-bottom: 3px double $colour-border;
+            padding: 1px 0.25rem;
+            text-align: center;
+        }
+
+        &--total {
+            border-top: 2px solid $colour-border;
+            text-align: center;
+
+            &-label {
+                border-top: 2px solid $colour-border;
+                border-right: 2px solid $colour-border;
+                border-bottom: 0 !important;
+                border-left: 0 !important;
+                background-color: transparent !important;
+                text-align: right;
+                text-transform: uppercase;
+                font-weight: 600;
+            }
+        }
+
+        &--colon {
+            width: 2rem;
+            text-align: center;
+        }
+    }
+}
