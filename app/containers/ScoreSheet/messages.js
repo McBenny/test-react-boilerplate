@@ -1,6 +1,4 @@
 export const messages = {
-    title: 'NSW Handball',
-    scoreSheet: 'Score sheet',
     signature: 'Signature',
     halfTimeResult: 'Half-time result',
     place: 'Place',
@@ -9,7 +7,8 @@ export const messages = {
     venue: 'Venue',
     officials: 'Officials',
     players: 'Players',
-    extraTimeResult: 'Extra time result',
+    extraHalfTimeResult: 'Extra time half-time result',
+    fullExtraTimeResult: 'Full + Extra time result',
     date: 'Date',
     afterPenaltiesResult: 'After penalties result',
     time: 'Time',
@@ -18,11 +17,13 @@ export const messages = {
     initialScoreKeeper: 'SK',
     initialTimeKeeper: 'TK',
     shortNumber: 'No',
+    goalsList: 'Goals list',
     initialTeamA: 'H',
     initialTeamB: 'A',
     score: 'Score',
     initialYellowCards: 'Y',
     initialSuspensions: '2',
     initialRedCards: 'R',
-    initialBlueCards: 'B'
+    initialBlueCards: 'B',
+    initialPenalty: 'p'
 };

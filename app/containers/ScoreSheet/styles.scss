@@ -7,20 +7,23 @@ $colour-zebra: #ddd;
 
 .score-sheet {
     display: inherit;
-}
 
-.title {
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: flex-end;
-    margin: 0;
-    line-height: 1em;
+    &__title {
+        display: flex;
+        justify-content: center;
+        margin: 0;
+        line-height: 1em;
+        font-size: 3rem;
+        font-weight: 600;
 
-    &--aside {
-        position: absolute;
-        right: 1rem;
-        font-size: 1rem;
+        &-details {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            margin-left: 1rem;
+            line-height: 1em;
+            font-size: 1.2rem;
+        }
     }
 }
 
@@ -95,7 +98,8 @@ $colour-zebra: #ddd;
             text-align: center;
         }
 
-        &--captain {
+        &--captain,
+        &--acting-team {
             font-weight: 600;
         }
 
