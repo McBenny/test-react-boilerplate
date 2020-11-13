@@ -12,6 +12,9 @@
 export const CHANGE_COMPETITION = 'boilerplate/Settings/CHANGE_COMPETITION';
 export const CHANGE_ROUND = 'boilerplate/Settings/CHANGE_ROUND';
 export const CHANGE_GENDER = 'boilerplate/Settings/CHANGE_GENDER';
+export const CHANGE_PLACE = 'boilerplate/Settings/CHANGE_PLACE';
+export const CHANGE_VENUE = 'boilerplate/Settings/CHANGE_VENUE';
+export const CHANGE_TIME = 'boilerplate/Settings/CHANGE_TIME';
 export const CHANGE_REFEREE_1 = 'boilerplate/Settings/CHANGE_REFEREE_1';
 export const CHANGE_REFEREE_2 = 'boilerplate/Settings/CHANGE_REFEREE_2';
 export const CHANGE_SCORE_KEEPER = 'boilerplate/Settings/CHANGE_SCORE_KEEPER';

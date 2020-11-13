@@ -122,6 +122,13 @@ $colour-zebra: #ddd;
             }
         }
 
+        &--break {
+            border-top: 3px double $colour-border;
+            border-bottom: 3px double $colour-border;
+            padding: 1px 0.25rem;
+            text-align: center;
+        }
+
         &--total {
             border-top: 2px solid $colour-border;
 

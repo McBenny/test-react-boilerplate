@@ -25,5 +25,6 @@ export const messages = {
     initialSuspensions: '2',
     initialRedCards: 'R',
     initialBlueCards: 'B',
-    initialPenalty: 'p'
+    initialPenalty: 'p',
+    endGame: 'End of game'
 };

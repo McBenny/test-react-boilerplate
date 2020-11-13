@@ -38,6 +38,9 @@ import {
     CHANGE_COMPETITION,
     CHANGE_GENDER,
     CHANGE_ROUND,
+    CHANGE_PLACE,
+    CHANGE_VENUE,
+    CHANGE_TIME,
     CHANGE_REFEREE_1,
     CHANGE_REFEREE_2,
     CHANGE_SCORE_KEEPER,
@@ -71,6 +74,9 @@ import {
     makeSelectCompetition,
     makeSelectGameId,
     makeSelectGender,
+    makeSelectPlace,
+    makeSelectVenue,
+    makeSelectTime,
     makeSelectReferee1,
     makeSelectReferee2,
     makeSelectScoreKeeper,
@@ -91,6 +97,9 @@ export function Settings({
     competition,
     round,
     gender,
+    place,
+    venue,
+    time,
     referee1,
     referee2,
     scoreKeeper,
@@ -179,6 +188,9 @@ export function Settings({
             competition,
             round,
             gender,
+            place,
+            venue,
+            time,
             referee1,
             referee2,
             scoreKeeper,
@@ -630,6 +642,32 @@ export function Settings({
                         </div>
                         <div className="settings__grid">
                             <TextField
+                                id="place"
+                                label={messages.place}
+                                value={place}
+                                onChange={e => handleChangeSetting(e, CHANGE_PLACE)}
+                                margin="dense"
+                                variant="outlined"
+                            />
+                            <TextField
+                                id="venue"
+                                label={messages.venue}
+                                value={venue}
+                                onChange={e => handleChangeSetting(e, CHANGE_VENUE)}
+                                margin="dense"
+                                variant="outlined"
+                            />
+                            <TextField
+                                id="time"
+                                label={messages.time}
+                                value={time}
+                                onChange={e => handleChangeSetting(e, CHANGE_TIME)}
+                                margin="dense"
+                                variant="outlined"
+                            />
+                        </div>
+                        <div className="settings__grid">
+                            <TextField
                                 id="referee1"
                                 label={messages.referee1}
                                 value={referee1}
@@ -699,6 +737,9 @@ Settings.propTypes = {
     competition: PropTypes.string,
     round: PropTypes.string,
     gender: PropTypes.string,
+    place: PropTypes.string,
+    venue: PropTypes.string,
+    time: PropTypes.string,
     referee1: PropTypes.string,
     referee2: PropTypes.string,
     scoreKeeper: PropTypes.string,
@@ -724,6 +765,9 @@ const mapStateToProps = createStructuredSelector({
     competition: makeSelectCompetition(),
     round: makeSelectRound(),
     gender: makeSelectGender(),
+    place: makeSelectPlace(),
+    venue: makeSelectVenue(),
+    time: makeSelectTime(),
     referee1: makeSelectReferee1(),
     referee2: makeSelectReferee2(),
     scoreKeeper: makeSelectScoreKeeper(),

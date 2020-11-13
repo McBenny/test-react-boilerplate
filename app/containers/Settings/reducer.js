@@ -12,6 +12,9 @@ import {
     CHANGE_COMPETITION,
     CHANGE_ROUND,
     CHANGE_GENDER,
+    CHANGE_PLACE,
+    CHANGE_VENUE,
+    CHANGE_TIME,
     CHANGE_REFEREE_1,
     CHANGE_REFEREE_2,
     CHANGE_SCORE_KEEPER,
@@ -37,6 +40,9 @@ import {
  *      competition: {string}
  *      round: {string},
  *      gender: {string}
+ *      place: {string}
+ *      venue: {string}
+ *      time: {string}
  *      referee1: {string}
  *      referee2: {string}
  *      scoreKeeper: {string}
@@ -66,6 +72,9 @@ export const initialState = {
     competition: '',
     round: '',
     gender: '',
+    place: '',
+    venue: '',
+    time: '',
     referee1: '',
     referee2: '',
     scoreKeeper: '',
@@ -104,6 +113,15 @@ const settingsReducer = (state = initialState, action) =>
             case CHANGE_GENDER:
                 updatedData = 'gender';
                 break;
+            case CHANGE_PLACE:
+                updatedData = 'place';
+                break;
+            case CHANGE_VENUE:
+                updatedData = 'venue';
+                break;
+            case CHANGE_TIME:
+                updatedData = 'time';
+                break;
             case CHANGE_REFEREE_1:
                 updatedData = 'referee1';
                 break;
@@ -122,6 +140,9 @@ const settingsReducer = (state = initialState, action) =>
             case CHANGE_COMPETITION:
             case CHANGE_ROUND:
             case CHANGE_GENDER:
+            case CHANGE_PLACE:
+            case CHANGE_VENUE:
+            case CHANGE_TIME:
             case CHANGE_REFEREE_1:
             case CHANGE_REFEREE_2:
             case CHANGE_SCORE_KEEPER:
