@@ -197,6 +197,12 @@ export function ScoreSheet({ settings, date, currentScore, gameEvents }) {
                                             <th className="table__cell table__cell--header">
                                                 {settingsMessages.teamA}
                                             </th>
+                                            <th className="table__cell table__cell--header">
+                                                {settingsMessages.jerseyColour}
+                                            </th>
+                                            <th colSpan="3" className="table__cell table__cell--header">
+                                                {messages.timeouts}
+                                            </th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -204,24 +210,19 @@ export function ScoreSheet({ settings, date, currentScore, gameEvents }) {
                                             <td className="table__cell table__cell--data table__cell--single">
                                                 {settings.teams.A.name}
                                             </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </td>
-                            <td className="table__cell table__cell--structure">
-                                <table className="table table--data" summary={settingsMessages.teamB}>
-                                    <thead>
-                                        <tr>
-                                            <th className="table__cell table__cell--header">
-                                                {settingsMessages.teamB}
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td className="table__cell table__cell--data table__cell--single">
-                                                {settings.teams.B.name}
+                                            <td
+                                                className="table__cell table__cell--data table__cell--single"
+                                                style={{
+                                                    backgroundColor: settings.teams.A.jersey,
+                                                    fontWeight: 600,
+                                                    color: settings.teams.A.reference
+                                                }}
+                                            >
+                                                ###
                                             </td>
+                                            <td className="table__cell table__cell--data table__cell--single">-</td>
+                                            <td className="table__cell table__cell--data table__cell--single">-</td>
+                                            <td className="table__cell table__cell--data table__cell--single">-</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -267,9 +268,12 @@ export function ScoreSheet({ settings, date, currentScore, gameEvents }) {
                         </tr>
                         <tr className="table__row table__row--structure">
                             <td className="table__cell table__cell--structure">
-                                <table className="table table--data" summary={settingsMessages.jerseyColour}>
+                                <table className="table table--data" summary={settingsMessages.teamB}>
                                     <thead>
                                         <tr>
+                                            <th className="table__cell table__cell--header">
+                                                {settingsMessages.teamB}
+                                            </th>
                                             <th className="table__cell table__cell--header">
                                                 {settingsMessages.jerseyColour}
                                             </th>
@@ -280,37 +284,9 @@ export function ScoreSheet({ settings, date, currentScore, gameEvents }) {
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td
-                                                className="table__cell table__cell--data table__cell--single"
-                                                style={{
-                                                    backgroundColor: settings.teams.A.jersey,
-                                                    fontWeight: 600,
-                                                    color: settings.teams.A.reference
-                                                }}
-                                            >
-                                                ###
+                                            <td className="table__cell table__cell--data table__cell--single">
+                                                {settings.teams.B.name}
                                             </td>
-                                            <td className="table__cell table__cell--data table__cell--single">-</td>
-                                            <td className="table__cell table__cell--data table__cell--single">-</td>
-                                            <td className="table__cell table__cell--data table__cell--single">-</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </td>
-                            <td className="table__cell table__cell--structure">
-                                <table className="table table--data" summary={settingsMessages.jerseyColour}>
-                                    <thead>
-                                        <tr>
-                                            <th className="table__cell table__cell--header">
-                                                {settingsMessages.jerseyColour}
-                                            </th>
-                                            <th colSpan="3" className="table__cell table__cell--header">
-                                                {messages.timeouts}
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
                                             <td
                                                 className="table__cell table__cell--data table__cell--single"
                                                 style={{
@@ -368,7 +344,7 @@ export function ScoreSheet({ settings, date, currentScore, gameEvents }) {
                             </td>
                         </tr>
                         <tr className="table__row table__row--structure">
-                            <td colSpan="2" rowSpan="2" className="table__cell table__cell--structure">
+                            <td rowSpan="2" className="table__cell table__cell--structure">
                                 <table className="table table--data" summary={messages.officials}>
                                     <thead>
                                         <tr>
@@ -501,7 +477,7 @@ export function ScoreSheet({ settings, date, currentScore, gameEvents }) {
                             </td>
                         </tr>
                         <tr className="table__row table__row--structure">
-                            <td colSpan="2" className="table__cell table__cell--structure">
+                            <td className="table__cell table__cell--structure">
                                 <table
                                     className="table table--data"
                                     summary={`${settingsMessages.teamA} ${messages.players}`}
@@ -606,7 +582,7 @@ export function ScoreSheet({ settings, date, currentScore, gameEvents }) {
                             </td>
                         </tr>
                         <tr className="table__row table__row--structure">
-                            <td colSpan="2" className="table__cell table__cell--structure">
+                            <td className="table__cell table__cell--structure">
                                 <table
                                     className="table table--data"
                                     summary={`${settingsMessages.teamA} ${messages.officials}`}
@@ -654,7 +630,7 @@ export function ScoreSheet({ settings, date, currentScore, gameEvents }) {
                             </td>
                         </tr>
                         <tr className="table__row table__row--structure">
-                            <td colSpan="2" className="table__cell table__cell--structure">
+                            <td className="table__cell table__cell--structure">
                                 <table
                                     className="table table--data"
                                     summary={`${settingsMessages.teamB} ${messages.players}`}
@@ -702,7 +678,7 @@ export function ScoreSheet({ settings, date, currentScore, gameEvents }) {
                             </td>
                         </tr>
                         <tr className="table__row table__row--structure">
-                            <td colSpan="2" className="table__cell table__cell--structure">
+                            <td className="table__cell table__cell--structure">
                                 <table
                                     className="table table--data"
                                     summary={`${settingsMessages.teamB} ${messages.officials}`}
