@@ -12,10 +12,15 @@ import { List, ListItem, ListItemText, Button } from '@material-ui/core';
 import { URLS } from '../App/constants';
 import { EVENT_TYPES, GAMES_PREFIX } from '../Game/constants';
 import LocalStorage from '../../utils/local-storage';
-import { generateId, naturalSorting, formatDate } from '../../utils/utilities';
+import { generateId, formatDate } from '../../utils/utilities';
 
 import { messages } from './messages';
 import './styles.scss';
+
+function gameSorting(myArray) {
+    const collator = new Intl.Collator('en', { numeric: true, sensitivity: 'base' });
+    return myArray.sort((a, b) => collator.compare(b.settings.date, a.settings.date));
+}
 
 export default function HomePage() {
     const createGame = () => {
@@ -41,9 +46,10 @@ export default function HomePage() {
                 cleanLocalStorage[i] = LocalStorage.get(localKeys[i]);
             }
         }
-        const sortedLocalStorage = naturalSorting(cleanLocalStorage, 'date', 'DESC');
+        const sortedLocalStorage = gameSorting(cleanLocalStorage);
         const buffer = sortedLocalStorage.map(game => {
-            const formattedDate = formatDate(game.date);
+            // Alternative to support old format
+            const formattedDate = formatDate(game.settings.date || game.date);
             let matchStatus = messages.notStarted;
             if (game.gameEvents.length > 0) {
                 const lastEvent = game.gameEvents[game.gameEvents.length - 1];

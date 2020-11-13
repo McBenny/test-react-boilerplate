@@ -14,6 +14,7 @@ import {
     CHANGE_GENDER,
     CHANGE_PLACE,
     CHANGE_VENUE,
+    CHANGE_DATE,
     CHANGE_TIME,
     CHANGE_REFEREE_1,
     CHANGE_REFEREE_2,
@@ -42,6 +43,7 @@ import {
  *      gender: {string}
  *      place: {string}
  *      venue: {string}
+ *      date: {string}
  *      time: {string}
  *      referee1: {string}
  *      referee2: {string}
@@ -68,13 +70,24 @@ import {
  *  }
  * }
  */
+const getToday = () => {
+    const today = new Date();
+    let todayDD = today.getDate();
+    todayDD = todayDD < 10 ? `0${todayDD}` : todayDD;
+    let todayMM = today.getMonth() + 1;
+    todayMM = todayMM < 10 ? `0${todayMM}` : todayMM;
+    const todayYYYY = today.getFullYear();
+    return `${todayYYYY}-${todayMM}-${todayDD}`;
+};
+
 export const initialState = {
     competition: '',
     round: '',
     gender: '',
     place: '',
     venue: '',
-    time: '',
+    date: getToday(),
+    time: '20:00',
     referee1: '',
     referee2: '',
     scoreKeeper: '',
@@ -119,6 +132,9 @@ const settingsReducer = (state = initialState, action) =>
             case CHANGE_VENUE:
                 updatedData = 'venue';
                 break;
+            case CHANGE_DATE:
+                updatedData = 'date';
+                break;
             case CHANGE_TIME:
                 updatedData = 'time';
                 break;
@@ -142,6 +158,7 @@ const settingsReducer = (state = initialState, action) =>
             case CHANGE_GENDER:
             case CHANGE_PLACE:
             case CHANGE_VENUE:
+            case CHANGE_DATE:
             case CHANGE_TIME:
             case CHANGE_REFEREE_1:
             case CHANGE_REFEREE_2:

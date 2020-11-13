@@ -43,6 +43,12 @@ const makeSelectVenue = () =>
         settingsState => settingsState.venue
     );
 
+const makeSelectDate = () =>
+    createSelector(
+        selectSettings,
+        settingsState => settingsState.date
+    );
+
 const makeSelectTime = () =>
     createSelector(
         selectSettings,
@@ -87,6 +93,7 @@ export {
     makeSelectGender,
     makeSelectPlace,
     makeSelectVenue,
+    makeSelectDate,
     makeSelectTime,
     makeSelectReferee1,
     makeSelectReferee2,

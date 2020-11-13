@@ -16,7 +16,7 @@ const makeSelectSettings = () =>
 const makeSelectDate = () =>
     createSelector(
         selectGame,
-        gameState => gameState.date
+        gameState => gameState.settings.date
     );
 
 const makeSelectGameStarted = () =>

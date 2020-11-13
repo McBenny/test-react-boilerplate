@@ -17,7 +17,7 @@ import { useInjectReducer } from '../../utils/injectReducer';
 import { capitalize, formatDate } from '../../utils/utilities';
 
 import reducer from '../Game/reducer';
-import { makeSelectDate, makeSelectGameEvents, makeSelectScore, makeSelectSettings } from '../Game/selectors';
+import { makeSelectGameEvents, makeSelectScore, makeSelectSettings } from '../Game/selectors';
 
 import { messages } from './messages';
 import { messages as lineUpMessages } from '../../components/Line-up/messages';
@@ -34,10 +34,10 @@ import { EVENT_TYPES, PERIODS } from '../Game/constants';
 
 const key = 'game';
 
-export function ScoreSheet({ settings, date, currentScore, gameEvents }) {
+export function ScoreSheet({ settings, currentScore, gameEvents }) {
     useInjectReducer({ key, reducer });
 
-    const formattedDate = formatDate(date);
+    const formattedDate = formatDate(settings.date);
 
     const getScore = (score, team) => {
         const [scoreA, scoreB] = score.split('-');
@@ -734,14 +734,12 @@ export function ScoreSheet({ settings, date, currentScore, gameEvents }) {
 
 ScoreSheet.propTypes = {
     settings: PropTypes.object,
-    date: PropTypes.string,
     currentScore: PropTypes.object,
     gameEvents: PropTypes.array
 };
 
 const mapStateToProps = createStructuredSelector({
     settings: makeSelectSettings(),
-    date: makeSelectDate(),
     currentScore: makeSelectScore(),
     gameEvents: makeSelectGameEvents()
 });
