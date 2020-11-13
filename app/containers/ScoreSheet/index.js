@@ -17,7 +17,13 @@ import { useInjectReducer } from '../../utils/injectReducer';
 import { capitalize, formatDate } from '../../utils/utilities';
 
 import reducer from '../Game/reducer';
-import { makeSelectGameEvents, makeSelectScore, makeSelectSettings } from '../Game/selectors';
+import {
+    makeSelectGameEvents,
+    makeSelectScore,
+    makeSelectDataTeamA,
+    makeSelectDataTeamB,
+    makeSelectSettings
+} from '../Game/selectors';
 
 import { messages } from './messages';
 import { messages as lineUpMessages } from '../../components/Line-up/messages';
@@ -34,7 +40,7 @@ import { EVENT_TYPES, PERIODS } from '../Game/constants';
 
 const key = 'game';
 
-export function ScoreSheet({ settings, currentScore, gameEvents }) {
+export function ScoreSheet({ settings, currentScore, dataTeamA, dataTeamB, gameEvents }) {
     useInjectReducer({ key, reducer });
 
     const formattedDate = formatDate(settings.date);
@@ -109,7 +115,7 @@ export function ScoreSheet({ settings, currentScore, gameEvents }) {
         const buffer = tempBuffer.filter(item => item !== false);
 
         // Adding empty rows to align/finish the table
-        for (let i = buffer.length; i < 90; i += 1) {
+        for (let i = buffer.length; i < 94; i += 1) {
             buffer.push(
                 <tr key={uuidv4()}>
                     <td className="table__cell table__cell--data" />
@@ -182,7 +188,7 @@ export function ScoreSheet({ settings, currentScore, gameEvents }) {
                     <span>{settings.competition}</span>
                     <div className="score-sheet__title-details">
                         <span>
-                            {settingsMessages.round} {settings.round}
+                            {settings.round !== '' ? settingsMessages.round : ''} {settings.round}
                         </span>
                         <span>{settings.gender}</span>
                     </div>
@@ -349,7 +355,7 @@ export function ScoreSheet({ settings, currentScore, gameEvents }) {
                                     <thead>
                                         <tr>
                                             <th className="table__cell table__cell--header" />
-                                            <th className="table__cell table__cell--header">{messages.officials}</th>
+                                            <th className="table__cell table__cell--header">{messages.Officials}</th>
                                             <th className="table__cell table__cell--header">{messages.signature}</th>
                                         </tr>
                                     </thead>
@@ -491,8 +497,7 @@ export function ScoreSheet({ settings, currentScore, gameEvents }) {
                                                 {messages.shortNumber}
                                             </th>
                                             <th className="table__cell table__cell--header">
-                                                {settingsMessages.teamA}
-                                                {messages.players}
+                                                {settingsMessages.teamA} {messages.players}
                                             </th>
                                             <th className="table__cell table__cell--header">{lineUpMessages.goals}</th>
                                             <th
@@ -521,7 +526,32 @@ export function ScoreSheet({ settings, currentScore, gameEvents }) {
                                             </th>
                                         </tr>
                                     </thead>
-                                    <tbody>{listMembers(TEAMS_LIST.HOME, MEMBERS_TYPES.players)}</tbody>
+                                    <tbody>
+                                        {listMembers(TEAMS_LIST.HOME, MEMBERS_TYPES.players)}
+                                        <tr>
+                                            <td
+                                                colSpan="2"
+                                                className="table__cell table__cell--data table__cell--total-label"
+                                            >
+                                                Total
+                                            </td>
+                                            <td className="table__cell table__cell--data table__cell--total">
+                                                {dataTeamA.goals || ''}
+                                            </td>
+                                            <td className="table__cell table__cell--data table__cell--total">
+                                                {dataTeamA.yellowCards || ''}
+                                            </td>
+                                            <td className="table__cell table__cell--data table__cell--total">
+                                                {dataTeamA.suspensions || ''}
+                                            </td>
+                                            <td className="table__cell table__cell--data table__cell--total">
+                                                {dataTeamA.redCards || ''}
+                                            </td>
+                                            <td className="table__cell table__cell--data table__cell--total">
+                                                {dataTeamA.blueCards || ''}
+                                            </td>
+                                        </tr>
+                                    </tbody>
                                 </table>
                             </td>
                             <td rowSpan="4" className="table__cell table__cell--structure">
@@ -673,7 +703,32 @@ export function ScoreSheet({ settings, currentScore, gameEvents }) {
                                             </th>
                                         </tr>
                                     </thead>
-                                    <tbody>{listMembers(TEAMS_LIST.AWAY, MEMBERS_TYPES.players)}</tbody>
+                                    <tbody>
+                                        {listMembers(TEAMS_LIST.AWAY, MEMBERS_TYPES.players)}
+                                        <tr>
+                                            <td
+                                                colSpan="2"
+                                                className="table__cell table__cell--data table__cell--total-label"
+                                            >
+                                                Total
+                                            </td>
+                                            <td className="table__cell table__cell--data table__cell--total">
+                                                {dataTeamB.goals || ''}
+                                            </td>
+                                            <td className="table__cell table__cell--data table__cell--total">
+                                                {dataTeamB.yellowCards || ''}
+                                            </td>
+                                            <td className="table__cell table__cell--data table__cell--total">
+                                                {dataTeamB.suspensions || ''}
+                                            </td>
+                                            <td className="table__cell table__cell--data table__cell--total">
+                                                {dataTeamB.redCards || ''}
+                                            </td>
+                                            <td className="table__cell table__cell--data table__cell--total">
+                                                {dataTeamB.blueCards || ''}
+                                            </td>
+                                        </tr>
+                                    </tbody>
                                 </table>
                             </td>
                         </tr>
@@ -735,12 +790,16 @@ export function ScoreSheet({ settings, currentScore, gameEvents }) {
 ScoreSheet.propTypes = {
     settings: PropTypes.object,
     currentScore: PropTypes.object,
+    dataTeamA: PropTypes.object,
+    dataTeamB: PropTypes.object,
     gameEvents: PropTypes.array
 };
 
 const mapStateToProps = createStructuredSelector({
     settings: makeSelectSettings(),
     currentScore: makeSelectScore(),
+    dataTeamA: makeSelectDataTeamA(),
+    dataTeamB: makeSelectDataTeamB(),
     gameEvents: makeSelectGameEvents()
 });
 
