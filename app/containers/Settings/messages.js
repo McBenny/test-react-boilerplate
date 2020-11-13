@@ -9,6 +9,7 @@ export const messages = {
     selectGender: 'Select a gender...',
     place: 'Place',
     venue: 'Venue',
+    date: 'Date',
     time: 'Time',
     referee1: 'Referee 1',
     referee2: 'Referee 2',

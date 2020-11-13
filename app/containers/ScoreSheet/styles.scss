@@ -50,10 +50,6 @@ $colour-zebra: #ddd;
         }
     }
 
-    &__row {
-        &--structure {}
-    }
-
     &__cell {
         &:first-child {
             border-left: 2px solid $colour-border;
@@ -71,12 +67,6 @@ $colour-zebra: #ddd;
 
         &--bottom {
             vertical-align: bottom;
-        }
-
-        &--header-1 {
-            text-align: center;
-            font-size: 2rem;
-            font-weight: 600;
         }
 
         &--header {

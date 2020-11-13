@@ -91,6 +91,7 @@ export function ScoreSheet({ settings, currentScore, dataTeamA, dataTeamB, gameE
                     </tr>
                 );
             }
+            // Case: full game or end of second extra half time
             if (event.id === 4 || (event.id === 7 && event.eventType === EVENT_TYPES.periodEnd)) {
                 return (
                     <tr key={uuidv4()}>
@@ -181,16 +182,21 @@ export function ScoreSheet({ settings, currentScore, dataTeamA, dataTeamB, gameE
             return false;
         });
     };
+
     return (
         <Fragment>
             <main>
                 <h1 className="score-sheet__title">
                     <span>{settings.competition}</span>
                     <div className="score-sheet__title-details">
-                        <span>
-                            {settings.round !== '' ? settingsMessages.round : ''} {settings.round}
-                        </span>
-                        <span>{settings.gender}</span>
+                        {settings.round !== '' ? (
+                            <span>
+                                {settingsMessages.round} {settings.round}
+                            </span>
+                        ) : (
+                            ''
+                        )}
+                        {settings.gender !== '' ? <span>{settings.gender}</span> : ''}
                     </div>
                 </h1>
                 <table className="table table--structure" role="presentation">
@@ -226,9 +232,15 @@ export function ScoreSheet({ settings, currentScore, dataTeamA, dataTeamB, gameE
                                             >
                                                 ###
                                             </td>
-                                            <td className="table__cell table__cell--data table__cell--single">-</td>
-                                            <td className="table__cell table__cell--data table__cell--single">-</td>
-                                            <td className="table__cell table__cell--data table__cell--single">-</td>
+                                            <td className="table__cell table__cell--data table__cell--single">
+                                                {dataTeamA.timeouts > 0 ? 'X' : '-'}
+                                            </td>
+                                            <td className="table__cell table__cell--data table__cell--single">
+                                                {dataTeamA.timeouts > 1 ? 'X' : '-'}
+                                            </td>
+                                            <td className="table__cell table__cell--data table__cell--single">
+                                                {dataTeamA.timeouts > 2 ? 'X' : '-'}
+                                            </td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -303,9 +315,15 @@ export function ScoreSheet({ settings, currentScore, dataTeamA, dataTeamB, gameE
                                             >
                                                 ###
                                             </td>
-                                            <td className="table__cell table__cell--data table__cell--single">-</td>
-                                            <td className="table__cell table__cell--data table__cell--single">-</td>
-                                            <td className="table__cell table__cell--data table__cell--single">-</td>
+                                            <td className="table__cell table__cell--data table__cell--single">
+                                                {dataTeamB.timeouts > 0 ? 'X' : '-'}
+                                            </td>
+                                            <td className="table__cell table__cell--data table__cell--single">
+                                                {dataTeamB.timeouts > 1 ? 'X' : '-'}
+                                            </td>
+                                            <td className="table__cell table__cell--data table__cell--single">
+                                                {dataTeamB.timeouts > 2 ? 'X' : '-'}
+                                            </td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -504,25 +522,25 @@ export function ScoreSheet({ settings, currentScore, dataTeamA, dataTeamB, gameE
                                                 className="table__cell table__cell--header"
                                                 title={capitalize(lineUpMessages.sorting_yellowCards)}
                                             >
-                                                Y
+                                                {messages.initialYellowCards}
                                             </th>
                                             <th
                                                 className="table__cell table__cell--header"
                                                 title={capitalize(lineUpMessages.sorting_suspensions)}
                                             >
-                                                2
+                                                {messages.initialSuspensions}
                                             </th>
                                             <th
                                                 className="table__cell table__cell--header"
                                                 title={capitalize(lineUpMessages.sorting_redCards)}
                                             >
-                                                R
+                                                {messages.initialRedCards}
                                             </th>
                                             <th
                                                 className="table__cell table__cell--header"
                                                 title={capitalize(lineUpMessages.sorting_blueCards)}
                                             >
-                                                B
+                                                {messages.initialBlueCards}
                                             </th>
                                         </tr>
                                     </thead>
@@ -533,7 +551,7 @@ export function ScoreSheet({ settings, currentScore, dataTeamA, dataTeamB, gameE
                                                 colSpan="2"
                                                 className="table__cell table__cell--data table__cell--total-label"
                                             >
-                                                Total
+                                                {messages.total}
                                             </td>
                                             <td className="table__cell table__cell--data table__cell--total">
                                                 {dataTeamA.goals || ''}
@@ -710,7 +728,7 @@ export function ScoreSheet({ settings, currentScore, dataTeamA, dataTeamB, gameE
                                                 colSpan="2"
                                                 className="table__cell table__cell--data table__cell--total-label"
                                             >
-                                                Total
+                                                {messages.total}
                                             </td>
                                             <td className="table__cell table__cell--data table__cell--total">
                                                 {dataTeamB.goals || ''}
