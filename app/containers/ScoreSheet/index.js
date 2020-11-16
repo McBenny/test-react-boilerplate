@@ -96,53 +96,43 @@ export function ScoreSheet({ settings, currentScore, dataTeamA, dataTeamB, gameE
         return team === TEAMS_LIST.HOME ? scoreA || '-' : scoreB || '-';
     };
 
-    const displayResult = (data, title) => {
-        if (title) {
-            return (
-                <table className="table table--data" summary={title}>
-                    <thead>
-                        <tr>
-                            <th colSpan="3" className="table__cell table__cell--header">
-                                {title}
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td className="table__cell table__cell--data table__cell--half">
-                                {getScore(data, TEAMS_LIST.HOME)}
-                            </td>
-                            <td className="table__cell table__cell--data table__cell--colon">:</td>
-                            <td className="table__cell table__cell--data table__cell--half">
-                                {getScore(data, TEAMS_LIST.AWAY)}
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            );
-        }
-        return false;
-    };
+    const displayResult = (title, data) => (
+        <table className="table table--data" summary={title}>
+            <thead>
+                <tr>
+                    <th colSpan="3" className="table__cell table__cell--header">
+                        {title}
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td className="table__cell table__cell--data table__cell--half">
+                        {getScore(data, TEAMS_LIST.HOME)}
+                    </td>
+                    <td className="table__cell table__cell--data table__cell--colon">:</td>
+                    <td className="table__cell table__cell--data table__cell--half">
+                        {getScore(data, TEAMS_LIST.AWAY)}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    );
 
-    const displaySingleInfo = (title, data) => {
-        if (title) {
-            return (
-                <table className="table table--data" summary={title}>
-                    <thead>
-                        <tr>
-                            <th className="table__cell table__cell--header">{title}</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td className="table__cell table__cell--data table__cell--single">{data}</td>
-                        </tr>
-                    </tbody>
-                </table>
-            );
-        }
-        return false;
-    };
+    const displaySingleInfo = (title, data) => (
+        <table className="table table--data" summary={title}>
+            <thead>
+                <tr>
+                    <th className="table__cell table__cell--header">{title}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td className="table__cell table__cell--data table__cell--single">{data}</td>
+                </tr>
+            </tbody>
+        </table>
+    );
 
     const listMembers = (team, memberType) => {
         const members = settings.teams[team][memberType];
@@ -190,117 +180,93 @@ export function ScoreSheet({ settings, currentScore, dataTeamA, dataTeamB, gameE
         });
     };
 
-    const displayPlayersList = (team, dataTeam) => {
-        if (team) {
-            return (
-                <table className="table table--data" summary={`${settingsMessages[`team${team}`]} ${messages.players}`}>
-                    <thead>
-                        <tr>
-                            <th className="table__cell table__cell--header" title={settingsMessages.playersReference}>
-                                {messages.shortNumber}
-                            </th>
-                            <th className="table__cell table__cell--header">
-                                {settingsMessages[`team${team}`]} {messages.players}
-                            </th>
-                            <th className="table__cell table__cell--header">{lineUpMessages.goals}</th>
-                            <th
-                                className="table__cell table__cell--header"
-                                title={capitalize(lineUpMessages.sorting_yellowCards)}
-                            >
-                                {messages.initialYellowCards}
-                            </th>
-                            <th
-                                className="table__cell table__cell--header"
-                                title={capitalize(lineUpMessages.sorting_suspensions)}
-                            >
-                                {messages.initialSuspensions}
-                            </th>
-                            <th
-                                className="table__cell table__cell--header"
-                                title={capitalize(lineUpMessages.sorting_redCards)}
-                            >
-                                {messages.initialRedCards}
-                            </th>
-                            <th
-                                className="table__cell table__cell--header"
-                                title={capitalize(lineUpMessages.sorting_blueCards)}
-                            >
-                                {messages.initialBlueCards}
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {listMembers(team, MEMBERS_TYPES.players)}
-                        <tr>
-                            <td colSpan="2" className="table__cell table__cell--data table__cell--total-label">
-                                {messages.total}
-                            </td>
-                            <td className="table__cell table__cell--data table__cell--total">{dataTeam.goals || ''}</td>
-                            <td className="table__cell table__cell--data table__cell--total">
-                                {dataTeam.yellowCards || ''}
-                            </td>
-                            <td className="table__cell table__cell--data table__cell--total">
-                                {dataTeam.suspensions || ''}
-                            </td>
-                            <td className="table__cell table__cell--data table__cell--total">
-                                {dataTeam.redCards || ''}
-                            </td>
-                            <td className="table__cell table__cell--data table__cell--total">
-                                {dataTeam.blueCards || ''}
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            );
-        }
-        return false;
-    };
+    const displayPlayersList = (team, dataTeam) => (
+        <table className="table table--data" summary={`${settingsMessages[`team${team}`]} ${messages.players}`}>
+            <thead>
+                <tr>
+                    <th className="table__cell table__cell--header" title={settingsMessages.playersReference}>
+                        {messages.shortNumber}
+                    </th>
+                    <th className="table__cell table__cell--header">
+                        {settingsMessages[`team${team}`]} {messages.players}
+                    </th>
+                    <th className="table__cell table__cell--header">{lineUpMessages.goals}</th>
+                    <th
+                        className="table__cell table__cell--header"
+                        title={capitalize(lineUpMessages.sorting_yellowCards)}
+                    >
+                        {messages.initialYellowCards}
+                    </th>
+                    <th
+                        className="table__cell table__cell--header"
+                        title={capitalize(lineUpMessages.sorting_suspensions)}
+                    >
+                        {messages.initialSuspensions}
+                    </th>
+                    <th className="table__cell table__cell--header" title={capitalize(lineUpMessages.sorting_redCards)}>
+                        {messages.initialRedCards}
+                    </th>
+                    <th
+                        className="table__cell table__cell--header"
+                        title={capitalize(lineUpMessages.sorting_blueCards)}
+                    >
+                        {messages.initialBlueCards}
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                {listMembers(team, MEMBERS_TYPES.players)}
+                <tr>
+                    <td colSpan="2" className="table__cell table__cell--data table__cell--total-label">
+                        {messages.total}
+                    </td>
+                    <td className="table__cell table__cell--data table__cell--total">{dataTeam.goals || ''}</td>
+                    <td className="table__cell table__cell--data table__cell--total">{dataTeam.yellowCards || ''}</td>
+                    <td className="table__cell table__cell--data table__cell--total">{dataTeam.suspensions || ''}</td>
+                    <td className="table__cell table__cell--data table__cell--total">{dataTeam.redCards || ''}</td>
+                    <td className="table__cell table__cell--data table__cell--total">{dataTeam.blueCards || ''}</td>
+                </tr>
+            </tbody>
+        </table>
+    );
 
-    const displayOfficialsList = team => {
-        if (team) {
-            return (
-                <table className="table table--data" summary={`${settingsMessages.teamA} ${messages.officials}`}>
-                    <thead>
-                        <tr>
-                            <th className="table__cell table__cell--header" title={settingsMessages.officialsReference}>
-                                {messages.shortNumber}
-                            </th>
-                            <th className="table__cell table__cell--header">
-                                {settingsMessages[`team${team}`]} {messages.officials}
-                            </th>
-                            <th className="table__cell table__cell--header">{messages.signature}</th>
-                            <th
-                                className="table__cell table__cell--header"
-                                title={capitalize(lineUpMessages.sorting_yellowCards)}
-                            >
-                                {messages.initialYellowCards}
-                            </th>
-                            <th
-                                className="table__cell table__cell--header"
-                                title={capitalize(lineUpMessages.sorting_suspensions)}
-                            >
-                                {messages.initialSuspensions}
-                            </th>
-                            <th
-                                className="table__cell table__cell--header"
-                                title={capitalize(lineUpMessages.sorting_redCards)}
-                            >
-                                {messages.initialRedCards}
-                            </th>
-                            <th
-                                className="table__cell table__cell--header"
-                                title={capitalize(lineUpMessages.sorting_blueCards)}
-                            >
-                                {messages.initialBlueCards}
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>{listMembers(team, MEMBERS_TYPES.officials)}</tbody>
-                </table>
-            );
-        }
-        return false;
-    };
+    const displayOfficialsList = team => (
+        <table className="table table--data" summary={`${settingsMessages.teamA} ${messages.officials}`}>
+            <thead>
+                <tr>
+                    <th className="table__cell table__cell--header" title={settingsMessages.officialsReference}>
+                        {messages.shortNumber}
+                    </th>
+                    <th className="table__cell table__cell--header">
+                        {settingsMessages[`team${team}`]} {messages.officials}
+                    </th>
+                    <th className="table__cell table__cell--header">{messages.signature}</th>
+                    <th
+                        className="table__cell table__cell--header"
+                        title={capitalize(lineUpMessages.sorting_yellowCards)}
+                    >
+                        {messages.initialYellowCards}
+                    </th>
+                    <th
+                        className="table__cell table__cell--header"
+                        title={capitalize(lineUpMessages.sorting_suspensions)}
+                    >
+                        {messages.initialSuspensions}
+                    </th>
+                    <th className="table__cell table__cell--header" title={capitalize(lineUpMessages.sorting_redCards)}>
+                        {messages.initialRedCards}
+                    </th>
+                    <th
+                        className="table__cell table__cell--header"
+                        title={capitalize(lineUpMessages.sorting_blueCards)}
+                    >
+                        {messages.initialBlueCards}
+                    </th>
+                </tr>
+            </thead>
+            <tbody>{listMembers(team, MEMBERS_TYPES.officials)}</tbody>
+        </table>
+    );
 
     const listGoals = () => {
         const tempBuffer = gameEvents.map(event => {
@@ -389,35 +355,30 @@ export function ScoreSheet({ settings, currentScore, dataTeamA, dataTeamB, gameE
     };
     const goalTables = listGoals();
 
-    const displayGoalsList = part => {
-        if (part) {
-            return (
-                <table className="table table--data" summary={messages.goalsList}>
-                    <thead>
-                        <tr>
-                            <th
-                                className="table__cell table__cell--header"
-                                title={`${settingsMessages.teamA}: ${settings.teams[TEAMS_LIST.HOME].name}`}
-                            >
-                                {messages.initialTeamA}
-                            </th>
-                            <th colSpan="3" className="table__cell table__cell--header">
-                                {messages.score}
-                            </th>
-                            <th
-                                className="table__cell table__cell--header"
-                                title={`${settingsMessages.teamB}: ${settings.teams[TEAMS_LIST.AWAY].name}`}
-                            >
-                                {messages.initialTeamB}
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>{part}</tbody>
-                </table>
-            );
-        }
-        return false;
-    };
+    const displayGoalsList = part => (
+        <table className="table table--data" summary={messages.goalsList}>
+            <thead>
+                <tr>
+                    <th
+                        className="table__cell table__cell--header"
+                        title={`${settingsMessages.teamA}: ${settings.teams[TEAMS_LIST.HOME].name}`}
+                    >
+                        {messages.initialTeamA}
+                    </th>
+                    <th colSpan="3" className="table__cell table__cell--header">
+                        {messages.score}
+                    </th>
+                    <th
+                        className="table__cell table__cell--header"
+                        title={`${settingsMessages.teamB}: ${settings.teams[TEAMS_LIST.AWAY].name}`}
+                    >
+                        {messages.initialTeamB}
+                    </th>
+                </tr>
+            </thead>
+            <tbody>{part}</tbody>
+        </table>
+    );
 
     return (
         <Fragment>
@@ -440,7 +401,7 @@ export function ScoreSheet({ settings, currentScore, dataTeamA, dataTeamB, gameE
                         <tr className="table__row table__row--structure">
                             <td className="table__cell table__cell--structure">{displayTeamInfo(TEAMS_LIST.HOME)}</td>
                             <td className="table__cell table__cell--structure">
-                                {displayResult(currentScore.half1, messages.halfTimeResult)}
+                                {displayResult(messages.halfTimeResult, currentScore.half1)}
                             </td>
                             <td className="table__cell table__cell--structure">
                                 {displaySingleInfo(messages.place, settings.place)}
@@ -449,7 +410,7 @@ export function ScoreSheet({ settings, currentScore, dataTeamA, dataTeamB, gameE
                         <tr className="table__row table__row--structure">
                             <td className="table__cell table__cell--structure">{displayTeamInfo(TEAMS_LIST.AWAY)}</td>
                             <td className="table__cell table__cell--structure">
-                                {displayResult(currentScore.half3, messages.fullTimeResult)}
+                                {displayResult(messages.fullTimeResult, currentScore.half3)}
                             </td>
                             <td className="table__cell table__cell--structure">
                                 {displaySingleInfo(messages.venue, settings.venue)}
@@ -510,7 +471,7 @@ export function ScoreSheet({ settings, currentScore, dataTeamA, dataTeamB, gameE
                                 </table>
                             </td>
                             <td className="table__cell table__cell--structure">
-                                {displayResult(currentScore.half5, messages.extraHalfTimeResult)}
+                                {displayResult(messages.extraHalfTimeResult, currentScore.half5)}
                             </td>
                             <td className="table__cell table__cell--structure">
                                 {displaySingleInfo(messages.date, formattedDate)}
@@ -518,7 +479,7 @@ export function ScoreSheet({ settings, currentScore, dataTeamA, dataTeamB, gameE
                         </tr>
                         <tr className="table__row table__row--structure">
                             <td className="table__cell table__cell--structure table__cell--bottom">
-                                {displayResult(currentScore.half7, messages.fullExtraTimeResult)}
+                                {displayResult(messages.fullExtraTimeResult, currentScore.half7)}
                             </td>
                             <td className="table__cell table__cell--structure table__cell--bottom">
                                 {displaySingleInfo(messages.time, settings.time)}
