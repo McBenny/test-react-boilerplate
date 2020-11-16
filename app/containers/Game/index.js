@@ -600,9 +600,21 @@ export function Game({
                                             type: ADD_YELLOW_CARD
                                         })
                                     }
-                                    disabled={!gameStarted || gamePaused}
+                                    disabled={
+                                        !gameStarted ||
+                                        gamePaused ||
+                                        dataTeamA.yellowCards >=
+                                            MAX_NUMBER.yellowCardsPlayersPerTeam +
+                                                MAX_NUMBER.yellowCardsOfficialsPerTeam
+                                    }
                                     startIcon={<InsertDriveFileOutlinedIcon />}
                                     className="game__button game__button--yellow-card"
+                                    title={
+                                        dataTeamA.yellowCards >=
+                                        MAX_NUMBER.yellowCardsPlayersPerTeam + MAX_NUMBER.yellowCardsOfficialsPerTeam
+                                            ? messages.noMoreYellowCards
+                                            : ''
+                                    }
                                 >
                                     {messages.addYellowCard}
                                 </Button>
@@ -620,9 +632,21 @@ export function Game({
                                             type: ADD_YELLOW_CARD
                                         })
                                     }
-                                    disabled={!gameStarted || gamePaused}
+                                    disabled={
+                                        !gameStarted ||
+                                        gamePaused ||
+                                        dataTeamB.yellowCards >=
+                                            MAX_NUMBER.yellowCardsPlayersPerTeam +
+                                                MAX_NUMBER.yellowCardsOfficialsPerTeam
+                                    }
                                     startIcon={<InsertDriveFileOutlinedIcon />}
                                     className="game__button game__button--yellow-card"
+                                    title={
+                                        dataTeamB.yellowCards >=
+                                        MAX_NUMBER.yellowCardsPlayersPerTeam + MAX_NUMBER.yellowCardsOfficialsPerTeam
+                                            ? messages.noMoreYellowCards
+                                            : ''
+                                    }
                                 >
                                     {messages.addYellowCard}
                                 </Button>

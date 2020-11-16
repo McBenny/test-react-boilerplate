@@ -15,6 +15,7 @@ export const messages = {
     teamB: 'Visitor team',
     addGoal: 'goal',
     addYellowCard: 'yellow card',
+    noMoreYellowCards: 'The team has reached the maximum number of yellow cards',
     addSuspension: '2 min',
     addRedCard: 'red card',
     addBlueCard: 'blue card',
