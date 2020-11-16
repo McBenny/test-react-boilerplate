@@ -55,6 +55,8 @@ export const MAX_NUMBER = {
     players: 16,
     officials: 4,
     yellowCards: 1,
+    yellowCardsPlayersPerTeam: 3,
+    yellowCardsOfficialsPerTeam: 1,
     redCards: 1,
     blueCards: 1,
     suspensions: 2,

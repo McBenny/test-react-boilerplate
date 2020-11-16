@@ -19,7 +19,8 @@ import {
     ADD_BLUE_CARD,
     ADD_SUSPENSION,
     UNKNOWN_PLAYER,
-    POPUPS
+    POPUPS,
+    EVENT_TYPES
 } from '../../containers/Game/constants';
 import { MAX_NUMBER, MEMBERS_QUALIFICATIONS, MEMBERS_TYPES } from '../../containers/Settings/constants';
 import { naturalSorting } from '../../utils/utilities';
@@ -65,6 +66,28 @@ function Players({
             (playersListType === ADD_YELLOW_CARD || playersListType === ADD_SUSPENSION) &&
             member.suspensions >= MAX_NUMBER.suspensions;
         return yellowCardsMax || redCardsMax || blueCardsMax || suspensionsMax;
+    };
+
+    /**
+     * According to the rules of handball:
+     *  - there should not be more than 3 yellow cards per team, all players included
+     *  - there should not be more than 1 yellow card per team, all officials included
+     * @param memberType
+     * @param membersList
+     * @returns {boolean}
+     */
+    const disabledAllMembers = (memberType, membersList) => {
+        if (eventType === EVENT_TYPES.yellowCard) {
+            const yellowCardsLimit =
+                memberType === MEMBERS_TYPES.players
+                    ? MAX_NUMBER.yellowCardsPlayersPerTeam
+                    : MAX_NUMBER.yellowCardsOfficialsPerTeam;
+            const warnedMembers = membersList.filter(member => member.yellowCards === yellowCardsLimit);
+            if (warnedMembers.length > 0) {
+                return true;
+            }
+        }
+        return false;
     };
 
     const [penalty, setPenalty] = useState(false);
@@ -143,7 +166,7 @@ function Players({
         const buffer = membersList.map(member => {
             // Display all members if it's a goal, or don't display "unknown player"
             if (playersListType === ADD_GOAL || member.id !== 0) {
-                const memberDisabled = isMemberDisabled(member);
+                const memberDisabled = isMemberDisabled(member) || disabledAllMembers(memberType, membersList);
                 return buttonTemplate(member, memberType, memberDisabled);
             }
             return '';
