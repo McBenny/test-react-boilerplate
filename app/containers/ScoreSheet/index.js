@@ -34,7 +34,8 @@ import {
     MAX_NUMBER,
     MEMBERS_TYPES,
     MEMBERS_QUALIFICATIONS,
-    TEAMS_LIST
+    TEAMS_LIST,
+    GENDERS
 } from '../Settings/constants';
 import { EVENT_TYPES, PERIODS } from '../Game/constants';
 
@@ -45,9 +46,260 @@ export function ScoreSheet({ settings, currentScore, dataTeamA, dataTeamB, gameE
 
     const formattedDate = formatDate(settings.date);
 
+    const displayTeamInfo = team => {
+        if (team) {
+            return (
+                <table className="table table--data" summary={settingsMessages[`team${team}`]}>
+                    <thead>
+                        <tr>
+                            <th className="table__cell table__cell--header">{settingsMessages[`team${team}`]}</th>
+                            <th className="table__cell table__cell--header">{settingsMessages.jerseyColour}</th>
+                            <th colSpan="3" className="table__cell table__cell--header">
+                                {messages.timeouts}
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td className="table__cell table__cell--data table__cell--single">
+                                {settings.teams[team].name}
+                            </td>
+                            <td
+                                className="table__cell table__cell--data table__cell--single"
+                                style={{
+                                    backgroundColor: settings.teams[team].jersey,
+                                    fontWeight: 600,
+                                    color: settings.teams[team].reference
+                                }}
+                            >
+                                ###
+                            </td>
+                            <td className="table__cell table__cell--data table__cell--single">
+                                {[`dataTeam${team}`].timeouts > 0 ? 'X' : '-'}
+                            </td>
+                            <td className="table__cell table__cell--data table__cell--single">
+                                {[`dataTeam${team}`].timeouts > 1 ? 'X' : '-'}
+                            </td>
+                            <td className="table__cell table__cell--data table__cell--single">
+                                {[`dataTeam${team}`].timeouts > 2 ? 'X' : '-'}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            );
+        }
+        return false;
+    };
+
     const getScore = (score, team) => {
         const [scoreA, scoreB] = score.split('-');
         return team === TEAMS_LIST.HOME ? scoreA || '-' : scoreB || '-';
+    };
+
+    const displayResult = (data, title) => {
+        if (title) {
+            return (
+                <table className="table table--data" summary={title}>
+                    <thead>
+                        <tr>
+                            <th colSpan="3" className="table__cell table__cell--header">
+                                {title}
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td className="table__cell table__cell--data table__cell--half">
+                                {getScore(data, TEAMS_LIST.HOME)}
+                            </td>
+                            <td className="table__cell table__cell--data table__cell--colon">:</td>
+                            <td className="table__cell table__cell--data table__cell--half">
+                                {getScore(data, TEAMS_LIST.AWAY)}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            );
+        }
+        return false;
+    };
+
+    const displaySingleInfo = (title, data) => {
+        if (title) {
+            return (
+                <table className="table table--data" summary={title}>
+                    <thead>
+                        <tr>
+                            <th className="table__cell table__cell--header">{title}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td className="table__cell table__cell--data table__cell--single">{data}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            );
+        }
+        return false;
+    };
+
+    const listMembers = (team, memberType) => {
+        const members = settings.teams[team][memberType];
+        const captainId = settings.teams[team].captain;
+        const maxMembers =
+            memberType === MEMBERS_TYPES.players && members[0] && members[0].reference === ''
+                ? MAX_NUMBER[memberType] + 1
+                : MAX_NUMBER[memberType];
+        for (let i = members.length; i < maxMembers; i += 1) {
+            members.push(EMPTY_MEMBER_DATA);
+        }
+        return members.map(member => {
+            if (member.id !== 0 || member.goals > 0) {
+                return (
+                    <tr key={uuidv4()}>
+                        <td className="table__cell table__cell--data table__cell--line-head">{member.reference}</td>
+                        <td
+                            className={`table__cell table__cell--data${
+                                member.id !== 0 && member.id === captainId ? ' table__cell--captain' : ''
+                            }`}
+                        >
+                            {member.name}
+                            {member.qualification === MEMBERS_QUALIFICATIONS.players.goalie
+                                ? ` (${lineUpMessages.goalieInitial})`
+                                : ''}
+                            {member.id !== 0 && member.id === captainId ? ` (${lineUpMessages.captainInitial})` : ''}
+                        </td>
+                        <td className="table__cell table__cell--data table__cell--member">{member.goals || ''}</td>
+                        <td className="table__cell table__cell--data table__cell--member">
+                            {member.yellowCards ? 'X' : ''}
+                        </td>
+                        <td className="table__cell table__cell--data table__cell--member">
+                            {member.suspensions || ''}
+                        </td>
+                        <td className="table__cell table__cell--data table__cell--member">
+                            {member.redCards ? 'X' : ''}
+                        </td>
+                        <td className="table__cell table__cell--data table__cell--member">
+                            {member.blueCards ? 'X' : ''}
+                        </td>
+                    </tr>
+                );
+            }
+            return false;
+        });
+    };
+
+    const displayPlayersList = (team, dataTeam) => {
+        if (team) {
+            return (
+                <table className="table table--data" summary={`${settingsMessages[`team${team}`]} ${messages.players}`}>
+                    <thead>
+                        <tr>
+                            <th className="table__cell table__cell--header" title={settingsMessages.playersReference}>
+                                {messages.shortNumber}
+                            </th>
+                            <th className="table__cell table__cell--header">
+                                {settingsMessages[`team${team}`]} {messages.players}
+                            </th>
+                            <th className="table__cell table__cell--header">{lineUpMessages.goals}</th>
+                            <th
+                                className="table__cell table__cell--header"
+                                title={capitalize(lineUpMessages.sorting_yellowCards)}
+                            >
+                                {messages.initialYellowCards}
+                            </th>
+                            <th
+                                className="table__cell table__cell--header"
+                                title={capitalize(lineUpMessages.sorting_suspensions)}
+                            >
+                                {messages.initialSuspensions}
+                            </th>
+                            <th
+                                className="table__cell table__cell--header"
+                                title={capitalize(lineUpMessages.sorting_redCards)}
+                            >
+                                {messages.initialRedCards}
+                            </th>
+                            <th
+                                className="table__cell table__cell--header"
+                                title={capitalize(lineUpMessages.sorting_blueCards)}
+                            >
+                                {messages.initialBlueCards}
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {listMembers(team, MEMBERS_TYPES.players)}
+                        <tr>
+                            <td colSpan="2" className="table__cell table__cell--data table__cell--total-label">
+                                {messages.total}
+                            </td>
+                            <td className="table__cell table__cell--data table__cell--total">{dataTeam.goals || ''}</td>
+                            <td className="table__cell table__cell--data table__cell--total">
+                                {dataTeam.yellowCards || ''}
+                            </td>
+                            <td className="table__cell table__cell--data table__cell--total">
+                                {dataTeam.suspensions || ''}
+                            </td>
+                            <td className="table__cell table__cell--data table__cell--total">
+                                {dataTeam.redCards || ''}
+                            </td>
+                            <td className="table__cell table__cell--data table__cell--total">
+                                {dataTeam.blueCards || ''}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            );
+        }
+        return false;
+    };
+
+    const displayOfficialsList = team => {
+        if (team) {
+            return (
+                <table className="table table--data" summary={`${settingsMessages.teamA} ${messages.officials}`}>
+                    <thead>
+                        <tr>
+                            <th className="table__cell table__cell--header" title={settingsMessages.officialsReference}>
+                                {messages.shortNumber}
+                            </th>
+                            <th className="table__cell table__cell--header">
+                                {settingsMessages[`team${team}`]} {messages.officials}
+                            </th>
+                            <th className="table__cell table__cell--header">{messages.signature}</th>
+                            <th
+                                className="table__cell table__cell--header"
+                                title={capitalize(lineUpMessages.sorting_yellowCards)}
+                            >
+                                {messages.initialYellowCards}
+                            </th>
+                            <th
+                                className="table__cell table__cell--header"
+                                title={capitalize(lineUpMessages.sorting_suspensions)}
+                            >
+                                {messages.initialSuspensions}
+                            </th>
+                            <th
+                                className="table__cell table__cell--header"
+                                title={capitalize(lineUpMessages.sorting_redCards)}
+                            >
+                                {messages.initialRedCards}
+                            </th>
+                            <th
+                                className="table__cell table__cell--header"
+                                title={capitalize(lineUpMessages.sorting_blueCards)}
+                            >
+                                {messages.initialBlueCards}
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>{listMembers(team, MEMBERS_TYPES.officials)}</tbody>
+                </table>
+            );
+        }
+        return false;
     };
 
     const listGoals = () => {
@@ -137,50 +389,34 @@ export function ScoreSheet({ settings, currentScore, dataTeamA, dataTeamB, gameE
     };
     const goalTables = listGoals();
 
-    const listMembers = (team, memberType) => {
-        const members = settings.teams[team][memberType];
-        const captainId = settings.teams[team].captain;
-        const maxMembers =
-            memberType === MEMBERS_TYPES.players && members[0] && members[0].reference === ''
-                ? MAX_NUMBER[memberType] + 1
-                : MAX_NUMBER[memberType];
-        for (let i = members.length; i < maxMembers; i += 1) {
-            members.push(EMPTY_MEMBER_DATA);
+    const displayGoalsList = part => {
+        if (part) {
+            return (
+                <table className="table table--data" summary={messages.goalsList}>
+                    <thead>
+                        <tr>
+                            <th
+                                className="table__cell table__cell--header"
+                                title={`${settingsMessages.teamA}: ${settings.teams[TEAMS_LIST.HOME].name}`}
+                            >
+                                {messages.initialTeamA}
+                            </th>
+                            <th colSpan="3" className="table__cell table__cell--header">
+                                {messages.score}
+                            </th>
+                            <th
+                                className="table__cell table__cell--header"
+                                title={`${settingsMessages.teamB}: ${settings.teams[TEAMS_LIST.AWAY].name}`}
+                            >
+                                {messages.initialTeamB}
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>{part}</tbody>
+                </table>
+            );
         }
-        return members.map(member => {
-            if (member.id !== 0 || member.goals > 0) {
-                return (
-                    <tr key={uuidv4()}>
-                        <td className="table__cell table__cell--data table__cell--line-head">{member.reference}</td>
-                        <td
-                            className={`table__cell table__cell--data${
-                                member.id !== 0 && member.id === captainId ? ' table__cell--captain' : ''
-                            }`}
-                        >
-                            {member.name}
-                            {member.qualification === MEMBERS_QUALIFICATIONS.players.goalie
-                                ? ` (${lineUpMessages.goalieInitial})`
-                                : ''}
-                            {member.id !== 0 && member.id === captainId ? ` (${lineUpMessages.captainInitial})` : ''}
-                        </td>
-                        <td className="table__cell table__cell--data table__cell--member">{member.goals || ''}</td>
-                        <td className="table__cell table__cell--data table__cell--member">
-                            {member.yellowCards ? 'X' : ''}
-                        </td>
-                        <td className="table__cell table__cell--data table__cell--member">
-                            {member.suspensions || ''}
-                        </td>
-                        <td className="table__cell table__cell--data table__cell--member">
-                            {member.redCards ? 'X' : ''}
-                        </td>
-                        <td className="table__cell table__cell--data table__cell--member">
-                            {member.blueCards ? 'X' : ''}
-                        </td>
-                    </tr>
-                );
-            }
-            return false;
-        });
+        return false;
     };
 
     return (
@@ -196,175 +432,27 @@ export function ScoreSheet({ settings, currentScore, dataTeamA, dataTeamB, gameE
                         ) : (
                             ''
                         )}
-                        {settings.gender !== '' ? <span>{settings.gender}</span> : ''}
+                        {settings.gender !== '' ? <span>{GENDERS[settings.gender]}</span> : ''}
                     </div>
                 </h1>
                 <table className="table table--structure" role="presentation">
                     <tbody>
                         <tr className="table__row table__row--structure">
+                            <td className="table__cell table__cell--structure">{displayTeamInfo(TEAMS_LIST.HOME)}</td>
                             <td className="table__cell table__cell--structure">
-                                <table className="table table--data" summary={settingsMessages.teamA}>
-                                    <thead>
-                                        <tr>
-                                            <th className="table__cell table__cell--header">
-                                                {settingsMessages.teamA}
-                                            </th>
-                                            <th className="table__cell table__cell--header">
-                                                {settingsMessages.jerseyColour}
-                                            </th>
-                                            <th colSpan="3" className="table__cell table__cell--header">
-                                                {messages.timeouts}
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td className="table__cell table__cell--data table__cell--single">
-                                                {settings.teams.A.name}
-                                            </td>
-                                            <td
-                                                className="table__cell table__cell--data table__cell--single"
-                                                style={{
-                                                    backgroundColor: settings.teams.A.jersey,
-                                                    fontWeight: 600,
-                                                    color: settings.teams.A.reference
-                                                }}
-                                            >
-                                                ###
-                                            </td>
-                                            <td className="table__cell table__cell--data table__cell--single">
-                                                {dataTeamA.timeouts > 0 ? 'X' : '-'}
-                                            </td>
-                                            <td className="table__cell table__cell--data table__cell--single">
-                                                {dataTeamA.timeouts > 1 ? 'X' : '-'}
-                                            </td>
-                                            <td className="table__cell table__cell--data table__cell--single">
-                                                {dataTeamA.timeouts > 2 ? 'X' : '-'}
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                {displayResult(currentScore.half1, messages.halfTimeResult)}
                             </td>
                             <td className="table__cell table__cell--structure">
-                                <table className="table table--data" summary={messages.halfTimeResult}>
-                                    <thead>
-                                        <tr>
-                                            <th colSpan="3" className="table__cell table__cell--header">
-                                                {messages.halfTimeResult}
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td className="table__cell table__cell--data table__cell--half">
-                                                {getScore(currentScore.half1, TEAMS_LIST.HOME)}
-                                            </td>
-                                            <td className="table__cell table__cell--data table__cell--colon">:</td>
-                                            <td className="table__cell table__cell--data table__cell--half">
-                                                {getScore(currentScore.half1, TEAMS_LIST.AWAY)}
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </td>
-                            <td className="table__cell table__cell--structure">
-                                <table className="table table--data" summary={messages.place}>
-                                    <thead>
-                                        <tr>
-                                            <th className="table__cell table__cell--header">{messages.place}</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td className="table__cell table__cell--data table__cell--single">
-                                                {settings.place}
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                {displaySingleInfo(messages.place, settings.place)}
                             </td>
                         </tr>
                         <tr className="table__row table__row--structure">
+                            <td className="table__cell table__cell--structure">{displayTeamInfo(TEAMS_LIST.AWAY)}</td>
                             <td className="table__cell table__cell--structure">
-                                <table className="table table--data" summary={settingsMessages.teamB}>
-                                    <thead>
-                                        <tr>
-                                            <th className="table__cell table__cell--header">
-                                                {settingsMessages.teamB}
-                                            </th>
-                                            <th className="table__cell table__cell--header">
-                                                {settingsMessages.jerseyColour}
-                                            </th>
-                                            <th colSpan="3" className="table__cell table__cell--header">
-                                                {messages.timeouts}
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td className="table__cell table__cell--data table__cell--single">
-                                                {settings.teams.B.name}
-                                            </td>
-                                            <td
-                                                className="table__cell table__cell--data table__cell--single"
-                                                style={{
-                                                    backgroundColor: settings.teams.B.jersey,
-                                                    fontWeight: 600,
-                                                    color: settings.teams.B.reference
-                                                }}
-                                            >
-                                                ###
-                                            </td>
-                                            <td className="table__cell table__cell--data table__cell--single">
-                                                {dataTeamB.timeouts > 0 ? 'X' : '-'}
-                                            </td>
-                                            <td className="table__cell table__cell--data table__cell--single">
-                                                {dataTeamB.timeouts > 1 ? 'X' : '-'}
-                                            </td>
-                                            <td className="table__cell table__cell--data table__cell--single">
-                                                {dataTeamB.timeouts > 2 ? 'X' : '-'}
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                {displayResult(currentScore.half3, messages.fullTimeResult)}
                             </td>
                             <td className="table__cell table__cell--structure">
-                                <table className="table table--data" summary={messages.fullTimeResult}>
-                                    <thead>
-                                        <tr>
-                                            <th colSpan="3" className="table__cell table__cell--header">
-                                                {messages.fullTimeResult}
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td className="table__cell table__cell--data table__cell--half">
-                                                {getScore(currentScore.half3, TEAMS_LIST.HOME)}
-                                            </td>
-                                            <td className="table__cell table__cell--data table__cell--colon">:</td>
-                                            <td className="table__cell table__cell--data table__cell--half">
-                                                {getScore(currentScore.half3, TEAMS_LIST.AWAY)}
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </td>
-                            <td className="table__cell table__cell--structure">
-                                <table className="table table--data" summary={messages.venue}>
-                                    <thead>
-                                        <tr>
-                                            <th className="table__cell table__cell--header">{messages.venue}</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td className="table__cell table__cell--data table__cell--single">
-                                                {settings.venue}
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                {displaySingleInfo(messages.venue, settings.venue)}
                             </td>
                         </tr>
                         <tr className="table__row table__row--structure">
@@ -422,380 +510,44 @@ export function ScoreSheet({ settings, currentScore, dataTeamA, dataTeamB, gameE
                                 </table>
                             </td>
                             <td className="table__cell table__cell--structure">
-                                <table className="table table--data" summary={messages.extraHalfTimeResult}>
-                                    <thead>
-                                        <tr>
-                                            <th colSpan="3" className="table__cell table__cell--header">
-                                                {messages.extraHalfTimeResult}
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td className="table__cell table__cell--data table__cell--half">
-                                                {getScore(currentScore.half5, TEAMS_LIST.HOME)}
-                                            </td>
-                                            <td className="table__cell table__cell--data table__cell--colon">:</td>
-                                            <td className="table__cell table__cell--data table__cell--half">
-                                                {getScore(currentScore.half5, TEAMS_LIST.AWAY)}
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                {displayResult(currentScore.half5, messages.extraHalfTimeResult)}
                             </td>
                             <td className="table__cell table__cell--structure">
-                                <table className="table table--data" summary={messages.date}>
-                                    <thead>
-                                        <tr>
-                                            <th className="table__cell table__cell--header">{messages.date}</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td className="table__cell table__cell--data table__cell--single">
-                                                {formattedDate}
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                {displaySingleInfo(messages.date, formattedDate)}
                             </td>
                         </tr>
                         <tr className="table__row table__row--structure">
                             <td className="table__cell table__cell--structure table__cell--bottom">
-                                <table className="table table--data" summary={messages.fullExtraTimeResult}>
-                                    <thead>
-                                        <tr>
-                                            <th colSpan="3" className="table__cell table__cell--header">
-                                                {messages.fullExtraTimeResult}
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td className="table__cell table__cell--data table__cell--half">
-                                                {getScore(currentScore.half7, TEAMS_LIST.HOME)}
-                                            </td>
-                                            <td className="table__cell table__cell--data table__cell--colon">:</td>
-                                            <td className="table__cell table__cell--data table__cell--half">
-                                                {getScore(currentScore.half7, TEAMS_LIST.AWAY)}
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                {displayResult(currentScore.half7, messages.fullExtraTimeResult)}
                             </td>
                             <td className="table__cell table__cell--structure table__cell--bottom">
-                                <table className="table table--data" summary={messages.time}>
-                                    <thead>
-                                        <tr>
-                                            <th className="table__cell table__cell--header">{messages.time}</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td className="table__cell table__cell--data table__cell--single">
-                                                {settings.time}
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                {displaySingleInfo(messages.time, settings.time)}
                             </td>
                         </tr>
                         <tr className="table__row table__row--structure">
                             <td className="table__cell table__cell--structure">
-                                <table
-                                    className="table table--data"
-                                    summary={`${settingsMessages.teamA} ${messages.players}`}
-                                >
-                                    <thead>
-                                        <tr>
-                                            <th
-                                                className="table__cell table__cell--header"
-                                                title={settingsMessages.playersReference}
-                                            >
-                                                {messages.shortNumber}
-                                            </th>
-                                            <th className="table__cell table__cell--header">
-                                                {settingsMessages.teamA} {messages.players}
-                                            </th>
-                                            <th className="table__cell table__cell--header">{lineUpMessages.goals}</th>
-                                            <th
-                                                className="table__cell table__cell--header"
-                                                title={capitalize(lineUpMessages.sorting_yellowCards)}
-                                            >
-                                                {messages.initialYellowCards}
-                                            </th>
-                                            <th
-                                                className="table__cell table__cell--header"
-                                                title={capitalize(lineUpMessages.sorting_suspensions)}
-                                            >
-                                                {messages.initialSuspensions}
-                                            </th>
-                                            <th
-                                                className="table__cell table__cell--header"
-                                                title={capitalize(lineUpMessages.sorting_redCards)}
-                                            >
-                                                {messages.initialRedCards}
-                                            </th>
-                                            <th
-                                                className="table__cell table__cell--header"
-                                                title={capitalize(lineUpMessages.sorting_blueCards)}
-                                            >
-                                                {messages.initialBlueCards}
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {listMembers(TEAMS_LIST.HOME, MEMBERS_TYPES.players)}
-                                        <tr>
-                                            <td
-                                                colSpan="2"
-                                                className="table__cell table__cell--data table__cell--total-label"
-                                            >
-                                                {messages.total}
-                                            </td>
-                                            <td className="table__cell table__cell--data table__cell--total">
-                                                {dataTeamA.goals || ''}
-                                            </td>
-                                            <td className="table__cell table__cell--data table__cell--total">
-                                                {dataTeamA.yellowCards || ''}
-                                            </td>
-                                            <td className="table__cell table__cell--data table__cell--total">
-                                                {dataTeamA.suspensions || ''}
-                                            </td>
-                                            <td className="table__cell table__cell--data table__cell--total">
-                                                {dataTeamA.redCards || ''}
-                                            </td>
-                                            <td className="table__cell table__cell--data table__cell--total">
-                                                {dataTeamA.blueCards || ''}
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                {displayPlayersList(TEAMS_LIST.HOME, dataTeamA)}
                             </td>
                             <td rowSpan="4" className="table__cell table__cell--structure">
-                                <table className="table table--data" summary={messages.goalsList}>
-                                    <thead>
-                                        <tr>
-                                            <th
-                                                className="table__cell table__cell--header"
-                                                title={`${settingsMessages.teamA}: ${
-                                                    settings.teams[TEAMS_LIST.HOME].name
-                                                }`}
-                                            >
-                                                {messages.initialTeamA}
-                                            </th>
-                                            <th colSpan="3" className="table__cell table__cell--header">
-                                                {messages.score}
-                                            </th>
-                                            <th
-                                                className="table__cell table__cell--header"
-                                                title={`${settingsMessages.teamB}: ${
-                                                    settings.teams[TEAMS_LIST.AWAY].name
-                                                }`}
-                                            >
-                                                {messages.initialTeamB}
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>{goalTables.firstHalf}</tbody>
-                                </table>
+                                {displayGoalsList(goalTables.firstHalf)}
                             </td>
                             <td rowSpan="4" className="table__cell table__cell--structure">
-                                <table className="table table--data" summary={messages.goalsList}>
-                                    <thead>
-                                        <tr>
-                                            <th
-                                                className="table__cell table__cell--header"
-                                                title={`${settingsMessages.teamA}: ${
-                                                    settings.teams[TEAMS_LIST.HOME].name
-                                                }`}
-                                            >
-                                                {messages.initialTeamA}
-                                            </th>
-                                            <th colSpan="3" className="table__cell table__cell--header">
-                                                {messages.score}
-                                            </th>
-                                            <th
-                                                className="table__cell table__cell--header"
-                                                title={`${settingsMessages.teamB}: ${
-                                                    settings.teams[TEAMS_LIST.AWAY].name
-                                                }`}
-                                            >
-                                                {messages.initialTeamB}
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>{goalTables.secondHalf}</tbody>
-                                </table>
+                                {displayGoalsList(goalTables.secondHalf)}
                             </td>
                         </tr>
                         <tr className="table__row table__row--structure">
                             <td className="table__cell table__cell--structure">
-                                <table
-                                    className="table table--data"
-                                    summary={`${settingsMessages.teamA} ${messages.officials}`}
-                                >
-                                    <thead>
-                                        <tr>
-                                            <th
-                                                className="table__cell table__cell--header"
-                                                title={settingsMessages.officialsReference}
-                                            >
-                                                {messages.shortNumber}
-                                            </th>
-                                            <th className="table__cell table__cell--header">
-                                                {settingsMessages.teamA} {messages.officials}
-                                            </th>
-                                            <th className="table__cell table__cell--header">{messages.signature}</th>
-                                            <th
-                                                className="table__cell table__cell--header"
-                                                title={capitalize(lineUpMessages.sorting_yellowCards)}
-                                            >
-                                                {messages.initialYellowCards}
-                                            </th>
-                                            <th
-                                                className="table__cell table__cell--header"
-                                                title={capitalize(lineUpMessages.sorting_suspensions)}
-                                            >
-                                                {messages.initialSuspensions}
-                                            </th>
-                                            <th
-                                                className="table__cell table__cell--header"
-                                                title={capitalize(lineUpMessages.sorting_redCards)}
-                                            >
-                                                {messages.initialRedCards}
-                                            </th>
-                                            <th
-                                                className="table__cell table__cell--header"
-                                                title={capitalize(lineUpMessages.sorting_blueCards)}
-                                            >
-                                                {messages.initialBlueCards}
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>{listMembers(TEAMS_LIST.HOME, MEMBERS_TYPES.officials)}</tbody>
-                                </table>
+                                {displayOfficialsList(TEAMS_LIST.HOME)}
                             </td>
                         </tr>
                         <tr className="table__row table__row--structure">
                             <td className="table__cell table__cell--structure">
-                                <table
-                                    className="table table--data"
-                                    summary={`${settingsMessages.teamB} ${messages.players}`}
-                                >
-                                    <thead>
-                                        <tr>
-                                            <th
-                                                className="table__cell table__cell--header"
-                                                title={settingsMessages.playersReference}
-                                            >
-                                                {messages.shortNumber}
-                                            </th>
-                                            <th className="table__cell table__cell--header">
-                                                {settingsMessages.teamB} {messages.players}
-                                            </th>
-                                            <th className="table__cell table__cell--header">{lineUpMessages.goals}</th>
-                                            <th
-                                                className="table__cell table__cell--header"
-                                                title={capitalize(lineUpMessages.sorting_yellowCards)}
-                                            >
-                                                {messages.initialYellowCards}
-                                            </th>
-                                            <th
-                                                className="table__cell table__cell--header"
-                                                title={capitalize(lineUpMessages.sorting_suspensions)}
-                                            >
-                                                {messages.initialSuspensions}
-                                            </th>
-                                            <th
-                                                className="table__cell table__cell--header"
-                                                title={capitalize(lineUpMessages.sorting_redCards)}
-                                            >
-                                                {messages.initialRedCards}
-                                            </th>
-                                            <th
-                                                className="table__cell table__cell--header"
-                                                title={capitalize(lineUpMessages.sorting_blueCards)}
-                                            >
-                                                {messages.initialBlueCards}
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {listMembers(TEAMS_LIST.AWAY, MEMBERS_TYPES.players)}
-                                        <tr>
-                                            <td
-                                                colSpan="2"
-                                                className="table__cell table__cell--data table__cell--total-label"
-                                            >
-                                                {messages.total}
-                                            </td>
-                                            <td className="table__cell table__cell--data table__cell--total">
-                                                {dataTeamB.goals || ''}
-                                            </td>
-                                            <td className="table__cell table__cell--data table__cell--total">
-                                                {dataTeamB.yellowCards || ''}
-                                            </td>
-                                            <td className="table__cell table__cell--data table__cell--total">
-                                                {dataTeamB.suspensions || ''}
-                                            </td>
-                                            <td className="table__cell table__cell--data table__cell--total">
-                                                {dataTeamB.redCards || ''}
-                                            </td>
-                                            <td className="table__cell table__cell--data table__cell--total">
-                                                {dataTeamB.blueCards || ''}
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                {displayPlayersList(TEAMS_LIST.AWAY, dataTeamB)}
                             </td>
                         </tr>
                         <tr className="table__row table__row--structure">
                             <td className="table__cell table__cell--structure">
-                                <table
-                                    className="table table--data"
-                                    summary={`${settingsMessages.teamB} ${messages.officials}`}
-                                >
-                                    <thead>
-                                        <tr>
-                                            <th
-                                                className="table__cell table__cell--header"
-                                                title={settingsMessages.officialsReference}
-                                            >
-                                                {messages.shortNumber}
-                                            </th>
-                                            <th className="table__cell table__cell--header">
-                                                {settingsMessages.teamB} {messages.officials}
-                                            </th>
-                                            <th className="table__cell table__cell--header">{messages.signature}</th>
-                                            <th
-                                                className="table__cell table__cell--header"
-                                                title={capitalize(lineUpMessages.sorting_yellowCards)}
-                                            >
-                                                {messages.initialYellowCards}
-                                            </th>
-                                            <th
-                                                className="table__cell table__cell--header"
-                                                title={capitalize(lineUpMessages.sorting_suspensions)}
-                                            >
-                                                {messages.initialSuspensions}
-                                            </th>
-                                            <th
-                                                className="table__cell table__cell--header"
-                                                title={capitalize(lineUpMessages.sorting_redCards)}
-                                            >
-                                                {messages.initialRedCards}
-                                            </th>
-                                            <th
-                                                className="table__cell table__cell--header"
-                                                title={capitalize(lineUpMessages.sorting_blueCards)}
-                                            >
-                                                {messages.initialBlueCards}
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>{listMembers(TEAMS_LIST.AWAY, MEMBERS_TYPES.officials)}</tbody>
-                                </table>
+                                {displayOfficialsList(TEAMS_LIST.AWAY)}
                             </td>
                         </tr>
                     </tbody>

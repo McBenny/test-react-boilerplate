@@ -236,12 +236,12 @@ These features should also apply to the fouls, any foul registered should be edi
 - [X] Generate a printable/PDF score sheet
 
 ##REFACTORING
-- [ ] Optimise score sheet to avoid repetition between A and B teams and list of goals.
 - [X] Optimise settings page to avoid repetition between A and B teams.
 - [X] Separate colours from colour usage
 - [X] Optimize components calls
 - [X] Check W3C conformance and accessibility
 - [X] Replace A and B strings by constants
+- [X] Optimise score sheet to avoid repetition between A and B teams and list of goals.
 - [ ] ~~move open and close popup functions inside the popup component~~
 
 ##First feedback
