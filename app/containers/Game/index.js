@@ -32,7 +32,7 @@ import LineUp from '../../components/Line-up';
 import GameLog from '../../components/Game-log';
 
 import { URLS } from '../App/constants';
-import { MAX_NUMBER, TEAMS_LIST } from '../Settings/constants';
+import { GENDERS, MAX_NUMBER, TEAMS_LIST } from '../Settings/constants';
 import {
     ADD_BLUE_CARD,
     ADD_EVENT,
@@ -211,7 +211,7 @@ export function Game({
             message += `${settings.competition} `;
         }
         if (settings.gender !== '') {
-            message += ` [${settings.gender}] `;
+            message += ` [${GENDERS[settings.gender]}] `;
         }
         if (settings.round !== '') {
             message += ` (${messages.round}: ${settings.round})`;
