@@ -30,7 +30,7 @@ const GameLog = ({ popupVisibility, gameEvents, settingsData, setATimeOut, openH
     const [isFullLogVisible, setIsFullLogVisible] = useState(false);
 
     const goToScoreSheetHandler = () => {
-        window.location.href = URLS.scoreSheet;
+        window.open(URLS.scoreSheet, '_blank');
     };
 
     const getMemberData = event => {
