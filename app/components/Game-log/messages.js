@@ -18,6 +18,7 @@ export const messages = {
     period7: '2nd half (extra time)',
     goalFor: 'Goal for',
     penaltyFor: 'Goal (penalty) for',
+    missedPenaltyFor: 'Missed penalty for',
     yellowCardFor: 'Yellow card for',
     redCardFor: 'Red card for',
     blueCardFor: 'Blue card for',

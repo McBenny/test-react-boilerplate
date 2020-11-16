@@ -94,8 +94,15 @@ function Players({
     const handleChangePenalty = e => {
         setPenalty(e.target.checked);
     };
+
+    const [missed, setMissed] = useState(false);
+    const handleChangeMissed = e => {
+        setMissed(e.target.checked);
+    };
+
     useEffect(() => {
         setPenalty(false);
+        setMissed(false);
     }, [popupVisibility]);
 
     const createPlayersList = () => {
@@ -136,6 +143,7 @@ function Players({
                     actionHandler({
                         eventType,
                         penalty,
+                        missed,
                         type: playersListType,
                         team,
                         id: member.id,
@@ -211,7 +219,7 @@ function Players({
             </DialogTitle>
             <DialogContent>
                 {playersListType === ADD_GOAL ? (
-                    <div>
+                    <div className="players__penalty">
                         <FormControlLabel
                             control={
                                 <Checkbox
@@ -225,6 +233,26 @@ function Players({
                             label={messages.penalty}
                             labelPlacement="start"
                         />
+                        {penalty ? (
+                            <>
+                                <br />
+                                <FormControlLabel
+                                    control={
+                                        <Checkbox
+                                            checked={missed}
+                                            onChange={e => handleChangeMissed(e)}
+                                            name="missed"
+                                            color="primary"
+                                            value
+                                        />
+                                    }
+                                    label={messages.wasItMissed}
+                                    labelPlacement="start"
+                                />
+                            </>
+                        ) : (
+                            ''
+                        )}
                     </div>
                 ) : (
                     ''

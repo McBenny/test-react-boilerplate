@@ -273,8 +273,11 @@ export function ScoreSheet({ settings, currentScore, dataTeamA, dataTeamB, gameE
             if (event.eventType === EVENT_TYPES.goal) {
                 const player = settings.teams[event.team].players.filter(member => member.id === event.id);
                 const penalty = event.penalty ? `(${messages.initialPenalty})` : '';
-                const playerA = event.team === TEAMS_LIST.HOME ? `${penalty} ${player[0].reference || '?'}` : '';
-                const playerB = event.team === TEAMS_LIST.AWAY ? `${player[0].reference || '?'} ${penalty}` : '';
+                const missed = event.missed ? 'X' : '';
+                const playerA =
+                    event.team === TEAMS_LIST.HOME ? `${missed} ${penalty} ${player[0].reference || '?'}` : '';
+                const playerB =
+                    event.team === TEAMS_LIST.AWAY ? `${player[0].reference || '?'} ${penalty} ${missed}` : '';
                 return (
                     <tr key={uuidv4()}>
                         <td
@@ -286,7 +289,7 @@ export function ScoreSheet({ settings, currentScore, dataTeamA, dataTeamB, gameE
                         </td>
                         <td
                             className={`table__cell table__cell--data table__cell--half${
-                                event.team === TEAMS_LIST.HOME ? ' table__cell--acting-team' : ''
+                                event.team === TEAMS_LIST.HOME && !event.missed ? ' table__cell--acting-team' : ''
                             }`}
                         >
                             {event.score.teamA}
@@ -294,7 +297,7 @@ export function ScoreSheet({ settings, currentScore, dataTeamA, dataTeamB, gameE
                         <td className="table__cell table__cell--data table__cell--colon">:</td>
                         <td
                             className={`table__cell table__cell--data table__cell--half${
-                                event.team === TEAMS_LIST.AWAY ? ' table__cell--acting-team' : ''
+                                event.team === TEAMS_LIST.AWAY && !event.missed ? ' table__cell--acting-team' : ''
                             }`}
                         >
                             {event.score.teamB}

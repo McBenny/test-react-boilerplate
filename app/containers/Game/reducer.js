@@ -109,10 +109,11 @@ const gameReducer = (state = useableState, action) =>
                 break;
             case ADD_EVENT: {
                 // console.log(ADD_EVENT, action);
-                const { id, team, eventType, memberType, score, penalty } = action;
+                const { id, team, eventType, memberType, score, penalty, missed } = action;
                 draft.gameEvents.push({
                     eventType,
                     penalty,
+                    missed,
                     team,
                     id,
                     memberType,
@@ -130,20 +131,22 @@ const gameReducer = (state = useableState, action) =>
             case ADD_BLUE_CARD: {
                 // console.log(updatedData, action);
                 // UpdatedData is determined in the previous switch statement
-                draft[`dataTeam${action.team}`][updatedData] += 1;
-                const { memberType } = action;
-                draft.settings.teams[action.team][memberType] = draft.settings.teams[action.team][memberType].map(
-                    member => {
-                        if (member.id === action.id) {
-                            return {
-                                ...member,
-                                [updatedData]: member[updatedData] + 1,
-                                penalty: penaltyStatus ? member.penalty + 1 : member.penalty
-                            };
+                if (!action.missed) {
+                    draft[`dataTeam${action.team}`][updatedData] += 1;
+                    const { memberType } = action;
+                    draft.settings.teams[action.team][memberType] = draft.settings.teams[action.team][memberType].map(
+                        member => {
+                            if (member.id === action.id) {
+                                return {
+                                    ...member,
+                                    [updatedData]: member[updatedData] + 1,
+                                    penalty: penaltyStatus ? member.penalty + 1 : member.penalty
+                                };
+                            }
+                            return member;
                         }
-                        return member;
-                    }
-                );
+                    );
+                }
                 break;
             }
             case ADD_TIMEOUT:
@@ -162,20 +165,22 @@ const gameReducer = (state = useableState, action) =>
             case REMOVE_BLUE_CARD: {
                 // console.log(updatedData, action);
                 // UpdatedData is determined in the previous switch statement
-                draft[`dataTeam${action.team}`][updatedData] -= 1;
-                const { memberType } = action;
-                draft.settings.teams[action.team][memberType] = draft.settings.teams[action.team][memberType].map(
-                    member => {
-                        if (member.id === action.id) {
-                            return {
-                                ...member,
-                                [updatedData]: member[updatedData] - 1,
-                                penalty: penaltyStatus ? member.penalty - 1 : member.penalty
-                            };
+                if (!action.missed) {
+                    draft[`dataTeam${action.team}`][updatedData] -= 1;
+                    const { memberType } = action;
+                    draft.settings.teams[action.team][memberType] = draft.settings.teams[action.team][memberType].map(
+                        member => {
+                            if (member.id === action.id) {
+                                return {
+                                    ...member,
+                                    [updatedData]: member[updatedData] - 1,
+                                    penalty: penaltyStatus ? member.penalty - 1 : member.penalty
+                                };
+                            }
+                            return member;
                         }
-                        return member;
-                    }
-                );
+                    );
+                }
                 break;
             }
             case REMOVE_TIMEOUT:

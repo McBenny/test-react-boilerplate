@@ -185,6 +185,7 @@ It should be possible to also add a goal anywhere in the list.
 These features should also apply to the fouls, any foul registered should be editable and removable, it should also be possible to add a foul.
 
 ##BUGS
+- [ ] Avoid "Game paused / Game restarted around Timeouts in Game log.
 - [ ] When I create a player, it jumps from bottom to top of the list, this is annoying
 - [X] Players with letters are not in uppercase in list for captain
 - [X] I don't want to get "NaN" when I erase a number before putting a new one in the settings
@@ -234,6 +235,7 @@ These features should also apply to the fouls, any foul registered should be edi
 - [x] Modify icons
 - [X] Generate a printable/PDF score sheet
 - [ ] Removing a player gives everything he holds to "unknown players"
+- [X] I want to say there was a penalty missed
 
 ##REFACTORING
 - [X] Optimise settings page to avoid repetition between A and B teams.
@@ -253,7 +255,6 @@ These features should also apply to the fouls, any foul registered should be edi
 - [X] I want to cancel the last action (an action) +2
 
 ###Priority 2
-- [ ] I want to say there was a penalty missed
 - [X] I want to be able to give a letter to a player (when no number, a colour initial maybe?)
 - [X] I want to see the number of players and officials per team in the settings
 - [X] I want to see if the player is a goalie (in the line-up)
