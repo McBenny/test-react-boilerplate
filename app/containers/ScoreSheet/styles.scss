@@ -61,7 +61,7 @@ $colour-zebra: #ddd;
 
         &--structure {
             border: 0 !important;
-            padding: 0.25rem 0.5rem;
+            padding: 0.125rem 0.5rem;
             vertical-align: top;
         }
 
@@ -79,9 +79,9 @@ $colour-zebra: #ddd;
 
         &--data {
             border: 1px solid $colour-border;
-            height: 1.5625rem;
-            padding: 0.125rem 0.25rem;
-            font-size: 0.875rem;
+            height: 1.4375rem;
+            padding: 0.0625rem 0.25rem;
+            font-size: 0.8125rem;
         }
 
         &--member {
