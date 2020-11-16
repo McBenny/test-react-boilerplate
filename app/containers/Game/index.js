@@ -260,20 +260,27 @@ export function Game({
         });
     };
 
-    const addActionPerTeam = ({ eventType, penalty = false, type, team, id, memberType }) => {
+    const addActionPerTeam = ({ eventType, penalty = false, missed = false, type, team, id, memberType }) => {
         let updatedScore = score;
         if (eventType === EVENT_TYPES.goal) {
-            updatedScore = {
-                teamA: team === TEAMS_LIST.HOME ? score.teamA + 1 : score.teamA,
-                teamB: team === TEAMS_LIST.AWAY ? score.teamB + 1 : score.teamB
-            };
+            if (missed) {
+                updatedScore = {
+                    teamA: score.teamA,
+                    teamB: score.teamB
+                };
+            } else {
+                updatedScore = {
+                    teamA: team === TEAMS_LIST.HOME ? score.teamA + 1 : score.teamA,
+                    teamB: team === TEAMS_LIST.AWAY ? score.teamB + 1 : score.teamB
+                };
+            }
         } else if (eventType === EVENT_TYPES.suspension) {
             setATimeOut({
                 ...timeOut,
                 [`${FOULS.suspension}${team}${memberType}${id}`]: true
             });
         }
-        onAddAction({ eventType, penalty, type, team, id, memberType, score: updatedScore });
+        onAddAction({ eventType, penalty, missed, type, team, id, memberType, score: updatedScore });
     };
 
     /**

@@ -117,6 +117,7 @@ function Undo({ popupVisibility, event, setATimeOut, closeHandler }) {
                     addAction({
                         eventType: event.eventType,
                         penalty: event.penalty,
+                        missed: event.missed,
                         type: ACTION,
                         team: event.team,
                         id: event.id,

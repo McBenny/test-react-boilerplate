@@ -9,6 +9,14 @@
     &__grid-item {
         flex: 0 0 12.5%;
     }
+
+    &__penalty {
+        margin: 0 auto 1rem;
+        border: 1px solid #000;
+        border-radius: 0.5rem;
+        width: 60%;
+        text-align: center;
+    }
 }
 
 .member {

@@ -4,6 +4,7 @@ import nextId from 'react-id-generator';
 
 import { List, ListItem, Button } from '@material-ui/core';
 import AssignmentOutlinedIcon from '@material-ui/icons/AssignmentOutlined';
+import CancelOutlinedIcon from '@material-ui/icons/CancelOutlined';
 import Filter2OutlinedIcon from '@material-ui/icons/Filter2Outlined';
 import Filter7OutlinedIcon from '@material-ui/icons/Filter7Outlined';
 import HighlightOffOutlinedIcon from '@material-ui/icons/HighlightOffOutlined';
@@ -114,7 +115,7 @@ const GameLog = ({ popupVisibility, gameEvents, settingsData, setATimeOut, openH
 
                 const memberData = getMemberData(gameEvent);
                 const formattedScore = displayScore({
-                    isGoal: gameEvent.eventType === EVENT_TYPES.goal,
+                    isGoal: gameEvent.eventType === EVENT_TYPES.goal && !gameEvent.missed,
                     scoringTeam: gameEvent.team,
                     scoreA: gameEvent.score.teamA,
                     scoreB: gameEvent.score.teamB
@@ -244,22 +245,27 @@ const GameLog = ({ popupVisibility, gameEvents, settingsData, setATimeOut, openH
                     }
 
                     case EVENT_TYPES.goal: {
-                        const icon = gameEvent.penalty ? (
+                        const icon1 = !gameEvent.missed ? <SportsSoccerOutlinedIcon /> : <></>;
+                        const icon2 = gameEvent.penalty ? (
                             <>
-                                <SportsSoccerOutlinedIcon />
-                                <Filter7OutlinedIcon />
+                                {gameEvent.missed ? <CancelOutlinedIcon /> : <></>} <Filter7OutlinedIcon />
                             </>
                         ) : (
-                            <SportsSoccerOutlinedIcon />
+                            <></>
                         );
-                        const message1 = gameEvent.penalty ? messages.penaltyFor : messages.goalFor;
+                        // eslint-disable-next-line no-nested-ternary
+                        const message1 = gameEvent.penalty
+                            ? gameEvent.missed
+                                ? messages.missedPenaltyFor
+                                : messages.penaltyFor
+                            : messages.goalFor;
                         const message2 = `${settingsData.teams[gameEvent.team].name} (${memberData[0].name} [`;
                         const message3 = memberData[0].reference;
                         const message4 = `])`;
                         template = (
                             <div className="game-log__event">
                                 <div>
-                                    {icon} {message1} {message2}
+                                    {icon1} {icon2} {message1} {message2}
                                     <strong>{message3}</strong>
                                     {message4}
                                 </div>
@@ -267,7 +273,7 @@ const GameLog = ({ popupVisibility, gameEvents, settingsData, setATimeOut, openH
                                 {index === events.length - 1 && (
                                     <UndoButton
                                         event={gameEvent}
-                                        icon={icon}
+                                        icon={!gameEvent.missed ? icon1 : icon2}
                                         message={`${message1} ${message2}${message3}${message4}`}
                                     />
                                 )}

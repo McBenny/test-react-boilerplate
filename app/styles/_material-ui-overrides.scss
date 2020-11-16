@@ -122,3 +122,9 @@
         padding: 0.25rem !important;
     }
 }
+
+//_________________
+// Checkboxes
+.MuiCheckbox-colorPrimary.Mui-checked {
+    color: $buttonBackgroundColour !important;
+}

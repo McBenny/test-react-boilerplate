@@ -24,6 +24,7 @@ export const messages = {
     listOfPlayers: 'List of players',
     none: 'none',
     penalty: 'Is it a penalty?',
+    wasItMissed: 'Was it missed?',
     captainInitial: 'C',
     goalieInitial: 'GK',
     noPlayers: 'No players, please insert players in',
