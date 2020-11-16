@@ -76,14 +76,14 @@ function Players({
      * @param membersList
      * @returns {boolean}
      */
-    const disabledAllMembers = (memberType, membersList) => {
+    const disableAllMembers = (memberType, membersList) => {
         if (eventType === EVENT_TYPES.yellowCard) {
             const yellowCardsLimit =
                 memberType === MEMBERS_TYPES.players
                     ? MAX_NUMBER.yellowCardsPlayersPerTeam
                     : MAX_NUMBER.yellowCardsOfficialsPerTeam;
-            const warnedMembers = membersList.filter(member => member.yellowCards === yellowCardsLimit);
-            if (warnedMembers.length > 0) {
+            const warnedMembers = membersList.filter(member => member.yellowCards === MAX_NUMBER.yellowCards);
+            if (warnedMembers.length >= yellowCardsLimit) {
                 return true;
             }
         }
@@ -166,7 +166,7 @@ function Players({
         const buffer = membersList.map(member => {
             // Display all members if it's a goal, or don't display "unknown player"
             if (playersListType === ADD_GOAL || member.id !== 0) {
-                const memberDisabled = isMemberDisabled(member) || disabledAllMembers(memberType, membersList);
+                const memberDisabled = isMemberDisabled(member) || disableAllMembers(memberType, membersList);
                 return buttonTemplate(member, memberType, memberDisabled);
             }
             return '';
