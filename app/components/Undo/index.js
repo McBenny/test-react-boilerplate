@@ -129,7 +129,7 @@ function Undo({ popupVisibility, event, setATimeOut, closeHandler }) {
 
             default:
         }
-        dispatch(removeEvent());
+        dispatch(removeEvent(event.eventType));
         closeHandler();
     };
 
