@@ -106,6 +106,20 @@ const GameLog = ({ popupVisibility, gameEvents, settingsData, setATimeOut, openH
         scoreB: PropTypes.number
     };
 
+    /**
+     * If paused and next event is a timeout OR resumed and previous event is a Timeout,
+     * then clean the entry.
+     */
+    const cleanEventsList = events =>
+        events.filter(
+            (event, index) =>
+                (event.eventType !== EVENT_TYPES.gamePaused && event.eventType !== EVENT_TYPES.gameResumed) ||
+                (event.eventType === EVENT_TYPES.gamePaused &&
+                    (!events[index + 1] || events[index + 1].eventType !== EVENT_TYPES.timeout)) ||
+                (event.eventType === EVENT_TYPES.gameResumed && events[index - 1].eventType !== EVENT_TYPES.timeout)
+        );
+    const cleanedEvents = cleanEventsList(gameEvents);
+
     const createBuffer = (events, isLastAction) => {
         if (events.length > 0) {
             const listOfEvents = isLastAction ? [events[events.length - 1]] : events;
@@ -304,7 +318,7 @@ const GameLog = ({ popupVisibility, gameEvents, settingsData, setATimeOut, openH
             <h2>{messages.title}</h2>
             <h3>{messages.lastAction}:</h3>
             <List component="ol" className="game-log" start={gameEvents.length}>
-                {createBuffer(gameEvents, true)}
+                {createBuffer(cleanedEvents, true)}
                 <ListItem key="log-displayFullLog" disableGutters className="game-log__item game-log__item--invisible">
                     <Button
                         variant="contained"
@@ -327,7 +341,7 @@ const GameLog = ({ popupVisibility, gameEvents, settingsData, setATimeOut, openH
                 <Fragment>
                     <h3>{messages.fullLog}:</h3>
                     <List component="ol" className="game-log">
-                        {createBuffer(gameEvents, false)}
+                        {createBuffer(cleanedEvents, false)}
                     </List>
                 </Fragment>
             ) : (
