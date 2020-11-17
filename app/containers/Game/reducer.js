@@ -19,13 +19,15 @@ import {
     ADD_SUSPENSION,
     ADD_TIMEOUT,
     REMOVE_EVENT,
+    REMOVE_EVENT_TIMEOUT,
     REMOVE_GOAL,
     REMOVE_YELLOW_CARD,
     REMOVE_SUSPENSION,
     REMOVE_RED_CARD,
     REMOVE_BLUE_CARD,
     REMOVE_TIMEOUT,
-    STORE_SCORE
+    STORE_SCORE,
+    EVENT_TYPES
 } from './constants';
 import { initialState as initialSettings } from '../Settings/reducer';
 import LocalStorage from '../../utils/local-storage';
@@ -156,6 +158,17 @@ const gameReducer = (state = useableState, action) =>
             case REMOVE_EVENT: {
                 // console.log(REMOVE_EVENT, action);
                 draft.gameEvents.pop();
+                break;
+            }
+            case REMOVE_EVENT_TIMEOUT: {
+                // console.log(REMOVE_EVENT_TIMEOUT, action);
+                if (draft.gameEvents[draft.gameEvents.length - 1].eventType === EVENT_TYPES.timeout) {
+                    draft.gameEvents.pop();
+                }
+                if (draft.gameEvents[draft.gameEvents.length - 1].eventType === EVENT_TYPES.gameResumed) {
+                    draft.gameEvents.pop();
+                    draft.gameEvents.pop();
+                }
                 break;
             }
             case REMOVE_GOAL:

@@ -15,7 +15,16 @@
  *    }
  */
 
-import { SAVE_SETTINGS, HANDLE_GAME_STATUS, ADD_EVENT, REMOVE_EVENT, REMOVE_TIMEOUT, STORE_SCORE } from './constants';
+import {
+    SAVE_SETTINGS,
+    HANDLE_GAME_STATUS,
+    ADD_EVENT,
+    REMOVE_EVENT,
+    REMOVE_EVENT_TIMEOUT,
+    REMOVE_TIMEOUT,
+    STORE_SCORE,
+    EVENT_TYPES
+} from './constants';
 
 /**
  * Saves the settings
@@ -45,9 +54,9 @@ export function addEvent(data) {
     };
 }
 
-export function removeEvent() {
+export function removeEvent(eventType) {
     return {
-        type: REMOVE_EVENT
+        type: eventType === EVENT_TYPES.timeout ? REMOVE_EVENT_TIMEOUT : REMOVE_EVENT
     };
 }
 

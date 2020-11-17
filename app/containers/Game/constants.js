@@ -22,6 +22,7 @@ export const ADD_BLUE_CARD = 'boilerplate/Game/ADD_BLUE_CARD';
 export const ADD_SUSPENSION = 'boilerplate/Game/ADD_SUSPENSION';
 export const ADD_TIMEOUT = 'boilerplate/Game/ADD_TIMEOUT';
 export const REMOVE_EVENT = 'boilerplate/Game/REMOVE_EVENT';
+export const REMOVE_EVENT_TIMEOUT = 'boilerplate/Game/REMOVE_EVENT_TIMEOUT';
 export const REMOVE_GOAL = 'boilerplate/Game/REMOVE_GOAL';
 export const REMOVE_YELLOW_CARD = 'boilerplate/Game/REMOVE_YELLOW_CARD';
 export const REMOVE_SUSPENSION = 'boilerplate/Game/REMOVE_SUSPENSION';
