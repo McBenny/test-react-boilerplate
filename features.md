@@ -185,6 +185,7 @@ It should be possible to also add a goal anywhere in the list.
 These features should also apply to the fouls, any foul registered should be editable and removable, it should also be possible to add a foul.
 
 ##BUGS
+- [ ] A player under suspension can't score a goal
 - [ ] When I create a player, it jumps from bottom to top of the list, this is annoying
 - [X] Players with letters are not in uppercase in list for captain
 - [X] I don't want to get "NaN" when I erase a number before putting a new one in the settings
@@ -197,6 +198,10 @@ These features should also apply to the fouls, any foul registered should be edi
 - [X] Avoid "Game paused / Game restarted around Timeouts in Game log.
 
 ##TODO
+- [X] Change suspension colour to orange
+- [ ] Adapt responsiveness for tablets
+- [ ] Allow for a second 2 minutes suspension on an already suspended player (up to 4 minutes)
+- [ ] Build a proper 404 page
 - [ ] Give the ability to filter the list of games per date, competition, round or gender on the Home Screen
 - [ ] I want to be able to delete a game (via popup confirmation)
 - [ ] I want to be able to register an action while the game is on hold (if time is managed)
@@ -234,7 +239,7 @@ These features should also apply to the fouls, any foul registered should be edi
 - [X] Open app in full screen
 - [x] Modify icons
 - [X] Generate a printable/PDF score sheet
-- [ ] Removing a player gives everything he holds to "unknown players"
+- [ ] ~~Removing a player gives everything he holds to "unknown players"~~
 - [X] I want to say there was a penalty missed
 
 ##REFACTORING
