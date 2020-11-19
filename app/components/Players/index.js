@@ -19,6 +19,7 @@ import {
     ADD_BLUE_CARD,
     ADD_SUSPENSION,
     UNKNOWN_PLAYER,
+    FOULS,
     POPUPS,
     EVENT_TYPES
 } from '../../containers/Game/constants';
@@ -38,6 +39,7 @@ function Players({
     playersList,
     captainId,
     officialsList,
+    suspensions,
     actionHandler,
     closeHandler,
     openPopup
@@ -89,6 +91,9 @@ function Players({
         }
         return false;
     };
+
+    const playerUnderSuspension = ({ memberType, memberId }) =>
+        suspensions[`${FOULS.suspension}${team}${memberType}${memberId}`] && true;
 
     const [penalty, setPenalty] = useState(false);
     const handleChangePenalty = e => {
@@ -174,7 +179,11 @@ function Players({
         const buffer = membersList.map(member => {
             // Display all members if it's a goal, or don't display "unknown player"
             if (playersListType === ADD_GOAL || member.id !== 0) {
-                const memberDisabled = isMemberDisabled(member) || disableAllMembers(memberType, membersList);
+                const memberDisabled =
+                    isMemberDisabled(member) ||
+                    disableAllMembers(memberType, membersList) ||
+                    // Player should be disabled if under suspension and event is goal
+                    (playerUnderSuspension({ memberType, memberId: member.id }) && playersListType === ADD_GOAL);
                 return buttonTemplate(member, memberType, memberDisabled);
             }
             return '';
@@ -279,6 +288,7 @@ Players.propTypes = {
     playersList: PropTypes.array,
     captainId: PropTypes.number,
     officialsList: PropTypes.array,
+    suspensions: PropTypes.object,
     actionHandler: PropTypes.func,
     closeHandler: PropTypes.func,
     openPopup: PropTypes.func

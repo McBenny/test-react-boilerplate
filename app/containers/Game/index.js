@@ -146,7 +146,8 @@ export function Game({
         playersListType: '',
         playersTeam: '',
         playersList: [],
-        officialsList: []
+        officialsList: [],
+        suspensions: {}
     };
     const [playersData, setPlayersData] = useState(initialPlayersData);
     const openPlayers = ({ team, type, eventType }) => {
@@ -158,7 +159,8 @@ export function Game({
             referenceColour: settings.teams[team].reference,
             playersList: settings.teams[team].players,
             captainId: settings.teams[team].captain,
-            officialsList: settings.teams[team].officials
+            officialsList: settings.teams[team].officials,
+            suspensions: timeOut
         });
     };
     useEffect(() => {
@@ -766,6 +768,7 @@ export function Game({
                     playersList={playersData.playersList}
                     captainId={playersData.captainId}
                     officialsList={playersData.officialsList}
+                    suspensions={playersData.suspensions}
                     actionHandler={addActionPerTeam}
                     closeHandler={closePopup}
                     openPopup={openPopup}
