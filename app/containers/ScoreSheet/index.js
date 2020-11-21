@@ -406,7 +406,9 @@ export function ScoreSheet({ settings, currentScore, dataTeamA, dataTeamB, gameE
                 <table className="table table--structure" role="presentation">
                     <tbody>
                         <tr className="table__row table__row--structure">
-                            <td className="table__cell table__cell--structure">{displayTeamInfo(TEAMS_LIST.HOME)}</td>
+                            <td className="table__cell table__cell--structure table__cell--structure-1">
+                                {displayTeamInfo(TEAMS_LIST.HOME)}
+                            </td>
                             <td className="table__cell table__cell--structure">
                                 {displayResult(messages.halfTimeResult, currentScore.half1)}
                             </td>
