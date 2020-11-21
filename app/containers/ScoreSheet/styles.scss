@@ -145,5 +145,9 @@ $colour-zebra: #ddd;
             width: 2rem;
             text-align: center;
         }
+
+        &--missed {
+            text-decoration: line-through;
+        }
     }
 }
