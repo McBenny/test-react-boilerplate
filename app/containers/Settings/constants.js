@@ -30,7 +30,7 @@ export const SWAP_TEAMS = 'boilerplate/Settings/SWAP_TEAMS';
 export const INIT_SETTINGS = 'boilerplate/Settings/INIT_SETTINGS';
 
 export const EMPTY_MEMBER_DATA = {
-    id: 1,
+    id: 1000,
     reference: '',
     name: '',
     goals: 0,

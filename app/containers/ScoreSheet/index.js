@@ -151,14 +151,18 @@ export function ScoreSheet({ settings, currentScore, dataTeamA, dataTeamB, gameE
                         <td className="table__cell table__cell--data table__cell--line-head">{member.reference}</td>
                         <td
                             className={`table__cell table__cell--data${
-                                member.id !== 0 && member.id === captainId ? ' table__cell--captain' : ''
+                                memberType === MEMBERS_TYPES.players && member.id !== 0 && member.id === captainId
+                                    ? ' table__cell--captain'
+                                    : ''
                             }`}
                         >
                             {member.name}
                             {member.qualification === MEMBERS_QUALIFICATIONS.players.goalie
                                 ? ` (${lineUpMessages.goalieInitial})`
                                 : ''}
-                            {member.id !== 0 && member.id === captainId ? ` (${lineUpMessages.captainInitial})` : ''}
+                            {memberType === MEMBERS_TYPES.players && member.id !== 0 && member.id === captainId
+                                ? ` (${lineUpMessages.captainInitial})`
+                                : ''}
                         </td>
                         <td className="table__cell table__cell--data table__cell--member">{member.goals || ''}</td>
                         <td className="table__cell table__cell--data table__cell--member">
