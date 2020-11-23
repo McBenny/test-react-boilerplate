@@ -1,0 +1,43 @@
+@import '../../styles/variables';
+
+.timeline {
+    &__buttons {
+        height: 2.815rem;
+        padding: 0.25rem 11px;
+
+        &:hover {
+            text-decoration: underline;
+        }
+
+        &--disabled {
+            pointer-events: none;
+        }
+    }
+
+    &__explanations {
+        margin: 0.25rem 0;
+
+        &:last-child {
+            margin: 0.5rem 0 1.5rem;
+        }
+    }
+
+    &__not-found {
+        color: $buttonBackgroundColour;
+    }
+
+    &__404 {
+        line-height: 0.75em;
+        font-family: $fontScore;
+        font-size: 6rem;
+        font-weight: 600;
+        letter-spacing: -5px;
+
+        &--legend {
+            line-height: 1em;
+            font-family: $fontReferences;
+            font-size: 1.75rem;
+            letter-spacing: 0px;
+        }
+    }
+}

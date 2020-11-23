@@ -128,3 +128,23 @@
 .MuiCheckbox-colorPrimary.Mui-checked {
     color: $buttonBackgroundColour !important;
 }
+
+//_________________
+// Timeline
+.MuiTimeline {
+    &OppositeContent-root {
+        padding-top: 1rem !important;
+    }
+
+    &Dot-defaultPrimary {
+        background-color: $timelineColour !important;
+    }
+
+    &Dot-defaultSecondary {
+        background-color: $timelineSecondaryColour !important;
+    }
+
+    &Connector-root {
+        background-color: $timelineColour !important;
+    }
+}
