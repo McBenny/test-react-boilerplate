@@ -48,7 +48,7 @@ export function NotFound({ gameId }) {
     return (
         <>
             <main>
-                <h1>{messages.title}</h1>
+                <h1 className="title title--1">{messages.title}</h1>
                 <Timeline className="timeline">
                     <TimelineItem>
                         <TimelineOppositeContent>
@@ -69,7 +69,6 @@ export function NotFound({ gameId }) {
                             <TimelineConnector />
                         </TimelineSeparator>
                         <TimelineContent>
-                            {/* eslint-disable-next-line no-return-assign */}
                             <Button onClick={() => loadPage(URLS.index)} className="timeline__buttons" size="large">
                                 {messages.homePage}
                             </Button>
@@ -148,7 +147,7 @@ export function NotFound({ gameId }) {
                             <p className="timeline__explanations">
                                 <strong>{messages.whatYouWillFind}</strong>
                                 <br />
-                                {messages.scoreSheetText}{' '}
+                                {messages.scoreSheetText}
                             </p>
                             {!gameId ? (
                                 <p className="timeline__explanations">
