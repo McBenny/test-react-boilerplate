@@ -151,14 +151,18 @@ export function ScoreSheet({ settings, currentScore, dataTeamA, dataTeamB, gameE
                         <td className="table__cell table__cell--data table__cell--line-head">{member.reference}</td>
                         <td
                             className={`table__cell table__cell--data${
-                                member.id !== 0 && member.id === captainId ? ' table__cell--captain' : ''
+                                memberType === MEMBERS_TYPES.players && member.id !== 0 && member.id === captainId
+                                    ? ' table__cell--captain'
+                                    : ''
                             }`}
                         >
                             {member.name}
                             {member.qualification === MEMBERS_QUALIFICATIONS.players.goalie
                                 ? ` (${lineUpMessages.goalieInitial})`
                                 : ''}
-                            {member.id !== 0 && member.id === captainId ? ` (${lineUpMessages.captainInitial})` : ''}
+                            {memberType === MEMBERS_TYPES.players && member.id !== 0 && member.id === captainId
+                                ? ` (${lineUpMessages.captainInitial})`
+                                : ''}
                         </td>
                         <td className="table__cell table__cell--data table__cell--member">{member.goals || ''}</td>
                         <td className="table__cell table__cell--data table__cell--member">
@@ -273,17 +277,14 @@ export function ScoreSheet({ settings, currentScore, dataTeamA, dataTeamB, gameE
             if (event.eventType === EVENT_TYPES.goal) {
                 const player = settings.teams[event.team].players.filter(member => member.id === event.id);
                 const penalty = event.penalty ? `(${messages.initialPenalty})` : '';
-                const missed = event.missed ? 'X' : '';
-                const playerA =
-                    event.team === TEAMS_LIST.HOME ? `${missed} ${penalty} ${player[0].reference || '?'}` : '';
-                const playerB =
-                    event.team === TEAMS_LIST.AWAY ? `${player[0].reference || '?'} ${penalty} ${missed}` : '';
+                const playerA = event.team === TEAMS_LIST.HOME ? `${penalty} ${player[0].reference || '?'}` : '';
+                const playerB = event.team === TEAMS_LIST.AWAY ? `${player[0].reference || '?'} ${penalty}` : '';
                 return (
                     <tr key={uuidv4()}>
                         <td
                             className={`table__cell table__cell--data table__cell--half${
                                 event.team === TEAMS_LIST.HOME ? ' table__cell--acting-team' : ''
-                            }`}
+                            }${event.team === TEAMS_LIST.HOME && event.missed ? ' table__cell--missed' : ''}`}
                         >
                             {playerA}
                         </td>
@@ -305,7 +306,7 @@ export function ScoreSheet({ settings, currentScore, dataTeamA, dataTeamB, gameE
                         <td
                             className={`table__cell table__cell--data table__cell--half${
                                 event.team === TEAMS_LIST.AWAY ? ' table__cell--acting-team' : ''
-                            }`}
+                            }${event.team === TEAMS_LIST.HOME && event.missed ? ' table__cell--missed' : ''}`}
                         >
                             {playerB}
                         </td>
@@ -402,7 +403,9 @@ export function ScoreSheet({ settings, currentScore, dataTeamA, dataTeamB, gameE
                 <table className="table table--structure" role="presentation">
                     <tbody>
                         <tr className="table__row table__row--structure">
-                            <td className="table__cell table__cell--structure">{displayTeamInfo(TEAMS_LIST.HOME)}</td>
+                            <td className="table__cell table__cell--structure table__cell--structure-1">
+                                {displayTeamInfo(TEAMS_LIST.HOME)}
+                            </td>
                             <td className="table__cell table__cell--structure">
                                 {displayResult(messages.halfTimeResult, currentScore.half1)}
                             </td>

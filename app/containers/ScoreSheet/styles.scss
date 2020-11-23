@@ -63,6 +63,10 @@ $colour-zebra: #ddd;
             border: 0 !important;
             padding: 0.125rem 0.5rem;
             vertical-align: top;
+
+            &-1 {
+                width: 50%;
+            }
         }
 
         &--bottom {
@@ -99,7 +103,8 @@ $colour-zebra: #ddd;
         }
 
         &--line-head {
-            max-width: 1rem;
+            min-width: 1.5rem;
+            max-width: 2rem;
             text-align: center;
             font-weight: 600;
         }
@@ -139,6 +144,10 @@ $colour-zebra: #ddd;
         &--colon {
             width: 2rem;
             text-align: center;
+        }
+
+        &--missed {
+            text-decoration: line-through;
         }
     }
 }

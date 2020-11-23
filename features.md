@@ -195,8 +195,14 @@ These features should also apply to the fouls, any foul registered should be edi
 - [X] Display unidentified player if there are goals registered
 - [X] Limit the number of yellow cards to 3 per team (allow for a fourth for officials)
 - [X] Avoid "Game paused / Game restarted around Timeouts in Game log.
+- [X] A player under suspension can't score a goal
+- [X] On the score sheet, certain empty players or officials receive a (C) mark (Round 7 women)
+- [X] Om the score sheet, allow more space to the first main column
 
 ##TODO
+- [ ] Adapt responsiveness for tablets
+- [ ] Allow for a second 2 minutes suspension on an already suspended player (up to 4 minutes)
+- [ ] Build a proper 404 page
 - [ ] Give the ability to filter the list of games per date, competition, round or gender on the Home Screen
 - [ ] I want to be able to delete a game (via popup confirmation)
 - [ ] I want to be able to register an action while the game is on hold (if time is managed)
@@ -234,8 +240,9 @@ These features should also apply to the fouls, any foul registered should be edi
 - [X] Open app in full screen
 - [x] Modify icons
 - [X] Generate a printable/PDF score sheet
-- [ ] Removing a player gives everything he holds to "unknown players"
+- [ ] ~~Removing a player gives everything he holds to "unknown players"~~
 - [X] I want to say there was a penalty missed
+- [X] Change suspension colour to orange
 
 ##REFACTORING
 - [X] Optimise settings page to avoid repetition between A and B teams.
