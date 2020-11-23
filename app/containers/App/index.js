@@ -21,7 +21,7 @@ import { URLS } from './constants';
 
 export default function App() {
     return (
-        <div>
+        <>
             <CssBaseline />
             <Switch>
                 <Route exact path={URLS.index} component={HomePage} />
@@ -29,6 +29,6 @@ export default function App() {
                 <Route exact path={URLS.scoreSheet} component={ScoreSheet} />
                 <Route component={NotFoundPage} />
             </Switch>
-        </div>
+        </>
     );
 }

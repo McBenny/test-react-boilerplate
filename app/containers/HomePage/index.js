@@ -102,7 +102,7 @@ export default function HomePage() {
     return (
         <Fragment>
             <main>
-                <h1>{messages.title}</h1>
+                <h1 className="title title--1">{messages.title}</h1>
                 <Button variant="contained" color="primary" onClick={createGame}>
                     {messages.createGame}
                 </Button>

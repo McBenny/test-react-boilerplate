@@ -13,6 +13,12 @@ const makeSelectSettings = () =>
         gameState => gameState.settings
     );
 
+const makeSelectGameId = () =>
+    createSelector(
+        selectGame,
+        gameState => gameState.gameId
+    );
+
 const makeSelectDate = () =>
     createSelector(
         selectGame,
@@ -64,6 +70,7 @@ const makeSelectDataTeamB = () =>
 export {
     selectGame,
     makeSelectSettings,
+    makeSelectGameId,
     makeSelectDate,
     makeSelectGameStarted,
     makeSelectGamePaused,
