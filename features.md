@@ -201,10 +201,10 @@ These features should also apply to the fouls, any foul registered should be edi
 - [X] Allow to "end the game" when 2nd half is over (and waiting for extra-time to start)
 
 ##TODO
+- [X] Give the ability to filter the list of games per date, competition, round or gender on the Home Screen
 - [ ] Enlarge the timeout count down, maybe use a digital clock font
 - [ ] Adapt responsiveness for tablets
 - [ ] Allow for a second 2 minutes suspension on an already suspended player (up to 4 minutes)
-- [ ] Give the ability to filter the list of games per date, competition, round or gender on the Home Screen
 - [ ] I want to be able to delete a game (via popup confirmation)
 - [ ] authenticate users
 - [ ] save team and players data to use in auto-suggest, save colours as well

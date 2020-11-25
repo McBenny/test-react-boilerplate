@@ -6,8 +6,19 @@
  */
 
 import React, { Fragment } from 'react';
+import PropTypes from 'prop-types';
 
-import { List, ListItem, ListItemText, Button } from '@material-ui/core';
+import {
+    Button,
+    Paper,
+    TableContainer,
+    Table,
+    TableHead,
+    TableBody,
+    TableRow,
+    TableCell,
+    TableSortLabel
+} from '@material-ui/core';
 
 import { URLS } from '../App/constants';
 import { EVENT_TYPES, GAMES_PREFIX } from '../Game/constants';
@@ -17,10 +28,129 @@ import { generateId, formatDate } from '../../utils/utilities';
 import { messages } from './messages';
 import './styles.scss';
 
-function gameSorting(myArray) {
-    const collator = new Intl.Collator('en', { numeric: true, sensitivity: 'base' });
-    return myArray.sort((a, b) => collator.compare(b.settings.date, a.settings.date));
+function createData(id, date, competition, round, gender, homeTeam, score, awayTeam, status) {
+    return { id, date, competition, round, gender, homeTeam, score, awayTeam, status };
 }
+
+const gamesList = [];
+const localKeys = Object.keys(localStorage);
+const gamePrefix = /^game-uuid-[a-z0-9-]{36}$/g;
+for (let i = 0; i < localKeys.length; i += 1) {
+    if (localKeys[i].match(gamePrefix)) {
+        const game = LocalStorage.get(localKeys[i]);
+        let matchStatus = messages.notStarted;
+        if (game.gameEvents.length > 0) {
+            const lastEvent = game.gameEvents[game.gameEvents.length - 1];
+            switch (lastEvent.eventType) {
+                case EVENT_TYPES.gamePaused:
+                    matchStatus = messages.gamePaused;
+                    break;
+                case EVENT_TYPES.periodEnd:
+                    matchStatus = lastEvent.id === 7 ? messages.fullTime : messages.halfTime;
+                    break;
+                case EVENT_TYPES.gameEnd:
+                    matchStatus = messages.fullTime;
+                    break;
+                default:
+                    matchStatus = messages.inProgress;
+            }
+        }
+        gamesList.push(
+            createData(
+                game.gameId,
+                game.settings.date || game.date,
+                game.settings.competition,
+                game.settings.round,
+                game.settings.gender,
+                game.settings.teams.A.name,
+                `${game.dataTeamA.goals}-${game.dataTeamB.goals}`,
+                game.settings.teams.B.name,
+                matchStatus
+            )
+        );
+    }
+}
+
+function descendingComparator(a, b, orderByKey) {
+    if (b[orderByKey] < a[orderByKey]) {
+        return -1;
+    }
+    if (b[orderByKey] > a[orderByKey]) {
+        return 1;
+    }
+    return 0;
+}
+
+function getComparator(theOrder, orderByKey) {
+    return theOrder === 'desc'
+        ? (a, b) => descendingComparator(a, b, orderByKey)
+        : (a, b) => -descendingComparator(a, b, orderByKey);
+}
+
+function stableSort(array, comparator) {
+    const stabilizedThis = array.map((el, index) => [el, index]);
+    stabilizedThis.sort((a, b) => {
+        const theOrder = comparator(a[0], b[0]);
+        if (theOrder !== 0) {
+            return theOrder;
+        }
+        return a[1] - b[1];
+    });
+    return stabilizedThis.map(el => el[0]);
+}
+
+const headCells = [
+    { id: 'date', numeric: true, disablePadding: false, label: messages.date },
+    { id: 'competition', numeric: false, disablePadding: false, label: messages.competition },
+    { id: 'round', numeric: true, disablePadding: false, label: messages.round },
+    { id: 'gender', numeric: true, disablePadding: false, label: messages.gender },
+    { id: 'homeTeam', numeric: false, disablePadding: false, label: messages.homeTeam },
+    { id: 'score', numeric: false, disablePadding: false, label: messages.score, notSortable: true },
+    { id: 'awayTeam', numeric: false, disablePadding: false, label: messages.awayTeam },
+    { id: 'status', numeric: false, disablePadding: false, label: messages.status }
+];
+
+const EnhancedTableHead = ({ order, orderBy, onRequestSort }) => {
+    const createSortHandler = property => event => {
+        onRequestSort(event, property);
+    };
+    return (
+        <TableHead>
+            <TableRow>
+                {headCells.map(headCell => (
+                    <TableCell
+                        key={headCell.id}
+                        align={headCell.numeric ? 'center' : 'left'}
+                        sortDirection={orderBy === headCell.id ? order : false}
+                    >
+                        {!headCell.notSortable ? (
+                            <TableSortLabel
+                                active={orderBy === headCell.id}
+                                direction={orderBy === headCell.id ? order : 'asc'}
+                                onClick={createSortHandler(headCell.id)}
+                            >
+                                {headCell.label}
+                                {orderBy === headCell.id ? (
+                                    <span className="sr-only">
+                                        {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
+                                    </span>
+                                ) : null}
+                            </TableSortLabel>
+                        ) : (
+                            headCell.label
+                        )}
+                    </TableCell>
+                ))}
+            </TableRow>
+        </TableHead>
+    );
+};
+
+EnhancedTableHead.propTypes = {
+    order: PropTypes.string,
+    orderBy: PropTypes.string,
+    onRequestSort: PropTypes.func
+};
 
 export default function HomePage() {
     const createGame = () => {
@@ -36,67 +166,13 @@ export default function HomePage() {
         window.location.href = URLS.game;
     };
 
-    const savedGames = () => {
-        const localKeys = Object.keys(localStorage);
-        const gamePrefix = /^game-uuid-[a-z0-9-]{36}$/g;
+    const [order, setOrder] = React.useState('asc');
+    const [orderBy, setOrderBy] = React.useState('date');
 
-        const cleanLocalStorage = [];
-        for (let i = 0; i < localKeys.length; i += 1) {
-            if (localKeys[i].match(gamePrefix)) {
-                cleanLocalStorage[i] = LocalStorage.get(localKeys[i]);
-            }
-        }
-        const sortedLocalStorage = gameSorting(cleanLocalStorage);
-        const buffer = sortedLocalStorage.map(game => {
-            // Alternative to support old format
-            const formattedDate = formatDate(game.settings.date || game.date);
-            let matchStatus = messages.notStarted;
-            if (game.gameEvents.length > 0) {
-                const lastEvent = game.gameEvents[game.gameEvents.length - 1];
-                switch (lastEvent.eventType) {
-                    case EVENT_TYPES.gamePaused:
-                        matchStatus = messages.gamePaused;
-                        break;
-                    case EVENT_TYPES.periodEnd:
-                        matchStatus = lastEvent.id === 7 ? messages.fullTime : messages.halfTime;
-                        break;
-                    case EVENT_TYPES.gameEnd:
-                        matchStatus = messages.fullTime;
-                        break;
-                    default:
-                        matchStatus = messages.inProgress;
-                }
-            }
-            return (
-                <ListItem key={game.gameId} button className="game-list__item">
-                    <ListItemText onClick={() => loadGame(game.gameId)}>
-                        <span className="game-list__content">
-                            <span className="game-list__date">{formattedDate}</span>
-                            <span className="game-list__details">
-                                <span className="title title--1-5">
-                                    {game.settings.competition} [{game.settings.gender}]{' '}
-                                    {game.settings.round !== '' ? `(round: ${game.settings.round})` : ''}
-                                </span>
-                                <br />
-                                <span className="title title--subtitle">
-                                    {game.settings.teams.A.name} vs {game.settings.teams.B.name}
-                                </span>
-                                <br />
-                                <span className="title title--1-5">
-                                    score: {game.dataTeamA.goals}-{game.dataTeamB.goals} (
-                                    <em className="game-list__status">{matchStatus}</em>)
-                                </span>
-                            </span>
-                        </span>
-                    </ListItemText>
-                </ListItem>
-            );
-        });
-        return (
-            <List component="nav" className="game-list" aria-labelledby="gameListTitle">
-                {buffer}
-            </List>
-        );
+    const handleRequestSort = (event, property) => {
+        const isAsc = orderBy === property && order === 'asc';
+        setOrder(isAsc ? 'desc' : 'asc');
+        setOrderBy(property);
     };
 
     return (
@@ -106,8 +182,29 @@ export default function HomePage() {
                 <Button variant="contained" color="primary" onClick={createGame}>
                     {messages.createGame}
                 </Button>
+
                 <h2 id="gameListTitle">{messages.savedGames}</h2>
-                {savedGames()}
+                <Paper>
+                    <TableContainer>
+                        <Table size="small">
+                            <EnhancedTableHead order={order} orderBy={orderBy} onRequestSort={handleRequestSort} />
+                            <TableBody>
+                                {stableSort(gamesList, getComparator(order, orderBy)).map(game => (
+                                    <TableRow key={game.id} onClick={() => loadGame(game.id)}>
+                                        <TableCell align="center">{formatDate(game.date)}</TableCell>
+                                        <TableCell>{game.competition}</TableCell>
+                                        <TableCell align="center">{game.round !== '' ? game.round : ''}</TableCell>
+                                        <TableCell align="center">{game.gender}</TableCell>
+                                        <TableCell align="right">{game.homeTeam}</TableCell>
+                                        <TableCell align="center">{game.score}</TableCell>
+                                        <TableCell>{game.awayTeam}</TableCell>
+                                        <TableCell>{game.status}</TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+                </Paper>
             </main>
         </Fragment>
     );
