@@ -13,6 +13,7 @@ export const messages = {
     },
     teamA: 'Home team',
     teamB: 'Visitor team',
+    onHold: 'paused',
     addGoal: 'goal',
     addYellowCard: 'yellow card',
     noMoreYellowCards: 'The team has reached the maximum number of yellow cards',
