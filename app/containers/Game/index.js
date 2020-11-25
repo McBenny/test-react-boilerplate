@@ -467,6 +467,18 @@ export function Game({
                                 <div className="game__score game__score--half-time">{PERIODS[currentPeriod]}</div>
                                 <div className="game__score">
                                     {dataTeamA.goals} - {dataTeamB.goals}
+                                    {gamePaused && (
+                                        <div className="game__pause">
+                                            <Button
+                                                variant="contained"
+                                                onClick={() => openPopup(POPUPS.playPause)}
+                                                disableElevation
+                                                className="game__button game__button--pause"
+                                            >
+                                                {messages.onHold}
+                                            </Button>
+                                        </div>
+                                    )}
                                 </div>
                                 <div className="game__score game__score--half-time">
                                     {currentScore.half1 ? (
@@ -552,7 +564,7 @@ export function Game({
                                             type: ADD_BLUE_CARD
                                         })
                                     }
-                                    disabled={!gameStarted || gamePaused}
+                                    disabled={!gameStarted || currentPeriod === 4 || currentPeriod === 8}
                                     startIcon={<InsertDriveFileOutlinedIcon />}
                                     className="game__button game__button--blue-card"
                                 >
@@ -571,7 +583,7 @@ export function Game({
                                             type: ADD_RED_CARD
                                         })
                                     }
-                                    disabled={!gameStarted || gamePaused}
+                                    disabled={!gameStarted || currentPeriod === 4 || currentPeriod === 8}
                                     startIcon={<InsertDriveFileOutlinedIcon />}
                                     className="game__button game__button--red-card"
                                 >
@@ -590,7 +602,7 @@ export function Game({
                                             type: ADD_SUSPENSION
                                         })
                                     }
-                                    disabled={!gameStarted || gamePaused}
+                                    disabled={!gameStarted || currentPeriod === 4 || currentPeriod === 8}
                                     startIcon={<Filter2OutlinedIcon />}
                                     className="game__button game__button--suspension"
                                 >
@@ -611,7 +623,8 @@ export function Game({
                                     }
                                     disabled={
                                         !gameStarted ||
-                                        gamePaused ||
+                                        currentPeriod === 4 ||
+                                        currentPeriod === 8 ||
                                         dataTeamA.yellowCards >=
                                             MAX_NUMBER.yellowCardsPlayersPerTeam +
                                                 MAX_NUMBER.yellowCardsOfficialsPerTeam
@@ -643,7 +656,8 @@ export function Game({
                                     }
                                     disabled={
                                         !gameStarted ||
-                                        gamePaused ||
+                                        currentPeriod === 4 ||
+                                        currentPeriod === 8 ||
                                         dataTeamB.yellowCards >=
                                             MAX_NUMBER.yellowCardsPlayersPerTeam +
                                                 MAX_NUMBER.yellowCardsOfficialsPerTeam
@@ -672,7 +686,7 @@ export function Game({
                                             type: ADD_SUSPENSION
                                         })
                                     }
-                                    disabled={!gameStarted || gamePaused}
+                                    disabled={!gameStarted || currentPeriod === 4 || currentPeriod === 8}
                                     startIcon={<Filter2OutlinedIcon />}
                                     className="game__button game__button--suspension"
                                 >
@@ -691,7 +705,7 @@ export function Game({
                                             type: ADD_RED_CARD
                                         })
                                     }
-                                    disabled={!gameStarted || gamePaused}
+                                    disabled={!gameStarted || currentPeriod === 4 || currentPeriod === 8}
                                     startIcon={<InsertDriveFileOutlinedIcon />}
                                     className="game__button game__button--red-card"
                                 >
@@ -710,7 +724,7 @@ export function Game({
                                             type: ADD_BLUE_CARD
                                         })
                                     }
-                                    disabled={!gameStarted || gamePaused}
+                                    disabled={!gameStarted || currentPeriod === 4 || currentPeriod === 8}
                                     startIcon={<InsertDriveFileOutlinedIcon />}
                                     className="game__button game__button--blue-card"
                                 >

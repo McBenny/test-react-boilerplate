@@ -185,6 +185,7 @@ It should be possible to also add a goal anywhere in the list.
 These features should also apply to the fouls, any foul registered should be editable and removable, it should also be possible to add a foul.
 
 ##BUGS
+- [ ] Allow to "end the game" when 2nd half is over (and waiting for extra-time to start)
 - [ ] When I create a player, it jumps from bottom to top of the list, this is annoying
 - [X] Players with letters are not in uppercase in list for captain
 - [X] I don't want to get "NaN" when I erase a number before putting a new one in the settings
@@ -200,11 +201,11 @@ These features should also apply to the fouls, any foul registered should be edi
 - [X] On the score sheet, allow more space to the first main column
 
 ##TODO
+- [ ] Enlarge the timeout count down, maybe use a digital clock font
 - [ ] Adapt responsiveness for tablets
 - [ ] Allow for a second 2 minutes suspension on an already suspended player (up to 4 minutes)
 - [ ] Give the ability to filter the list of games per date, competition, round or gender on the Home Screen
 - [ ] I want to be able to delete a game (via popup confirmation)
-- [ ] I want to be able to register an action while the game is on hold (if time is managed)
 - [ ] authenticate users
 - [ ] save team and players data to use in auto-suggest, save colours as well
 - [ ] allow image upload for teams
@@ -243,6 +244,7 @@ These features should also apply to the fouls, any foul registered should be edi
 - [X] I want to say there was a penalty missed
 - [X] Change suspension colour to orange
 - [X] Build a proper 404 page
+- [X] I want to be able to register an action while the game is on hold
 
 ##REFACTORING
 - [X] Optimise settings page to avoid repetition between A and B teams.
