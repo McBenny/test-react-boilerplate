@@ -234,7 +234,7 @@ export function Game({
             return gamePaused ? <PlayCircleOutlineIcon /> : <PauseCircleOutlineIcon />;
         }
         if (type === TYPE_MESSAGE) {
-            return messages.startButton.start;
+            return currentPeriod === 0 ? messages.startButton.start : messages.startButton.gameOver;
         }
         return <PlayCircleOutlineIcon />;
     };
@@ -467,7 +467,7 @@ export function Game({
                                 <div className="game__score game__score--half-time">{PERIODS[currentPeriod]}</div>
                                 <div className="game__score">
                                     {dataTeamA.goals} - {dataTeamB.goals}
-                                    {gamePaused && (
+                                    {gamePaused && gameStarted && (
                                         <div className="game__pause">
                                             <Button
                                                 variant="contained"

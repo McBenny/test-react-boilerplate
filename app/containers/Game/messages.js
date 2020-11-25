@@ -9,7 +9,8 @@ export const messages = {
     startButton: {
         start: 'Start game',
         pause: 'Pause game',
-        resume: 'Resume game'
+        resume: 'Resume game',
+        gameOver: 'Game over'
     },
     teamA: 'Home team',
     teamB: 'Visitor team',

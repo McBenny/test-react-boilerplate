@@ -58,7 +58,7 @@ export default function HomePage() {
                         matchStatus = messages.gamePaused;
                         break;
                     case EVENT_TYPES.periodEnd:
-                        matchStatus = messages.halfTime;
+                        matchStatus = lastEvent.id === 7 ? messages.fullTime : messages.halfTime;
                         break;
                     case EVENT_TYPES.gameEnd:
                         matchStatus = messages.fullTime;
