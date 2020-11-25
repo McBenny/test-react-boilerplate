@@ -79,7 +79,7 @@ function PlayPause({ popupVisibility, gameStarted, gamePaused, period, startHand
             <DialogTitle id="dialog-title-play-pause">{messages.title}</DialogTitle>
             <DialogContent>
                 <List component="nav" aria-label="Actions regarding periods">
-                    {!gameStarted ? (
+                    {!gameStarted && period === 0 ? (
                         <ListItem button onClick={handleStartButton}>
                             <ListItemIcon>
                                 <PlayCircleOutlineIcon />
@@ -119,7 +119,9 @@ function PlayPause({ popupVisibility, gameStarted, gamePaused, period, startHand
                     ) : (
                         ''
                     )}
-                    {gameStarted && (period === 3 || period === 7) ? (
+                    {/* eslint-disable indent */}
+                    {(gameStarted && (period === 3 || period === 4 || period === 7)) ||
+                    (!gameStarted && period === 8) ? (
                         <ListItem button onClick={handleEndButton}>
                             <ListItemIcon>
                                 <HighlightOffOutlinedIcon />
@@ -129,6 +131,7 @@ function PlayPause({ popupVisibility, gameStarted, gamePaused, period, startHand
                     ) : (
                         ''
                     )}
+                    {/* eslint-enable indent */}
                 </List>
             </DialogContent>
             <DialogActions>
