@@ -184,9 +184,10 @@ export default function HomePage() {
                 </Button>
 
                 <h2 id="gameListTitle">{messages.savedGames}</h2>
-                <Paper>
+                <Paper className="game-list__container">
                     <TableContainer>
-                        <Table size="small">
+                        <Table size="small" aria-label="caption table">
+                            <caption>{messages.caption}</caption>
                             <EnhancedTableHead order={order} orderBy={orderBy} onRequestSort={handleRequestSort} />
                             <TableBody>
                                 {stableSort(gamesList, getComparator(order, orderBy)).map(game => (

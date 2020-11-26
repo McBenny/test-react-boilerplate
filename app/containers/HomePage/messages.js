@@ -2,6 +2,7 @@ export const messages = {
     title: 'Handball Scoreboard',
     createGame: 'Create a game',
     savedGames: 'Saved games',
+    caption: 'Click on the line of the game you want to see / manage',
     date: 'Date',
     competition: 'Competition',
     round: 'Round',
