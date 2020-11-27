@@ -28,8 +28,8 @@ import { generateId, formatDate } from '../../utils/utilities';
 import { messages } from './messages';
 import './styles.scss';
 
-function createData(id, date, competition, round, gender, homeTeam, score, awayTeam, status) {
-    return { id, date, competition, round, gender, homeTeam, score, awayTeam, status };
+function createData(id, date, competition, round, gender, homeTeam, scoreHome, scoreAway, awayTeam, status) {
+    return { id, date, competition, round, gender, homeTeam, scoreHome, scoreAway, awayTeam, status };
 }
 
 const gamesList = [];
@@ -63,7 +63,8 @@ for (let i = 0; i < localKeys.length; i += 1) {
                 game.settings.round,
                 game.settings.gender,
                 game.settings.teams.A.name,
-                `${game.dataTeamA.goals}-${game.dataTeamB.goals}`,
+                game.dataTeamA.goals,
+                game.dataTeamB.goals,
                 game.settings.teams.B.name,
                 matchStatus
             )
@@ -71,28 +72,28 @@ for (let i = 0; i < localKeys.length; i += 1) {
     }
 }
 
-function descendingComparator(a, b, orderByKey) {
-    if (b[orderByKey] < a[orderByKey]) {
+function descendingComparator(a, b, orderBy) {
+    if (b[orderBy] < a[orderBy]) {
         return -1;
     }
-    if (b[orderByKey] > a[orderByKey]) {
+    if (b[orderBy] > a[orderBy]) {
         return 1;
     }
     return 0;
 }
 
-function getComparator(theOrder, orderByKey) {
-    return theOrder === 'desc'
-        ? (a, b) => descendingComparator(a, b, orderByKey)
-        : (a, b) => -descendingComparator(a, b, orderByKey);
+function getComparator(order, orderBy) {
+    return order === 'desc'
+        ? (a, b) => descendingComparator(a, b, orderBy)
+        : (a, b) => -descendingComparator(a, b, orderBy);
 }
 
 function stableSort(array, comparator) {
     const stabilizedThis = array.map((el, index) => [el, index]);
     stabilizedThis.sort((a, b) => {
-        const theOrder = comparator(a[0], b[0]);
-        if (theOrder !== 0) {
-            return theOrder;
+        const order = comparator(a[0], b[0]);
+        if (order !== 0) {
+            return order;
         }
         return a[1] - b[1];
     });
@@ -194,10 +195,12 @@ export default function HomePage() {
                                     <TableRow key={game.id} onClick={() => loadGame(game.id)}>
                                         <TableCell align="center">{formatDate(game.date)}</TableCell>
                                         <TableCell>{game.competition}</TableCell>
-                                        <TableCell align="center">{game.round !== '' ? game.round : ''}</TableCell>
+                                        <TableCell align="center">{game.round}</TableCell>
                                         <TableCell align="center">{game.gender}</TableCell>
                                         <TableCell align="right">{game.homeTeam}</TableCell>
-                                        <TableCell align="center">{game.score}</TableCell>
+                                        <TableCell align="center">
+                                            {game.scoreHome}-{game.scoreAway}
+                                        </TableCell>
                                         <TableCell>{game.awayTeam}</TableCell>
                                         <TableCell>{game.status}</TableCell>
                                     </TableRow>

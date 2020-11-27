@@ -11,9 +11,9 @@ export const messages = {
     score: 'Score',
     awayTeam: 'Away team',
     status: 'Status',
-    notStarted: 'not started',
-    inProgress: 'in progress...',
-    gamePaused: 'game paused',
-    halfTime: 'half time',
+    notStarted: 'Not started',
+    inProgress: 'In progress...',
+    gamePaused: 'Game paused',
+    halfTime: 'Half time',
     fullTime: 'Full time'
 };
