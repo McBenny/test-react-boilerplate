@@ -395,7 +395,7 @@ export function Settings({
         }
         if (buffer.length > 0) {
             return (
-                <TableContainer>
+                <TableContainer className="settings__table">
                     <Table padding="none" size="small">
                         <TableHead>
                             <TableRow>

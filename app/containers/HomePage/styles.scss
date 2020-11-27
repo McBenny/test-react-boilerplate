@@ -1,4 +1,9 @@
 .game-list {
+
+    &__container {
+        margin: 2rem;
+    }
+
     &__content {
         display: flex;
     }

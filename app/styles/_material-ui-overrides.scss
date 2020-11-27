@@ -10,30 +10,30 @@
 
 //_________________
 // Tables
-.MuiTable {
-    &Container-root {
-        margin-bottom: 1rem;
-        border: 1px solid $borderStrongColour;
-        border-radius: 0.5rem;
-    }
+.settings__table {
+    margin-bottom: 1rem;
+    border: 1px solid $borderStrongColour;
+    border-radius: 0.5rem;
 
-    &Cell-head {
-        background-color: $tableHeaderBackgroundColour;
-        text-align: center !important;
-    }
+    .MuiTable {
+        &Cell-head {
+            background-color: $tableHeaderBackgroundColour;
+            text-align: center !important;
+        }
 
-    &Row-root:nth-child(even) {
-        background-color: $tableStripeBackgroundColour;
-    }
+        &Row-root:nth-child(even) {
+            background-color: $tableStripeBackgroundColour;
+        }
 
-    &Cell-first.MuiTableCell-paddingNone {
-        padding-left: 0.5rem !important;
-    }
+        &Cell-first.MuiTableCell-paddingNone {
+            padding-left: 0.5rem !important;
+        }
 
-    &-root {
-        .MuiFormControl {
-            &-root.MuiFormControl-marginDense {
-                margin: 4px;
+        &-root {
+            .MuiFormControl {
+                &-root.MuiFormControl-marginDense {
+                    margin: 4px;
+                }
             }
         }
     }
