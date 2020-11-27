@@ -167,7 +167,7 @@ export default function HomePage() {
         window.location.href = URLS.game;
     };
 
-    const [order, setOrder] = React.useState('asc');
+    const [order, setOrder] = React.useState('desc');
     const [orderBy, setOrderBy] = React.useState('date');
 
     const handleRequestSort = (event, property) => {
