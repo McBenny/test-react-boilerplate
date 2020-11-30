@@ -204,7 +204,6 @@ These features should also apply to the fouls, any foul registered should be edi
 - [ ] Enlarge the timeout count down, maybe use a digital clock font
 - [ ] Adapt responsiveness for tablets
 - [ ] Allow for a second 2 minutes suspension on an already suspended player (up to 4 minutes)
-- [ ] I want to be able to delete a game (via popup confirmation)
 - [ ] authenticate users
 - [ ] save team and players data to use in auto-suggest, save colours as well
 - [ ] allow image upload for teams
@@ -245,6 +244,7 @@ These features should also apply to the fouls, any foul registered should be edi
 - [X] Build a proper 404 page
 - [X] I want to be able to register an action while the game is on hold
 - [X] Better present games on the home page with sorting capacity
+- [X] I want to be able to delete a game (via popup confirmation)
 
 ##REFACTORING
 - [X] Optimise settings page to avoid repetition between A and B teams.

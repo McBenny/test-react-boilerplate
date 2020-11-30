@@ -5,12 +5,14 @@
  *
  */
 
-import React, { Fragment } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import {
     Button,
+    IconButton,
     Paper,
+    Snackbar,
     TableContainer,
     Table,
     TableHead,
@@ -19,57 +21,66 @@ import {
     TableCell,
     TableSortLabel
 } from '@material-ui/core';
+import MuiAlert from '@material-ui/lab/Alert';
+import DeleteForeverOutlinedIcon from '@material-ui/icons/DeleteForeverOutlined';
+import WcIcon from '@material-ui/icons/Wc';
 
-import { URLS } from '../App/constants';
-import { EVENT_TYPES, GAMES_PREFIX } from '../Game/constants';
+import { SESSION_KEY, URLS } from '../App/constants';
+import { EVENT_TYPES, GAMES_PREFIX, POPUPS } from '../Game/constants';
 import LocalStorage from '../../utils/local-storage';
 import { generateId, formatDate } from '../../utils/utilities';
+
+import DeleteGame from '../../components/Delete-game';
 
 import { messages } from './messages';
 import './styles.scss';
 
+const gamePrefix = /^game-uuid-[a-z0-9-]{36}$/g;
+const createGameList = () => {
+    const localKeys = Object.keys(localStorage);
+    const buffer = [];
+    for (let i = 0; i < localKeys.length; i += 1) {
+        if (localKeys[i].match(gamePrefix)) {
+            const game = LocalStorage.get(localKeys[i]);
+            let matchStatus = messages.notStarted;
+            if (game.gameEvents.length > 0) {
+                const lastEvent = game.gameEvents[game.gameEvents.length - 1];
+                switch (lastEvent.eventType) {
+                    case EVENT_TYPES.gamePaused:
+                        matchStatus = messages.gamePaused;
+                        break;
+                    case EVENT_TYPES.periodEnd:
+                        matchStatus = lastEvent.id === 7 ? messages.fullTime : messages.halfTime;
+                        break;
+                    case EVENT_TYPES.gameEnd:
+                        matchStatus = messages.fullTime;
+                        break;
+                    default:
+                        matchStatus = messages.inProgress;
+                }
+            }
+            buffer.push(
+                createData(
+                    game.gameId,
+                    game.settings.date || game.date,
+                    game.settings.competition,
+                    game.settings.round,
+                    game.settings.gender,
+                    game.settings.teams.A.name,
+                    game.dataTeamA.goals,
+                    game.dataTeamB.goals,
+                    game.settings.teams.B.name,
+                    matchStatus
+                )
+            );
+        }
+    }
+    return buffer;
+};
+let gamesList = createGameList();
+
 function createData(id, date, competition, round, gender, homeTeam, scoreHome, scoreAway, awayTeam, status) {
     return { id, date, competition, round, gender, homeTeam, scoreHome, scoreAway, awayTeam, status };
-}
-
-const gamesList = [];
-const localKeys = Object.keys(localStorage);
-const gamePrefix = /^game-uuid-[a-z0-9-]{36}$/g;
-for (let i = 0; i < localKeys.length; i += 1) {
-    if (localKeys[i].match(gamePrefix)) {
-        const game = LocalStorage.get(localKeys[i]);
-        let matchStatus = messages.notStarted;
-        if (game.gameEvents.length > 0) {
-            const lastEvent = game.gameEvents[game.gameEvents.length - 1];
-            switch (lastEvent.eventType) {
-                case EVENT_TYPES.gamePaused:
-                    matchStatus = messages.gamePaused;
-                    break;
-                case EVENT_TYPES.periodEnd:
-                    matchStatus = lastEvent.id === 7 ? messages.fullTime : messages.halfTime;
-                    break;
-                case EVENT_TYPES.gameEnd:
-                    matchStatus = messages.fullTime;
-                    break;
-                default:
-                    matchStatus = messages.inProgress;
-            }
-        }
-        gamesList.push(
-            createData(
-                game.gameId,
-                game.settings.date || game.date,
-                game.settings.competition,
-                game.settings.round,
-                game.settings.gender,
-                game.settings.teams.A.name,
-                game.dataTeamA.goals,
-                game.dataTeamB.goals,
-                game.settings.teams.B.name,
-                matchStatus
-            )
-        );
-    }
 }
 
 function descendingComparator(a, b, orderBy) {
@@ -100,15 +111,21 @@ function stableSort(array, comparator) {
     return stabilizedThis.map(el => el[0]);
 }
 
+const POSITIONS = {
+    left: 'left',
+    center: 'center',
+    right: 'right'
+};
 const headCells = [
-    { id: 'date', numeric: true, disablePadding: false, label: messages.date },
-    { id: 'competition', numeric: false, disablePadding: false, label: messages.competition },
-    { id: 'round', numeric: true, disablePadding: false, label: messages.round },
-    { id: 'gender', numeric: true, disablePadding: false, label: messages.gender },
-    { id: 'homeTeam', numeric: false, disablePadding: false, label: messages.homeTeam },
-    { id: 'score', numeric: false, disablePadding: false, label: messages.score, notSortable: true },
-    { id: 'awayTeam', numeric: false, disablePadding: false, label: messages.awayTeam },
-    { id: 'status', numeric: false, disablePadding: false, label: messages.status }
+    { id: 'date', numeric: POSITIONS.center, disablePadding: false, label: messages.date },
+    { id: 'competition', numeric: POSITIONS.left, disablePadding: false, label: messages.competition },
+    { id: 'round', numeric: POSITIONS.center, disablePadding: false, label: messages.round },
+    { id: 'gender', numeric: POSITIONS.center, disablePadding: false, label: <WcIcon /> },
+    { id: 'homeTeam', numeric: POSITIONS.right, disablePadding: false, label: messages.homeTeam },
+    { id: 'score', numeric: POSITIONS.center, disablePadding: false, label: messages.score, notSortable: true },
+    { id: 'awayTeam', numeric: POSITIONS.left, disablePadding: false, label: messages.awayTeam },
+    { id: 'status', numeric: POSITIONS.center, disablePadding: false, label: messages.status },
+    { id: 'action', numeric: POSITIONS.center, disablePadding: false, label: messages.action, notSortable: true }
 ];
 
 const EnhancedTableHead = ({ order, orderBy, onRequestSort }) => {
@@ -121,7 +138,7 @@ const EnhancedTableHead = ({ order, orderBy, onRequestSort }) => {
                 {headCells.map(headCell => (
                     <TableCell
                         key={headCell.id}
-                        align={headCell.numeric ? 'center' : 'left'}
+                        align={headCell.numeric}
                         sortDirection={orderBy === headCell.id ? order : false}
                     >
                         {!headCell.notSortable ? (
@@ -158,13 +175,49 @@ export default function HomePage() {
         const gameId = generateId();
         const gameKey = `${GAMES_PREFIX}${gameId}`;
         LocalStorage.set(gameKey, '');
-        sessionStorage.setItem('gameId', gameKey);
+        sessionStorage.setItem(SESSION_KEY, gameKey);
         window.location.href = URLS.game;
     };
 
+    const [selectedGame, setSelectedGame] = useState(null);
+    useEffect(() => {
+        if (selectedGame !== null) {
+            openPopup(POPUPS.deleteGame);
+        }
+    }, [selectedGame]);
+    const [snackStatus, setSnackStatus] = useState(false);
+    const closeSnackBar = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setSnackStatus(false);
+    };
+
     const loadGame = gameKey => {
-        sessionStorage.setItem('gameId', gameKey);
+        sessionStorage.setItem(SESSION_KEY, gameKey);
         window.location.href = URLS.game;
+    };
+
+    // Popups management
+    const popupsInitialState = {
+        deleteGame: false
+    };
+
+    const [popupVisibility, setPopupVisibility] = useState(popupsInitialState);
+    const openPopup = popup => {
+        setPopupVisibility({ ...popupsInitialState, [popup]: true });
+    };
+    const validLocalKeys = Object.keys(localStorage).filter(key => key.match(gamePrefix));
+    const closePopup = () => {
+        setSelectedGame(null);
+        setPopupVisibility({ ...popupsInitialState });
+
+        // Update table of games
+        const newValidLocalKeys = Object.keys(localStorage).filter(key => key.match(gamePrefix));
+        if (validLocalKeys.length !== newValidLocalKeys.length) {
+            gamesList = createGameList();
+            setSnackStatus(true);
+        }
     };
 
     const [order, setOrder] = React.useState('desc');
@@ -187,7 +240,7 @@ export default function HomePage() {
                 <h2 id="gameListTitle">{messages.savedGames}</h2>
                 <Paper className="game-list__container">
                     <TableContainer>
-                        <Table size="small" aria-label="caption table">
+                        <Table size="small" aria-label="caption table" className="home__table">
                             <caption>{messages.caption}</caption>
                             <EnhancedTableHead order={order} orderBy={orderBy} onRequestSort={handleRequestSort} />
                             <TableBody>
@@ -202,13 +255,44 @@ export default function HomePage() {
                                             {game.scoreHome}-{game.scoreAway}
                                         </TableCell>
                                         <TableCell>{game.awayTeam}</TableCell>
-                                        <TableCell>{game.status}</TableCell>
+                                        <TableCell align="center">{game.status}</TableCell>
+                                        <TableCell align="center">
+                                            <IconButton
+                                                color="inherit"
+                                                onClick={e => {
+                                                    e.stopPropagation();
+                                                    setSelectedGame(game);
+                                                }}
+                                                arial-label={messages.action}
+                                            >
+                                                <DeleteForeverOutlinedIcon />
+                                            </IconButton>
+                                        </TableCell>
                                     </TableRow>
                                 ))}
                             </TableBody>
                         </Table>
                     </TableContainer>
                 </Paper>
+                {popupVisibility.deleteGame ? (
+                    <DeleteGame
+                        popupVisibility={popupVisibility.deleteGame}
+                        game={selectedGame}
+                        closeHandler={closePopup}
+                    />
+                ) : (
+                    ''
+                )}
+                <Snackbar
+                    anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+                    open={snackStatus}
+                    autoHideDuration={4000}
+                    onClose={closeSnackBar}
+                >
+                    <MuiAlert elevation={6} variant="filled" onClose={closeSnackBar}>
+                        {messages.deleteConfirmation}
+                    </MuiAlert>
+                </Snackbar>
             </main>
         </Fragment>
     );

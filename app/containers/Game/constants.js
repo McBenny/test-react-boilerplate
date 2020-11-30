@@ -81,6 +81,7 @@ export const UNKNOWN_PLAYER = {
 export const GAMES_PREFIX = 'game-';
 
 export const POPUPS = {
+    deleteGame: 'deleteGame',
     lineUp: 'lineUp',
     players: 'players',
     playPause: 'playPause',
