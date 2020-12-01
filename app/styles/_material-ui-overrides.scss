@@ -1,6 +1,13 @@
 @import 'variables';
 
 //_________________
+// Alert
+.MuiAlert-filledSuccess {
+    background-color: $alertSuccessColour !important;
+    color: $alertSuccessText !important;
+}
+
+//_________________
 // AppBar
 .MuiToolbar-root {
     justify-content: flex-end;
@@ -10,6 +17,13 @@
 
 //_________________
 // Tables
+
+.home__table {
+    .MuiTableCell-sizeSmall {
+        padding: 6px;
+    }
+}
+
 .settings__table {
     margin-bottom: 1rem;
     border: 1px solid $borderStrongColour;
@@ -39,6 +53,23 @@
     }
 }
 
+.delete__table {
+    .MuiTableCell {
+        width: 50%;
+
+        &--header {
+            width: 50%;
+            text-align: right;
+            font-weight: 600;
+        }
+
+        &--match {
+            width: 100%;
+            text-align: center;
+            font-size: 1.25em;
+        }
+    }
+}
 //_________________
 // Dialog
 .MuiDialog-paper {

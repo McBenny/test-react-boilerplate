@@ -31,7 +31,7 @@ import Countdown from '../../components/Countdown';
 import LineUp from '../../components/Line-up';
 import GameLog from '../../components/Game-log';
 
-import { URLS } from '../App/constants';
+import { SESSION_KEY, URLS } from '../App/constants';
 import { GENDERS, MAX_NUMBER, TEAMS_LIST } from '../Settings/constants';
 import {
     ADD_BLUE_CARD,
@@ -84,7 +84,7 @@ export function Game({
 }) {
     useInjectReducer({ key, reducer });
 
-    const gameId = sessionStorage.getItem('gameId');
+    const gameId = sessionStorage.getItem(SESSION_KEY);
 
     const saveGameInStorage = () => {
         if (gameId === null) {

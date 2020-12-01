@@ -13,3 +13,5 @@ export const URLS = {
     index: '/',
     scoreSheet: '/score-sheet'
 };
+
+export const SESSION_KEY = 'gameId';

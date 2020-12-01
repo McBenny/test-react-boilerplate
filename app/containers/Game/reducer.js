@@ -29,13 +29,14 @@ import {
     STORE_SCORE,
     EVENT_TYPES
 } from './constants';
+import { SESSION_KEY } from '../App/constants';
 import { initialState as initialSettings } from '../Settings/reducer';
 import LocalStorage from '../../utils/local-storage';
 
 // The initial state of the App
 export const initialState = {
     settings: initialSettings,
-    gameId: sessionStorage.getItem('gameId'),
+    gameId: sessionStorage.getItem(SESSION_KEY),
     gameStarted: false,
     gamePaused: true,
     currentPeriod: 0,
@@ -65,7 +66,7 @@ export const initialState = {
     gameEvents: []
 };
 
-const savedState = LocalStorage.get(sessionStorage.getItem('gameId') || '');
+const savedState = LocalStorage.get(sessionStorage.getItem(SESSION_KEY) || '');
 const useableState = savedState !== '' ? savedState : initialState;
 
 /* eslint-disable default-case, no-param-reassign */
