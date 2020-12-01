@@ -12,17 +12,17 @@ import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
 
 import { Container, Grid, List, Button, IconButton, ListItem, ListItemText, AppBar, Toolbar } from '@material-ui/core';
-import Filter2OutlinedIcon from '@material-ui/icons/Filter2Outlined';
+import CropPortraitOutlinedIcon from '@material-ui/icons/CropPortraitOutlined';
 import FullscreenExitOutlinedIcon from '@material-ui/icons/FullscreenExitOutlined';
 import FullscreenOutlinedIcon from '@material-ui/icons/FullscreenOutlined';
 import HomeOutlined from '@material-ui/icons/HomeOutlined';
-import InsertDriveFileOutlinedIcon from '@material-ui/icons/InsertDriveFileOutlined';
+import LooksTwoOutlinedIcon from '@material-ui/icons/LooksTwoOutlined';
 import PauseCircleOutlineIcon from '@material-ui/icons/PauseCircleOutline';
 import PeopleOutlineIcon from '@material-ui/icons/PeopleOutline';
 import PlayCircleOutlineIcon from '@material-ui/icons/PlayCircleOutline';
 import SettingsOutlinedIcon from '@material-ui/icons/SettingsOutlined';
 import SportsSoccerOutlinedIcon from '@material-ui/icons/SportsSoccerOutlined';
-import TimerOutlinedIcon from '@material-ui/icons/TimerOutlined';
+import TitleOutlinedIcon from '@material-ui/icons/TitleOutlined';
 
 import Settings from '../Settings';
 import Players from '../../components/Players';
@@ -429,11 +429,14 @@ export function Game({
                                     variant="contained"
                                     onClick={() => handleTimeoutButton(TEAMS_LIST.HOME)}
                                     disabled={!gameStarted || gamePaused || dataTeamA.timeouts >= MAX_NUMBER.timeouts}
-                                    title={dataTeamA.timeouts >= MAX_NUMBER.timeouts ? messages.maxTimeoutsReached : ''}
-                                    startIcon={<TimerOutlinedIcon />}
-                                >
-                                    {messages.addTimeout}
-                                </Button>
+                                    className="game__button game__button--card game__button--timeout"
+                                    title={
+                                        dataTeamA.timeouts >= MAX_NUMBER.timeouts
+                                            ? messages.maxTimeoutsReached
+                                            : messages.addTimeout
+                                    }
+                                    startIcon={<TitleOutlinedIcon />}
+                                />
                                 <p>
                                     {timeOut.A ? (
                                         <Countdown
@@ -534,11 +537,14 @@ export function Game({
                                     variant="contained"
                                     onClick={() => handleTimeoutButton(TEAMS_LIST.AWAY)}
                                     disabled={!gameStarted || gamePaused || dataTeamB.timeouts >= MAX_NUMBER.timeouts}
-                                    title={dataTeamB.timeouts >= MAX_NUMBER.timeouts ? messages.maxTimeoutsReached : ''}
-                                    startIcon={<TimerOutlinedIcon />}
-                                >
-                                    {messages.addTimeout}
-                                </Button>
+                                    className="game__button game__button--card game__button--timeout"
+                                    title={
+                                        dataTeamB.timeouts >= MAX_NUMBER.timeouts
+                                            ? messages.maxTimeoutsReached
+                                            : messages.addTimeout
+                                    }
+                                    startIcon={<TitleOutlinedIcon />}
+                                />
                                 <p>
                                     {timeOut.B ? (
                                         <Countdown
@@ -565,10 +571,11 @@ export function Game({
                                         })
                                     }
                                     disabled={!gameStarted || currentPeriod === 4 || currentPeriod === 8}
-                                    startIcon={<InsertDriveFileOutlinedIcon />}
-                                    className="game__button game__button--blue-card"
+                                    startIcon={<CropPortraitOutlinedIcon />}
+                                    className="game__button game__button--card game__button--blue-card"
+                                    title={messages.addBlueCard}
                                 >
-                                    {messages.addBlueCard}
+                                    {messages.addBlueCardShort}
                                 </Button>
                                 <p>({dataTeamA.blueCards})</p>
                                 {foulPlayersLog(TEAMS_LIST.HOME, FOULS.blueCard)}
@@ -584,10 +591,11 @@ export function Game({
                                         })
                                     }
                                     disabled={!gameStarted || currentPeriod === 4 || currentPeriod === 8}
-                                    startIcon={<InsertDriveFileOutlinedIcon />}
-                                    className="game__button game__button--red-card"
+                                    startIcon={<CropPortraitOutlinedIcon />}
+                                    className="game__button game__button--card game__button--red-card"
+                                    title={messages.addRedCard}
                                 >
-                                    {messages.addRedCard}
+                                    {messages.addRedCardShort}
                                 </Button>
                                 <p>({dataTeamA.redCards})</p>
                                 {foulPlayersLog(TEAMS_LIST.HOME, FOULS.redCard)}
@@ -603,10 +611,11 @@ export function Game({
                                         })
                                     }
                                     disabled={!gameStarted || currentPeriod === 4 || currentPeriod === 8}
-                                    startIcon={<Filter2OutlinedIcon />}
-                                    className="game__button game__button--suspension"
+                                    startIcon={<LooksTwoOutlinedIcon />}
+                                    className="game__button game__button--card game__button--suspension"
+                                    title={messages.addSuspension}
                                 >
-                                    {messages.addSuspension}
+                                    {messages.addSuspensionShort}
                                 </Button>
                                 <p>({dataTeamA.suspensions})</p>
                                 {foulPlayersLog(TEAMS_LIST.HOME, FOULS.suspension)}
@@ -629,16 +638,16 @@ export function Game({
                                             MAX_NUMBER.yellowCardsPlayersPerTeam +
                                                 MAX_NUMBER.yellowCardsOfficialsPerTeam
                                     }
-                                    startIcon={<InsertDriveFileOutlinedIcon />}
-                                    className="game__button game__button--yellow-card"
+                                    startIcon={<CropPortraitOutlinedIcon />}
+                                    className="game__button game__button--card game__button--yellow-card"
                                     title={
                                         dataTeamA.yellowCards >=
                                         MAX_NUMBER.yellowCardsPlayersPerTeam + MAX_NUMBER.yellowCardsOfficialsPerTeam
                                             ? messages.noMoreYellowCards
-                                            : ''
+                                            : messages.addYellowCard
                                     }
                                 >
-                                    {messages.addYellowCard}
+                                    {messages.addYellowCardShort}
                                 </Button>
                                 <p>({dataTeamA.yellowCards})</p>
                                 {foulPlayersLog(TEAMS_LIST.HOME, FOULS.yellowCard)}
@@ -662,16 +671,16 @@ export function Game({
                                             MAX_NUMBER.yellowCardsPlayersPerTeam +
                                                 MAX_NUMBER.yellowCardsOfficialsPerTeam
                                     }
-                                    startIcon={<InsertDriveFileOutlinedIcon />}
-                                    className="game__button game__button--yellow-card"
+                                    startIcon={<CropPortraitOutlinedIcon />}
+                                    className="game__button game__button--card game__button--yellow-card"
                                     title={
                                         dataTeamB.yellowCards >=
                                         MAX_NUMBER.yellowCardsPlayersPerTeam + MAX_NUMBER.yellowCardsOfficialsPerTeam
                                             ? messages.noMoreYellowCards
-                                            : ''
+                                            : messages.addYellowCard
                                     }
                                 >
-                                    {messages.addYellowCard}
+                                    {messages.addYellowCardShort}
                                 </Button>
                                 <p>({dataTeamB.yellowCards})</p>
                                 {foulPlayersLog(TEAMS_LIST.AWAY, FOULS.yellowCard)}
@@ -687,10 +696,11 @@ export function Game({
                                         })
                                     }
                                     disabled={!gameStarted || currentPeriod === 4 || currentPeriod === 8}
-                                    startIcon={<Filter2OutlinedIcon />}
-                                    className="game__button game__button--suspension"
+                                    startIcon={<LooksTwoOutlinedIcon />}
+                                    className="game__button game__button--card game__button--suspension"
+                                    title={messages.addSuspension}
                                 >
-                                    {messages.addSuspension}
+                                    {messages.addSuspensionShort}
                                 </Button>
                                 <p>({dataTeamB.suspensions})</p>
                                 {foulPlayersLog(TEAMS_LIST.AWAY, FOULS.suspension)}
@@ -706,10 +716,11 @@ export function Game({
                                         })
                                     }
                                     disabled={!gameStarted || currentPeriod === 4 || currentPeriod === 8}
-                                    startIcon={<InsertDriveFileOutlinedIcon />}
-                                    className="game__button game__button--red-card"
+                                    startIcon={<CropPortraitOutlinedIcon />}
+                                    className="game__button game__button--card game__button--red-card"
+                                    title={messages.addRedCard}
                                 >
-                                    {messages.addRedCard}
+                                    {messages.addRedCardShort}
                                 </Button>
                                 <p>({dataTeamB.redCards})</p>
                                 {foulPlayersLog(TEAMS_LIST.AWAY, FOULS.redCard)}
@@ -725,10 +736,11 @@ export function Game({
                                         })
                                     }
                                     disabled={!gameStarted || currentPeriod === 4 || currentPeriod === 8}
-                                    startIcon={<InsertDriveFileOutlinedIcon />}
-                                    className="game__button game__button--blue-card"
+                                    startIcon={<CropPortraitOutlinedIcon />}
+                                    className="game__button game__button--card game__button--blue-card"
+                                    title={messages.addBlueCard}
                                 >
-                                    {messages.addBlueCard}
+                                    {messages.addBlueCardShort}
                                 </Button>
                                 <p>({dataTeamB.blueCards})</p>
                                 {foulPlayersLog(TEAMS_LIST.AWAY, FOULS.blueCard)}

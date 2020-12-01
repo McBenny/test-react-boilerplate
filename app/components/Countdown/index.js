@@ -17,14 +17,6 @@ function Countdown({ duration, isOnHold, event, callback }) {
         warningDelay: 10,
         unMountDelay: 5
     };
-    // const toggle = () => {
-    //     setIsActive(!isActive);
-    // };
-
-    // const reset = () => {
-    //     setRemainingTime(duration);
-    //     setIsActive(false);
-    // };
 
     useEffect(() => {
         let interval = null;

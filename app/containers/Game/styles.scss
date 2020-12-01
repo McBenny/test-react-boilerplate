@@ -76,11 +76,40 @@
             }
         }
 
+        &--card {
+            position: relative;
+            width: 100%;
+            padding: calc(100% / 8 * 11) 0 0;
+
+            .MuiButton-label {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                flex-direction: column;
+            }
+
+            .MuiButton-startIcon {
+                margin: 0 !important;
+                width: auto;
+                height: auto;
+
+                svg {
+                    width: 100%;
+                    height: 100%;
+                }
+            }
+        }
+
         &--pause {
             background-color: transparent !important;
             padding: 0;
             font-family: $fontScore;
             font-size: inherit;
+        }
+
+        &--timeout:not(:disabled) {
+            background-color: $timeOutColour !important;
         }
 
         &--yellow-card:not(:disabled) {
