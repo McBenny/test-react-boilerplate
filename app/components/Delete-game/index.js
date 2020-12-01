@@ -2,11 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import {
+    Button,
     Dialog,
     DialogTitle,
     DialogContent,
     DialogActions,
-    Button,
     TableContainer,
     Table,
     TableBody,
@@ -16,6 +16,7 @@ import {
 
 import LocalStorage from '../../utils/local-storage';
 import { formatDate } from '../../utils/utilities';
+import { SESSION_KEY } from '../../containers/App/constants';
 
 import { messages } from './messages';
 import './styles.scss';
@@ -25,13 +26,13 @@ function DeleteGame({ popupVisibility, game, closeHandler }) {
         const { id, date, competition, round, gender, homeTeam, awayTeam, scoreHome, scoreAway, status } = game;
         const deleteGame = gameId => {
             LocalStorage.remove(gameId);
-            sessionStorage.removeItem('gameId');
+            sessionStorage.removeItem(SESSION_KEY);
             closeHandler();
         };
 
         return (
-            <Dialog open={popupVisibility} onClose={closeHandler} aria-labelledby="dialog-title-play-pause">
-                <DialogTitle id="dialog-title-play-pause">{messages.title}</DialogTitle>
+            <Dialog open={popupVisibility} onClose={closeHandler} aria-labelledby="dialog-title-delete-game">
+                <DialogTitle id="dialog-title-delete-game">{messages.title}</DialogTitle>
                 <DialogContent>
                     <p>{messages.question}</p>
                     <TableContainer className="delete__table">
@@ -71,7 +72,10 @@ function DeleteGame({ popupVisibility, game, closeHandler }) {
                             </TableBody>
                         </Table>
                         <br />
-                        <Table size="small" aria-label="caption table">
+                        <Table size="small" aria-labelledby="table-title-match">
+                            <caption id="table-title-match" className="sr-only">
+                                {messages.match}
+                            </caption>
                             <TableBody>
                                 <TableRow>
                                     <TableCell className="MuiTableCell--match">
@@ -102,7 +106,11 @@ function DeleteGame({ popupVisibility, game, closeHandler }) {
             </Dialog>
         );
     }
+    return '';
 }
+DeleteGame.defaultProps = {
+    popupVisibility: false
+};
 
 DeleteGame.propTypes = {
     popupVisibility: PropTypes.bool,

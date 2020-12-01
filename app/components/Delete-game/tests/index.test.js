@@ -6,6 +6,9 @@ import { messages } from '../messages';
 
 const componentProperties = {
     popupVisibility: true,
+    game: {
+        date: '0000-00-00'
+    },
     closeHandler: () => {}
 };
 
