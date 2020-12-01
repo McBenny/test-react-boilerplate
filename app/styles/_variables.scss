@@ -10,18 +10,24 @@ $black-10: rgba(0, 0, 0, 0.15);
 $black-30: rgba(0, 0, 0, 0.3);
 $black-50: rgba(0, 0, 0, 0.5);
 
-$blue-00: #6baed6;
+$blue-00: #216de8;
+$blue-01: #6baed6;
 
-$green-00: #74c476;
+$green-00: #01824d;
+$green-01: #74c476;
 
 $grey-00: #787878;
 $grey-01: #d3e1f2;
 $grey-02: #323f4e;
 $grey-50-85: rgba(127, 127, 127, 0.85);
 
-$yellow-00: #fcdd7e;
+$yellow-00: #e1ff00;
+$yellow-01: #fcdd7e;
+
 $orange-00: #fca536;
-$red-00: #e35637;
+
+$red-00: #fb2b11;
+$red-01: #e35637;
 
 
 $white-00: #fff;
@@ -53,11 +59,12 @@ $suspensionCardColour: $orange-00;
 $redCardColour: $red-00;
 $blueCardColour: $blue-00;
 
+$timeOutColour: $green-00;
 $timeOutWarningColour: $orange-00;
-$timeOutEndColour: $red-00;
-$suspensionDefaultColour: $red-00;
+$timeOutEndColour: $red-01;
+$suspensionDefaultColour: $red-01;
 $suspensionWarningColour: $orange-00;
-$suspensionEndColour: $green-00;
+$suspensionEndColour: $green-01;
 
 $featuresBackgroundColour: $white-95;
 $zebraBackgroundColour: $white-20;
@@ -68,5 +75,5 @@ $tableStripeBackgroundColour: $black-10;
 $timelineColour: $grey-02;
 $timelineSecondaryColour: $orange-00;
 
-$alertSuccessColour: $blue-00;
+$alertSuccessColour: $blue-01;
 $alertSuccessText: $grey-02;
