@@ -1,5 +1,5 @@
 export const messages = {
-    title: 'Play-pause screen',
+    title: 'Match management...',
     cancel: 'Cancel',
     start: 'Start',
     pause: 'Pause',

@@ -27,6 +27,7 @@ import TitleOutlinedIcon from '@material-ui/icons/TitleOutlined';
 import Settings from '../Settings';
 import Players from '../../components/Players';
 import PlayPause from '../../components/Play-pause';
+import Timeout from '../../components/Timeout';
 import Countdown from '../../components/Countdown';
 import LineUp from '../../components/Line-up';
 import GameLog from '../../components/Game-log';
@@ -396,8 +397,19 @@ export function Game({
                     <Container>
                         {displayCompetitionDetails()}
                         <div className="game__grid game__grid--score">
-                            <div />
-                            <div />
+                            <div className="game__grid-item game__grid-item--timeout">
+                                {timeOut.A ? (
+                                    <Timeout>
+                                        <Countdown
+                                            duration={TIME_DURATIONS.timeout}
+                                            callback={() => setATimeOut({ ...timeOut, A: false })}
+                                        />
+                                    </Timeout>
+                                ) : (
+                                    ''
+                                )}
+                            </div>
+                            <div className="game__grid-item game__grid-item--team" />
                             <div className="game__grid-item game__grid-item--team">
                                 <Button
                                     variant="contained"
@@ -421,6 +433,19 @@ export function Game({
                                     ''
                                 )}
                             </div>
+                            <div className="game__grid-item game__grid-item--team" />
+                            <div className="game__grid-item game__grid-item--timeout">
+                                {timeOut.B ? (
+                                    <Timeout>
+                                        <Countdown
+                                            duration={TIME_DURATIONS.timeout}
+                                            callback={() => setATimeOut({ ...timeOut, B: false })}
+                                        />
+                                    </Timeout>
+                                ) : (
+                                    ''
+                                )}
+                            </div>
                         </div>
 
                         <div className="game__grid game__grid--score">
@@ -436,18 +461,9 @@ export function Game({
                                             : messages.addTimeout
                                     }
                                     startIcon={<TitleOutlinedIcon />}
-                                />
-                                <p>
-                                    {timeOut.A ? (
-                                        <Countdown
-                                            duration={TIME_DURATIONS.timeout}
-                                            callback={() => setATimeOut({ ...timeOut, A: false })}
-                                        />
-                                    ) : (
-                                        ''
-                                    )}{' '}
-                                    ({dataTeamA.timeouts})
-                                </p>
+                                >
+                                    <span className="button__label button__label--timeout">{dataTeamA.timeouts}</span>
+                                </Button>
                             </div>
                             <div className="game__grid-item game__grid-item--team game__grid-item--team-A">
                                 <Button
@@ -544,18 +560,9 @@ export function Game({
                                             : messages.addTimeout
                                     }
                                     startIcon={<TitleOutlinedIcon />}
-                                />
-                                <p>
-                                    {timeOut.B ? (
-                                        <Countdown
-                                            duration={TIME_DURATIONS.timeout}
-                                            callback={() => setATimeOut({ ...timeOut, B: false })}
-                                        />
-                                    ) : (
-                                        ''
-                                    )}{' '}
-                                    ({dataTeamB.timeouts})
-                                </p>
+                                >
+                                    <span className="button__label button__label--timeout">{dataTeamB.timeouts}</span>
+                                </Button>
                             </div>
                         </div>
 
