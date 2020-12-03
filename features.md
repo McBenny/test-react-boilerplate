@@ -201,7 +201,6 @@ These features should also apply to the fouls, any foul registered should be edi
 - [X] Allow to "end the game" when 2nd half is over (and waiting for extra-time to start)
 
 ##TODO
-- [ ] Enlarge the timeout count down, maybe use a digital clock font
 - [ ] Adapt responsiveness for tablets
 - [ ] Allow for a second 2 minutes suspension on an already suspended player (up to 4 minutes)
 - [ ] authenticate users
@@ -245,6 +244,7 @@ These features should also apply to the fouls, any foul registered should be edi
 - [X] I want to be able to register an action while the game is on hold
 - [X] Better present games on the home page with sorting capacity
 - [X] I want to be able to delete a game (via popup confirmation)
+- [X] Enlarge the timeout count down, maybe use a digital clock font
 
 ##REFACTORING
 - [X] Optimise settings page to avoid repetition between A and B teams.
