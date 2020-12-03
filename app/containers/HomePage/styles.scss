@@ -11,11 +11,11 @@
     }
 
     &__row--clickable {
-        cursor: pointer;
         transition: all 0.1s ease-in;
 
         &:hover {
             background-color: $white-01;
+            cursor: pointer;
         }
     }
 
