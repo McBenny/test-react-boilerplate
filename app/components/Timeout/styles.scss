@@ -51,15 +51,3 @@
         }
     }
 }
-
-@keyframes animationName {
-    from {
-        background-color: $timeOutWarningColour;
-        color: $textReverseColour;
-    }
-
-    to {
-        background-color: transparent;
-        color: $textColour;
-    }
-}

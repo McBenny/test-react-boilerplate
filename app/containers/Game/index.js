@@ -406,7 +406,7 @@ export function Game({
                                         />
                                     </Timeout>
                                 ) : (
-                                    <div />
+                                    ''
                                 )}
                             </div>
                             <div className="game__grid-item game__grid-item--team" />
@@ -443,7 +443,7 @@ export function Game({
                                         />
                                     </Timeout>
                                 ) : (
-                                    <div />
+                                    ''
                                 )}
                             </div>
                         </div>
