@@ -248,7 +248,11 @@ export default function HomePage() {
                             <EnhancedTableHead order={order} orderBy={orderBy} onRequestSort={handleRequestSort} />
                             <TableBody>
                                 {stableSort(gamesList, getComparator(order, orderBy)).map(game => (
-                                    <TableRow key={game.id} onClick={() => loadGame(game.id)}>
+                                    <TableRow
+                                        key={game.id}
+                                        onClick={() => loadGame(game.id)}
+                                        className="game-list__row game-list__row--clickable"
+                                    >
                                         <TableCell align="center">{formatDate(game.date)}</TableCell>
                                         <TableCell>{game.competition}</TableCell>
                                         <TableCell align="center">{game.round}</TableCell>
