@@ -22,6 +22,7 @@ import {
     TableSortLabel
 } from '@material-ui/core';
 import MuiAlert from '@material-ui/lab/Alert';
+import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
 import DeleteForeverOutlinedIcon from '@material-ui/icons/DeleteForeverOutlined';
 import WcIcon from '@material-ui/icons/Wc';
 
@@ -146,6 +147,7 @@ const EnhancedTableHead = ({ order, orderBy, onRequestSort }) => {
                                 active={orderBy === headCell.id}
                                 direction={orderBy === headCell.id ? order : 'asc'}
                                 onClick={createSortHandler(headCell.id)}
+                                title={typeof headCell.label !== 'string' ? messages[headCell.id] : false}
                             >
                                 {headCell.label}
                                 {orderBy === headCell.id ? (
@@ -229,6 +231,7 @@ export default function HomePage() {
         setOrderBy(property);
     };
 
+    const [bins, setBin] = useState({});
     return (
         <Fragment>
             <main>
@@ -257,16 +260,47 @@ export default function HomePage() {
                                         <TableCell>{game.awayTeam}</TableCell>
                                         <TableCell align="center">{game.status}</TableCell>
                                         <TableCell align="center">
+                                            {/* eslint-disable indent */}
                                             <IconButton
                                                 color="inherit"
                                                 onClick={e => {
                                                     e.stopPropagation();
                                                     setSelectedGame(game);
                                                 }}
+                                                onMouseOver={
+                                                    !bins[game.id]
+                                                        ? () => {
+                                                              setBin({ ...bins, [game.id]: true });
+                                                          }
+                                                        : () => {}
+                                                }
+                                                onFocus={
+                                                    !bins[game.id]
+                                                        ? () => {
+                                                              setBin({ ...bins, [game.id]: true });
+                                                          }
+                                                        : () => {}
+                                                }
+                                                onMouseOut={
+                                                    bins[game.id]
+                                                        ? () => {
+                                                              setBin({ ...bins, [game.id]: false });
+                                                          }
+                                                        : () => {}
+                                                }
+                                                onBlur={
+                                                    bins[game.id]
+                                                        ? () => {
+                                                              setBin({ ...bins, [game.id]: false });
+                                                          }
+                                                        : () => {}
+                                                }
                                                 arial-label={messages.action}
+                                                title={messages.action}
                                             >
-                                                <DeleteForeverOutlinedIcon />
+                                                {bins[game.id] ? <DeleteForeverOutlinedIcon /> : <DeleteOutlinedIcon />}
                                             </IconButton>
+                                            {/* eslint-enable indent */}
                                         </TableCell>
                                     </TableRow>
                                 ))}

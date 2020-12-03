@@ -22,6 +22,12 @@
     .MuiTableCell-sizeSmall {
         padding: 6px;
     }
+
+    .MuiTableCell-alignCenter {
+        .MuiTableSortLabel-root {
+            margin-right: -26px;    // Corrects sorting arrow offset
+        }
+    }
 }
 
 .settings__table {

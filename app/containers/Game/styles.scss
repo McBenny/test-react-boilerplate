@@ -48,7 +48,9 @@
         }
 
         &--timeout {
-            text-align: center;
+            box-shadow: none;
+            width: 80px;
+            background-color: transparent;
         }
     }
 
@@ -67,7 +69,7 @@
             min-height: 2.9em;
             text-align: inherit;
             text-transform: unset;
-            line-height: 1.2em;
+            line-height: 1em;
             font-size: inherit;
             font-weight: 400;
 
@@ -108,24 +110,57 @@
             font-size: inherit;
         }
 
-        &--timeout:not(:disabled) {
-            background-color: $timeOutColour !important;
+        &--timeout {
+            &:not(:disabled) {
+                background-color: $timeOutColour !important;
+            }
+
+            &:hover {
+                background-color: lighten($timeOutColour, 5%) !important;
+            }
+
+            .button {
+                &__label {
+                    &--timeout {
+                        position: absolute;
+                        top: 48%;
+                        right: 0.75rem;
+                        font-size: 1.2em;
+                    }
+                }
+            }
         }
 
         &--yellow-card:not(:disabled) {
             background-color: $yellowCardColour !important;
+
+            &:hover {
+                background-color: darken($yellowCardColour, 5%) !important;
+            }
         }
 
         &--suspension:not(:disabled) {
             background-color: $suspensionCardColour !important;
+
+            &:hover {
+                background-color: lighten($suspensionCardColour, 10%) !important;
+            }
         }
 
         &--red-card:not(:disabled) {
             background-color: $redCardColour !important;
+
+            &:hover {
+                background-color: lighten($redCardColour, 10%) !important;
+            }
         }
 
         &--blue-card:not(:disabled) {
             background-color: $blueCardColour !important;
+
+            &:hover {
+                background-color: lighten($blueCardColour, 12%) !important;
+            }
         }
 
         .game__grid-item--fouls & {
