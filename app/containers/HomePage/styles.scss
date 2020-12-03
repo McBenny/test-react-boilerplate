@@ -1,3 +1,5 @@
+@import '../../styles/variables';
+
 .game-list {
 
     &__container {
@@ -6,6 +8,15 @@
 
     &__content {
         display: flex;
+    }
+
+    &__row--clickable {
+        transition: all 0.1s ease-in;
+
+        &:hover {
+            background-color: $white-01;
+            cursor: pointer;
+        }
     }
 
     &__date {
