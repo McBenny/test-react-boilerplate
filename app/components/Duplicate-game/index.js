@@ -44,7 +44,7 @@ function DuplicateGame({ popupVisibility, game, closeHandler }) {
                 ...oldGameData,
                 gameId: newGameKey
             };
-            const cleanPlayer = {
+            const cleanMember = {
                 blueCards: 0,
                 goals: 0,
                 penalty: 0,
@@ -52,39 +52,41 @@ function DuplicateGame({ popupVisibility, game, closeHandler }) {
                 suspensions: 0,
                 yellowCards: 0
             };
+            const { currentPeriod, currentScore, dataTeamA, dataTeamB, gamePaused, gameStarted } = initialState;
+            const oldTeams = oldGameData.settings.teams;
             const newInitialGameData = {
                 ...oldGameData,
-                currentPeriod: initialState.currentPeriod,
-                currentScore: initialState.currentScore,
-                dataTeamA: initialState.dataTeamA,
-                dataTeamB: initialState.dataTeamB,
+                currentPeriod,
+                currentScore,
+                dataTeamA,
+                dataTeamB,
                 gameEvents: [],
                 gameId: newGameKey,
-                gamePaused: initialState.gamePaused,
-                gameStarted: initialState.gameStarted,
+                gamePaused,
+                gameStarted,
                 settings: {
                     ...oldGameData.settings,
                     teams: {
                         A: {
-                            ...oldGameData.settings.teams.A,
-                            officials: oldGameData.settings.teams.A.officials.map(member => ({
+                            ...oldTeams.A,
+                            officials: oldTeams.A.officials.map(member => ({
                                 ...member,
-                                ...cleanPlayer
+                                ...cleanMember
                             })),
-                            players: oldGameData.settings.teams.A.players.map(member => ({
+                            players: oldTeams.A.players.map(member => ({
                                 ...member,
-                                ...cleanPlayer
+                                ...cleanMember
                             }))
                         },
                         B: {
-                            ...oldGameData.settings.teams.B,
-                            officials: oldGameData.settings.teams.B.officials.map(member => ({
+                            ...oldTeams.B,
+                            officials: oldTeams.B.officials.map(member => ({
                                 ...member,
-                                ...cleanPlayer
+                                ...cleanMember
                             })),
-                            players: oldGameData.settings.teams.B.players.map(member => ({
+                            players: oldTeams.B.players.map(member => ({
                                 ...member,
-                                ...cleanPlayer
+                                ...cleanMember
                             }))
                         }
                     }
@@ -98,11 +100,11 @@ function DuplicateGame({ popupVisibility, game, closeHandler }) {
             setDuplicationType(event.target.value);
         };
         return (
-            <Dialog open={popupVisibility} onClose={closeHandler} aria-labelledby="dialog-title-delete-game">
-                <DialogTitle id="dialog-title-delete-game">{messages.title}</DialogTitle>
+            <Dialog open={popupVisibility} onClose={closeHandler} aria-labelledby="dialog-title-duplicate-game">
+                <DialogTitle id="dialog-title-duplicate-game">{messages.title}</DialogTitle>
                 <DialogContent>
                     <p>{messages.question}</p>
-                    <TableContainer>
+                    <TableContainer className="summary__table">
                         <Table size="small" aria-label="caption table">
                             <caption className="sr-only">{messages.caption}</caption>
                             <TableBody>
@@ -133,7 +135,7 @@ function DuplicateGame({ popupVisibility, game, closeHandler }) {
                                 <TableRow>
                                     <TableCell className="MuiTableCell--match" colSpan={2} aria-label={messages.match}>
                                         {homeTeam}{' '}
-                                        <span className="delete__score">
+                                        <span className="summary__score">
                                             {scoreHome}-{scoreAway}
                                         </span>{' '}
                                         {awayTeam}
@@ -148,14 +150,14 @@ function DuplicateGame({ popupVisibility, game, closeHandler }) {
                             </TableBody>
                         </Table>
                     </TableContainer>
-                    <FormControl component="fieldset" className="duplicate__group">
+                    <FormControl component="fieldset" className="summary__group">
                         <h3>{messages.typeOfDuplication}</h3>
                         <RadioGroup
                             aria-label={messages.typeOfDuplication}
                             name="duplicationType"
                             value={duplicationType}
                             onChange={handleChangeDuplicationType}
-                            className="duplicate__types"
+                            className="summary__types"
                         >
                             <FormControlLabel
                                 value={DUPLICATION_TYPES.full}
