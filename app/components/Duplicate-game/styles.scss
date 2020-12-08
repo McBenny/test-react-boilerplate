@@ -1,7 +1,15 @@
 @import '../../styles/variables';
 
 .summary {
+    &__group {
+        display: flex;
+    }
+
     &__score {
         font-family: $fontScore;
+    }
+
+    &__types {
+        align-self: center;
     }
 }

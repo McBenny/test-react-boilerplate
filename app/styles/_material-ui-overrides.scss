@@ -59,7 +59,7 @@
     }
 }
 
-.delete__table {
+.summary__table {
     .MuiTableCell {
         width: 50%;
 
@@ -151,12 +151,20 @@
 //_________________
 // Radio buttons
 .MuiFormGroup-root {
+    display: flex;
+
     .MuiFormControlLabel-root {
         margin-left: -0.5rem;
     }
 
     .PrivateSwitchBase-root-1 {
         padding: 0.25rem !important;
+    }
+
+    .MuiRadio-colorPrimary {
+        &.Mui-checked {
+            color: $buttonBackgroundColour;
+        }
     }
 }
 

@@ -35,7 +35,7 @@ function DeleteGame({ popupVisibility, game, closeHandler }) {
                 <DialogTitle id="dialog-title-delete-game">{messages.title}</DialogTitle>
                 <DialogContent>
                     <p>{messages.question}</p>
-                    <TableContainer className="delete__table">
+                    <TableContainer className="summary__table">
                         <Table size="small" aria-label="caption table">
                             <caption className="sr-only">{messages.caption}</caption>
                             <TableBody>
@@ -64,27 +64,19 @@ function DeleteGame({ popupVisibility, game, closeHandler }) {
                                     <TableCell>{gender}</TableCell>
                                 </TableRow>
                                 <TableRow>
-                                    <TableCell component="th" className="MuiTableCell--header">
-                                        {messages.status}
-                                    </TableCell>
-                                    <TableCell>{status}</TableCell>
-                                </TableRow>
-                            </TableBody>
-                        </Table>
-                        <br />
-                        <Table size="small" aria-labelledby="table-title-match">
-                            <caption id="table-title-match" className="sr-only">
-                                {messages.match}
-                            </caption>
-                            <TableBody>
-                                <TableRow>
-                                    <TableCell className="MuiTableCell--match">
+                                    <TableCell className="MuiTableCell--match" colSpan={2}>
                                         {homeTeam}{' '}
-                                        <span className="delete__score">
+                                        <span className="summary__score">
                                             {scoreHome}-{scoreAway}
                                         </span>{' '}
                                         {awayTeam}
                                     </TableCell>
+                                </TableRow>
+                                <TableRow>
+                                    <TableCell component="th" className="MuiTableCell--header">
+                                        {messages.status}
+                                    </TableCell>
+                                    <TableCell>{status}</TableCell>
                                 </TableRow>
                             </TableBody>
                         </Table>
