@@ -24,6 +24,7 @@ import {
 import MuiAlert from '@material-ui/lab/Alert';
 import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
 import DeleteForeverOutlinedIcon from '@material-ui/icons/DeleteForeverOutlined';
+import PostAddOutlinedIcon from '@material-ui/icons/PostAddOutlined';
 import WcIcon from '@material-ui/icons/Wc';
 
 import { SESSION_KEY, URLS } from '../App/constants';
@@ -32,6 +33,7 @@ import LocalStorage from '../../utils/local-storage';
 import { generateId, formatDate } from '../../utils/utilities';
 
 import DeleteGame from '../../components/Delete-game';
+import DuplicateGame from '../../components/Duplicate-game';
 
 import { messages } from './messages';
 import './styles.scss';
@@ -126,7 +128,7 @@ const headCells = [
     { id: 'score', numeric: POSITIONS.center, disablePadding: false, label: messages.score, notSortable: true },
     { id: 'awayTeam', numeric: POSITIONS.left, disablePadding: false, label: messages.awayTeam },
     { id: 'status', numeric: POSITIONS.center, disablePadding: false, label: messages.status },
-    { id: 'action', numeric: POSITIONS.center, disablePadding: false, label: messages.action, notSortable: true }
+    { id: 'action', numeric: POSITIONS.center, disablePadding: false, label: messages.actions, notSortable: true }
 ];
 
 const EnhancedTableHead = ({ order, orderBy, onRequestSort }) => {
@@ -147,7 +149,7 @@ const EnhancedTableHead = ({ order, orderBy, onRequestSort }) => {
                                 active={orderBy === headCell.id}
                                 direction={orderBy === headCell.id ? order : 'asc'}
                                 onClick={createSortHandler(headCell.id)}
-                                title={typeof headCell.label !== 'string' ? messages[headCell.id] : false}
+                                title={typeof headCell.label !== 'string' ? messages[headCell.id] : undefined}
                             >
                                 {headCell.label}
                                 {orderBy === headCell.id ? (
@@ -181,12 +183,19 @@ export default function HomePage() {
         window.location.href = URLS.game;
     };
 
-    const [selectedGame, setSelectedGame] = useState(null);
+    const [gameToDelete, setGameToDelete] = useState(null);
     useEffect(() => {
-        if (selectedGame !== null) {
+        if (gameToDelete !== null) {
             openPopup(POPUPS.deleteGame);
         }
-    }, [selectedGame]);
+    }, [gameToDelete]);
+
+    const [gameToDuplicate, setGameToDuplicate] = useState(null);
+    useEffect(() => {
+        if (gameToDuplicate !== null) {
+            openPopup(POPUPS.duplicateGame);
+        }
+    }, [gameToDuplicate]);
     const [snackStatus, setSnackStatus] = useState(false);
     const closeSnackBar = (event, reason) => {
         if (reason === 'clickaway') {
@@ -202,7 +211,8 @@ export default function HomePage() {
 
     // Popups management
     const popupsInitialState = {
-        deleteGame: false
+        deleteGame: false,
+        duplicateGame: false
     };
 
     const [popupVisibility, setPopupVisibility] = useState(popupsInitialState);
@@ -211,7 +221,7 @@ export default function HomePage() {
     };
     const validLocalKeys = Object.keys(localStorage).filter(key => key.match(gamePrefix));
     const closePopup = () => {
-        setSelectedGame(null);
+        setGameToDelete(null);
         setPopupVisibility({ ...popupsInitialState });
 
         // Update table of games
@@ -264,12 +274,23 @@ export default function HomePage() {
                                         <TableCell>{game.awayTeam}</TableCell>
                                         <TableCell align="center">{game.status}</TableCell>
                                         <TableCell align="center">
+                                            <IconButton
+                                                color="inherit"
+                                                onClick={e => {
+                                                    e.stopPropagation();
+                                                    setGameToDuplicate(game);
+                                                }}
+                                                arial-label={messages.duplicate}
+                                                title={messages.duplicate}
+                                            >
+                                                <PostAddOutlinedIcon />
+                                            </IconButton>
                                             {/* eslint-disable indent */}
                                             <IconButton
                                                 color="inherit"
                                                 onClick={e => {
                                                     e.stopPropagation();
-                                                    setSelectedGame(game);
+                                                    setGameToDelete(game);
                                                 }}
                                                 onMouseOver={
                                                     !bins[game.id]
@@ -299,8 +320,8 @@ export default function HomePage() {
                                                           }
                                                         : () => {}
                                                 }
-                                                arial-label={messages.action}
-                                                title={messages.action}
+                                                arial-label={messages.delete}
+                                                title={messages.delete}
                                             >
                                                 {bins[game.id] ? <DeleteForeverOutlinedIcon /> : <DeleteOutlinedIcon />}
                                             </IconButton>
@@ -315,7 +336,16 @@ export default function HomePage() {
                 {popupVisibility.deleteGame ? (
                     <DeleteGame
                         popupVisibility={popupVisibility.deleteGame}
-                        game={selectedGame}
+                        game={gameToDelete}
+                        closeHandler={closePopup}
+                    />
+                ) : (
+                    ''
+                )}
+                {popupVisibility.duplicateGame ? (
+                    <DuplicateGame
+                        popupVisibility={popupVisibility.duplicateGame}
+                        game={gameToDuplicate}
                         closeHandler={closePopup}
                     />
                 ) : (

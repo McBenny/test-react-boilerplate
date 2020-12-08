@@ -11,11 +11,13 @@ export const messages = {
     score: 'Score',
     awayTeam: 'Away team',
     status: 'Status',
-    action: 'Delete',
+    actions: 'Actions',
     notStarted: 'Not started',
     inProgress: 'In progress...',
     gamePaused: 'Game paused',
     halfTime: 'Half time',
     fullTime: 'Full time',
+    duplicate: 'Duplicate',
+    delete: 'Delete',
     deleteConfirmation: 'The game has been deleted permanently.'
 };

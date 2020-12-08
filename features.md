@@ -54,19 +54,19 @@ It's accessible only once the user is identified, it replaces the links to the s
 ##Settings:
 Minimum requirements to get started:
 - Create a match:
-    - [ ] Competition (Men / Women)
+    - [X] Competition (Men / Women)
     - [X] Date
-    - [ ] Referees
+    - [X] Referees
         - [ ] First and last names (2),
-    - [ ] Timekeeper and Scorekeeper (2)
+    - [X] Timekeeper and Scorekeeper (2)
         - [ ] First and last names (2),
-    - [ ] Team A / B:
+    - [X] Team A / B:
         - [X] name
-        - [ ] _colour_
+        - [X] _colour_
         - Players:
             - [X] Number\*
             - [X] _First and last name_
-            - [ ] Goalie?
+            - [X] Goalie?
         - Officials:
             - [X] First and last name
             - [X] Start button
@@ -78,10 +78,10 @@ The display shows the 2 teams involved, the current score and the players who re
 
 ###General features
 - [X] Edit match settings => access to initial settings
-- [ ] Invert Teams (A-B => B-A)
+- [X] Invert Teams (A-B => B-A)
 - [ ] Alter score:
-    - [ ] remove last goal,
-    - [ ] edit score sheet:
+    - [X] remove last goal,
+    - [X] edit score sheet:
         - [ ] opens a dialog with:
             - [ ] list of goals one after the other with:
                 - [ ] score / new goal - for each line, possible to edit the team and player number or remove the line
@@ -95,13 +95,13 @@ The screen is separated in 2 sides with on each side:
 - [X] Team identification (name, _logo, jersey colour_)
 - [X] Number of goals,
 - [X] List of fouls (yellow and red cards, 2 minutes with player number, _first and last name_).
-- [ ] _Click on the team to view the line-up_
-    - [ ] opens a dialog with:
-        - [ ] lists the players with number, _first and last name_
-        - [ ] for each player, possible to edit (number, first or last name) and remove player
-        - [ ] button to add a player:
-            - [ ] adds a line with empty fields for number, _first and last name_.
-        - [ ] close button
+- [X] _Click on the team to view the line-up_
+    - [X] opens a dialog with:
+        - [X] lists the players with number, _first and last name_
+        - [X] for each player, possible to edit (number, first or last name) and remove player
+        - [X] button to add a player:
+            - [X] adds a line with empty fields for number, _first and last name_.
+        - [X] close button
 
 - [X] Click on the score to add a goal:
     - [X] opens a dialog with:
@@ -127,7 +127,7 @@ The screen is separated in 2 sides with on each side:
 1) [X] Game screen
 1) [X] Add a goal
 1) [X] Add a foul
-1) [ ] Edit game log
+1) [X] Edit game log
 
 ###Splash screen
 This is the starting screen of the application, its purpose is to present the app and allow for the official to start a session.
@@ -154,7 +154,7 @@ From this screen it's possible to access other screens:
 - [X] Game settings: to alter the game's settings (add a player, change a referee...),
 - [X] Add a goal screen: to add a goal for a team,
 - [X] Add a foul screen: to add a certain type of foul to a team / player,
-- [ ] Edit score screen: to edit the score if a mistake has been made
+- [X] Edit score screen: to edit the score if a mistake has been made
 
 This screen also allows for certain actions:
 - [X] select/change half-time,
@@ -201,6 +201,9 @@ These features should also apply to the fouls, any foul registered should be edi
 - [X] Allow to "end the game" when 2nd half is over (and waiting for extra-time to start)
 
 ##TODO
+- [ ] Display the number of games on the home page
+- [ ] Be able to duplicate a game, with or without the events (keeping teams and players)
+- [ ] Try to find icons to represent the state of a game on the home page
 - [ ] Adapt responsiveness for tablets
 - [ ] Allow for a second 2 minutes suspension on an already suspended player (up to 4 minutes)
 - [ ] authenticate users

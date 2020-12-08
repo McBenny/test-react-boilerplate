@@ -129,6 +129,7 @@ exports[`<HomePage /> should render and match the snapshot 1`] = `
                 class="MuiButtonBase-root MuiTableSortLabel-root"
                 role="button"
                 tabindex="0"
+                title="Gender"
               >
                 <svg
                   aria-hidden="true"
@@ -231,7 +232,7 @@ exports[`<HomePage /> should render and match the snapshot 1`] = `
               class="MuiTableCell-root MuiTableCell-head MuiTableCell-alignCenter MuiTableCell-sizeSmall"
               scope="col"
             >
-              Delete
+              Actions
             </th>
           </tr>
         </thead>
@@ -241,6 +242,7 @@ exports[`<HomePage /> should render and match the snapshot 1`] = `
       </table>
     </div>
   </div>
+  
   
 </main>
 `;

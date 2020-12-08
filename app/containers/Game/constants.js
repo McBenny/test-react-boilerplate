@@ -82,6 +82,7 @@ export const GAMES_PREFIX = 'game-';
 
 export const POPUPS = {
     deleteGame: 'deleteGame',
+    duplicateGame: 'duplicateGame',
     lineUp: 'lineUp',
     players: 'players',
     playPause: 'playPause',
