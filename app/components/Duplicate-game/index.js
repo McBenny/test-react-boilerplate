@@ -14,15 +14,27 @@ import {
     TableRow
 } from '@material-ui/core';
 
-import { formatDate } from '../../utils/utilities';
+import { formatDate, generateId } from '../../utils/utilities';
 
 import { messages } from './messages';
+import LocalStorage from '../../utils/local-storage';
+import { GAMES_PREFIX } from '../../containers/Game/constants';
 
 function DuplicateGame({ popupVisibility, game, closeHandler }) {
     if (game) {
         const { id, date, competition, round, gender, homeTeam, awayTeam, scoreHome, scoreAway, status } = game;
         const duplicateGame = gameId => {
-            console.log('Duplicate function to be defined', gameId);
+            const oldGameData = LocalStorage.get(gameId);
+            // console.log(oldGameData);
+            const newGameId = generateId();
+            const newGameKey = `${GAMES_PREFIX}${newGameId}`;
+            const newGameData = {
+                ...oldGameData,
+                gameId: newGameKey
+            };
+            // console.log(newGameData);
+            LocalStorage.set(newGameKey, newGameData);
+            // console.log('Duplicate function to be defined', gameId);
             closeHandler();
         };
 
@@ -85,11 +97,6 @@ function DuplicateGame({ popupVisibility, game, closeHandler }) {
                             </TableBody>
                         </Table>
                     </TableContainer>
-                    <p className="text text--error">
-                        <strong>{messages.warning}</strong>
-                        <br />
-                        {messages.warningText}
-                    </p>
                 </DialogContent>
                 <DialogActions>
                     <Button variant="contained" onClick={closeHandler}>

@@ -19,5 +19,6 @@ export const messages = {
     fullTime: 'Full time',
     duplicate: 'Duplicate',
     delete: 'Delete',
-    deleteConfirmation: 'The game has been deleted permanently.'
+    deleteConfirmation: 'The game has been deleted permanently.',
+    duplicateConfirmation: 'The game has been duplicated.'
 };

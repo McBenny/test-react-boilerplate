@@ -202,7 +202,7 @@ These features should also apply to the fouls, any foul registered should be edi
 
 ##TODO
 - [ ] Display the number of games on the home page
-- [ ] Be able to duplicate a game, with or without the events (keeping teams and players)
+- [X] Be able to duplicate a game, with or without the events (keeping teams and players)
 - [ ] Try to find icons to represent the state of a game on the home page
 - [ ] Adapt responsiveness for tablets
 - [ ] Allow for a second 2 minutes suspension on an already suspended player (up to 4 minutes)

@@ -6,8 +6,6 @@ export const messages = {
     question: 'Are you sure you want to duplicate the following game?',
     caption: 'Match data',
     match: 'Teams and score',
-    warning: 'Warning:',
-    warningText: 'This cannot be reverted. Any deleted game is definitely erased. Use with caution!',
     cancel: 'Cancel',
     confirm: 'Confirm'
 };

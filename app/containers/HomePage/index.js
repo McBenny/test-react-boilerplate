@@ -196,12 +196,14 @@ export default function HomePage() {
             openPopup(POPUPS.duplicateGame);
         }
     }, [gameToDuplicate]);
-    const [snackStatus, setSnackStatus] = useState(false);
+    const [snackStatus, setSnackStatus] = useState({ show: false });
     const closeSnackBar = (event, reason) => {
         if (reason === 'clickaway') {
             return;
         }
-        setSnackStatus(false);
+        setSnackStatus({
+            show: false
+        });
     };
 
     const loadGame = gameKey => {
@@ -222,13 +224,19 @@ export default function HomePage() {
     const validLocalKeys = Object.keys(localStorage).filter(key => key.match(gamePrefix));
     const closePopup = () => {
         setGameToDelete(null);
+        setGameToDuplicate(null);
         setPopupVisibility({ ...popupsInitialState });
 
         // Update table of games
         const newValidLocalKeys = Object.keys(localStorage).filter(key => key.match(gamePrefix));
         if (validLocalKeys.length !== newValidLocalKeys.length) {
+            const snackContent =
+                validLocalKeys.length < newValidLocalKeys.length ? POPUPS.duplicateGame : POPUPS.deleteGame;
             gamesList = createGameList();
-            setSnackStatus(true);
+            setSnackStatus({
+                content: snackContent,
+                show: true
+            });
         }
     };
 
@@ -353,12 +361,14 @@ export default function HomePage() {
                 )}
                 <Snackbar
                     anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-                    open={snackStatus}
+                    open={snackStatus.show}
                     autoHideDuration={4000}
                     onClose={closeSnackBar}
                 >
                     <MuiAlert elevation={6} variant="filled" onClose={closeSnackBar}>
-                        {messages.deleteConfirmation}
+                        {snackStatus.content === POPUPS.deleteGame
+                            ? messages.deleteConfirmation
+                            : messages.duplicateConfirmation}
                     </MuiAlert>
                 </Snackbar>
             </main>
