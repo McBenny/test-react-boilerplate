@@ -202,7 +202,6 @@ These features should also apply to the fouls, any foul registered should be edi
 
 ##TODO
 - [ ] Display the number of games on the home page
-- [X] Be able to duplicate a game, with or without the events (keeping teams and players)
 - [ ] Try to find icons to represent the state of a game on the home page
 - [ ] Adapt responsiveness for tablets
 - [ ] Allow for a second 2 minutes suspension on an already suspended player (up to 4 minutes)
@@ -248,6 +247,7 @@ These features should also apply to the fouls, any foul registered should be edi
 - [X] Better present games on the home page with sorting capacity
 - [X] I want to be able to delete a game (via popup confirmation)
 - [X] Enlarge the timeout count down, maybe use a digital clock font
+- [X] Be able to duplicate a game, with or without the events (keeping teams and players)
 
 ##REFACTORING
 - [X] Optimise settings page to avoid repetition between A and B teams.

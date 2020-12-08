@@ -196,6 +196,7 @@ export default function HomePage() {
             openPopup(POPUPS.duplicateGame);
         }
     }, [gameToDuplicate]);
+
     const [snackStatus, setSnackStatus] = useState({ show: false });
     const closeSnackBar = (event, reason) => {
         if (reason === 'clickaway') {
