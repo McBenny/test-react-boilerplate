@@ -5,7 +5,7 @@ export const messages = {
     introText: [
         'Want to start quickly? Just click the "<strong>Create a game</strong>" button and you\'re started!',
         'No need for any configuration, you can start to register the score of a game straight away, handle half-times and register time-outs.',
-        "If you want to register who's scoring as well as yellow cards, suspensions and other fouls, you will just need to enter the players' numbers and/or names in the settings. You will also be able to put in the team's names, their jersey colour (and number colour), name of officials, location and time of the game, the competition and many more.",
+        "If you want to register who's scoring as well as yellow cards, suspensions or other fouls, just enter the players' numbers and/or names in the settings. You can also save the team's names, their jersey (and number) colour(s), name of officials, location and time of the game, the competition and many more.",
         'Once created, you will find your game in the list of saved games bellow.'
     ],
     savedGames: 'Saved games',
