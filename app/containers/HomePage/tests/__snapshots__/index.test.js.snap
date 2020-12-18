@@ -7,242 +7,84 @@ exports[`<HomePage /> should render and match the snapshot 1`] = `
   >
     Handball Scoreboard
   </h1>
-  <button
-    class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary"
-    tabindex="0"
-    type="button"
+  <div
+    class="game-list__container"
   >
-    <span
-      class="MuiButton-label"
+    <button
+      aria-label="Create a game"
+      class="MuiButtonBase-root MuiButton-root MuiButton-contained button button--image game-list__button game-list__button--new-game"
+      tabindex="0"
+      title="Create a game"
+      type="button"
+    >
+      <span
+        class="MuiButton-label"
+      >
+        <img
+          alt="Thumbnail of the application"
+          src="IMAGE_MOCK"
+          style="max-width: 300px;"
+        />
+      </span>
+      <span
+        class="MuiTouchRipple-root"
+      />
+    </button>
+    <h2
+      id="homeTitle"
     >
       Create a game
-    </span>
-    <span
-      class="MuiTouchRipple-root"
-    />
-  </button>
-  <h2
-    id="gameListTitle"
-  >
-    Saved games
-  </h2>
-  <div
-    class="MuiPaper-root game-list__container MuiPaper-elevation1 MuiPaper-rounded"
-  >
-    <div
-      class="MuiTableContainer-root"
-    >
-      <table
-        aria-label="caption table"
-        class="MuiTable-root home__table"
+    </h2>
+    <p>
+      Want to start quickly? Just click the "
+      <strong>
+        Create a game
+      </strong>
+      " button and you're started!
+    </p>
+    <p>
+      No need for any configuration, you can start to register the score of a game straight away, handle half-times and register time-outs.
+    </p>
+    <p>
+      If you want to register who's scoring as well as yellow cards, suspensions and other fouls, you will just need to enter the players' numbers and/or names in the settings. You will also be able to put in the team's names, their jersey colour (and number colour), name of officials, location and time of the game, the competition and many more.
+    </p>
+    <p>
+      Once created, you will find your game in the list of saved games bellow.
+    </p>
+    <p>
+      <button
+        class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary"
+        tabindex="0"
+        type="button"
       >
-        <caption>
-          Click on the line of the game you want to see / manage
-        </caption>
-        <thead
-          class="MuiTableHead-root"
+        <span
+          class="MuiButton-label"
         >
-          <tr
-            class="MuiTableRow-root MuiTableRow-head"
-          >
-            <th
-              aria-sort="descending"
-              class="MuiTableCell-root MuiTableCell-head MuiTableCell-alignCenter MuiTableCell-sizeSmall"
-              scope="col"
-            >
-              <span
-                aria-disabled="false"
-                class="MuiButtonBase-root MuiTableSortLabel-root MuiTableSortLabel-active"
-                role="button"
-                tabindex="0"
-              >
-                Date
-                <span
-                  class="sr-only"
-                >
-                  sorted descending
-                </span>
-                <svg
-                  aria-hidden="true"
-                  class="MuiSvgIcon-root MuiTableSortLabel-icon MuiTableSortLabel-iconDirectionDesc"
-                  focusable="false"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    d="M20 12l-1.41-1.41L13 16.17V4h-2v12.17l-5.58-5.59L4 12l8 8 8-8z"
-                  />
-                </svg>
-              </span>
-            </th>
-            <th
-              class="MuiTableCell-root MuiTableCell-head MuiTableCell-alignLeft MuiTableCell-sizeSmall"
-              scope="col"
-            >
-              <span
-                aria-disabled="false"
-                class="MuiButtonBase-root MuiTableSortLabel-root"
-                role="button"
-                tabindex="0"
-              >
-                Competition
-                <svg
-                  aria-hidden="true"
-                  class="MuiSvgIcon-root MuiTableSortLabel-icon MuiTableSortLabel-iconDirectionAsc"
-                  focusable="false"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    d="M20 12l-1.41-1.41L13 16.17V4h-2v12.17l-5.58-5.59L4 12l8 8 8-8z"
-                  />
-                </svg>
-              </span>
-            </th>
-            <th
-              class="MuiTableCell-root MuiTableCell-head MuiTableCell-alignCenter MuiTableCell-sizeSmall"
-              scope="col"
-            >
-              <span
-                aria-disabled="false"
-                class="MuiButtonBase-root MuiTableSortLabel-root"
-                role="button"
-                tabindex="0"
-              >
-                Round
-                <svg
-                  aria-hidden="true"
-                  class="MuiSvgIcon-root MuiTableSortLabel-icon MuiTableSortLabel-iconDirectionAsc"
-                  focusable="false"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    d="M20 12l-1.41-1.41L13 16.17V4h-2v12.17l-5.58-5.59L4 12l8 8 8-8z"
-                  />
-                </svg>
-              </span>
-            </th>
-            <th
-              class="MuiTableCell-root MuiTableCell-head MuiTableCell-alignCenter MuiTableCell-sizeSmall"
-              scope="col"
-            >
-              <span
-                aria-disabled="false"
-                class="MuiButtonBase-root MuiTableSortLabel-root"
-                role="button"
-                tabindex="0"
-                title="Gender"
-              >
-                <svg
-                  aria-hidden="true"
-                  class="MuiSvgIcon-root"
-                  focusable="false"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    d="M5.5 22v-7.5H4V9c0-1.1.9-2 2-2h3c1.1 0 2 .9 2 2v5.5H9.5V22h-4zM18 22v-6h3l-2.54-7.63C18.18 7.55 17.42 7 16.56 7h-.12c-.86 0-1.63.55-1.9 1.37L12 16h3v6h3zM7.5 6c1.11 0 2-.89 2-2s-.89-2-2-2-2 .89-2 2 .89 2 2 2zm9 0c1.11 0 2-.89 2-2s-.89-2-2-2-2 .89-2 2 .89 2 2 2z"
-                  />
-                </svg>
-                <svg
-                  aria-hidden="true"
-                  class="MuiSvgIcon-root MuiTableSortLabel-icon MuiTableSortLabel-iconDirectionAsc"
-                  focusable="false"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    d="M20 12l-1.41-1.41L13 16.17V4h-2v12.17l-5.58-5.59L4 12l8 8 8-8z"
-                  />
-                </svg>
-              </span>
-            </th>
-            <th
-              class="MuiTableCell-root MuiTableCell-head MuiTableCell-alignRight MuiTableCell-sizeSmall"
-              scope="col"
-            >
-              <span
-                aria-disabled="false"
-                class="MuiButtonBase-root MuiTableSortLabel-root"
-                role="button"
-                tabindex="0"
-              >
-                Home team
-                <svg
-                  aria-hidden="true"
-                  class="MuiSvgIcon-root MuiTableSortLabel-icon MuiTableSortLabel-iconDirectionAsc"
-                  focusable="false"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    d="M20 12l-1.41-1.41L13 16.17V4h-2v12.17l-5.58-5.59L4 12l8 8 8-8z"
-                  />
-                </svg>
-              </span>
-            </th>
-            <th
-              class="MuiTableCell-root MuiTableCell-head MuiTableCell-alignCenter MuiTableCell-sizeSmall"
-              scope="col"
-            >
-              Score
-            </th>
-            <th
-              class="MuiTableCell-root MuiTableCell-head MuiTableCell-alignLeft MuiTableCell-sizeSmall"
-              scope="col"
-            >
-              <span
-                aria-disabled="false"
-                class="MuiButtonBase-root MuiTableSortLabel-root"
-                role="button"
-                tabindex="0"
-              >
-                Away team
-                <svg
-                  aria-hidden="true"
-                  class="MuiSvgIcon-root MuiTableSortLabel-icon MuiTableSortLabel-iconDirectionAsc"
-                  focusable="false"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    d="M20 12l-1.41-1.41L13 16.17V4h-2v12.17l-5.58-5.59L4 12l8 8 8-8z"
-                  />
-                </svg>
-              </span>
-            </th>
-            <th
-              class="MuiTableCell-root MuiTableCell-head MuiTableCell-alignCenter MuiTableCell-sizeSmall"
-              scope="col"
-            >
-              <span
-                aria-disabled="false"
-                class="MuiButtonBase-root MuiTableSortLabel-root"
-                role="button"
-                tabindex="0"
-              >
-                Status
-                <svg
-                  aria-hidden="true"
-                  class="MuiSvgIcon-root MuiTableSortLabel-icon MuiTableSortLabel-iconDirectionAsc"
-                  focusable="false"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    d="M20 12l-1.41-1.41L13 16.17V4h-2v12.17l-5.58-5.59L4 12l8 8 8-8z"
-                  />
-                </svg>
-              </span>
-            </th>
-            <th
-              class="MuiTableCell-root MuiTableCell-head MuiTableCell-alignCenter MuiTableCell-sizeSmall"
-              scope="col"
-            >
-              Actions
-            </th>
-          </tr>
-        </thead>
-        <tbody
-          class="MuiTableBody-root"
+          Create a game
+        </span>
+        <span
+          class="MuiTouchRipple-root"
         />
-      </table>
-    </div>
+      </button>
+    </p>
   </div>
-  
-  
+  <div
+    class="game-list__container"
+  >
+    <h2
+      id="gameListTitle"
+    >
+      Saved games
+       
+      
+    </h2>
+  </div>
+  <div
+    class="game-list__container"
+  >
+    <p>
+      You have no games saved yet. Create one and it will appear here.
+    </p>
+  </div>
 </main>
 `;
