@@ -74,13 +74,40 @@ export function ScoreSheet({ settings, currentScore, dataTeamA, dataTeamB, gameE
                                 ###
                             </td>
                             <td className="table__cell table__cell--data table__cell--single">
-                                {[`dataTeam${team}`].timeouts > 0 ? 'X' : '-'}
+                                {/* eslint-disable indent */}
+                                {/* eslint-disable-next-line no-nested-ternary */}
+                                {team === TEAMS_LIST.HOME
+                                    ? dataTeamA.timeouts > 0
+                                        ? 'X'
+                                        : '-'
+                                    : dataTeamB.timeouts > 0
+                                    ? 'X'
+                                    : '-'}
+                                {/* eslint-enable indent */}
                             </td>
                             <td className="table__cell table__cell--data table__cell--single">
-                                {[`dataTeam${team}`].timeouts > 1 ? 'X' : '-'}
+                                {/* eslint-disable indent */}
+                                {/* eslint-disable-next-line no-nested-ternary */}
+                                {team === TEAMS_LIST.HOME
+                                    ? dataTeamA.timeouts > 1
+                                        ? 'X'
+                                        : '-'
+                                    : dataTeamB.timeouts > 1
+                                    ? 'X'
+                                    : '-'}
+                                {/* eslint-enable indent */}
                             </td>
                             <td className="table__cell table__cell--data table__cell--single">
-                                {[`dataTeam${team}`].timeouts > 2 ? 'X' : '-'}
+                                {/* eslint-disable indent */}
+                                {/* eslint-disable-next-line no-nested-ternary */}
+                                {team === TEAMS_LIST.HOME
+                                    ? dataTeamA.timeouts > 2
+                                        ? 'X'
+                                        : '-'
+                                    : dataTeamB.timeouts > 2
+                                    ? 'X'
+                                    : '-'}
+                                {/* eslint-enable indent */}
                             </td>
                         </tr>
                     </tbody>
