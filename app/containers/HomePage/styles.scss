@@ -10,6 +10,13 @@
         display: flex;
     }
 
+    &__button {
+        &--new-game {
+            float: right;
+            margin-left: 1rem;
+        }
+    }
+
     &__row--clickable {
         transition: all 0.1s ease-in;
 

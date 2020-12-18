@@ -16,8 +16,110 @@
 }
 
 //_________________
-// Tables
+// Buttons
+.MuiButton {
+    &-contained.MuiButton-root {
+        background-color: $buttonBackgroundColour;
+        color: $buttonTextColour;
 
+        &:hover {
+            background-color: darken($buttonBackgroundColour, 10%);
+            color: $buttonTextColour;
+        }
+
+        &.button--image {
+            background-color: transparent;
+            padding: 0;
+        }
+    }
+
+    &-iconSizeLarge > *:first-child {
+        margin-top: 0.1em;
+        font-size: inherit !important;
+    }
+}
+
+//_________________
+// Checkboxes
+.MuiCheckbox-colorPrimary.Mui-checked {
+    color: $buttonBackgroundColour !important;
+}
+
+//_________________
+// Dialog
+.MuiDialog-paper {
+    > * {
+        z-index: 0;
+    }
+
+    &::before {
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 0;
+        width: 100%;
+        height: 100%;
+        background-repeat: no-repeat;
+        background-size: cover;
+        filter: alpha(0.666);
+        content: '';
+    }
+}
+
+.member__popup {
+    &--goal {
+        .MuiDialog-paper::before {
+            background-image: url(../images/background-app.png);
+        }
+    }
+
+    &--yellowcard {
+        .MuiDialog-paper::before {
+            background-image: url(../images/background-yellowcard.png);
+        }
+    }
+
+    &--suspension {
+        .MuiDialog-paper::before {
+            background-image: url(../images/background-suspension.png);
+        }
+    }
+
+    &--redcard {
+        .MuiDialog-paper::before {
+            background-image: url(../images/background-redcard.png);
+        }
+    }
+
+    &--bluecard {
+        .MuiDialog-paper::before {
+            background-image: url(../images/background-bluecard.png);
+        }
+    }
+}
+
+//_________________
+// Radio buttons
+.MuiFormGroup-root {
+    display: flex;
+
+    .MuiFormControlLabel-root {
+        margin-left: -0.5rem;
+    }
+
+    .PrivateSwitchBase-root-1 {
+        padding: 0.25rem !important;
+    }
+
+    .MuiRadio-colorPrimary {
+        &.Mui-checked {
+            color: $buttonBackgroundColour;
+        }
+    }
+}
+
+//_________________
+// Tables
 .home__table {
     .MuiTableCell-sizeSmall {
         padding: 6px;
@@ -75,103 +177,6 @@
             font-size: 1.25em;
         }
     }
-}
-//_________________
-// Dialog
-.MuiDialog-paper {
-    > * {
-        z-index: 0;
-    }
-
-    &::before {
-        position: absolute;
-        top: 0;
-        left: 0;
-        z-index: 0;
-        width: 100%;
-        height: 100%;
-        background-repeat: no-repeat;
-        background-size: cover;
-        filter: alpha(0.666);
-        content: '';
-    }
-}
-
-.member__popup {
-    &--goal {
-        .MuiDialog-paper::before {
-            background-image: url(../images/background-app.png);
-        }
-    }
-
-    &--yellowcard {
-        .MuiDialog-paper::before {
-            background-image: url(../images/background-yellowcard.png);
-        }
-    }
-
-    &--suspension {
-        .MuiDialog-paper::before {
-            background-image: url(../images/background-suspension.png);
-        }
-    }
-
-    &--redcard {
-        .MuiDialog-paper::before {
-            background-image: url(../images/background-redcard.png);
-        }
-    }
-
-    &--bluecard {
-        .MuiDialog-paper::before {
-            background-image: url(../images/background-bluecard.png);
-        }
-    }
-}
-
-//_________________
-// Buttons
-.MuiButton {
-    &-contained.MuiButton-root {
-        background-color: $buttonBackgroundColour;
-        color: $buttonTextColour;
-
-        &:hover {
-            background-color: darken($buttonBackgroundColour, 10%);
-            color: $buttonTextColour;
-        }
-    }
-
-    &-iconSizeLarge > *:first-child {
-        margin-top: 0.1em;
-        font-size: inherit !important;
-    }
-}
-
-//_________________
-// Radio buttons
-.MuiFormGroup-root {
-    display: flex;
-
-    .MuiFormControlLabel-root {
-        margin-left: -0.5rem;
-    }
-
-    .PrivateSwitchBase-root-1 {
-        padding: 0.25rem !important;
-    }
-
-    .MuiRadio-colorPrimary {
-        &.Mui-checked {
-            color: $buttonBackgroundColour;
-        }
-    }
-}
-
-//_________________
-// Checkboxes
-.MuiCheckbox-colorPrimary.Mui-checked {
-    color: $buttonBackgroundColour !important;
 }
 
 //_________________

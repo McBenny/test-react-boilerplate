@@ -1,7 +1,15 @@
 export const messages = {
     title: 'Handball Scoreboard',
     createGame: 'Create a game',
+    imageSample: 'Thumbnail of the application',
+    introText: [
+        'Want to start quickly? Just click the "<strong>Create a game</strong>" button and you\'re started!',
+        'No need for any configuration, you can start to register the score of a game straight away, handle half-times and register time-outs.',
+        "If you want to register who's scoring as well as yellow cards, suspensions and other fouls, you will just need to enter the players' numbers and/or names in the settings. You will also be able to put in the team's names, their jersey colour (and number colour), name of officials, location and time of the game, the competition and many more.",
+        'Once created, you will find your game in the list of saved games bellow.'
+    ],
     savedGames: 'Saved games',
+    noGames: 'You have no games saved yet. Create one and it will appear here.',
     caption: 'Click on the line of the game you want to see / manage',
     date: 'Date',
     competition: 'Competition',
@@ -12,6 +20,7 @@ export const messages = {
     awayTeam: 'Away team',
     status: 'Status',
     actions: 'Actions',
+    clickToSeeGame: "Click to see this game's details / manage the game",
     notStarted: 'Not started',
     inProgress: 'In progress...',
     gamePaused: 'Game paused',

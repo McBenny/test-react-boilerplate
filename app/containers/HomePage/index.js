@@ -7,6 +7,7 @@
 
 import React, { Fragment, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import { v4 as uuidv4 } from 'uuid';
 
 import {
     Button,
@@ -37,6 +38,7 @@ import DuplicateGame from '../../components/Duplicate-game';
 
 import { messages } from './messages';
 import './styles.scss';
+import scoreboardSample from '../../images/score-board-sample.png';
 
 const gamePrefix = /^game-uuid-[a-z0-9-]{36}$/g;
 const createGameList = () => {
@@ -112,6 +114,14 @@ function stableSort(array, comparator) {
         return a[1] - b[1];
     });
     return stabilizedThis.map(el => el[0]);
+}
+
+function printParagraphs(text) {
+    if (text && Array.isArray(text)) {
+        // eslint-disable-next-line react/no-danger
+        return text.map(paragraph => <p key={uuidv4()} dangerouslySetInnerHTML={{ __html: paragraph }} />);
+    }
+    return '';
 }
 
 const POSITIONS = {
@@ -255,123 +265,150 @@ export default function HomePage() {
         <Fragment>
             <main>
                 <h1 className="title title--1">{messages.title}</h1>
-                <Button variant="contained" color="primary" onClick={createGame}>
-                    {messages.createGame}
-                </Button>
-
-                <h2 id="gameListTitle">{messages.savedGames}</h2>
-                <Paper className="game-list__container">
-                    <TableContainer>
-                        <Table size="small" aria-label="caption table" className="home__table">
-                            <caption>{messages.caption}</caption>
-                            <EnhancedTableHead order={order} orderBy={orderBy} onRequestSort={handleRequestSort} />
-                            <TableBody>
-                                {stableSort(gamesList, getComparator(order, orderBy)).map(game => (
-                                    <TableRow
-                                        key={game.id}
-                                        onClick={() => loadGame(game.id)}
-                                        className="game-list__row game-list__row--clickable"
-                                    >
-                                        <TableCell align="center">{formatDate(game.date)}</TableCell>
-                                        <TableCell>{game.competition}</TableCell>
-                                        <TableCell align="center">{game.round}</TableCell>
-                                        <TableCell align="center">{game.gender}</TableCell>
-                                        <TableCell align="right">{game.homeTeam}</TableCell>
-                                        <TableCell align="center">
-                                            {game.scoreHome}-{game.scoreAway}
-                                        </TableCell>
-                                        <TableCell>{game.awayTeam}</TableCell>
-                                        <TableCell align="center">{game.status}</TableCell>
-                                        <TableCell align="center">
-                                            <IconButton
-                                                color="inherit"
-                                                onClick={e => {
-                                                    e.stopPropagation();
-                                                    setGameToDuplicate(game);
-                                                }}
-                                                arial-label={messages.duplicate}
-                                                title={messages.duplicate}
+                <div className="game-list__container">
+                    <Button
+                        variant="contained"
+                        className="button button--image game-list__button game-list__button--new-game"
+                        onClick={createGame}
+                        aria-label={messages.createGame}
+                        title={messages.createGame}
+                    >
+                        <img src={scoreboardSample} alt={messages.imageSample} style={{ maxWidth: '300px' }} />
+                    </Button>
+                    <h2 id="homeTitle">{messages.createGame}</h2>
+                    {printParagraphs(messages.introText)}
+                    <p>
+                        <Button variant="contained" color="primary" onClick={createGame}>
+                            {messages.createGame}
+                        </Button>
+                    </p>
+                </div>
+                <div className="game-list__container">
+                    <h2 id="gameListTitle">
+                        {messages.savedGames} {gamesList.length > 0 ? `(${gamesList.length})` : ''}
+                    </h2>
+                </div>
+                {gamesList.length > 0 ? (
+                    <>
+                        <Paper className="game-list__container">
+                            <TableContainer>
+                                <Table size="small" aria-label="caption table" className="home__table">
+                                    <caption>{messages.caption}</caption>
+                                    <EnhancedTableHead
+                                        order={order}
+                                        orderBy={orderBy}
+                                        onRequestSort={handleRequestSort}
+                                    />
+                                    <TableBody>
+                                        {stableSort(gamesList, getComparator(order, orderBy)).map(game => (
+                                            <TableRow
+                                                key={game.id}
+                                                onClick={() => loadGame(game.id)}
+                                                className="game-list__row game-list__row--clickable"
+                                                title={messages.clickToSeeGame}
                                             >
-                                                <PostAddOutlinedIcon />
-                                            </IconButton>
-                                            {/* eslint-disable indent */}
-                                            <IconButton
-                                                color="inherit"
-                                                onClick={e => {
-                                                    e.stopPropagation();
-                                                    setGameToDelete(game);
-                                                }}
-                                                onMouseOver={
-                                                    !bins[game.id]
-                                                        ? () => {
-                                                              setBin({ ...bins, [game.id]: true });
-                                                          }
-                                                        : () => {}
-                                                }
-                                                onFocus={
-                                                    !bins[game.id]
-                                                        ? () => {
-                                                              setBin({ ...bins, [game.id]: true });
-                                                          }
-                                                        : () => {}
-                                                }
-                                                onMouseOut={
-                                                    bins[game.id]
-                                                        ? () => {
-                                                              setBin({ ...bins, [game.id]: false });
-                                                          }
-                                                        : () => {}
-                                                }
-                                                onBlur={
-                                                    bins[game.id]
-                                                        ? () => {
-                                                              setBin({ ...bins, [game.id]: false });
-                                                          }
-                                                        : () => {}
-                                                }
-                                                arial-label={messages.delete}
-                                                title={messages.delete}
-                                            >
-                                                {bins[game.id] ? <DeleteForeverOutlinedIcon /> : <DeleteOutlinedIcon />}
-                                            </IconButton>
-                                            {/* eslint-enable indent */}
-                                        </TableCell>
-                                    </TableRow>
-                                ))}
-                            </TableBody>
-                        </Table>
-                    </TableContainer>
-                </Paper>
-                {popupVisibility.deleteGame ? (
-                    <DeleteGame
-                        popupVisibility={popupVisibility.deleteGame}
-                        game={gameToDelete}
-                        closeHandler={closePopup}
-                    />
+                                                <TableCell align="center">{formatDate(game.date)}</TableCell>
+                                                <TableCell>{game.competition}</TableCell>
+                                                <TableCell align="center">{game.round}</TableCell>
+                                                <TableCell align="center">{game.gender}</TableCell>
+                                                <TableCell align="right">{game.homeTeam}</TableCell>
+                                                <TableCell align="center">
+                                                    {game.scoreHome}-{game.scoreAway}
+                                                </TableCell>
+                                                <TableCell>{game.awayTeam}</TableCell>
+                                                <TableCell align="center">{game.status}</TableCell>
+                                                <TableCell align="center">
+                                                    <IconButton
+                                                        color="inherit"
+                                                        onClick={e => {
+                                                            e.stopPropagation();
+                                                            setGameToDuplicate(game);
+                                                        }}
+                                                        arial-label={messages.duplicate}
+                                                        title={messages.duplicate}
+                                                        size="small"
+                                                    >
+                                                        <PostAddOutlinedIcon fontSize="small" />
+                                                    </IconButton>
+                                                    <IconButton
+                                                        color="inherit"
+                                                        onClick={e => {
+                                                            e.stopPropagation();
+                                                            setGameToDelete(game);
+                                                        }}
+                                                        onMouseOver={
+                                                            !bins[game.id]
+                                                                ? () => setBin({ ...bins, [game.id]: true })
+                                                                : () => {}
+                                                        }
+                                                        onFocus={
+                                                            !bins[game.id]
+                                                                ? () => setBin({ ...bins, [game.id]: true })
+                                                                : () => {}
+                                                        }
+                                                        onMouseOut={
+                                                            bins[game.id]
+                                                                ? () => setBin({ ...bins, [game.id]: false })
+                                                                : () => {}
+                                                        }
+                                                        onBlur={
+                                                            bins[game.id]
+                                                                ? () => setBin({ ...bins, [game.id]: false })
+                                                                : () => {}
+                                                        }
+                                                        arial-label={messages.delete}
+                                                        title={messages.delete}
+                                                        size="small"
+                                                    >
+                                                        {bins[game.id] ? (
+                                                            <DeleteForeverOutlinedIcon fontSize="small" />
+                                                        ) : (
+                                                            <DeleteOutlinedIcon fontSize="small" />
+                                                        )}
+                                                    </IconButton>
+                                                </TableCell>
+                                            </TableRow>
+                                        ))}
+                                    </TableBody>
+                                </Table>
+                            </TableContainer>
+                        </Paper>
+                        {popupVisibility.deleteGame ? (
+                            <DeleteGame
+                                popupVisibility={popupVisibility.deleteGame}
+                                game={gameToDelete}
+                                closeHandler={closePopup}
+                            />
+                        ) : (
+                            ''
+                        )}
+                        {popupVisibility.duplicateGame ? (
+                            <DuplicateGame
+                                popupVisibility={popupVisibility.duplicateGame}
+                                game={gameToDuplicate}
+                                closeHandler={closePopup}
+                            />
+                        ) : (
+                            ''
+                        )}
+                        <Snackbar
+                            anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+                            open={snackStatus.show}
+                            autoHideDuration={4000}
+                            onClose={closeSnackBar}
+                        >
+                            <MuiAlert elevation={6} variant="filled" onClose={closeSnackBar}>
+                                {snackStatus.content === POPUPS.deleteGame
+                                    ? messages.deleteConfirmation
+                                    : messages.duplicateConfirmation}
+                            </MuiAlert>
+                        </Snackbar>
+                    </>
                 ) : (
-                    ''
+                    <div className="game-list__container">
+                        <p>{messages.noGames}</p>
+                    </div>
                 )}
-                {popupVisibility.duplicateGame ? (
-                    <DuplicateGame
-                        popupVisibility={popupVisibility.duplicateGame}
-                        game={gameToDuplicate}
-                        closeHandler={closePopup}
-                    />
-                ) : (
-                    ''
-                )}
-                <Snackbar
-                    anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-                    open={snackStatus.show}
-                    autoHideDuration={4000}
-                    onClose={closeSnackBar}
-                >
-                    <MuiAlert elevation={6} variant="filled" onClose={closeSnackBar}>
-                        {snackStatus.content === POPUPS.deleteGame
-                            ? messages.deleteConfirmation
-                            : messages.duplicateConfirmation}
-                    </MuiAlert>
-                </Snackbar>
             </main>
         </Fragment>
     );
