@@ -145,6 +145,18 @@ const EnhancedTableHead = ({ order, orderBy, onRequestSort }) => {
     const createSortHandler = property => event => {
         onRequestSort(event, property);
     };
+    const printResponsiveLabels = label => {
+        if (Array.isArray(label)) {
+            return (
+                <>
+                    <span className="tablet-mode">{label[0]}</span>
+                    <span className="laptop-mode">{label[1]}</span>
+                </>
+            );
+        }
+        return label;
+    };
+
     return (
         <TableHead>
             <TableRow>
@@ -161,7 +173,7 @@ const EnhancedTableHead = ({ order, orderBy, onRequestSort }) => {
                                 onClick={createSortHandler(headCell.id)}
                                 title={typeof headCell.label !== 'string' ? messages[headCell.id] : undefined}
                             >
-                                {headCell.label}
+                                {printResponsiveLabels(headCell.label)}
                                 {orderBy === headCell.id ? (
                                     <span className="sr-only">
                                         {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
@@ -169,7 +181,7 @@ const EnhancedTableHead = ({ order, orderBy, onRequestSort }) => {
                                 ) : null}
                             </TableSortLabel>
                         ) : (
-                            headCell.label
+                            printResponsiveLabels(headCell.label)
                         )}
                     </TableCell>
                 ))}

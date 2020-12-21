@@ -17,6 +17,18 @@
     @include sr-only;
 }
 
+.tablet-mode {
+    @media screen and (min-width: $bp-tablet + 1px) {
+        display: none;
+    }
+}
+
+.laptop-mode {
+    @media screen and (max-width: $bp-tablet) {
+        display: none;
+    }
+}
+
 /**
 Sources
     - https://cloudfour.com/thinks/see-no-evil-hidden-content-and-accessibility/
