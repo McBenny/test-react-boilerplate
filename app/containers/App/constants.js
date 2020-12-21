@@ -15,3 +15,7 @@ export const URLS = {
 };
 
 export const SESSION_KEY = 'gameId';
+
+export const BREAKPOINTS = {
+    laptop: 1024
+};

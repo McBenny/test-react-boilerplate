@@ -43,9 +43,28 @@
         }
     }
 
-    &-iconSizeLarge > *:first-child {
-        margin-top: 0.1em;
-        font-size: inherit !important;
+    &-label {
+        .game__pause & {
+            font-size: 2.25rem !important;
+        }
+    }
+
+    &-iconSizeLarge,
+    &-iconSizeMedium {
+        .game__button--start-stop & {
+            margin-right: 0;
+        }
+    }
+
+    &-iconSizeLarge {
+        > *:first-child {
+            margin-top: 0.1em;
+            font-size: inherit !important;
+
+            .game__button--start-stop & {
+                font-size: 3rem !important;
+            }
+        }
     }
 }
 

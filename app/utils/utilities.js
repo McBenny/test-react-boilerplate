@@ -1,3 +1,4 @@
+import React from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { UUID_PREFIX } from '../containers/Settings/constants';
 
@@ -77,4 +78,16 @@ export function capitalize(s) {
         return '';
     }
     return s.charAt(0).toUpperCase() + s.slice(1);
+}
+
+export function printResponsiveLabels(label) {
+    if (Array.isArray(label)) {
+        return (
+            <>
+                <span className="tablet-mode">{label[0]}</span>
+                <span className="laptop-mode">{label[1]}</span>
+            </>
+        );
+    }
+    return label;
 }

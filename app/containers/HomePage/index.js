@@ -31,7 +31,7 @@ import WcIcon from '@material-ui/icons/Wc';
 import { SESSION_KEY, URLS } from '../App/constants';
 import { EVENT_TYPES, GAMES_PREFIX, POPUPS } from '../Game/constants';
 import LocalStorage from '../../utils/local-storage';
-import { generateId, formatDate } from '../../utils/utilities';
+import { generateId, formatDate, printResponsiveLabels } from '../../utils/utilities';
 
 import DeleteGame from '../../components/Delete-game';
 import DuplicateGame from '../../components/Duplicate-game';
@@ -144,17 +144,6 @@ const headCells = [
 const EnhancedTableHead = ({ order, orderBy, onRequestSort }) => {
     const createSortHandler = property => event => {
         onRequestSort(event, property);
-    };
-    const printResponsiveLabels = label => {
-        if (Array.isArray(label)) {
-            return (
-                <>
-                    <span className="tablet-mode">{label[0]}</span>
-                    <span className="laptop-mode">{label[1]}</span>
-                </>
-            );
-        }
-        return label;
     };
 
     return (

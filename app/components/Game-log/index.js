@@ -17,6 +17,8 @@ import SportsSoccerOutlinedIcon from '@material-ui/icons/SportsSoccerOutlined';
 import TimerOutlinedIcon from '@material-ui/icons/TimerOutlined';
 import UndoIcon from '@material-ui/icons/Undo';
 
+import { printResponsiveLabels } from '../../utils/utilities';
+
 import { TEAMS_LIST } from '../../containers/Settings/constants';
 import { EVENT_TYPES, POPUPS } from '../../containers/Game/constants';
 
@@ -325,7 +327,9 @@ const GameLog = ({ popupVisibility, gameEvents, settingsData, setATimeOut, openH
                         onClick={() => setIsFullLogVisible(!isFullLogVisible)}
                         startIcon={isFullLogVisible ? <SpeakerNotesOffOutlinedIcon /> : <SpeakerNotesOutlinedIcon />}
                     >
-                        {isFullLogVisible ? messages.hideFullLog : messages.displayFullLog}
+                        {isFullLogVisible
+                            ? printResponsiveLabels(messages.hideFullLog)
+                            : printResponsiveLabels(messages.displayFullLog)}
                     </Button>
                     <Button
                         variant="contained"
@@ -333,7 +337,7 @@ const GameLog = ({ popupVisibility, gameEvents, settingsData, setATimeOut, openH
                         startIcon={<AssignmentOutlinedIcon />}
                         style={{ float: 'right' }}
                     >
-                        {messages.displayScoreSheet}
+                        {printResponsiveLabels(messages.displayScoreSheet)}
                     </Button>
                 </ListItem>
             </List>

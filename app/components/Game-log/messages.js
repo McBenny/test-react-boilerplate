@@ -1,9 +1,9 @@
 export const messages = {
     title: 'Game log:',
     lastAction: 'Last action',
-    displayFullLog: 'Display full log',
-    hideFullLog: 'Hide full log',
-    displayScoreSheet: 'Display score sheet',
+    displayFullLog: ['Full log', 'Display full log'],
+    hideFullLog: ['Full log', 'Hide full log'],
+    displayScoreSheet: ['Score sheet', 'Display score sheet'],
     fullLog: 'Full log',
     startGame: 'Start of the game',
     endGame: 'End of the game',
