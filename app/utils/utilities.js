@@ -83,10 +83,10 @@ export function capitalize(s) {
 export function printResponsiveLabels(label) {
     if (Array.isArray(label)) {
         return (
-            <>
+            <React.Fragment key={label[0]}>
                 <span className="tablet-mode">{label[0]}</span>
-                <span className="laptop-mode">{label[1]}</span>
-            </>
+                <span className="laptop-mode">{label[1]}</span>{' '}
+            </React.Fragment>
         );
     }
     return label;

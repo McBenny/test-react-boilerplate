@@ -14,8 +14,8 @@
         border-radius: 50%;
         width: 6rem;
         height: 6rem;
-        overflow: hidden;
-        background-color: $gameLogColour;
+        box-shadow: 2px 2px 10px $shadowColourExtraStrong;
+        background-color: $stopWatchColour;
     }
 
     &__stopwatch {
@@ -33,13 +33,20 @@
 
     &__counter {
         position: absolute;
-        left: 0;
-        bottom: 0.45rem;
+        left: 5%;
+        bottom: 0.25rem;
         z-index: 0;
-        width: 100%;
+        border-radius: 0% 0% 50% 50% / 0% 0% 100% 100%;
+        width: 90%;
+        overflow: hidden;
         text-align: center;
         font-family: $fontTime;
-        font-size: 1.2rem;
+        font-size: 1.5rem;
+
+        @media screen and (min-width: $bp-tablet + 1px) {
+            bottom: 0.45rem;
+            font-size: 1.2rem;
+        }
 
         .countdown {
             display: block;

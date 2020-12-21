@@ -69,11 +69,11 @@ const GameLog = ({ popupVisibility, isLaptop, gameEvents, settingsData, setATime
     };
 
     const [undoData, setUndoData] = useState(null);
-    const UndoButton = ({ event, icon, message }) => (
+    const UndoButton = ({ event, icon, logMessages }) => (
         <Button
             variant="contained"
             size={isLaptop ? 'small' : 'large'}
-            onClick={() => setUndoData({ ...event, icon, message })}
+            onClick={() => setUndoData({ ...event, icon, messages: logMessages })}
             className="game-log__button"
             startIcon={<UndoIcon />}
             aria-label={messages.undo}
@@ -85,7 +85,7 @@ const GameLog = ({ popupVisibility, isLaptop, gameEvents, settingsData, setATime
     UndoButton.propTypes = {
         event: PropTypes.object.isRequired,
         icon: PropTypes.any,
-        message: PropTypes.string.isRequired
+        logMessages: PropTypes.array.isRequired
     };
 
     // Opens Undo popup
@@ -155,7 +155,7 @@ const GameLog = ({ popupVisibility, isLaptop, gameEvents, settingsData, setATime
                                 </div>
                                 {formattedScore}
                                 {index === events.length - 1 && (
-                                    <UndoButton event={gameEvent} icon={icon} message={message1} />
+                                    <UndoButton event={gameEvent} icon={icon} logMessages={[message1]} />
                                 )}
                             </div>
                         );
@@ -170,7 +170,7 @@ const GameLog = ({ popupVisibility, isLaptop, gameEvents, settingsData, setATime
                             ) : (
                                 <PauseCircleOutlineIcon />
                             );
-                        const message1 = messages[gameEvent.eventType];
+                        const message1 = `${messages[gameEvent.eventType]} `;
                         const message2 = printResponsiveLabels(messages[`period${gameEvent.id}`]);
                         template = (
                             <div className="game-log__event">
@@ -181,7 +181,7 @@ const GameLog = ({ popupVisibility, isLaptop, gameEvents, settingsData, setATime
                                 </div>
                                 {formattedScore}
                                 {index === events.length - 1 && (
-                                    <UndoButton event={gameEvent} icon={icon} message={`${message1} ${message2}`} />
+                                    <UndoButton event={gameEvent} icon={icon} logMessages={[message1, message2]} />
                                 )}
                             </div>
                         );
@@ -203,7 +203,7 @@ const GameLog = ({ popupVisibility, isLaptop, gameEvents, settingsData, setATime
                                     {icon} <strong>{message1}</strong>
                                 </div>
                                 {index === events.length - 1 && (
-                                    <UndoButton event={gameEvent} icon={icon} message={message1} />
+                                    <UndoButton event={gameEvent} icon={icon} logMessages={[message1]} />
                                 )}
                             </div>
                         );
@@ -221,7 +221,11 @@ const GameLog = ({ popupVisibility, isLaptop, gameEvents, settingsData, setATime
                                 </div>
                                 {formattedScore}
                                 {index === events.length - 1 && (
-                                    <UndoButton event={gameEvent} icon={icon} message={`${message1} ${message2}`} />
+                                    <UndoButton
+                                        event={gameEvent}
+                                        icon={icon}
+                                        logMessages={[messages[`${gameEvent.eventType}For`], message2]}
+                                    />
                                 )}
                             </div>
                         );
@@ -254,7 +258,7 @@ const GameLog = ({ popupVisibility, isLaptop, gameEvents, settingsData, setATime
                                     <UndoButton
                                         event={gameEvent}
                                         icon={icon}
-                                        message={`${message1}${message2}${message3}`}
+                                        logMessages={[labelName, message1, message2, message3]}
                                     />
                                 )}
                             </div>
@@ -274,12 +278,12 @@ const GameLog = ({ popupVisibility, isLaptop, gameEvents, settingsData, setATime
                         // eslint-disable-next-line no-nested-ternary
                         const message1 = gameEvent.penalty
                             ? gameEvent.missed
-                                ? messages.missedPenaltyFor
+                                ? `${messages.missedPenaltyFor} `
                                 : printResponsiveLabels(messages.penaltyFor)
-                            : messages.goalFor;
+                            : `${messages.goalFor} `;
                         const message2 = `${settingsData.teams[gameEvent.team].name} (${
-                            isLaptop ? memberData[0].name : ''
-                        } [`;
+                            isLaptop ? `${memberData[0].name} ` : ''
+                        }[`;
                         const message3 = memberData[0].reference;
                         const message4 = `])`;
                         template = (
@@ -294,7 +298,7 @@ const GameLog = ({ popupVisibility, isLaptop, gameEvents, settingsData, setATime
                                     <UndoButton
                                         event={gameEvent}
                                         icon={!gameEvent.missed ? icon1 : icon2}
-                                        message={`${message1} ${message2}${message3}${message4}`}
+                                        logMessages={[message1, message2, message3, message4]}
                                     />
                                 )}
                             </div>
