@@ -75,6 +75,7 @@ export const FOULS = {
 export const UNKNOWN_PLAYER = {
     ...EMPTY_MEMBER.players,
     id: 0,
+    reference: '?',
     name: `(${messages.unknownPlayer})`
 };
 

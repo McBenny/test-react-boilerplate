@@ -16,7 +16,7 @@ import SettingsOutlinedIcon from '@material-ui/icons/SettingsOutlined';
 
 import { POPUPS } from '../../containers/Game/constants';
 import { MEMBERS_QUALIFICATIONS, MEMBERS_TYPES } from '../../containers/Settings/constants';
-import { naturalSorting } from '../../utils/utilities';
+import { naturalSorting, printResponsiveLabels } from '../../utils/utilities';
 
 import { messages } from './messages';
 import './styles.scss';
@@ -43,7 +43,7 @@ const memberTemplate = ({ member, memberType, team, captainId, jerseyColour, ref
                 }}
             >
                 <span className="member__reference">{member.reference}</span>
-                <span className="member__name">
+                <span className="laptop-mode member__name">
                     {member.name}{' '}
                     {captainId !== 0 && captainId === member.id && memberType === MEMBERS_TYPES.players
                         ? `(${messages.captainInitial})`
@@ -71,13 +71,29 @@ const memberTemplate = ({ member, memberType, team, captainId, jerseyColour, ref
                 ) : (
                     ''
                 )}
-                {member.yellowCards > 0 && `${messages.yellowCards}: ${member.yellowCards}`}
+                {member.yellowCards > 0 && (
+                    <>
+                        {printResponsiveLabels(messages.yellowCards)}: {member.yellowCards}
+                    </>
+                )}
                 {member.yellowCards > 0 && <br />}
-                {member.suspensions > 0 && `${messages.suspension}: ${member.suspensions}`}
+                {member.suspensions > 0 && (
+                    <>
+                        {printResponsiveLabels(messages.suspension)}: {member.suspensions}
+                    </>
+                )}
                 {member.suspensions > 0 && <br />}
-                {member.redCards > 0 && `${messages.redCards}: ${member.redCards}`}
+                {member.redCards > 0 && (
+                    <>
+                        {printResponsiveLabels(messages.redCards)}: {member.redCards}
+                    </>
+                )}
                 {member.redCards > 0 && <br />}
-                {member.blueCards > 0 && `${messages.blueCards}: ${member.blueCards}`}
+                {member.blueCards > 0 && (
+                    <>
+                        {printResponsiveLabels(messages.blueCards)}: {member.blueCards}
+                    </>
+                )}
             </div>
         </div>
     </Grid>
@@ -186,7 +202,7 @@ function radioButtonTemplate(value) {
             key={`line-up-sorting-${value}`}
             value={SORTING[value]}
             control={<Radio disableRipple color="default" />}
-            label={messages[`sorting_${value}`]}
+            label={printResponsiveLabels(messages[`sorting_${value}`])}
         />
     );
 }

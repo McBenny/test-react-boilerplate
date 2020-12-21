@@ -27,6 +27,6 @@ export const messages = {
     addBlueCardShort: 'blue',
     addTimeout: 'timeout',
     maxTimeoutsReached: 'The team already used all their timeouts',
-    unknownPlayer: 'unidentified',
+    unknownPlayer: 'unknown',
     showLineUp: 'Show line-up'
 };

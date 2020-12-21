@@ -17,15 +17,15 @@
     @include sr-only;
 }
 
-.tablet-mode {
+body .tablet-mode {
     @media screen and (min-width: $bp-tablet + 1px) {
-        display: none;
+        display: none !important;
     }
 }
 
-.laptop-mode {
+body .laptop-mode {
     @media screen and (max-width: $bp-tablet) {
-        display: none;
+        display: none !important;
     }
 }
 

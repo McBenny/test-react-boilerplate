@@ -164,7 +164,11 @@ function Players({
                 }}
             >
                 <span className="member__reference">{member.reference}</span>
-                <span className={`member__name${member.reference === '' ? ' member__name--unidentified' : ''}`}>
+                <span
+                    className={`laptop-mode member__name${
+                        member.reference === '' ? ' member__name--unidentified' : ''
+                    }`}
+                >
                     {member.name} {captainId !== 0 && captainId === member.id ? `(${messages.captainInitial})` : ''}
                     {member.qualification && member.qualification === MEMBERS_QUALIFICATIONS.players.goalie
                         ? `(${messages.goalieInitial})`

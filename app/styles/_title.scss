@@ -57,7 +57,10 @@
 
     &--radio-group {
         margin: 0 1rem 0 0;
-        font-size: 1rem;
         font-weight: 600;
+
+        @media screen and (min-width: $bp-tablet + 1px) {
+            font-size: 1rem !important;
+        }
     }
 }
