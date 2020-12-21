@@ -132,6 +132,35 @@
 }
 
 //_________________
+// List
+.MuiListItem {
+    &-root {
+        font-size: 1.33rem;
+
+        @media screen and (min-width: $bp-tablet + 1px) {
+            font-size: 1rem;
+        }
+    }
+
+    &Icon-root {
+        min-width: 2rem !important;
+        font-size: inherit;
+
+        .MuiSvgIcon-root {
+            font-size: inherit;
+        }
+    }
+
+    &Text-root {
+        font-size: inherit;
+
+        .MuiTypography-body1 {
+            font-size: inherit;
+        }
+    }
+}
+
+//_________________
 // Radio buttons
 .MuiFormGroup-root {
     display: flex;
@@ -256,12 +285,22 @@
 
 //_________________
 // Typography
-.MuiTypography-body1 {
-    .game__member-list & {
-        font-size: 1.66rem;
+.MuiTypography {
+    &-h6 {
+        font-size: 1.5rem !important;
 
         @media screen and (min-width: $bp-tablet + 1px) {
-            font-size: 1rem;
+            font-size: 1.25rem !important;
+        }
+    }
+
+    &-body1 {
+        .game__member-list & {
+            font-size: 1.66rem;
+
+            @media screen and (min-width: $bp-tablet + 1px) {
+                font-size: 1rem;
+            }
         }
     }
 }
