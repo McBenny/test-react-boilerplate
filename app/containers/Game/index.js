@@ -361,7 +361,8 @@ export function Game({
                             ''
                         )}
                         {/* eslint-enable indent */}[
-                        <span className="game__member-reference">{faultyMember.reference}</span>] {faultyMember.name}{' '}
+                        <span className="game__member-reference">{faultyMember.reference}</span>]{' '}
+                        <span className="laptop-mode">{faultyMember.name}</span>{' '}
                         {faultyMember.count > 1 ? `(${faultyMember.count})` : ''}
                     </ListItemText>
                 </ListItem>
@@ -799,6 +800,7 @@ export function Game({
                 <div className="game__log">
                     <GameLog
                         popupVisibility={popupVisibility}
+                        isLaptop={isLaptop}
                         gameEvents={gameEvents}
                         settingsData={settings}
                         setATimeOut={setATimeOut}

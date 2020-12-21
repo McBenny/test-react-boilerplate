@@ -203,6 +203,7 @@ These features should also apply to the fouls, any foul registered should be edi
 ##TODO
 - [ ] Try to find icons to represent the state of a game on the home page
 - [X] Adapt responsiveness for tablets
+- [ ] show/hide list of players in fouls lists in tablet mode
 - [ ] Allow for a second 2 minutes suspension on an already suspended player (up to 4 minutes)
 - [ ] authenticate users
 - [ ] save team and players data to use in auto-suggest, save colours as well

@@ -29,7 +29,7 @@ import Undo from '../Undo';
 import './styles.scss';
 import { URLS } from '../../containers/App/constants';
 
-const GameLog = ({ popupVisibility, gameEvents, settingsData, setATimeOut, openHandler, closeHandler }) => {
+const GameLog = ({ popupVisibility, isLaptop, gameEvents, settingsData, setATimeOut, openHandler, closeHandler }) => {
     const [isFullLogVisible, setIsFullLogVisible] = useState(false);
 
     const goToScoreSheetHandler = () => {
@@ -72,12 +72,13 @@ const GameLog = ({ popupVisibility, gameEvents, settingsData, setATimeOut, openH
     const UndoButton = ({ event, icon, message }) => (
         <Button
             variant="contained"
-            size="small"
+            size={isLaptop ? 'small' : 'large'}
             onClick={() => setUndoData({ ...event, icon, message })}
             className="game-log__button"
             startIcon={<UndoIcon />}
+            aria-label={messages.undo}
         >
-            {messages.undo}
+            {isLaptop ? messages.undo : ''}
         </Button>
     );
 
@@ -170,7 +171,7 @@ const GameLog = ({ popupVisibility, gameEvents, settingsData, setATimeOut, openH
                                 <PauseCircleOutlineIcon />
                             );
                         const message1 = messages[gameEvent.eventType];
-                        const message2 = messages[`period${gameEvent.id}`];
+                        const message2 = printResponsiveLabels(messages[`period${gameEvent.id}`]);
                         template = (
                             <div className="game-log__event">
                                 <div>
@@ -211,12 +212,12 @@ const GameLog = ({ popupVisibility, gameEvents, settingsData, setATimeOut, openH
 
                     case EVENT_TYPES.timeout: {
                         const icon = <TimerOutlinedIcon />;
-                        const message1 = messages[`${gameEvent.eventType}For`];
+                        const message1 = printResponsiveLabels(messages[`${gameEvent.eventType}For`]);
                         const message2 = settingsData.teams[gameEvent.team].name;
                         template = (
                             <div className="game-log__event">
                                 <div>
-                                    {icon} {`${message1} ${message2}`}
+                                    {icon} {message1} {message2}
                                 </div>
                                 {formattedScore}
                                 {index === events.length - 1 && (
@@ -237,13 +238,14 @@ const GameLog = ({ popupVisibility, gameEvents, settingsData, setATimeOut, openH
                             ) : (
                                 <InsertDriveFileOutlinedIcon />
                             );
-                        const message1 = `${messages[`${gameEvent.eventType}For`]} ${memberData[0].name} [`;
+                        const labelName = printResponsiveLabels(messages[`${gameEvent.eventType}For`]);
+                        const message1 = `${isLaptop ? memberData[0].name : ''} [`;
                         const message2 = memberData[0].reference;
                         const message3 = `] (${settingsData.teams[gameEvent.team].name})`;
                         template = (
                             <div className={`game-log__event game-log__event--${gameEvent.eventType.toLowerCase()}`}>
                                 <div>
-                                    {icon} {message1}
+                                    {icon} {labelName} {message1}
                                     <strong>{message2}</strong>
                                     {message3}
                                 </div>
@@ -273,9 +275,11 @@ const GameLog = ({ popupVisibility, gameEvents, settingsData, setATimeOut, openH
                         const message1 = gameEvent.penalty
                             ? gameEvent.missed
                                 ? messages.missedPenaltyFor
-                                : messages.penaltyFor
+                                : printResponsiveLabels(messages.penaltyFor)
                             : messages.goalFor;
-                        const message2 = `${settingsData.teams[gameEvent.team].name} (${memberData[0].name} [`;
+                        const message2 = `${settingsData.teams[gameEvent.team].name} (${
+                            isLaptop ? memberData[0].name : ''
+                        } [`;
                         const message3 = memberData[0].reference;
                         const message4 = `])`;
                         template = (
@@ -369,6 +373,7 @@ GameLog.defaultProps = {
 
 GameLog.propTypes = {
     popupVisibility: PropTypes.object,
+    isLaptop: PropTypes.bool,
     gameEvents: PropTypes.array.isRequired,
     settingsData: PropTypes.object,
     setATimeOut: PropTypes.func.isRequired,

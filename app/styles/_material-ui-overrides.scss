@@ -49,9 +49,13 @@
         }
     }
 
-    &-iconSizeLarge,
-    &-iconSizeMedium {
+    &-iconSizeMedium,
+    &-iconSizeLarge {
         .game__button--start-stop & {
+            margin-right: 0;
+        }
+
+        .game-log__button & {
             margin-right: 0;
         }
     }
@@ -247,5 +251,17 @@
 
     &Connector-root {
         background-color: $timelineColour !important;
+    }
+}
+
+//_________________
+// Typography
+.MuiTypography-body1 {
+    .game__member-list & {
+        font-size: 1.66rem;
+
+        @media screen and (min-width: $bp-tablet + 1px) {
+            font-size: 1rem;
+        }
     }
 }
