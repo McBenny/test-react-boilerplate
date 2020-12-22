@@ -112,9 +112,10 @@ const gameReducer = (state = useableState, action) =>
                 break;
             case ADD_EVENT: {
                 // console.log(ADD_EVENT, action);
-                const { id, team, eventType, memberType, score, penalty, missed } = action;
+                const { id, team, eventType, memberType, score, second2Minutes, penalty, missed } = action;
                 draft.gameEvents.push({
                     eventType,
+                    second2Minutes,
                     penalty,
                     missed,
                     team,
@@ -135,14 +136,14 @@ const gameReducer = (state = useableState, action) =>
                 // console.log(updatedData, action);
                 // UpdatedData is determined in the previous switch statement
                 if (!action.missed) {
-                    draft[`dataTeam${action.team}`][updatedData] += 1;
+                    draft[`dataTeam${action.team}`][updatedData] += action.second2Minutes ? 2 : 1;
                     const { memberType } = action;
                     draft.settings.teams[action.team][memberType] = draft.settings.teams[action.team][memberType].map(
                         member => {
                             if (member.id === action.id) {
                                 return {
                                     ...member,
-                                    [updatedData]: member[updatedData] + 1,
+                                    [updatedData]: member[updatedData] + (action.second2Minutes ? 2 : 1),
                                     penalty: penaltyStatus ? member.penalty + 1 : member.penalty
                                 };
                             }
@@ -180,14 +181,14 @@ const gameReducer = (state = useableState, action) =>
                 // console.log(updatedData, action);
                 // UpdatedData is determined in the previous switch statement
                 if (!action.missed) {
-                    draft[`dataTeam${action.team}`][updatedData] -= 1;
+                    draft[`dataTeam${action.team}`][updatedData] -= action.second2Minutes ? 2 : 1;
                     const { memberType } = action;
                     draft.settings.teams[action.team][memberType] = draft.settings.teams[action.team][memberType].map(
                         member => {
                             if (member.id === action.id) {
                                 return {
                                     ...member,
-                                    [updatedData]: member[updatedData] - 1,
+                                    [updatedData]: member[updatedData] - (action.second2Minutes ? 2 : 1),
                                     penalty: penaltyStatus ? member.penalty - 1 : member.penalty
                                 };
                             }
