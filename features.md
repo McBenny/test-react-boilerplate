@@ -204,7 +204,6 @@ These features should also apply to the fouls, any foul registered should be edi
 ##TODO
 - [ ] Try to find icons to represent the state of a game on the home page
 - [ ] show/hide list of players in fouls lists in tablet mode
-- [ ] Allow for a second 2 minutes suspension on an already suspended player (up to 4 minutes)
 - [ ] authenticate users
 - [ ] save team and players data to use in auto-suggest, save colours as well
 - [ ] allow image upload for teams
@@ -250,6 +249,7 @@ These features should also apply to the fouls, any foul registered should be edi
 - [X] Be able to duplicate a game, with or without the events (keeping teams and players)
 - [X] Display the number of games on the home page
 - [X] Adapt responsiveness for tablets
+- [X] Allow for a second 2 minutes suspension on an already suspended player (up to 4 minutes)
 
 ##REFACTORING
 - [X] Optimise settings page to avoid repetition between A and B teams.

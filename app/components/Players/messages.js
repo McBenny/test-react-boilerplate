@@ -23,6 +23,7 @@ export const messages = {
     maxActionsReached: 'Invalid choice for this player',
     listOfPlayers: 'List of players',
     none: 'none',
+    second2Minutes: 'Should it be 2 x 2 minutes?',
     penalty: 'Is it a penalty?',
     wasItMissed: 'Was it missed?',
     captainInitial: 'C',

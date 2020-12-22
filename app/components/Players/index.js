@@ -95,6 +95,11 @@ function Players({
     const playerUnderSuspension = ({ memberType, memberId }) =>
         suspensions[`${FOULS.suspension}${team}${memberType}${memberId}`] && true;
 
+    const [second2Minutes, setSecond2Minutes] = useState(false);
+    const handleChangeSecond2Minutes = e => {
+        setSecond2Minutes(e.target.checked);
+    };
+
     const [penalty, setPenalty] = useState(false);
     const handleChangePenalty = e => {
         setPenalty(e.target.checked);
@@ -106,6 +111,7 @@ function Players({
     };
 
     useEffect(() => {
+        setSecond2Minutes(false);
         setPenalty(false);
         setMissed(false);
     }, [popupVisibility]);
@@ -147,6 +153,7 @@ function Players({
                 onClick={() => {
                     actionHandler({
                         eventType,
+                        second2Minutes,
                         penalty,
                         missed,
                         type: playersListType,
@@ -232,7 +239,7 @@ function Players({
             </DialogTitle>
             <DialogContent>
                 {playersListType === ADD_GOAL ? (
-                    <div className="players__penalty">
+                    <div className="players__mod">
                         <FormControlLabel
                             control={
                                 <Checkbox
@@ -266,6 +273,25 @@ function Players({
                         ) : (
                             ''
                         )}
+                    </div>
+                ) : (
+                    ''
+                )}
+                {playersListType === ADD_SUSPENSION ? (
+                    <div className="players__mod">
+                        <FormControlLabel
+                            control={
+                                <Checkbox
+                                    checked={second2Minutes}
+                                    onChange={e => handleChangeSecond2Minutes(e)}
+                                    name="second2Minutes"
+                                    color="primary"
+                                    value
+                                />
+                            }
+                            label={messages.second2Minutes}
+                            labelPlacement="start"
+                        />
                     </div>
                 ) : (
                     ''

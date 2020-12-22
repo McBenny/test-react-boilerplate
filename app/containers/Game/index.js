@@ -279,7 +279,16 @@ export function Game({
         });
     };
 
-    const addActionPerTeam = ({ eventType, penalty = false, missed = false, type, team, id, memberType }) => {
+    const addActionPerTeam = ({
+        eventType,
+        second2Minutes = false,
+        penalty = false,
+        missed = false,
+        type,
+        team,
+        id,
+        memberType
+    }) => {
         let updatedScore = score;
         if (eventType === EVENT_TYPES.goal) {
             if (missed) {
@@ -296,10 +305,11 @@ export function Game({
         } else if (eventType === EVENT_TYPES.suspension) {
             setATimeOut({
                 ...timeOut,
-                [`${FOULS.suspension}${team}${memberType}${id}`]: true
+                [`${FOULS.suspension}${team}${memberType}${id}`]: true,
+                [`${FOULS.suspension}${team}${memberType}${id}Double`]: second2Minutes
             });
         }
-        onAddAction({ eventType, penalty, missed, type, team, id, memberType, score: updatedScore });
+        onAddAction({ eventType, second2Minutes, penalty, missed, type, team, id, memberType, score: updatedScore });
     };
 
     /**
@@ -310,9 +320,14 @@ export function Game({
      */
     const foulPlayersLog = (team, foul) => {
         const log = gameEvents.filter(event => event.team === team && event.eventType === EVENT_TYPES[foul]);
+
         if (log.length > 0) {
+            // Duplicate lines when "second2Minutes"
+            const additionalLog = log.filter(line => line.second2Minutes);
+            const completeLog = log.concat(additionalLog);
+
             // Creates a list of made-up uids from the ids coupled with member type
-            const uids = log.map(member => `${member.id}-${member.memberType}`);
+            const uids = completeLog.map(member => `${member.id}-${member.memberType}`);
 
             // Creates an object of UNIQUE previous uids as keys with their respective count as values
             const foulsCount = uids.reduce((map, val) => {
@@ -347,13 +362,19 @@ export function Game({
                         {foul === FOULS.suspension &&
                         timeOut[`${foul}${team}${faultyMember.memberType}${faultyMember.id}`] === true ? (
                             <Countdown
-                                duration={TIME_DURATIONS.suspension}
+                                duration={
+                                    TIME_DURATIONS.suspension *
+                                    (timeOut[`${foul}${team}${faultyMember.memberType}${faultyMember.id}Double`]
+                                        ? 2
+                                        : 1)
+                                }
                                 isOnHold={gamePaused}
                                 event={EVENT_TYPES.suspension}
                                 callback={() =>
                                     setATimeOut({
                                         ...timeOut,
-                                        [`${foul}${team}${faultyMember.memberType}${faultyMember.id}`]: false
+                                        [`${foul}${team}${faultyMember.memberType}${faultyMember.id}`]: false,
+                                        [`${foul}${team}${faultyMember.memberType}${faultyMember.id}Double`]: false
                                     })
                                 }
                             />

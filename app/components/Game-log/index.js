@@ -242,6 +242,7 @@ const GameLog = ({ popupVisibility, isLaptop, gameEvents, settingsData, setATime
                             ) : (
                                 <InsertDriveFileOutlinedIcon />
                             );
+                        const second2Minutes = gameEvent.second2Minutes ? `${messages.second2Minutes} ` : '';
                         const labelName = printResponsiveLabels(messages[`${gameEvent.eventType}For`]);
                         const message1 = `${isLaptop ? memberData[0].name : ''} [`;
                         const message2 = memberData[0].reference;
@@ -249,7 +250,7 @@ const GameLog = ({ popupVisibility, isLaptop, gameEvents, settingsData, setATime
                         template = (
                             <div className={`game-log__event game-log__event--${gameEvent.eventType.toLowerCase()}`}>
                                 <div>
-                                    {icon} {labelName} {message1}
+                                    {icon} {second2Minutes} {labelName} {message1}
                                     <strong>{message2}</strong>
                                     {message3}
                                 </div>
@@ -258,7 +259,7 @@ const GameLog = ({ popupVisibility, isLaptop, gameEvents, settingsData, setATime
                                     <UndoButton
                                         event={gameEvent}
                                         icon={icon}
-                                        logMessages={[labelName, message1, message2, message3]}
+                                        logMessages={[second2Minutes, labelName, message1, message2, message3]}
                                     />
                                 )}
                             </div>
