@@ -10,8 +10,7 @@ html {
 body {
     margin: 0;
     min-height: 100%;
-    //background-color: $gameLogColour !important;
-    background-color: $blue-01 !important;
+    background-color: $gameLogColour !important;
     font-size: 1.2rem !important;
 
     @media screen and (min-width: $bp-tablet + 1px) {
