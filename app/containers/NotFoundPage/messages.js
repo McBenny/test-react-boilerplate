@@ -4,7 +4,7 @@ export const messages = {
     whatYouWillFind: 'What will you find there?',
     homePage: 'Home page',
     homePageText:
-        'The list of all your saved games, and the ability o create a new game. Most probably where you want to go...',
+        'The list of all your saved games, and the ability to create a new game. Most probably where you want to go...',
     gamePage: 'Game score board',
     gamePageText: 'The working scoreboard. Where you record the events of each game.',
     gamePageTextComplement: 'You need to select an existing game or create one from the',

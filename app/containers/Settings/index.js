@@ -57,7 +57,7 @@ import {
     SWAP_TEAMS
 } from './constants';
 import { useInjectReducer } from '../../utils/injectReducer';
-import { generateId, naturalSorting } from '../../utils/utilities';
+import { generateId, naturalSorting, printResponsiveLabels } from '../../utils/utilities';
 
 import { saveSettings } from '../Game/actions';
 import {
@@ -236,7 +236,7 @@ export function Settings({
                 startIcon={<PersonAddOutlinedIcon />}
                 className="settings__button settings__button--add-member"
             >
-                {messages[type === MEMBERS_TYPES.players ? 'addPlayer' : 'addOfficial']}
+                {printResponsiveLabels(messages[type === MEMBERS_TYPES.players ? 'addPlayer' : 'addOfficial'])}
             </Button>
         ) : (
             ''
@@ -399,17 +399,17 @@ export function Settings({
                     <Table padding="none" size="small">
                         <TableHead>
                             <TableRow>
-                                <TableCell>{messages[`${memberType}Reference`]}</TableCell>
-                                <TableCell>{messages[`${memberType}Name`]}</TableCell>
+                                <TableCell>{printResponsiveLabels(messages[`${memberType}Reference`])}</TableCell>
+                                <TableCell>{printResponsiveLabels(messages[`${memberType}Name`])}</TableCell>
                                 {memberType === MEMBERS_TYPES.players ? (
                                     <TableCell className="settings__table-header settings__table-header--checkbox">
-                                        {messages.playersQualificationHelpText}
+                                        {printResponsiveLabels(messages.playersQualificationHelpText)}
                                     </TableCell>
                                 ) : (
                                     <></>
                                 )}
                                 <TableCell className="settings__table-header">
-                                    {messages[`${memberType}Remove`]}
+                                    {printResponsiveLabels(messages[`${memberType}Remove`])}
                                 </TableCell>
                             </TableRow>
                         </TableHead>
@@ -519,12 +519,12 @@ export function Settings({
     const displaySettingsPerTeam = team => (
         <fieldset className="settings__section">
             <h3 className="title title--3">
-                {messages[`team${team}`]}: <span className="title title--35">{teams[team].name}</span>
+                {messages[`team${team}`][1]}: <span className="title title--35">{teams[team].name}</span>
             </h3>
             <div className="settings__grid settings__grid--half">
                 <TextField
                     id={`team${team}Name`}
-                    label={messages[`team${team}`]}
+                    label={messages[`team${team}`][1]}
                     value={teams[team].name}
                     onChange={e => handleChangeTeamName(e, team)}
                     required
@@ -606,7 +606,7 @@ export function Settings({
             <DialogContent>
                 <form noValidate>
                     <fieldset className="settings__section">
-                        <h3>{messages.gameDetails}</h3>
+                        <h3 className="title title--3">{messages.gameDetails}</h3>
                         <div className="settings__grid">
                             <TextField
                                 id="competition"

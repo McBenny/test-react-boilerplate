@@ -38,8 +38,12 @@
     &--4 {
         margin: 2rem 0 0.5rem;
         padding: 0.5rem 0 0 0.5rem;
-        font-size: 0.875rem;
+        font-size: 1rem;
         font-weight: 600;
+
+        @media screen and (min-width: $bp-tablet + 1px) {
+            font-size: 0.875rem !important;
+        }
     }
 
     &--45 {

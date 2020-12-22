@@ -13,7 +13,7 @@ import { createStructuredSelector } from 'reselect';
 import { v4 as uuidv4 } from 'uuid';
 
 import { useInjectReducer } from '../../utils/injectReducer';
-import { capitalize, formatDate } from '../../utils/utilities';
+import { capitalize, formatDate, printResponsiveLabels } from '../../utils/utilities';
 
 import reducer from '../Game/reducer';
 import {
@@ -51,7 +51,7 @@ export function ScoreSheet({ settings, currentScore, dataTeamA, dataTeamB, gameE
                 <table className="table table--data" summary={settingsMessages[`team${team}`]}>
                     <thead>
                         <tr>
-                            <th className="table__cell table__cell--header">{settingsMessages[`team${team}`]}</th>
+                            <th className="table__cell table__cell--header">{settingsMessages[`team${team}`][1]}</th>
                             <th className="table__cell table__cell--header">{settingsMessages.jerseyColour}</th>
                             <th colSpan="3" className="table__cell table__cell--header">
                                 {messages.timeouts}
@@ -215,10 +215,10 @@ export function ScoreSheet({ settings, currentScore, dataTeamA, dataTeamB, gameE
             <thead>
                 <tr>
                     <th className="table__cell table__cell--header" title={settingsMessages.playersReference}>
-                        {messages.shortNumber}
+                        {printResponsiveLabels(messages.shortNumber)}
                     </th>
                     <th className="table__cell table__cell--header">
-                        {settingsMessages[`team${team}`]} {messages.players}
+                        {printResponsiveLabels(settingsMessages[`team${team}`])} {messages.players}
                     </th>
                     <th className="table__cell table__cell--header">{lineUpMessages.goals}</th>
                     <th
@@ -261,16 +261,16 @@ export function ScoreSheet({ settings, currentScore, dataTeamA, dataTeamB, gameE
     );
 
     const displayOfficialsList = team => (
-        <table className="table table--data" summary={`${settingsMessages.teamA} ${messages.officials}`}>
+        <table className="table table--data" summary={`${settingsMessages[`team${team}`]} ${messages.officials}`}>
             <thead>
                 <tr>
                     <th className="table__cell table__cell--header" title={settingsMessages.officialsReference}>
-                        {messages.shortNumber}
+                        {printResponsiveLabels(messages.shortNumber)}
                     </th>
                     <th className="table__cell table__cell--header">
-                        {settingsMessages[`team${team}`]} {messages.officials}
+                        {printResponsiveLabels(settingsMessages[`team${team}`])} {messages.officials}
                     </th>
-                    <th className="table__cell table__cell--header">{messages.signature}</th>
+                    <th className="table__cell table__cell--header">{printResponsiveLabels(messages.signature)}</th>
                     <th
                         className="table__cell table__cell--header"
                         title={capitalize(lineUpMessages.sorting_yellowCards)}
@@ -455,7 +455,7 @@ export function ScoreSheet({ settings, currentScore, dataTeamA, dataTeamB, gameE
                                         <tr>
                                             <th className="table__cell table__cell--header" />
                                             <th className="table__cell table__cell--header">{messages.Officials}</th>
-                                            <th className="table__cell table__cell--header">{messages.signature}</th>
+                                            <th className="table__cell table__cell--header">{messages.signature[1]}</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -503,7 +503,7 @@ export function ScoreSheet({ settings, currentScore, dataTeamA, dataTeamB, gameE
                                 </table>
                             </td>
                             <td className="table__cell table__cell--structure">
-                                {displayResult(messages.extraHalfTimeResult, currentScore.half5)}
+                                {displayResult(printResponsiveLabels(messages.extraHalfTimeResult), currentScore.half5)}
                             </td>
                             <td className="table__cell table__cell--structure">
                                 {displaySingleInfo(messages.date, formattedDate)}
@@ -511,7 +511,7 @@ export function ScoreSheet({ settings, currentScore, dataTeamA, dataTeamB, gameE
                         </tr>
                         <tr className="table__row table__row--structure">
                             <td className="table__cell table__cell--structure table__cell--bottom">
-                                {displayResult(messages.fullExtraTimeResult, currentScore.half7)}
+                                {displayResult(printResponsiveLabels(messages.fullExtraTimeResult), currentScore.half7)}
                             </td>
                             <td className="table__cell table__cell--structure table__cell--bottom">
                                 {displaySingleInfo(messages.time, settings.time)}
