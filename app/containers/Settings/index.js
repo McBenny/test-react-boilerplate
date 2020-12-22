@@ -215,7 +215,8 @@ export function Settings({
 
     const addMemberButton = (team, type) => {
         const membersList = teams[team][type];
-        const membersLength = membersList.length;
+        const cleanMembersList = membersList.filter(member => member.id !== 0);
+        const membersLength = cleanMembersList.length;
         let maxId = 0;
         if (membersLength > 0) {
             maxId = membersList.reduce((max, member) => (member.id > max ? member.id : max), membersList[0].id);
