@@ -185,6 +185,7 @@ It should be possible to also add a goal anywhere in the list.
 These features should also apply to the fouls, any foul registered should be editable and removable, it should also be possible to add a foul.
 
 ##BUGS
+- [ ] It seems I can't add 16 players but only 15 (when unknown player has been added?)
 - [ ] When I create a player, it jumps from bottom to top of the list, this is annoying
 - [X] Players with letters are not in uppercase in list for captain
 - [X] I don't want to get "NaN" when I erase a number before putting a new one in the settings
@@ -202,7 +203,7 @@ These features should also apply to the fouls, any foul registered should be edi
 
 ##TODO
 - [ ] Try to find icons to represent the state of a game on the home page
-- [ ] Adapt responsiveness for tablets
+- [ ] show/hide list of players in fouls lists in tablet mode
 - [ ] Allow for a second 2 minutes suspension on an already suspended player (up to 4 minutes)
 - [ ] authenticate users
 - [ ] save team and players data to use in auto-suggest, save colours as well
@@ -248,6 +249,7 @@ These features should also apply to the fouls, any foul registered should be edi
 - [X] Enlarge the timeout count down, maybe use a digital clock font
 - [X] Be able to duplicate a game, with or without the events (keeping teams and players)
 - [X] Display the number of games on the home page
+- [X] Adapt responsiveness for tablets
 
 ##REFACTORING
 - [X] Optimise settings page to avoid repetition between A and B teams.

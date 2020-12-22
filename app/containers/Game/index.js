@@ -11,7 +11,18 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
 
-import { Container, Grid, List, Button, IconButton, ListItem, ListItemText, AppBar, Toolbar } from '@material-ui/core';
+import {
+    Container,
+    Grid,
+    List,
+    Button,
+    IconButton,
+    ListItem,
+    ListItemText,
+    AppBar,
+    Toolbar,
+    useMediaQuery
+} from '@material-ui/core';
 import CropPortraitOutlinedIcon from '@material-ui/icons/CropPortraitOutlined';
 import FullscreenExitOutlinedIcon from '@material-ui/icons/FullscreenExitOutlined';
 import FullscreenOutlinedIcon from '@material-ui/icons/FullscreenOutlined';
@@ -32,7 +43,7 @@ import Countdown from '../../components/Countdown';
 import LineUp from '../../components/Line-up';
 import GameLog from '../../components/Game-log';
 
-import { SESSION_KEY, URLS } from '../App/constants';
+import { BREAKPOINTS, SESSION_KEY, URLS } from '../App/constants';
 import { GENDERS, MAX_NUMBER, TEAMS_LIST } from '../Settings/constants';
 import {
     ADD_BLUE_CARD,
@@ -104,6 +115,7 @@ export function Game({
         });
     };
     useEffect(saveGameInStorage, [gameId, gameStarted, gameEvents, settings]);
+    const isLaptop = useMediaQuery(`(min-width: ${BREAKPOINTS.laptop + 1}px)`);
 
     // Fullscreen management
     const [fullScreen, setFullScreen] = useState({ status: false, element: '' });
@@ -232,12 +244,16 @@ export function Game({
             if (type === TYPE_MESSAGE) {
                 return gamePaused ? messages.startButton.resume : messages.startButton.pause;
             }
-            return gamePaused ? <PlayCircleOutlineIcon /> : <PauseCircleOutlineIcon />;
+            return gamePaused ? (
+                <PlayCircleOutlineIcon fontSize={isLaptop ? 'default' : 'large'} />
+            ) : (
+                <PauseCircleOutlineIcon fontSize={isLaptop ? 'default' : 'large'} />
+            );
         }
         if (type === TYPE_MESSAGE) {
             return currentPeriod === 0 ? messages.startButton.start : messages.startButton.gameOver;
         }
-        return <PlayCircleOutlineIcon />;
+        return <PlayCircleOutlineIcon fontSize={isLaptop ? 'default' : 'large'} />;
     };
 
     const initialTimeOuts = { A: false, B: false };
@@ -345,7 +361,8 @@ export function Game({
                             ''
                         )}
                         {/* eslint-enable indent */}[
-                        <span className="game__member-reference">{faultyMember.reference}</span>] {faultyMember.name}{' '}
+                        <span className="game__member-reference">{faultyMember.reference}</span>]{' '}
+                        <span className="laptop-mode">{faultyMember.name}</span>{' '}
                         {faultyMember.count > 1 ? `(${faultyMember.count})` : ''}
                     </ListItemText>
                 </ListItem>
@@ -373,7 +390,11 @@ export function Game({
                             title={messages.fullscreen}
                             edge="end"
                         >
-                            {fullScreen.status ? <FullscreenExitOutlinedIcon /> : <FullscreenOutlinedIcon />}
+                            {fullScreen.status ? (
+                                <FullscreenExitOutlinedIcon fontSize={isLaptop ? 'default' : 'large'} />
+                            ) : (
+                                <FullscreenOutlinedIcon fontSize={isLaptop ? 'default' : 'large'} />
+                            )}
                         </IconButton>
                         <IconButton
                             color="inherit"
@@ -381,7 +402,7 @@ export function Game({
                             arial-label={messages.settings.open}
                             edge="end"
                         >
-                            <SettingsOutlinedIcon />
+                            <SettingsOutlinedIcon fontSize={isLaptop ? 'default' : 'large'} />
                         </IconButton>
                         <IconButton
                             color="inherit"
@@ -389,7 +410,7 @@ export function Game({
                             aria-label={messages.returnHome}
                             edge="end"
                         >
-                            <HomeOutlined />
+                            <HomeOutlined fontSize={isLaptop ? 'default' : 'large'} />
                         </IconButton>
                     </Toolbar>
                 </AppBar>
@@ -417,8 +438,9 @@ export function Game({
                                     disabled={!gameStarted && (currentPeriod === 4 || currentPeriod === 8)}
                                     startIcon={displayStartButtonData()}
                                     className="game__button game__button--start-stop"
+                                    size={isLaptop ? 'medium' : 'large'}
                                 >
-                                    {displayStartButtonData(TYPE_MESSAGE)}
+                                    {isLaptop && displayStartButtonData(TYPE_MESSAGE)}
                                 </Button>
                                 {popupVisibility.playPause ? (
                                     <PlayPause
@@ -778,6 +800,7 @@ export function Game({
                 <div className="game__log">
                     <GameLog
                         popupVisibility={popupVisibility}
+                        isLaptop={isLaptop}
                         gameEvents={gameEvents}
                         settingsData={settings}
                         setATimeOut={setATimeOut}

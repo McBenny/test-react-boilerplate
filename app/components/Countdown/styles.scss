@@ -3,6 +3,16 @@
 .countdown {
     $block: &;
 
+    &--suspension {
+        display: block;
+        font-size: initial;
+
+        @media screen and (min-width: $bp-tablet + 1px) {
+            display: inline;
+            margin-right: 0.25rem;
+        }
+    }
+
     &__remaining-time {
         background-color: transparent;
         padding: 0.25rem 0.75rem;

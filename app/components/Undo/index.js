@@ -11,6 +11,7 @@ import {
     REMOVE_RED_CARD,
     REMOVE_BLUE_CARD
 } from '../../containers/Game/constants';
+import { printResponsiveLabels } from '../../utils/utilities';
 import { addAction, handleGameStatus, removeEvent, removeTimeout, storeScore } from '../../containers/Game/actions';
 
 function Undo({ popupVisibility, event, setATimeOut, closeHandler }) {
@@ -142,7 +143,7 @@ function Undo({ popupVisibility, event, setATimeOut, closeHandler }) {
                 <DialogContent>
                     <p>{messages.introduction}</p>
                     <p>
-                        {event.icon} <strong>{event.message}</strong>
+                        {event.icon} <strong>{event.messages.map(message => printResponsiveLabels(message))}</strong>
                     </p>
                 </DialogContent>
                 <DialogActions>

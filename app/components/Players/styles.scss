@@ -15,7 +15,9 @@
         border: 1px solid #000;
         border-radius: 0.5rem;
         width: 60%;
+        background-color: $bgColour;
         text-align: center;
+        font-size: 1.2em !important;
     }
 }
 
@@ -61,8 +63,12 @@
         transform: translateX(-50%);
         width: calc(100% - 1rem);
         font-family: $fontReferences;
-        font-size: 2.75rem;
+        font-size: 3.75rem;
         letter-spacing: 1px;
+
+        @media screen and (min-width: $bp-tablet + 1px) {
+            font-size: 2.75rem !important;
+        }
     }
 
     &__name {

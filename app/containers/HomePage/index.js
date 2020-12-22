@@ -31,7 +31,7 @@ import WcIcon from '@material-ui/icons/Wc';
 import { SESSION_KEY, URLS } from '../App/constants';
 import { EVENT_TYPES, GAMES_PREFIX, POPUPS } from '../Game/constants';
 import LocalStorage from '../../utils/local-storage';
-import { generateId, formatDate } from '../../utils/utilities';
+import { generateId, formatDate, printResponsiveLabels } from '../../utils/utilities';
 
 import DeleteGame from '../../components/Delete-game';
 import DuplicateGame from '../../components/Duplicate-game';
@@ -145,6 +145,7 @@ const EnhancedTableHead = ({ order, orderBy, onRequestSort }) => {
     const createSortHandler = property => event => {
         onRequestSort(event, property);
     };
+
     return (
         <TableHead>
             <TableRow>
@@ -161,7 +162,7 @@ const EnhancedTableHead = ({ order, orderBy, onRequestSort }) => {
                                 onClick={createSortHandler(headCell.id)}
                                 title={typeof headCell.label !== 'string' ? messages[headCell.id] : undefined}
                             >
-                                {headCell.label}
+                                {printResponsiveLabels(headCell.label)}
                                 {orderBy === headCell.id ? (
                                     <span className="sr-only">
                                         {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
@@ -169,7 +170,7 @@ const EnhancedTableHead = ({ order, orderBy, onRequestSort }) => {
                                 ) : null}
                             </TableSortLabel>
                         ) : (
-                            headCell.label
+                            printResponsiveLabels(headCell.label)
                         )}
                     </TableCell>
                 ))}
